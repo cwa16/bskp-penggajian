@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class SalaryController extends Controller
+class SalaryAnnualController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +13,7 @@ class SalaryController extends Controller
      */
     public function index()
     {
-        return view('salary.index', ['title' => 'Data Gaji']);
+        return view('salary_annual.index', ['title' => 'Data Gaji']);
     }
 
     /**

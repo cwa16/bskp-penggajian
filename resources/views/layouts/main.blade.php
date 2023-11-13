@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" href="./assets/img/bridgestone_white.png">
 
     <title>
-        BSKP
+        BSKP - {{ $title }}
     </title>
     <!--     Fonts and icons     -->
     <link rel="stylesheet" type="text/css"
@@ -51,18 +51,19 @@
                     <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                         <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a>
                         </li>
-                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
+                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">{{ $title }}
+                        </li>
                     </ol>
-                    <h6 class="font-weight-bolder mb-0">index</h6>
+                    <h6 class="font-weight-bolder mb-0">{{ $title }}</h6>
 
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
 
-                        <div class="input-group input-group-outline">
+                        {{-- <div class="input-group input-group-outline">
                             <label class="form-label">Type here...</label>
                             <input type="text" class="form-control">
-                        </div>
+                        </div> --}}
 
                     </div>
                     <ul class="navbar-nav  justify-content-end">
@@ -224,13 +225,10 @@
     </main>
 
     <div class="fixed-plugin">
-        <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
-            <i class="material-icons py-2">settings</i>
-        </a>
         <div class="card shadow-lg">
             <div class="card-header pb-0 pt-3">
                 <div class="float-start">
-                    <h5 class="mt-3 mb-0">Material UI Configurator</h5>
+                    <h5 class="mt-3 mb-0">Configuration</h5>
                     <p>See our dashboard options.</p>
                 </div>
                 <div class="float-end mt-4">
@@ -303,35 +301,6 @@
                     </div>
                 </div>
                 <hr class="horizontal dark my-sm-4">
-
-
-                <a class="btn bg-gradient-info w-100"
-                    href="https://www.creative-tim.com/product/material-dashboard-pro">Free Download</a>
-
-
-                <a class="btn btn-outline-dark w-100"
-                    href="https://www.creative-tim.com/learning-lab/bootstrap/overview/material-dashboard">View
-                    documentation</a>
-
-                <div class="w-100 text-center">
-                    <a class="github-button" href="https://github.com/creativetimofficial/material-dashboard"
-                        data-icon="octicon-star" data-size="large" data-show-count="true"
-                        aria-label="Star creativetimofficial/material-dashboard on GitHub">Star</a>
-                    <h6 class="mt-3">Thank you for sharing!</h6>
-
-                    <a href="https://twitter.com/intent/tweet?text=Check%20Material%20UI%20Dashboard%20made%20by%20%40CreativeTim%20%23webdesign%20%23dashboard%20%23bootstrap5&amp;url=https%3A%2F%2Fwww.creative-tim.com%2Fproduct%2Fsoft-ui-dashboard"
-                        class="btn btn-dark mb-0 me-2" target="_blank">
-                        <i class="fab fa-twitter me-1" aria-hidden="true"></i> Tweet
-                    </a>
-
-
-
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.creative-tim.com/product/material-dashboard"
-                        class="btn btn-dark mb-0 me-2" target="_blank">
-                        <i class="fab fa-facebook-square me-1" aria-hidden="true"></i> Share
-                    </a>
-
-                </div>
             </div>
         </div>
     </div>
@@ -374,6 +343,9 @@
                 "initComplete": function(settings, json) {
                     $(".dtTable").wrap(
                         "<div style='overflow:auto; width:100%;position:relative;'></div>");
+                },
+                "fixedColumns": {
+                    leftColumns: 4,
                 },
             });
         })
