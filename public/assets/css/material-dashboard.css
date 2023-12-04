@@ -20568,7 +20568,7 @@ fieldset:disabled .btn {
 
 .btn.btn-sm i,
 .btn-group-sm>.btn i {
-  font-size: 0.5rem;
+  font-size: 0.9rem; /* perubahan awal 0.5rem */
 }
 
 .btn.btn-lg.btn-icon-only,

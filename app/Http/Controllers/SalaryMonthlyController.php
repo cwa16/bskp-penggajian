@@ -23,7 +23,7 @@ class SalaryMonthlyController extends Controller
      */
     public function create()
     {
-        //
+        return view('salary_monthly.create', ['title' => 'Data Gaji']);
     }
 
     /**

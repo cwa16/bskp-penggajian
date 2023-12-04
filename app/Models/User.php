@@ -18,8 +18,43 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'nik',
         'name',
+        'id_status',
+        'id_grade',
+        'id_dept',
+        'id_job',
+        'sex',
+        'ttl',
+        'start',
+        'pendidikan',
+        'agama',
+        'domisili',
         'email',
+        'no_ktp',
+        'no_telpon',
+        'kis',
+        'kpj',
+        'suku',
+        'no_sepatu_safety',
+        'start_work_user',
+        'end_work_user',
+        'loc_kerja',
+        'loc',
+        'sistem_absensi',
+        'latitude',
+        'longitude',
+        'aktual_cuti',
+        'status_pernikahan',
+        'istri_suami',
+        'anak_1',
+        'anak_2',
+        'anak_3',
+        'access_by',
+        'image_url',
+        'role_app',
+        'active',
+        'email_verified_at',
         'password',
     ];
 
@@ -41,4 +76,34 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // Relasi dengan tabel Status
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'id_status');
+    }
+
+    // Relasi dengan tabel Grade
+    public function grade()
+    {
+        return $this->belongsTo(Grade::class, 'id_grade');
+    }
+
+    // Relasi dengan tabel Department
+    public function dept()
+    {
+        return $this->belongsTo(Dept::class, 'id_dept');
+    }
+
+    // Relasi dengan tabel Job
+    public function job()
+    {
+        return $this->belongsTo(Job::class, 'id_job');
+    }
+
+    // Relasi dengan tabel Salary
+    public function salaries()
+    {
+        return $this->hasMany(Salary::class, 'id_user');
+    }
 }

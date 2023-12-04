@@ -1,3 +1,7 @@
+@php
+    $currentRoute = Route::currentRouteName();
+@endphp
+
 <aside
     class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark"
     id="sidenav-main">
@@ -7,7 +11,7 @@
             aria-hidden="true" id="iconSidenav"></i>
         <a class="navbar-brand m-0" href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard "
             target="_blank">
-            <img src="./assets/img/bridgestone_outline.png" class="navbar-brand-img h-100" alt="main_logo">
+            <img src="{{ asset('/assets/img/bridgestone_outline.png') }}" class="navbar-brand-img h-100" alt="main_logo">
             <span class="ms-1 font-weight-bold text-white">BSKP-Penggajian</span>
         </a>
     </div>
@@ -17,7 +21,8 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link text-white " href="{{ url('/') }}">
+                <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'dashboard.index') ? 'active bg-gradient-primary' : '' }}"
+                    href="{{ url('/') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons">dashboard</i>
                     </div>
@@ -26,75 +31,104 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link text-white " href="{{ url('/employee') }}">
+                <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'user') ? 'active bg-gradient-primary' : '' }}"
+                    href="{{ route('user.index') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons">groups</i>
                     </div>
-                    <span class="nav-link-text ms-1">Data Karyawan</span>
+                    <span class="nav-link-text ms-1">Employees Data</span>
                 </a>
             </li>
-
+            <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#dataMaseter"
+                    class="nav-link text-white {{ Str::startsWith($currentRoute, ['status', 'grade', 'departement', 'job']) ? 'active' : '' }}"
+                    aria-controls="dataMaseter" role="button" aria-expanded="false">
+                    <i class="material-icons-round opacity-10">storage</i>
+                    <span class="nav-link-text ms-2 ps-1">Master Data</span>
+                </a>
+                <div class="collapse {{ Str::startsWith($currentRoute, ['status', 'grade', 'departement', 'job']) ? 'show' : '' }}"
+                    id="dataMaseter" style="">
+                    <ul class="nav ">
+                        <li class="nav-item">
+                            <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'status') ? 'active bg-gradient-primary' : '' }}"
+                                href="{{ route('status.index') }}">
+                                <span class="sidenav-mini-icon"> S </span>
+                                <span class="sidenav-normal  ms-2  ps-1"> Status </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'grade') ? 'active bg-gradient-primary' : '' }}"
+                                href="{{ route('grade.index') }}">
+                                <span class="sidenav-mini-icon"> G </span>
+                                <span class="sidenav-normal  ms-2  ps-1"> Grade </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'departement') ? 'active bg-gradient-primary' : '' }}"
+                                href="{{ route('departement.index') }}">
+                                <span class="sidenav-mini-icon"> D </span>
+                                <span class="sidenav-normal  ms-2  ps-1"> Departement </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'job') ? 'active bg-gradient-primary' : '' }}"
+                                href="{{ route('job.index') }}">
+                                <span class="sidenav-mini-icon"> J </span>
+                                <span class="sidenav-normal  ms-2  ps-1"> Job </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'salarygrade') ? 'active bg-gradient-primary' : '' }}"
+                                href="{{ route('salarygrade.index') }}">
+                                <span class="sidenav-mini-icon"> <i class="material-icons">price_change</i> </span>
+                                <span class="sidenav-normal  ms-2  ps-1"> Salary Data - Per Grade </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
             <li class="nav-item mt-3">
-                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Data Gaji
+                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Salary Data
                 </h6>
             </li>
-
+{{-- 
             <li class="nav-item">
-                <a class="nav-link text-white " href="{{ url('/salarygrade') }}">
+                <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'salarygrade') ? 'active bg-gradient-primary' : '' }}"
+                    href="{{ url('/salarygrade') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons">price_change</i>
                     </div>
-                    <span class="nav-link-text ms-1">Data Gaji - Per Grade</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link text-white " href="{{ url('/salaryannual') }}">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons">payments</i>
-                    </div>
-                    <span class="nav-link-text ms-1">Data Gaji - Per Tahun</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link text-white " href="{{ url('/salarymonthly') }}">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons">payments</i>
-                    </div>
-                    <span class="nav-link-text ms-1">Data Gaji - Per Bulan</span>
-                </a>
-            </li>
-
-            {{-- <li class="nav-item mt-3">
-                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Data Gaji Reguler
-                </h6>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link text-white " href="{{ url('/salaryregular') }}">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons">payments</i>
-                    </div>
-                    <span class="nav-link-text ms-1">Data Gaji Reguler</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link text-white " href="./virtual-reality.html">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons">receipt_long</i>
-                    </div>
-                    <span class="nav-link-text ms-1">Slip Gaji</span>
+                    <span class="nav-link-text ms-1">Salary Data - Per Grade</span>
                 </a>
             </li> --}}
 
             <li class="nav-item">
-                <a class="nav-link text-white " href="{{ url('/salary') }}">
+                <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'salaryannual') ? 'active bg-gradient-primary' : '' }}"
+                    href="{{ url('/salaryannual') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons">receipt_long</i>
+                        <i class="material-icons">payments</i>
                     </div>
-                    <span class="nav-link-text ms-1">Seluruh Data Gaji</span>
+                    <span class="nav-link-text ms-1">Salary Data - Per Year</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'salarymonthly') ? 'active bg-gradient-primary' : '' }}"
+                    href="{{ url('/salarymonthly') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons">payments</i>
+                    </div>
+                    <span class="nav-link-text ms-1">Salary Data - Per Month</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'salary.index') ? 'active bg-gradient-primary' : '' }}"
+                    href="{{ url('/salary') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons">receipt</i>
+                    </div>
+                    <span class="nav-link-text ms-1">All Salary Data</span>
                 </a>
             </li>
 

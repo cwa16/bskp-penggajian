@@ -13,7 +13,8 @@
                     <div class="card-body p-3 pb-2">
                         <div class="row">
                             <div class="col-9">
-                                <button type="button" class="btn btn-info">Input Data Gaji</button>
+                                <a href="{{ url('/salaryannual/create') }}" class="btn btn-info btn-sm">Input Data</a>
+                                <a href="{{ url('/salaryannual/edit') }}" class="btn btn-warning btn-sm">Edit Data</a>
                             </div>
                             <div class="col-3 justify-content-end">
                                 <select class="form-select px-3">
@@ -25,60 +26,118 @@
                             </div>
                         </div>
                         <div class="table-responsive p-0">
-                            <table class="table table-sm table-striped table-hover dtTable align-items-center">
+                            <table
+                                class="table table-sm table-striped table-hover dtTableFix5 align-items-center small-tbl compact "
+                                style="font-size: 10pt; font-family: 'Arial', sans-serif;">
                                 <thead>
                                     <tr>
-                                        <th colspan="6" class="text-center p-0">Identitas Karyawan</th>
-                                        <th colspan="6" class="text-center bg-success text-white p-0">Salary Components
-                                        </th>
-                                        <th colspan="4" class="text-center bg-danger  text-white p-0">Deduction</th>
-                                        <th class="text-center p-0">Action</th>
+                                        <th colspan="6" class="text-center p-0">Employee Identity</th>
+                                        <th colspan="6" class="text-center p-0">Salary Components</th>
+                                        <th colspan="2" class="text-center p-0">Deduction</th>
+                                        <th rowspan="2" class="text-center">Action</th>
                                     </tr>
-                                    <tr>
-                                        <th>NIK</th>
+                                    <tr class="">
+                                        <th class="cell-border">NIK</th>
                                         <th>Name</th>
                                         <th>Grade</th>
                                         <th>Status</th>
                                         <th>Dept</th>
                                         <th>Job</th>
-                                        <th>Rate</th>
+                                        <th>Salary Grade</th>
                                         <th>Ability</th>
                                         <th>Fungtional Allowance</th>
-                                        <th>Family</th>
+                                        <th>Family Allowance</th>
                                         <th>Adjustment</th>
-                                        <th>Transport</th>
-                                        <th>Union</th>
-                                        <th>Absent</th>
-                                        <th>Electricity</th>
-                                        <th>Koperasi</th>
-                                        <th>Action</th>
+                                        <th>Transport Allowance</th>
+                                        <th>BPJS</th>
+                                        <th>Jamsostek</th>
+                                        {{-- <th>Action</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @for ($i = 1; $i < 5; $i++)
-                                        <tr>
-                                            <td>{{ $i }}</td>
-                                            <td>Jude</td>
-                                            <td>V-A</td>
-                                            <td>Monthly</td>
-                                            <td>BSKP</td>
-                                            <td>Operator</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td class="text-center m-0 p-0">
-                                                <button class="btn btn-warning btn-icon-only m-0 p-0 btn" type="button">
-                                                    <span class="btn-inner--icon"><i class="material-icons">edit</i></span>
-                                                </button>
-                                            </td>
-                                    @endfor
+                                    <tr>
+                                        <td class="text-nowrap">123-001</td>
+                                        <td>Mr. A</td>
+                                        <td>IV-A</td>
+                                        <td>Monthly</td>
+                                        <td>BSKP</td>
+                                        <td>Assistant Manager</td>
+                                        <td>8.999.999</td>
+                                        <td>600.000</td>
+                                        <td>0</td>
+                                        <td>100.000</td>
+                                        <td>0</td>
+                                        <td>300.000</td>
+                                        <td>99.999</td>
+                                        <td>199.999</td>
+                                        <td class="text-center m-0 p-0">
+                                            <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
+                                                <span class="btn-inner--icon"><i class="material-icons">edit</i></span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>123-002</td>
+                                        <td>Mr. B</td>
+                                        <td>IV-A</td>
+                                        <td>Monthly</td>
+                                        <td>BSKP</td>
+                                        <td>Administrasi</td>
+                                        <td>7.999.999</td>
+                                        <td>600.000</td>
+                                        <td>0</td>
+                                        <td>100.000</td>
+                                        <td>0</td>
+                                        <td>300.000</td>
+                                        <td>89.999</td>
+                                        <td>179.999</td>
+                                        <td class="text-center m-0 p-0">
+                                            <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
+                                                <span class="btn-inner--icon"><i class="material-icons">edit</i></span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>123-003</td>
+                                        <td>Mrs. C</td>
+                                        <td>IV-A</td>
+                                        <td>Monthly</td>
+                                        <td>BSKP</td>
+                                        <td>Administrasi</td>
+                                        <td>8.999.999</td>
+                                        <td>500.000</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>94.999</td>
+                                        <td>189.999</td>
+                                        <td class="text-center m-0 p-0">
+                                            <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
+                                                <span class="btn-inner--icon"><i class="material-icons">edit</i></span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>123-004</td>
+                                        <td>Mr. D</td>
+                                        <td>IV-A</td>
+                                        <td>Monthly</td>
+                                        <td>HSE & DP</td>
+                                        <td>Administrasi</td>
+                                        <td>7.999.999</td>
+                                        <td>600.000</td>
+                                        <td>0</td>
+                                        <td>100.000</td>
+                                        <td>0</td>
+                                        <td>300.000</td>
+                                        <td>89.999</td>
+                                        <td>179.999</td>
+                                        <td class="text-center m-0 p-0">
+                                            <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
+                                                <span class="btn-inner--icon"><i class="material-icons">edit</i></span>
+                                            </button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -88,4 +147,3 @@
             </div>
         </div>
     @endsection
-        

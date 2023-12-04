@@ -23,7 +23,7 @@ class SalaryAnnualController extends Controller
      */
     public function create()
     {
-        //
+        return view('salary_annual.create', ['title' => 'Data Gaji']);
     }
 
     /**

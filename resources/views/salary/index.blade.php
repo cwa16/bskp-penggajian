@@ -12,8 +12,11 @@
 
                     <div class="card-body p-3 pb-2">
                         <div class="row">
-                            <div class="col-8">
-                                <button type="button" class="btn btn-info">Input Data Gaji</button>
+                            <div class="col-8 mb-2">
+                                <button class="btn btn-icon btn-3 btn-warning btn-sm" type="button">
+                                    <span class="btn-inner--icon"><i class="material-icons">print</i></span>
+                                    <span class="btn-inner--text">Print All</span>
+                                </button>
                             </div>
                             <div class="col-4 justify-content-end d-flex m-auto">
                                 <select class="form-select px-3 me-2">
@@ -31,45 +34,32 @@
                             </div>
                         </div>
                         <div class="table-responsive p-0">
-                            <table class="table table-sm table-striped table-hover dtTable align-items-center">
+                            <table
+                                class="table table-sm table-striped table-hover dtTableFix2 align-items-center small-tbl compact">
                                 <thead>
                                     <tr>
-                                        <th rowspan="2" class="text-center">No</th>
+                                        {{-- <th rowspan="2" class="text-center">No</th> --}}
+                                        <th colspan="7" class="text-center p-0">Identitas Karyawan</th>
+                                        <th colspan="11" class="text-center p-0">Salary Components</th>
+                                        <th rowspan="2" class="text-center bg-light text-dark">Bruto Salary</th>
+                                        <th colspan="7" class="text-center p-0">Deduction</th>
+                                        <th rowspan="2" class="text-center bg-light text-dark">Total Deduction</th>
+                                        <th rowspan="2" class="text-center bg-light text-dark">Nett Salary</th>
                                         <th rowspan="2" class="text-center">Tanggal Pengisian</th>
-                                        <th colspan="11" class="text-center p-0">Identitas Karyawan</th>
-                                        <th colspan="11" class="text-center bg-success text-white p-0 border">Salary
-                                            Components
-                                        </th>
-                                        <th colspan="5" class="text-center bg-success text-white p-0 border">Benefite
-                                        </th>
-                                        <th rowspan="2" class="text-center bg-success text-white border">Bruto Salary
-                                        </th>
-                                        <th colspan="7" class="text-center bg-danger text-white p-0 border">
-                                            Deduction</th>
-                                        <th colspan="5" class="text-center bg-danger text-white p-0 border">
-                                            Deduction Benefite</th>
-                                        <th rowspan="2" class="text-center bg-danger text-white border">Total Deduction
-                                        </th>
-                                        <th rowspan="2" class="text-center bg-secondary text-white border">Nett
-                                            Salary
-                                        </th>
-                                        <th rowspan="2" class="text-center text-nowrap border">Action</th>
+                                        <th rowspan="2" class="text-center">Check</th>
+                                        <th rowspan="2" class="text-center">Approve</th>
+                                        <th rowspan="2" class="text-center">Action</th>
                                     </tr>
                                     <tr>
                                         {{-- <th>No</th> --}}
-                                        {{-- <th>Tanggal Pengisian</th> --}}
                                         <th>NIK</th>
                                         <th>Name</th>
                                         <th>Dept</th>
                                         <th>Status</th>
                                         <th>Grade</th>
                                         <th>Job</th>
-                                        <th>Date of Birth</th>
-                                        <th>Date of Join</th>
-                                        <th>Marital Status</th>
-                                        <th>Tax ID Number</th>
                                         <th>No Account</th>
-                                        <th>Rate</th>
+                                        <th>Salary Grade</th>
                                         <th>Ability</th>
                                         <th>Fungtional Allowance</th>
                                         <th>Family Allowance</th>
@@ -79,188 +69,99 @@
                                         <th>THR</th>
                                         <th>Bonus</th>
                                         <th>Incentive</th>
-                                        <th class="bg-light text-dark">Salary Gross</th>
-                                        <th>Jamsostek JKK</th>
-                                        <th>Jamsostek TK</th>
-                                        <th>Jamsostek THT</th>
-                                        <th>PPh 21</th>
-                                        <th class="bg-light text-dark">Sub Total Benefite</th>
-                                        {{-- <th class="bg-light">Bruto Salary</th> --}}
+                                        <th>Salary Gross</th>
+                                        {{-- <th class=">Bruto Salary</th> --}}
                                         <th>BPJS</th>
                                         <th>Jamsostek</th>
                                         <th>Union</th>
                                         <th>Absent</th>
                                         <th>Electricity</th>
                                         <th>Koperasi</th>
-                                        <th class="bg-light text-dark">Sub Total Deduction</th>
-                                        <th>Jamsostek JKK</th>
-                                        <th>Jamsostek TK</th>
-                                        <th>Jamsostek THT</th>
-                                        <th>PPh 21</th>
-                                        <th class="bg-light text-dark">Sub Total Deduction Benefite</th>
-                                        {{-- <th class="bg-light">Total Deduction</th> --}}
+                                        <th>Sub Total Deduction</th>
+                                        {{-- <th class=">Total Deduction</th> --}}
                                         {{-- <th class="bg-info text-white">Nett Salary</th> --}}
+                                        {{-- <th>Tanggal Pengisian</th> --}}
                                         {{-- <th>Action</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @for ($i = 1; $i < 5; $i++)
-                                        <tr>
-                                            <td>{{ $i }}</td>
-                                            <td>01-01-2024</td>
-                                            <td>123-321</td>
-                                            <td>Messi</td>
-                                            <td>BSKP</td>
-                                            <td>Monthly</td>
-                                            <td>V-A</td>
-                                            <td>Asisstent Manager</td>
-                                            <td>12-12-1999</td>
-                                            <td>01-01-2011</td>
-                                            <td>K3</td>
-                                            <td>987654321</td>
-                                            <td>123456789</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td></td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td class="bg-light text-dark">Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td class="bg-light text-dark">Rp 9.999.999</td>
-                                            <td class="bg-light">Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td class="bg-light text-dark">Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td>Rp 9.999.999</td>
-                                            <td class="bg-light text-dark">Rp 9.999.999</td>
-                                            <td class="bg-light">Rp 9.999.999</td>
-                                            <td class="bg-secondary text-white">Rp 9.999.999</td>
-                                            <td class="text-center m-0 p-0">
-                                                <button class="btn btn-warning btn-icon-only m-0 p-0 btn" type="button">
-                                                    <span class="btn-inner--icon"><i class="material-icons">edit</i></span>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    @endfor
                                     <tr>
-                                        <td>5</td>
-                                        <td>01-01-2024</td>
-                                        <td>123-321</td>
-                                        <td>Ronaldo</td>
-                                        <td>Acc & Fin</td>
-                                        <td>Staff</td>
-                                        <td>V-A</td>
-                                        <td>Asisstent Manager</td>
-                                        <td>12-12-1999</td>
-                                        <td>01-01-2011</td>
-                                        <td>K3</td>
-                                        <td>987654321</td>
-                                        <td>123456789</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td></td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td class="bg-light text-dark">Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td class="bg-light text-dark">Rp 9.999.999</td>
-                                        <td class="bg-light">Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td class="bg-light text-dark">Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td class="bg-light text-dark">Rp 9.999.999</td>
-                                        <td class="bg-light">Rp 9.999.999</td>
-                                        <td class="bg-secondary text-white">Rp 9.999.999</td>
-                                        <td class="text-center m-0 p-0">
-                                            <button class="btn btn-warning btn-icon-only m-0 p-0 btn" type="button">
-                                                <span class="btn-inner--icon"><i class="material-icons">edit</i></span>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>6</td>
-                                        <td>01-01-2024</td>
-                                        <td>123-321</td>
-                                        <td>Benzema</td>
+                                        <td>123-001</td>
+                                        <td>Mr. A</td>
+                                        <td>IV-A</td>
+                                        <td>Monthly</td>
                                         <td>BSKP</td>
-                                        <td>Staff</td>
-                                        <td>V-A</td>
-                                        <td>Asisstent Manager</td>
-                                        <td>12-12-1999</td>
-                                        <td>01-01-2011</td>
-                                        <td>K3</td>
-                                        <td>987654321</td>
+                                        <td>Assistant Manager</td>
                                         <td>123456789</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td></td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td class="bg-light text-dark">Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td class="bg-light text-dark">Rp 9.999.999</td>
-                                        <td class="bg-light">Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td class="bg-light text-dark">Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td>Rp 9.999.999</td>
-                                        <td class="bg-light text-dark">Rp 9.999.999</td>
-                                        <td class="bg-light">Rp 9.999.999</td>
-                                        <td class="bg-secondary text-white">Rp 9.999.999</td>
+                                        <td>8.999.999</td>
+                                        <td>600.000</td>
+                                        <td>0</td>
+                                        <td>100.000</td>
+                                        <td>0</td>
+                                        <td>300.000</td>
+                                        <td>1.000.000</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>10.999.999</td>
+                                        <td class="bg-light text-dark">11.440.379</td>
+                                        <td>99.999</td>
+                                        <td>199.999</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>500.000</td>
+                                        <td>500.000</td>
+                                        <td>1.299.998</td>
+                                        <td class="bg-light">1.740.378</td>
+                                        <td class="bg-light text-dark">9.700.001</td>
+                                        <td>01-12-2023</td>
+                                        <td class="align-middle text-center text-sm"><span
+                                                class="badge badge-sm bg-gradient-success"> &#10004;</td>
+                                        <td class="align-middle text-center text-sm"><span
+                                                class="badge badge-sm bg-gradient-secondary">&#9744;</td>
                                         <td class="text-center m-0 p-0">
-                                            <button class="btn btn-warning btn-icon-only m-0 p-0 btn" type="button">
-                                                <span class="btn-inner--icon"><i class="material-icons">edit</i></span>
+                                            <button class="btn btn-primary btn-icon-only m-0 p-0 btn-sm" type="button"
+                                                data-bs-toggle="modal" data-bs-target="#detailGaji">
+                                                <span class="btn-inner--icon"><i class="material-icons">info</i></span>
+                                            </button>
+                                            <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
+                                                <span class="btn-inner--icon"><i class="material-icons">print</i></span>
                                             </button>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="detailGaji" tabindex="-1" role="dialog" aria-labelledby="modal-form"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body p-0">
+                        <div class="card card-plain">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Tambah Data Status</h5>
+                                <button type="button" class="btn-close text-dark" data-bs-dismiss="modal"
+                                    aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form action="{{ route('status.store') }}" method="post">
+                                @csrf
+                                <div class="card-body py-0">
+                                    <div class="input-group input-group-outline my-3">
+                                        <label class="form-label">Nama Status</label>
+                                        <input type="text" class="form-control" name="name_status" required>
+                                    </div>
+                                </div>
+                                <div class="card-footer text-end">
+                                    <button type="submit" class="btn btn-sm bg-success text-white m-0">Simpan</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
