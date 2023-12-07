@@ -25,6 +25,11 @@
                 $(".dtTable").wrap(
                     "<div style='overflow:auto; width:100%;position:relative;'></div>");
             },
+            "lengthMenu": [
+                [10, 50, 100, 200, -1],
+                [10, 50, 100, 200, "All"]
+            ], // Customize the entries per page
+            "pageLength": 100
         });
     })
 </script>
@@ -185,6 +190,60 @@
                     name_job: {
                         required: true,
                     },
+                },
+                ...element
+            })
+        });
+    });
+</script>
+
+<script>
+    // fungsi memberikan rule dan pesan serta elemen pada form
+    $(function() {
+        // custom rules
+        jQuery.validator.addMethod("letter", function(value, element) {
+            return this.optional(element) || /^[A-Za-z.',-\s]+$/.test(value);
+        }, "Input must alphabet!");
+
+        // Menambahkan aturan validasi untuk input number
+        jQuery.validator.addMethod("positiveNum", function(value, element) {
+            return value > 0;
+        }, "Please enter a positive number.");
+
+        jQuery.validator.addMethod("validNum", function(value, element) {
+            // Use regex to check if the input contains only numbers
+            return /^[0-9]+$/.test(value);
+        }, "Please enter a valid number");
+
+        // variable untuk rule yg sama
+        var element = {
+            errorElement: 'span',
+            errorPlacement: function(error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.input-group').append(error);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        };
+
+        // Validasi untuk data status
+        $('.salary-grade-form').each(function() {
+            var form = $(this);
+            form.validate({
+                rules: {
+                    @if (isset($grades))
+                        @foreach ($grades as $grade)
+                            "rate_salary[{{ $grade->id }}]": {
+                                required: true,
+                                positiveNum: true,
+                                validNum: true
+                            },
+                        @endforeach
+                    @endif
                 },
                 ...element
             })

@@ -46,7 +46,7 @@
                     <i class="material-icons-round opacity-10">storage</i>
                     <span class="nav-link-text ms-2 ps-1">Master Data</span>
                 </a>
-                <div class="collapse {{ Str::startsWith($currentRoute, ['status', 'grade', 'departement', 'job']) ? 'show' : '' }}"
+                <div class="collapse {{ Str::startsWith($currentRoute, ['status', 'grade', 'departement', 'job', 'salarygrade']) ? 'show' : '' }}"
                     id="dataMaseter" style="">
                     <ul class="nav ">
                         <li class="nav-item">

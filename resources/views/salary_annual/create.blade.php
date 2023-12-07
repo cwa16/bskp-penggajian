@@ -56,99 +56,101 @@
                                     <a type="button" href="{{ route('salaryannual.index') }}"
                                         class="btn btn-outline-secondary btn-sm">Kembali</a>
                                 </div>
-                                <div class="table-responsive p-0">
-                                    <table class="table table-sm align-items-center mb-0 text-center dtTableFix5">
-                                        <thead>
-                                            <tr>
-                                                <th colspan="6" class="text-center p-0">Identitas Karyawan</th>
-                                                <th colspan="6" class="text-center bg-success text-white p-0">Salary
-                                                    Components
-                                                </th>
-                                                {{-- <th colspan="1" class="text-center bg-danger  text-white p-0">Deduction
+                                <div class="col">
+                                    <div class="table-responsive p-0">
+                                        <table class="table table-sm align-items-center mb-0 text-center dtTableFix5">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="6" class="text-center p-0">Identitas Karyawan</th>
+                                                    <th colspan="6" class="text-center bg-success text-white p-0">Salary
+                                                        Components
+                                                    </th>
+                                                    {{-- <th colspan="1" class="text-center bg-danger  text-white p-0">Deduction
                                                 </th> --}}
-                                            </tr>
-                                            <tr>
-                                                <th>NIK</th>
-                                                <th>Name</th>
-                                                <th>Grade</th>
-                                                <th>Status</th>
-                                                <th>Dept</th>
-                                                <th>Job</th>
-                                                <th>Salary Grade</th>
-                                                <th>Ability</th>
-                                                <th>Fungtional Allowance</th>
-                                                <th>Family</th>
-                                                <th>Adjustment</th>
-                                                <th>Transport</th>
-                                                {{-- <th>BPJS</th> --}}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>123-001</td>
-                                                <td>Mr. A</td>
-                                                <td>IV-A</td>
-                                                <td>Monthly</td>
-                                                <td>BSKP</td>
-                                                <td>Assistant Manager</td>
-                                                <td>Rp 8.999.999</td>
-                                                <td><input type="text" id="row-ability" name="row-ability" value=""
-                                                        placeholder="Ability"></td>
-                                                <td><input type="text" id="row-fungtional" name="row-fungtional"
-                                                        value="" placeholder="Fungtional Allowance"></td>
-                                                <td><input type="text" id="row-family" name="row-family" value=""
-                                                        placeholder="Family Allowance"></td>
-                                                <td><input type="text" id="row-adjustmen" name="row-adjustmen"
-                                                        value="" placeholder="Adjustmen"></td>
-                                                <td><input type="text" id="row-transport" name="row-transport"
-                                                        value="" placeholder="Transport Allowance"></td>
-                                                {{-- <td><input type="number" id="row-bpjs" name="row-bpjs" value=""
+                                                </tr>
+                                                <tr>
+                                                    <th>NIK</th>
+                                                    <th>Name</th>
+                                                    <th>Grade</th>
+                                                    <th>Status</th>
+                                                    <th>Dept</th>
+                                                    <th>Job</th>
+                                                    <th>Salary Grade</th>
+                                                    <th>Ability</th>
+                                                    <th>Fungtional Allowance</th>
+                                                    <th>Family</th>
+                                                    <th>Adjustment</th>
+                                                    <th>Transport</th>
+                                                    {{-- <th>BPJS</th> --}}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>123-001</td>
+                                                    <td>Mr. A</td>
+                                                    <td>IV-A</td>
+                                                    <td>Monthly</td>
+                                                    <td>BSKP</td>
+                                                    <td>Assistant Manager</td>
+                                                    <td>Rp 8.999.999</td>
+                                                    <td><input type="text" id="row-ability" name="row-ability"
+                                                            value="" placeholder="Ability"></td>
+                                                    <td><input type="text" id="row-fungtional" name="row-fungtional"
+                                                            value="" placeholder="Fungtional Allowance"></td>
+                                                    <td><input type="text" id="row-family" name="row-family"
+                                                            value="" placeholder="Family Allowance"></td>
+                                                    <td><input type="text" id="row-adjustmen" name="row-adjustmen"
+                                                            value="" placeholder="Adjustmen"></td>
+                                                    <td><input type="text" id="row-transport" name="row-transport"
+                                                            value="" placeholder="Transport Allowance"></td>
+                                                    {{-- <td><input type="number" id="row-bpjs" name="row-bpjs" value=""
                                                             placeholder="BPJS"></td> --}}
-                                            </tr>
-                                            <tr>
-                                                <td>123-002</td>
-                                                <td>Mr. B</td>
-                                                <td>III-D</td>
-                                                <td>Monthly</td>
-                                                <td>BSKP</td>
-                                                <td>Administrasi</td>
-                                                <td>Rp 7.999.999</td>
-                                                <td><input type="text" id="row-ability" name="row-ability" value=""
-                                                        placeholder="Ability"></td>
-                                                <td><input type="text" id="row-fungtional" name="row-fungtional"
-                                                        value="" placeholder="Fungtional Allowance"></td>
-                                                <td><input type="text" id="row-family" name="row-family" value=""
-                                                        placeholder="Family Allowance"></td>
-                                                <td><input type="text" id="row-adjustmen" name="row-adjustmen"
-                                                        value="" placeholder="Adjustmen"></td>
-                                                <td><input type="text" id="row-transport" name="row-transport"
-                                                        value="" placeholder="Transport Allowance"></td>
-                                                {{-- <td><input type="number" id="row-bpjs" name="row-bpjs" value=""
+                                                </tr>
+                                                <tr>
+                                                    <td>123-002</td>
+                                                    <td>Mr. B</td>
+                                                    <td>III-D</td>
+                                                    <td>Monthly</td>
+                                                    <td>BSKP</td>
+                                                    <td>Administrasi</td>
+                                                    <td>Rp 7.999.999</td>
+                                                    <td><input type="text" id="row-ability" name="row-ability"
+                                                            value="" placeholder="Ability"></td>
+                                                    <td><input type="text" id="row-fungtional" name="row-fungtional"
+                                                            value="" placeholder="Fungtional Allowance"></td>
+                                                    <td><input type="text" id="row-family" name="row-family"
+                                                            value="" placeholder="Family Allowance"></td>
+                                                    <td><input type="text" id="row-adjustmen" name="row-adjustmen"
+                                                            value="" placeholder="Adjustmen"></td>
+                                                    <td><input type="text" id="row-transport" name="row-transport"
+                                                            value="" placeholder="Transport Allowance"></td>
+                                                    {{-- <td><input type="number" id="row-bpjs" name="row-bpjs" value=""
                                                             placeholder="BPJS"></td> --}}
-                                            </tr>
-                                            <tr>
-                                                <td>123-003</td>
-                                                <td>Mrs. C</td>
-                                                <td>IV-A</td>
-                                                <td>Monthly</td>
-                                                <td>BSKP</td>
-                                                <td>Administrasi</td>
-                                                <td>Rp 8.999.999</td>
-                                                <td><input type="text" id="row-ability" name="row-ability"
-                                                        value="" placeholder="Ability"></td>
-                                                <td><input type="text" id="row-fungtional" name="row-fungtional"
-                                                        value="" placeholder="Fungtional Allowance"></td>
-                                                <td><input type="text" id="row-family" name="row-family"
-                                                        value="" placeholder="Family Allowance"></td>
-                                                <td><input type="text" id="row-adjustmen" name="row-adjustmen"
-                                                        value="" placeholder="Adjustmen"></td>
-                                                <td><input type="text" id="row-transport" name="row-transport"
-                                                        value="" placeholder="Transport Allowance"></td>
-                                                {{-- <td><input type="number" id="row-bpjs" name="row-bpjs" value=""
+                                                </tr>
+                                                <tr>
+                                                    <td>123-003</td>
+                                                    <td>Mrs. C</td>
+                                                    <td>IV-A</td>
+                                                    <td>Monthly</td>
+                                                    <td>BSKP</td>
+                                                    <td>Administrasi</td>
+                                                    <td>Rp 8.999.999</td>
+                                                    <td><input type="text" id="row-ability" name="row-ability"
+                                                            value="" placeholder="Ability"></td>
+                                                    <td><input type="text" id="row-fungtional" name="row-fungtional"
+                                                            value="" placeholder="Fungtional Allowance"></td>
+                                                    <td><input type="text" id="row-family" name="row-family"
+                                                            value="" placeholder="Family Allowance"></td>
+                                                    <td><input type="text" id="row-adjustmen" name="row-adjustmen"
+                                                            value="" placeholder="Adjustmen"></td>
+                                                    <td><input type="text" id="row-transport" name="row-transport"
+                                                            value="" placeholder="Transport Allowance"></td>
+                                                    {{-- <td><input type="number" id="row-bpjs" name="row-bpjs" value=""
                                                             placeholder="BPJS"></td> --}}
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
