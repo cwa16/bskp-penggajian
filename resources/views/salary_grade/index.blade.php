@@ -60,7 +60,7 @@
                                             {{-- <td>Monthly</td>
                                             <td>BSKP</td>
                                             <td>Operator</td> --}}
-                                            <td class="text-end">{{ $sg->rate_salary }}</td>
+                                            <td class="text-end">{{ number_format($sg->rate_salary, 0, ',', '.') }}</td>
                                             <td class="text-end">{{ $sg->year }}</td>
                                             <td class="text-center m-0 p-0">
                                                 <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
