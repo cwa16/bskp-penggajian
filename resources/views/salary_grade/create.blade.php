@@ -19,6 +19,8 @@
                                 @else
                                     <p>Input salary data per grade in {{ $currentYear }}</p>
                                     <button type="button" class="btn btn-primary btn-sm">Input</button>
+                                    <a type="button" href="{{ route('salarygrade.index') }}"
+                                        class="btn btn-outline-secondary btn-sm">Cancel</a>
                                 @endif
                             </div>
                         </div>
@@ -29,9 +31,7 @@
                             @csrf
                             <div class="row">
                                 <div class="col">
-                                    <button type="submit" class="btn btn-success btn-sm">Save</button>
-                                    <a type="button" href="{{ route('salarygrade.index') }}"
-                                        class="btn btn-outline-secondary btn-sm">Cancel</a>
+                                    <button type="submit" class="btn btn-success btn-sm px-4">Save</button>
                                 </div>
                             </div>
                             <div class="row">
