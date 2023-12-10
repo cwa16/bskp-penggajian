@@ -44,7 +44,7 @@
                                         <th colspan="6" class="text-center p-0">Employee Identity</th>
                                         <th colspan="6" class="text-center p-0">Salary Components</th>
                                         <th colspan="2" class="text-center p-0">Deduction</th>
-                                        <th rowspan="2" class="text-center">Action</th>
+                                        {{-- <th rowspan="2" class="text-center">Action</th> --}}
                                     </tr>
                                     <tr class="">
                                         <th class="cell-border">NIK</th>
@@ -67,25 +67,29 @@
                                 <tbody>
                                     @foreach ($salaries as $key => $salary)
                                         <tr>
-                                            <td class="text-nowrap">{{ $salary->id_user }}</td>
+                                            <td class="text-nowrap text-end">{{ $salary->id_user }}</td>
                                             <td>{{ $salary->user->name }}</td>
                                             <td>{{ $salary->user->grade->name_grade }}</td>
                                             <td>{{ $salary->user->status->name_status }}</td>
                                             <td>{{ $salary->user->dept->name_dept }}</td>
                                             <td>{{ $salary->user->job->name_job }}</td>
-                                            <td>{{ $salary->salary_grade->rate_salary }}</td>
-                                            <td>{{ $salary->ability }}</td>
-                                            <td>{{ $salary->fungtional_allowance }}</td>
-                                            <td>{{ $salary->family_allowance }}</td>
-                                            <td>{{ $salary->adjustment }}</td>
-                                            <td>{{ $salary->transport_allowance }}</td>
-                                            <td>{{ $salary->bpjs }}</td>
-                                            <td>{{ $salary->jamsostek }}</td>
-                                            <td class="text-center m-0 p-0">
+                                            <td class="text-end">
+                                                {{ number_format($salary->salary_grade->rate_salary, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($salary->ability, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($salary->fungtional_allowance, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($salary->family_allowance, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($salary->adjustment, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($salary->transport_allowance, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($salary->bpjs, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($salary->jamsostek, 0, ',', '.') }}</td>
+                                            {{-- <td class="text-center m-0 p-0">
                                                 <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
                                                     <span class="btn-inner--icon"><i class="material-icons">edit</i></span>
                                                 </button>
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                     @endforeach
                                 </tbody>

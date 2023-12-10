@@ -52,7 +52,7 @@
                                         <th colspan="4" class="text-center p-0">
                                             Deduction</th>
                                         <th rowspan="2" class="text-center">Tanggal Pengisian</th>
-                                        <th rowspan="2" class="text-center">Action</th>
+                                        {{-- <th rowspan="2" class="text-center">Action</th> --}}
                                     </tr>
                                     <tr>
                                         <th>NIK</th>
@@ -74,25 +74,31 @@
                                 <tbody>
                                     @foreach ($salaries as $key => $salary)
                                         <tr>
-                                            <td class="text-nowrap">{{ $salary->id_user }}</td>
+                                            <td class="text-nowrap text-end">{{ $salary->id_user }}</td>
                                             <td>{{ $salary->user->name }}</td>
                                             <td>{{ $salary->user->grade->name_grade }}</td>
                                             <td>{{ $salary->user->status->name_status }}</td>
                                             <td>{{ $salary->user->dept->name_dept }}</td>
                                             <td>{{ $salary->user->job->name_job }}</td>
-                                            <td>{{ number_format($salary->salary_grade->rate_salary, 0, ',', '.') }}</td>
-                                            <td>{{ number_format($salary->salary_grade->total_overtime, 0, ',', '.') }}
+                                            <td class="text-end">
+                                                {{ number_format($salary->salary_grade->rate_salary, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($salary->salary_grade->total_overtime, 0, ',', '.') }}
                                             </td>
-                                            <td>{{ number_format($salary->salary_grade->union, 0, ',', '.') }}</td>
-                                            <td>{{ number_format($salary->salary_grade->absent, 0, ',', '.') }}</td>
-                                            <td>{{ number_format($salary->salary_grade->electricity, 0, ',', '.') }}</td>
-                                            <td>{{ number_format($salary->salary_grade->koperasi, 0, ',', '.') }}</td>
-                                            <td>{{ date('Y-m-d', strtotime($salary->created_at)) }}</td>
-                                            <td class="text-center m-0 p-0">
+                                            <td class="text-end">
+                                                {{ number_format($salary->salary_grade->union, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($salary->salary_grade->absent, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($salary->salary_grade->electricity, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($salary->salary_grade->koperasi, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ date('Y-m-d', strtotime($salary->created_at)) }}</td>
+                                            {{-- <td class="text-center m-0 p-0">
                                                 <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
                                                     <span class="btn-inner--icon"><i class="material-icons">edit</i></span>
                                                 </button>
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                     @endforeach
                                 </tbody>

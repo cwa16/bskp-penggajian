@@ -68,15 +68,15 @@
                                                     @foreach ($users as $key => $user)
                                                         <tr>
                                                             <td>{{ $key + 1 }}</td>
-                                                            <td class="text-nowrap">{{ $user->nik }}</td>
+                                                            <td class="text-nowrap text-end">{{ $user->nik }}</td>
                                                             <td>{{ $user->name }}</td>
                                                             <td>{{ $user->grade->name_grade ?? '-' }}</td>
                                                             <td>{{ $user->status->name_status }}</td>
                                                             <td>{{ $user->dept->name_dept }}</td>
                                                             <td>{{ $user->job->name_job }}</td>
-                                                            <td>
+                                                            <td class="text-end">
                                                                 @if ($user->grade && $user->grade->salary_grades->isNotEmpty())
-                                                                    {{ $user->grade->salary_grades->first()->rate_salary }}
+                                                                    {{ number_format($user->grade->salary_grades->first()->rate_salary, 0, ',', '.') }}
                                                                 @else
                                                                     -
                                                                 @endif
@@ -101,7 +101,8 @@
                                                                 <div class="input-group input-group-outline">
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
-                                                                        style="width: 120px" name="fungtional_allowance[{{ $key }}]"
+                                                                        style="width: 120px"
+                                                                        name="fungtional_allowance[{{ $key }}]"
                                                                         placeholder="Enter the fungtional allowance">
                                                                 </div>
                                                             </td>
@@ -109,7 +110,8 @@
                                                                 <div class="input-group input-group-outline">
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
-                                                                        style="width: 120px" name="family_allowance[{{ $key }}]"
+                                                                        style="width: 120px"
+                                                                        name="family_allowance[{{ $key }}]"
                                                                         placeholder="Enter the family allowance">
                                                                 </div>
                                                             </td>
@@ -117,7 +119,8 @@
                                                                 <div class="input-group input-group-outline">
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
-                                                                        style="width: 120px" name="adjustment[{{ $key }}]"
+                                                                        style="width: 120px"
+                                                                        name="adjustment[{{ $key }}]"
                                                                         placeholder="Enter the adjustment">
                                                                 </div>
                                                             </td>
@@ -125,7 +128,8 @@
                                                                 <div class="input-group input-group-outline">
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
-                                                                        style="width: 120px" name="transport_allowance[{{ $key }}]"
+                                                                        style="width: 120px"
+                                                                        name="transport_allowance[{{ $key }}]"
                                                                         placeholder="Enter the transport allowance">
                                                                 </div>
                                                             </td>
