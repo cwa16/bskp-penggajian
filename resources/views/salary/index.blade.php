@@ -12,25 +12,30 @@
 
                     <div class="card-body p-3 pb-2">
                         <div class="row">
-                            <div class="col-8 mb-2">
+                            <div class="col-7">
                                 <button class="btn btn-icon btn-3 btn-warning btn-sm" type="button">
                                     <span class="btn-inner--icon"><i class="material-icons">print</i></span>
                                     <span class="btn-inner--text">Print All</span>
                                 </button>
                             </div>
-                            <div class="col-4 justify-content-end d-flex m-auto">
-                                <select class="form-select px-3 me-2">
-                                    <option selected>- Filter Tahun -</option>
-                                    <option value="1">2023</option>
-                                    <option value="2">2024</option>
-                                    <option value="3">2025</option>
-                                </select>
-                                <select class="form-select px-3">
-                                    <option selected>- Filter Bulan -</option>
-                                    <option value="1">Januari</option>
-                                    <option value="2">Februari</option>
-                                    <option value="3">Maret</option>
-                                </select>
+                            <div class="col-5 justify-content-end">
+                                <form action="{{ url('/salarygrade') }}" method="GET">
+                                    <div class="row">
+                                        <div class="col pe-0">
+                                            <select class="form-select form-select-sm " name="filter_year">
+                                                <option value="all">Show All Data</option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <select class="form-select form-select-sm " name="filter_month">
+                                                <option value="all">Show All Data</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="table-responsive p-0">
@@ -85,50 +90,138 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>123-001</td>
-                                        <td>Mr. A</td>
-                                        <td>IV-A</td>
-                                        <td>Monthly</td>
-                                        <td>BSKP</td>
-                                        <td>Assistant Manager</td>
-                                        <td>123456789</td>
-                                        <td>8.999.999</td>
-                                        <td>600.000</td>
-                                        <td>0</td>
-                                        <td>100.000</td>
-                                        <td>0</td>
-                                        <td>300.000</td>
-                                        <td>1.000.000</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>10.999.999</td>
-                                        <td class="bg-light text-dark">11.440.379</td>
-                                        <td>99.999</td>
-                                        <td>199.999</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>500.000</td>
-                                        <td>500.000</td>
-                                        <td>1.299.998</td>
-                                        <td class="bg-light">1.740.378</td>
-                                        <td class="bg-light text-dark">9.700.001</td>
-                                        <td>01-12-2023</td>
-                                        <td class="align-middle text-center text-sm"><span
-                                                class="badge badge-sm bg-gradient-success"> &#10004;</td>
-                                        <td class="align-middle text-center text-sm"><span
-                                                class="badge badge-sm bg-gradient-secondary">&#9744;</td>
-                                        <td class="text-center m-0 p-0">
-                                            <button class="btn btn-primary btn-icon-only m-0 p-0 btn-sm" type="button"
-                                                data-bs-toggle="modal" data-bs-target="#detailGaji">
-                                                <span class="btn-inner--icon"><i class="material-icons">info</i></span>
-                                            </button>
-                                            <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
-                                                <span class="btn-inner--icon"><i class="material-icons">print</i></span>
-                                            </button>
-                                        </td>
-                                    </tr>
+                                    @foreach ($salaries as $key => $salary)
+                                        <tr>
+                                            <td class="text-nowrap text-end">{{ $salary->id_user }}</td>
+                                            <td>{{ $salary->user->name }}</td>
+                                            <td>{{ $salary->user->grade->name_grade }}</td>
+                                            <td>{{ $salary->user->status->name_status }}</td>
+                                            <td>{{ $salary->user->dept->name_dept }}</td>
+                                            <td>{{ $salary->user->job->name_job }}</td>
+                                            <td>-</td>
+                                            <td class="text-end">
+                                                {{ number_format($salary->salary_grade->rate_salary, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($salary->ability, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($salary->fungtional_allowance, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($salary->family_allowance, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($salary->adjustment, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($salary->transport_allowance, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($salary->total_overtime, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-end">{{ number_format($salary->thr, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($salary->bonus, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($salary->incentive, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format(
+                                                    $salary->salary_grade->rate_salary +
+                                                        $salary->ability +
+                                                        $salary->fungtional_allowance +
+                                                        $salary->family_allowance +
+                                                        $salary->adjustment +
+                                                        $salary->transport_allowance +
+                                                        $salary->total_overtime +
+                                                        $salary->thr +
+                                                        $salary->bonus +
+                                                        $salary->incentive,
+                                                    0,
+                                                    ',',
+                                                    '.',
+                                                ) }}
+                                            </td>
+                                            <td class="text-end">
+                                                {{ number_format(
+                                                    $salary->salary_grade->rate_salary +
+                                                        $salary->ability +
+                                                        $salary->fungtional_allowance +
+                                                        $salary->family_allowance +
+                                                        $salary->adjustment +
+                                                        $salary->transport_allowance +
+                                                        $salary->total_overtime +
+                                                        $salary->thr +
+                                                        $salary->bonus +
+                                                        $salary->incentive +
+                                                        $salary->total_benefit,
+                                                    0,
+                                                    ',',
+                                                    '.',
+                                                ) }}
+                                            </td>
+                                            <td class="text-end">{{ number_format($salary->bpjs, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($salary->jamsostek, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($salary->salary_grade->union, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($salary->salary_grade->absent, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($salary->salary_grade->electricity, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($salary->salary_grade->koperasi, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format(
+                                                    $salary->bpjs + $salary->jamsostek + $salary->union + $salary->absent + $salary->electricity + $salary->koperasi,
+                                                    0,
+                                                    ',',
+                                                    '.',
+                                                ) }}
+                                            </td>
+                                            <td class="text-end">
+                                                {{ number_format(
+                                                    $salary->bpjs +
+                                                        $salary->jamsostek +
+                                                        $salary->union +
+                                                        $salary->absent +
+                                                        $salary->electricity +
+                                                        $salary->koperasi +
+                                                        $salary->total_debenefit,
+                                                    0,
+                                                    ',',
+                                                    '.',
+                                                ) }}
+                                            </td>
+                                            <td class="bg-light text-dark text-end">
+                                                {{ number_format(
+                                                    $salary->salary_grade->rate_salary +
+                                                        $salary->ability +
+                                                        $salary->fungtional_allowance +
+                                                        $salary->family_allowance +
+                                                        $salary->adjustment +
+                                                        $salary->transport_allowance +
+                                                        $salary->total_overtime +
+                                                        $salary->thr +
+                                                        $salary->bonus +
+                                                        $salary->incentive +
+                                                        $salary->total_benefit -
+                                                        ($salary->bpjs +
+                                                            $salary->jamsostek +
+                                                            $salary->union +
+                                                            $salary->absent +
+                                                            $salary->electricity +
+                                                            $salary->koperasi +
+                                                            $salary->total_debenefit),
+                                                    0,
+                                                    ',',
+                                                    '.',
+                                                ) }}
+                                            </td>
+                                            <td class="text-end">01-12-2023</td>
+                                            <td class="align-middle text-center text-sm"><span
+                                                    class="badge badge-sm bg-gradient-success"> &#10004;</td>
+                                            <td class="align-middle text-center text-sm"><span
+                                                    class="badge badge-sm bg-gradient-secondary">&#9744;</td>
+                                            <td class="text-center m-0 p-0">
+                                                <button class="btn btn-primary btn-icon-only m-0 p-0 btn-sm" type="button"
+                                                    data-bs-toggle="modal" data-bs-target="#detailGaji">
+                                                    <span class="btn-inner--icon"><i class="material-icons">info</i></span>
+                                                </button>
+                                                <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
+                                                    <span class="btn-inner--icon"><i class="material-icons">print</i></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
