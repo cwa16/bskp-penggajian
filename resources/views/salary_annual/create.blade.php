@@ -33,7 +33,7 @@
                         </form>
                         @if (request()->filled('id_status') && $users->isNotEmpty())
                             <hr class="horizontal dark my-2">
-                            <form action="{{ route('salaryannual.store') }}" method="post">
+                            <form action="{{ route('salaryannual.store') }}" method="post" class="salary-annual-form">
                                 @csrf
                                 <div class="row">
                                     <div class="col">
@@ -92,7 +92,8 @@
                                                                 <div class="input-group input-group-outline">
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
-                                                                        style="width: 120px" name="ability[]"
+                                                                        style="width: 120px"
+                                                                        name="ability[{{ $key }}]"
                                                                         placeholder="Enter the ability">
                                                                 </div>
                                                             </td>
@@ -100,7 +101,7 @@
                                                                 <div class="input-group input-group-outline">
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
-                                                                        style="width: 120px" name="fungtional_allowance[]"
+                                                                        style="width: 120px" name="fungtional_allowance[{{ $key }}]"
                                                                         placeholder="Enter the fungtional allowance">
                                                                 </div>
                                                             </td>
@@ -108,7 +109,7 @@
                                                                 <div class="input-group input-group-outline">
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
-                                                                        style="width: 120px" name="family_allowance[]"
+                                                                        style="width: 120px" name="family_allowance[{{ $key }}]"
                                                                         placeholder="Enter the family allowance">
                                                                 </div>
                                                             </td>
@@ -116,7 +117,7 @@
                                                                 <div class="input-group input-group-outline">
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
-                                                                        style="width: 120px" name="adjustment[]"
+                                                                        style="width: 120px" name="adjustment[{{ $key }}]"
                                                                         placeholder="Enter the adjustment">
                                                                 </div>
                                                             </td>
@@ -124,7 +125,7 @@
                                                                 <div class="input-group input-group-outline">
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
-                                                                        style="width: 120px" name="transport_allowance[]"
+                                                                        style="width: 120px" name="transport_allowance[{{ $key }}]"
                                                                         placeholder="Enter the transport allowance">
                                                                 </div>
                                                             </td>

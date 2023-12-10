@@ -84,27 +84,6 @@
         });
     })
 </script>
-<!-- Script Datatable -->
-<script>
-    var table = $('#dtTableinput').DataTable({
-        columnDefs: [{
-            orderable: false,
-            targets: [1, 2, 3]
-        }]
-    });
-
-    // $('button').on('click', function(e) {
-    //     e.preventDefault();
-
-    //     var data = table.$('input, select').serialize();
-
-    //     alert(
-    //         'The following data would have been submitted to the server: \n\n' +
-    //         data.substr(0, 120) +
-    //         '...'
-    //     );
-    // });
-</script>
 
 {{-- SCRIPT FORM VALIDATION --}}
 <script>
@@ -228,12 +207,12 @@
 
         // Menambahkan aturan validasi untuk input number
         jQuery.validator.addMethod("positiveNum", function(value, element) {
-            return value > 0;
+            return value >= 0;
         }, "Please enter a positive number.");
 
         jQuery.validator.addMethod("validNum", function(value, element) {
             // Use regex to check if the input contains only numbers
-            return /^[0-9]+$/.test(value);
+            return /^[0-9]*$/.test(value);
         }, "Please enter a valid number");
 
         // variable untuk rule yg sama
@@ -261,6 +240,37 @@
                             "rate_salary[{{ $grade->id }}]": {
                                 required: true,
                                 positiveNum: true,
+                                validNum: true
+                            },
+                        @endforeach
+                    @endif
+                },
+                ...element
+            })
+        });
+
+        // Validasi untuk data status
+        $('.salary-annual-form').each(function() {
+            var form = $(this);
+            form.validate({
+                rules: {
+                    @if (isset($users))
+                        @foreach ($users as $key => $grade)
+                            "ability[{{ $key }}]": {
+                                required: true,
+                                positiveNum: true,
+                                validNum: true
+                            },
+                            "fungtional_allowance[{{ $key }}]": {
+                                validNum: true
+                            },
+                            "family_allowance[{{ $key }}]": {
+                                validNum: true
+                            },
+                            "adjustment[{{ $key }}]": {
+                                validNum: true
+                            },
+                            "transport_allowance[{{ $key }}]": {
                                 validNum: true
                             },
                         @endforeach
