@@ -12,21 +12,32 @@
 
                     <div class="card-body p-3 pb-2">
                         <div class="row">
-                            <div class="col-9">
+                            <div class="col-7">
                                 <a href="{{ url('/salaryannual/create') }}" class="btn btn-info btn-sm">Input Data</a>
                                 <a href="{{ url('/salaryannual/edit') }}" class="btn btn-warning btn-sm">Edit Data</a>
                             </div>
-                            <div class="col-3 justify-content-end">
-                                <select class="form-select px-3">
-                                    <option selected>- Filter Tahun -</option>
-                                    <option value="1">2023</option>
-                                    <option value="2">2024</option>
-                                    <option value="3">2025</option>
-                                </select>
+                            <div class="col-5 justify-content-end">
+                                <form action="{{ url('/salarygrade') }}" method="GET">
+                                    <div class="row">
+                                        <div class="col pe-0">
+                                            <select class="form-select form-select-sm " name="filter_year">
+                                                <option value="all">Show All Data</option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <select class="form-select form-select-sm " name="filter_year">
+                                                <option value="all">Show All Data</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="table-responsive p-0">
-                            <table class="table table-sm dtTableFix5 align-items-center small-tbl compact stripe hover"
+                            <table class="table table-sm dtTableFix2 align-items-center small-tbl compact stripe hover"
                                 style="font-size: 10pt; font-family: 'Arial', sans-serif;">
                                 <thead>
                                     <tr>
@@ -54,90 +65,29 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="text-nowrap">123-001</td>
-                                        <td>Mr. A</td>
-                                        <td>IV-A</td>
-                                        <td>Monthly</td>
-                                        <td>BSKP</td>
-                                        <td>Assistant Manager</td>
-                                        <td>8.999.999</td>
-                                        <td>600.000</td>
-                                        <td>0</td>
-                                        <td>100.000</td>
-                                        <td>0</td>
-                                        <td>300.000</td>
-                                        <td>99.999</td>
-                                        <td>199.999</td>
-                                        <td class="text-center m-0 p-0">
-                                            <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
-                                                <span class="btn-inner--icon"><i class="material-icons">edit</i></span>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>123-002</td>
-                                        <td>Mr. B</td>
-                                        <td>IV-A</td>
-                                        <td>Monthly</td>
-                                        <td>BSKP</td>
-                                        <td>Administrasi</td>
-                                        <td>7.999.999</td>
-                                        <td>600.000</td>
-                                        <td>0</td>
-                                        <td>100.000</td>
-                                        <td>0</td>
-                                        <td>300.000</td>
-                                        <td>89.999</td>
-                                        <td>179.999</td>
-                                        <td class="text-center m-0 p-0">
-                                            <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
-                                                <span class="btn-inner--icon"><i class="material-icons">edit</i></span>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>123-003</td>
-                                        <td>Mrs. C</td>
-                                        <td>IV-A</td>
-                                        <td>Monthly</td>
-                                        <td>BSKP</td>
-                                        <td>Administrasi</td>
-                                        <td>8.999.999</td>
-                                        <td>500.000</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>94.999</td>
-                                        <td>189.999</td>
-                                        <td class="text-center m-0 p-0">
-                                            <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
-                                                <span class="btn-inner--icon"><i class="material-icons">edit</i></span>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>123-004</td>
-                                        <td>Mr. D</td>
-                                        <td>IV-A</td>
-                                        <td>Monthly</td>
-                                        <td>HSE & DP</td>
-                                        <td>Administrasi</td>
-                                        <td>7.999.999</td>
-                                        <td>600.000</td>
-                                        <td>0</td>
-                                        <td>100.000</td>
-                                        <td>0</td>
-                                        <td>300.000</td>
-                                        <td>89.999</td>
-                                        <td>179.999</td>
-                                        <td class="text-center m-0 p-0">
-                                            <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
-                                                <span class="btn-inner--icon"><i class="material-icons">edit</i></span>
-                                            </button>
-                                        </td>
-                                    </tr>
+                                    @foreach ($salaries as $key => $salary)
+                                        <tr>
+                                            <td class="text-nowrap">{{ $salary->id_user }}</td>
+                                            <td>{{ $salary->user->name }}</td>
+                                            <td>{{ $salary->user->grade->name_grade }}</td>
+                                            <td>{{ $salary->user->status->name_status }}</td>
+                                            <td>{{ $salary->user->dept->name_dept }}</td>
+                                            <td>{{ $salary->user->job->name_job }}</td>
+                                            <td>{{ $salary->salary_grade->rate_salary }}</td>
+                                            <td>{{ $salary->ability }}</td>
+                                            <td>{{ $salary->fungtional_allowance }}</td>
+                                            <td>{{ $salary->family_allowance }}</td>
+                                            <td>{{ $salary->adjustment }}</td>
+                                            <td>{{ $salary->transport_allowance }}</td>
+                                            <td>{{ $salary->bpjs }}</td>
+                                            <td>{{ $salary->jamsostek }}</td>
+                                            <td class="text-center m-0 p-0">
+                                                <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
+                                                    <span class="btn-inner--icon"><i class="material-icons">edit</i></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

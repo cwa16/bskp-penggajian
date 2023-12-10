@@ -15,7 +15,8 @@ class SalaryAnnualController extends Controller
     public function index()
     {
         $title = 'Salary Per Year';
-        return view('salary_annual.index', compact('title'));
+        $salaries = Salary::all();
+        return view('salary_annual.index', compact('title', 'salaries'));
     }
 
     /**
