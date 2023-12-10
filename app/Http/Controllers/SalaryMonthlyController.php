@@ -15,7 +15,7 @@ class SalaryMonthlyController extends Controller
      */
     public function index()
     {
-        $title = 'Salary Per Year';
+        $title = 'Salary Per Month';
         $salaries = Salary::all();
         return view('salary_monthly.index', compact('title', 'salaries'));
     }
