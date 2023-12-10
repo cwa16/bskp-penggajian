@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Salary;
+
 use Illuminate\Http\Request;
 
 class SalaryMonthlyController extends Controller
@@ -13,7 +15,9 @@ class SalaryMonthlyController extends Controller
      */
     public function index()
     {
-        return view('salary_monthly.index', ['title' => 'Data Gaji']);
+        $title = 'Salary Per Year';
+        $salaries = Salary::all();
+        return view('salary_monthly.index', compact('title', 'salaries'));
     }
 
     /**
