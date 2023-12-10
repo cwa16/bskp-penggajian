@@ -206,7 +206,7 @@
                                                     '.',
                                                 ) }}
                                             </td>
-                                            <td class="text-end">01-12-2023</td>
+                                            <td class="text-end">{{ date('Y-m-d', strtotime($salary->created_at)) }}</td>
                                             <td class="align-middle text-center text-sm"><span
                                                     class="badge badge-sm bg-gradient-success"> &#10004;</td>
                                             <td class="align-middle text-center text-sm"><span
