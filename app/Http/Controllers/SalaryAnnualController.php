@@ -71,6 +71,10 @@ class SalaryAnnualController extends Controller
             }
             $jamsostek = $total * 0.02;
 
+            $jamsostek_jkk = $total * 0.0054;
+            $jamsostek_tk = $total * 0.003;
+            $jamsostek_tht = $total * 0.037;
+
             // Simpan data ke dalam database
             Salary::create([
                 'id_user' => $request->input('id_user')[$key], // Pastikan Anda memiliki input user_id pada form
@@ -82,6 +86,12 @@ class SalaryAnnualController extends Controller
                 'transport_allowance' => $request->input('transport_allowance')[$key] ?? 0,
                 'bpjs' => $bpjs,
                 'jamsostek' => $jamsostek,
+                'jamsostek_jkk_ben' => $jamsostek_jkk,
+                'jamsostek_tk_ben' => $jamsostek_tk,
+                'jamsostek_tht_ben' => $jamsostek_tht,
+                'jamsostek_jkk_deb' => $jamsostek_jkk,
+                'jamsostek_tk_deb' => $jamsostek_tk,
+                'jamsostek_tht_deb' => $jamsostek_tht,
             ]);
         }
 
