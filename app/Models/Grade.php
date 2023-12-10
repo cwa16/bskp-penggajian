@@ -19,9 +19,9 @@ class Grade extends Model
         return $this->hasMany(User::class, 'id_grade');
     }
 
-    // Relasi dengan tabel User
+    // Relasi dengan tabel salaryGrade
     public function salary_grades()
     {
-        return $this->hasMany(User::class, 'id_salary_grade');
+        return $this->hasMany(SalaryGrade::class, 'id_grade');
     }
 }

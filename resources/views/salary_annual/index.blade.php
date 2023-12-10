@@ -6,7 +6,7 @@
                 <div class="card my-4">
                     <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                         <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                            <h6 class="text-white text-capitalize ps-3">Data Gaji Per Tahun</h6>
+                            <h6 class="text-white text-capitalize ps-3">Salary Data Per Year</h6>
                         </div>
                     </div>
 
@@ -26,8 +26,7 @@
                             </div>
                         </div>
                         <div class="table-responsive p-0">
-                            <table
-                                class="table table-sm table-striped table-hover dtTableFix5 align-items-center small-tbl compact "
+                            <table class="table table-sm dtTableFix5 align-items-center small-tbl compact stripe hover"
                                 style="font-size: 10pt; font-family: 'Arial', sans-serif;">
                                 <thead>
                                     <tr>

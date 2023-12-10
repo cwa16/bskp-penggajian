@@ -50,6 +50,27 @@
 </script>
 <script>
     $(document).ready(function() {
+        $('.dtTableFix3').DataTable({
+            "lengthChange": true,
+            "autoWidth": true,
+            "initComplete": function(settings, json) {
+                $(".dtTableFix3").wrap(
+                    "<div style='overflow:auto; width:100%;position:relative;'></div>");
+            },
+            "fixedColumns": {
+                leftColumns: 3,
+            },
+            "searching": false,
+            "lengthMenu": [
+                [10, 50, 100, 200, -1],
+                [10, 50, 100, 200, "All"]
+            ], // Customize the entries per page
+            "pageLength": -1
+        });
+    })
+</script>
+<script>
+    $(document).ready(function() {
         $('.dtTableFix2').DataTable({
             "lengthChange": true,
             "autoWidth": true,

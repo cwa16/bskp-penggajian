@@ -106,4 +106,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Salary::class, 'id_user');
     }
+
+    // method mengecek apakah data user sudah berelasi dengan salaries tahun ini
+    public function hasSalaryForYear($year)
+    {
+        return $this->salaries()->whereYear('created_at', $year)->exists();
+    }
 }

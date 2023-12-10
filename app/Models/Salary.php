@@ -56,7 +56,7 @@ class Salary extends Model
     }
 
     // Relasi dengan tabel SalaryGrade
-    public function salaryGrade()
+    public function salary_grade()
     {
         return $this->belongsTo(SalaryGrade::class, 'id_salary_grade');
     }

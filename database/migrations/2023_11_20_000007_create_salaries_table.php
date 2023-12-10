@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_user')->index();
             $table->unsignedBigInteger('id_salary_grade')->index();
             $table->integer('ability')->nullable();
-            $table->integer('functional_allowance')->nullable();
+            $table->integer('fungtional_allowance')->nullable();
             $table->integer('family_allowance')->nullable();
             $table->integer('adjustment')->nullable();
             $table->integer('transport_allowance')->nullable();
