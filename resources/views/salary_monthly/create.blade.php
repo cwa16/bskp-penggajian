@@ -11,160 +11,141 @@
                     </div>
 
                     <div class="card-body p-3 pb-2">
-                        <div class="row">
-                            <div class="col">
-                                <select class="form-select ps-3">
-                                    <option selected>- Pilih Status -</option>
-                                    <option value="Assistant trainee">Assistant trainee</option>
-                                    <option value="Manager">Manager</option>
-                                    <option value="Monthly">Monthly</option>
-                                    <option value="Staff">Staff</option>
-                                </select>
-                            </div>
-                                {{-- <div class="col">
-                                    <select class="form-select ps-3">
-                                        <option selected>- Pilih Departement -</option>
-                                        <option value="Acc & Fin">Acc & Fin</option>
-                                        <option value="BSKP">BSKP</option>
-                                        <option value="Factory">Factory</option>
-                                        <option value="Field">Field</option>
-                                        <option value="FSD">FSD</option>
-                                        <option value="HR & Legal">HR & Legal</option>
-                                        <option value="HR Legal">HR Legal</option>
-                                        <option value="HSE & DP">HSE & DP</option>
-                                        <option value="I/A">I/A</option>
-                                        <option value="I/B">I/B</option>
-                                        <option value="I/C">I/C</option>
-                                        <option value="II/D">II/D</option>
-                                        <option value="II/E">II/E</option>
-                                        <option value="II/F">II/F</option>
-                                        <option value="IT">IT</option>
-                                        <option value="QA">QA</option>
-                                        <option value="QM">QM</option>
-                                        <option value="Security">Security</option>
-                                        <option value="Workshop">Workshop</option>
-                                    </select>
-
-                                </div> --}}
-                            <div class="col">
-                                <button type="button" class="btn btn-info">Filter</button>
-                            </div>
-                            <hr class="horizontal dark my-3">
+                        <form action="{{ route('salarymonthly.create') }}" method="get">
+                            @csrf
                             <div class="row">
-                                <div class="col">
-                                    <button type="button" class="btn btn-success btn-sm">Simpan</button>
-                                    <a type="button" href="{{ route('salaryannual.index') }}"
-                                        class="btn btn-outline-secondary btn-sm">Kembali</a>
+                                <div class="col-auto">
+                                    <select name="id_status" class="form-select form-select-sm">
+                                        <option value="">- Pilih Status -</option>
+                                        @foreach ($statuses as $status)
+                                            <option value="{{ $status->id }}"
+                                                @if ($status->id == $selectedStatus) selected @endif>{{ $status->name_status }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                                <div class="table-responsive p-0">
-                                    <table class="table table-sm align-items-center mb-0 text-center dtTableFix5 compact small-tbl">
-                                        <thead>
-                                            <tr>
-                                                <th rowspan="2" colspan="6" class="text-center p-0">Identitas Karyawan
-                                                </th>
-                                                <th colspan="2" class="text-center p-0">Salary
-                                                    Components
-                                                </th>
-                                                <th rowspan="2" colspan="4"
-                                                    class="text-center p-0">
-                                                    Deduction</th>
-                                                {{-- <th rowspan="3" class="text-center">Tanggal Pengisian</th> --}}
-                                            </tr>
-                                            <tr>
-                                                {{-- <th colspan="6" class="text-center p-0">Identitas Karyawan</th> --}}
-                                                <th colspan="2" class="text-center p-0">Overtime
-                                                </th>
-                                                {{-- <th colspan="4" class="text-center p-0">Deduction</th> --}}
-                                                {{-- <th class="text-center p-0">Action</th> --}}
-                                            </tr>
-                                            <tr>
-                                                <th>NIK</th>
-                                                <th>Name</th>
-                                                <th>Grade</th>
-                                                <th>Status</th>
-                                                <th>Dept</th>
-                                                <th>Job</th>
-                                                <th>Hour(ori)</th>
-                                                <th>Hour(call)</th>
-                                                <th>Union</th>
-                                                <th>Absent</th>
-                                                <th>Electricity</th>
-                                                <th>Koperasi</th>
-                                                {{-- <th>Tanggal Pengisian</th> --}}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>123-001</td>
-                                                <td>Mr. A</td>
-                                                <td>IV-A</td>
-                                                <td>Monthly</td>
-                                                <td>BSKP</td>
-                                                <td>Assistant Manager</td>
-                                                <td><input type="number" id="row-hour_ori" name="row-hour_ori"
-                                                        value="" placeholder="Hour(ori)"></td>
-                                                <td><input type="number" id="row-hour_call" name="row-hour_call"
-                                                        value="" placeholder="Hour(call)"></td>
-                                                <td><input type="number" id="row-Union" name="row-Union" value=""
-                                                        placeholder="Union"></td>
-                                                <td><input type="number" id="row-absent" name="row-absent" value=""
-                                                        placeholder="Absent"></td>
-                                                <td><input type="number" id="row-electricity" name="row-electricity"
-                                                        value="" placeholder="Electricity"></td>
-                                                <td><input type="number" id="row-koperasi" name="row-koperasi"
-                                                        value="" placeholder="Koperasi"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>123-002</td>
-                                                <td>Mr. B</td>
-                                                <td>III-D</td>
-                                                <td>Monthly</td>
-                                                <td>BSKP</td>
-                                                <td>Administrasi</td>
-                                                <td><input type="number" id="row-hour_ori" name="row-hour_ori"
-                                                        value="" placeholder="Hour(ori)"></td>
-                                                <td><input type="number" id="row-hour_call" name="row-hour_call"
-                                                        value="" placeholder="Hour(call)"></td>
-                                                <td><input type="number" id="row-Union" name="row-Union" value=""
-                                                        placeholder="Union"></td>
-                                                <td><input type="number" id="row-absent" name="row-absent"
-                                                        value="" placeholder="Absent"></td>
-                                                <td><input type="number" id="row-electricity" name="row-electricity"
-                                                        value="" placeholder="Electricity"></td>
-                                                <td><input type="number" id="row-koperasi" name="row-koperasi"
-                                                        value="" placeholder="Koperasi"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>123-003</td>
-                                                <td>Mrs. C</td>
-                                                <td>IV-A</td>
-                                                <td>Monthly</td>
-                                                <td>BSKP</td>
-                                                <td>Administrasi</td>
-                                                <td><input type="number" id="row-hour_ori" name="row-hour_ori"
-                                                        value="" placeholder="Hour(ori)"></td>
-                                                <td><input type="number" id="row-hour_call" name="row-hour_call"
-                                                        value="" placeholder="Hour(call)"></td>
-                                                <td><input type="number" id="row-Union" name="row-Union" value=""
-                                                        placeholder="Union"></td>
-                                                <td><input type="number" id="row-absent" name="row-absent"
-                                                        value="" placeholder="Absent"></td>
-                                                <td><input type="number" id="row-electricity" name="row-electricity"
-                                                        value="" placeholder="Electricity"></td>
-                                                <td><input type="number" id="row-koperasi" name="row-koperasi"
-                                                        value="" placeholder="Koperasi"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                <div class="col">
+                                    <button type="submit" class="btn btn-primary btn-sm mb-2">Filter</button>
+                                    <a type="button" href="{{ route('salaryannual.index') }}"
+                                        class="btn btn-outline-secondary btn-sm mb-2">Cancel</a>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    {{-- <div class="card my-4">
-                    <div class="card-body p-3 pb-2">
+                        </form>
+                        @if (request()->filled('id_status') && $users->isNotEmpty())
+                            <hr class="horizontal dark my-2">
+                            <form action="{{ route('salarymonthly.store') }}" method="post" class="salary-annual-form">
+                                @csrf
+                                <div class="row">
+                                    <div class="col">
+                                        <button type="submit" class="btn btn-success btn-sm px-4">Save</button>
+                                    </div>
+                                    <div class="col">
+                                        <div class="table-responsive p-0">
+                                            <table
+                                                class="table align-items-center small-tbl dtTableFix3 compact stripe hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th rowspan="2" class="text-center p-0">#</th>
+                                                        <th  colspan="6" class="text-center p-0">Employee
+                                                            Identity</th>
+                                                        <th colspan="2" class="text-center p-0">Salary Components</th>
+                                                        <th  colspan="4" class="text-center p-0">
+                                                            Deduction</th>
+                                                    </tr>
+                                                    <tr class="">
+                                                        <th class="cell-border">NIK</th>
+                                                        <th>Name</th>
+                                                        <th>Grade</th>
+                                                        <th>Status</th>
+                                                        <th>Dept</th>
+                                                        <th>Job</th>
+                                                        <th>Rate Salary</th>
+                                                        <th>Total Overtime</th>
+                                                        <th>Union</th>
+                                                        <th>Absent</th>
+                                                        <th>Electricity</th>
+                                                        <th>Koperasi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($users as $key => $user)
+                                                        <tr>
+                                                            <td>{{ $key + 1 }}</td>
+                                                            <td class="text-nowrap text-end">{{ $user->nik }}</td>
+                                                            <td>{{ $user->name }}</td>
+                                                            <td>{{ $user->grade->name_grade ?? '-' }}</td>
+                                                            <td>{{ $user->status->name_status }}</td>
+                                                            <td>{{ $user->dept->name_dept }}</td>
+                                                            <td>{{ $user->job->name_job }}</td>
+                                                            <td class="text-end">
+                                                                @if ($user->grade && $user->grade->salary_grades->isNotEmpty())
+                                                                    {{ number_format($user->grade->salary_grades->first()->rate_salary, 0, ',', '.') }}
+                                                                @else
+                                                                    -
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                <input type="hidden" name="id_user[]"
+                                                                    value="{{ $user->id }}">
+                                                                <input type="hidden" name="id_salary_grade[]"
+                                                                    value="{{ $user->grade->salary_grades->first()->id ?? '' }}">
+                                                                <input type="hidden" name="rate_salary[]"
+                                                                    value="{{ $user->grade->salary_grades->first()->rate_salary ?? '' }}">
 
+                                                                <div class="input-group input-group-outline">
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm"
+                                                                        style="width: 120px"
+                                                                        name="total_overtime[{{ $key }}]"
+                                                                        placeholder="Enter the total overtime">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="input-group input-group-outline">
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm"
+                                                                        style="width: 120px"
+                                                                        name="union[{{ $key }}]"
+                                                                        placeholder="Enter the union">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="input-group input-group-outline">
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm"
+                                                                        style="width: 120px"
+                                                                        name="absent[{{ $key }}]"
+                                                                        placeholder="Enter the absent">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="input-group input-group-outline">
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm"
+                                                                        style="width: 120px"
+                                                                        name="electricity[{{ $key }}]"
+                                                                        placeholder="Enter the electricity">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="input-group input-group-outline">
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm"
+                                                                        style="width: 120px"
+                                                                        name="koperasi[{{ $key }}]"
+                                                                        placeholder="Enter the koperasi">
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        @endif
                     </div>
-                </div> --}}
                 </div>
             </div>
         @endsection
