@@ -76,7 +76,7 @@
                                         <th>Incentive</th>
                                         <th>Salary Gross</th>
                                         {{-- <th class=">Bruto Salary</th> --}}
-                                        <th>BPJS</th>
+                                        <th>BPJS Kesehatan</th>
                                         <th>Jamsostek</th>
                                         <th>Union</th>
                                         <th>Absent</th>
@@ -92,7 +92,7 @@
                                 <tbody>
                                     @foreach ($salaries as $key => $salary)
                                         <tr>
-                                            <td class="text-nowrap text-end">{{ $salary->id_user }}</td>
+                                            <td class="text-nowrap text-end">{{ $salary->user->nik }}</td>
                                             <td><a data-bs-toggle="modal"
                                                     href="#detailGaji{{ $salary->id }}">{{ $salary->user->name }}</a></td>
                                             <td>{{ $salary->user->grade->name_grade }}</td>

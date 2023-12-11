@@ -59,7 +59,7 @@
                                         <th>Family Allowance</th>
                                         <th>Adjustment</th>
                                         <th>Transport Allowance</th>
-                                        <th>BPJS</th>
+                                        <th>BPJS Kesehatan</th>
                                         <th>Jamsostek</th>
                                         {{-- <th>Action</th> --}}
                                     </tr>
@@ -67,7 +67,7 @@
                                 <tbody>
                                     @foreach ($salaries as $key => $salary)
                                         <tr>
-                                            <td class="text-nowrap text-end">{{ $salary->id_user }}</td>
+                                            <td class="text-nowrap text-end">{{ $salary->user->nik }}</td>
                                             <td>{{ $salary->user->name }}</td>
                                             <td>{{ $salary->user->grade->name_grade }}</td>
                                             <td>{{ $salary->user->status->name_status }}</td>
