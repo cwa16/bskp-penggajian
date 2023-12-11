@@ -46,12 +46,6 @@ class SalaryMonthlyController extends Controller
             $query->orderBy('year', 'desc'); // Jika Anda ingin mengurutkan berdasarkan tahun.
         }])->whereIn('id_status', $selectedStatusIds)->get();
 
-        // Filter users yang telah memiliki data gaji untuk bulan ini
-        $month = date('m');
-        $users = $users->filter(function ($user) use ($month) {
-            return !$user->hasSalaryForMonth($month);
-        });
-        
 
         // Meneruskan data ke tampilan
         return view('salary_monthly.create', compact('title', 'users', 'statuses', 'selectedStatus'));

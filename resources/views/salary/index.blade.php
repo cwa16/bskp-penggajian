@@ -557,6 +557,12 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-icon btn-3 btn-warning btn-sm" type="button">
+                                <span class="btn-inner--icon"><i class="material-icons">print</i></span>
+                                <span class="btn-inner--text">Print</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
