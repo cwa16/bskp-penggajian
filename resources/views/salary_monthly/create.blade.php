@@ -26,7 +26,7 @@
                                 </div>
                                 <div class="col">
                                     <button type="submit" class="btn btn-primary btn-sm mb-2">Filter</button>
-                                    <a type="button" href="{{ route('salaryannual.index') }}"
+                                    <a type="button" href="{{ route('salarymonthly.index') }}"
                                         class="btn btn-outline-secondary btn-sm mb-2">Cancel</a>
                                 </div>
                             </div>
