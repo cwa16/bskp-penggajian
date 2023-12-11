@@ -6,7 +6,7 @@
                 <div class="card my-4">
                     <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                         <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                            <h6 class="text-white text-capitalize ps-3">Data Seluruh Gaji</h6>
+                            <h6 class="text-white text-capitalize ps-3">All Salary Data</h6>
                         </div>
                     </div>
 
@@ -44,13 +44,13 @@
                                 <thead>
                                     <tr>
                                         {{-- <th rowspan="2" class="text-center">No</th> --}}
-                                        <th colspan="7" class="text-center p-0">Identitas Karyawan</th>
+                                        <th colspan="7" class="text-center p-0">Employee Identity</th>
                                         <th colspan="11" class="text-center p-0">Salary Components</th>
                                         <th rowspan="2" class="text-center bg-light text-dark">Bruto Salary</th>
                                         <th colspan="7" class="text-center p-0">Deduction</th>
                                         <th rowspan="2" class="text-center bg-light text-dark">Total Deduction</th>
                                         <th rowspan="2" class="text-center bg-light text-dark">Nett Salary</th>
-                                        <th rowspan="2" class="text-center">Tanggal Pengisian</th>
+                                        <th rowspan="2" class="text-center">Date Input</th>
                                         <th rowspan="2" class="text-center">Check</th>
                                         <th rowspan="2" class="text-center">Approve</th>
                                         <th rowspan="2" class="text-center">Action</th>
@@ -207,7 +207,7 @@
                                                     '.',
                                                 ) }}
                                             </td>
-                                            <td class="text-end">{{ date('Y-m-d', strtotime($salary->created_at)) }}</td>
+                                            <td class="text-end">{{ date('Y-M-d', strtotime($salary->created_at)) }}</td>
                                             <td class="align-middle text-center text-sm"><span
                                                     class="badge badge-sm bg-gradient-success"> &#10004;</td>
                                             <td class="align-middle text-center text-sm"><span
