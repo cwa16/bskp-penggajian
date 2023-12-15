@@ -49,6 +49,7 @@ return new class extends Migration
             $table->integer('total_debenefit')->nullable();
             $table->integer('total_deduction')->nullable();
             $table->integer('nett_salary')->nullable();
+            $table->integer('month')->nullable();
             $table->boolean('is_checked')->default(0);
             $table->boolean('is_approved')->default(0);
             $table->timestamps();
