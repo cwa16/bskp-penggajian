@@ -65,4 +65,14 @@ class SalaryController extends Controller
     {
         //
     }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function print_preview()
+    {
+        $title = 'Salary';
+        $salaries = Salary::all();
+        return view('salary.index', compact('title', 'salaries'));
+    }
 }

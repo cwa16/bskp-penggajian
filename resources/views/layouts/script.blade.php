@@ -281,3 +281,24 @@
         });
     });
 </script>
+<script>
+    function updateRealTimeClock() {
+        var now = new Date();
+        var hours = now.getHours();
+        var minutes = now.getMinutes();
+        var seconds = now.getSeconds();
+
+        // Format waktu sesuai kebutuhan
+        var formattedTime = hours + ':' + (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') +
+            seconds;
+
+        // Update elemen HTML dengan waktu terbaru
+        document.getElementById('real-time-clock').innerHTML = '[' + formattedTime + ']';
+    }
+
+    // Pembaruan setiap detik (1000 milidetik)
+    setInterval(updateRealTimeClock, 1000);
+
+    // Panggil untuk pertama kali saat halaman dimuat
+    updateRealTimeClock();
+</script>

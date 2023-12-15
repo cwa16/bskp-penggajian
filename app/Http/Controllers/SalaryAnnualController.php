@@ -74,6 +74,7 @@ class SalaryAnnualController extends Controller
             $jamsostek_jkk = $total * 0.0054;
             $jamsostek_tk = $total * 0.003;
             $jamsostek_tht = $total * 0.037;
+            $total_jamsostek = $jamsostek_jkk + $jamsostek_tk + $jamsostek_tht;
 
             // Simpan data ke dalam database
             Salary::create([
@@ -89,9 +90,11 @@ class SalaryAnnualController extends Controller
                 'jamsostek_jkk_ben' => $jamsostek_jkk,
                 'jamsostek_tk_ben' => $jamsostek_tk,
                 'jamsostek_tht_ben' => $jamsostek_tht,
+                'total_benefit' => $total_jamsostek,
                 'jamsostek_jkk_deb' => $jamsostek_jkk,
                 'jamsostek_tk_deb' => $jamsostek_tk,
                 'jamsostek_tht_deb' => $jamsostek_tht,
+                'total_debenefit' => $total_jamsostek,
             ]);
         }
 
