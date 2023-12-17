@@ -230,7 +230,7 @@
             }
         };
 
-        // Validasi untuk data status
+        // Validasi untuk data salary per grade
         $('.salary-grade-form').each(function() {
             var form = $(this);
             form.validate({
@@ -248,7 +248,7 @@
             })
         });
 
-        // Validasi untuk data status
+        // Validasi untuk data salary per year
         $('.salary-annual-form').each(function() {
             var form = $(this);
             form.validate({
@@ -269,6 +269,36 @@
                                 validNum: true
                             },
                             "transport_allowance[{{ $key }}]": {
+                                validNum: true
+                            },
+                        @endforeach
+                    @endif
+                },
+                ...element
+            })
+        });
+
+        // Validasi untuk data salary per year
+        $('.salary-monthly-form').each(function() {
+            var form = $(this);
+            form.validate({
+                rules: {
+                    @if (isset($users))
+                        @foreach ($users as $key => $grade)
+                            "hour_call[{{ $key }}]": {
+                                positiveNum: true,
+                                validNum: true
+                            },
+                            "union[{{ $key }}]": {
+                                validNum: true
+                            },
+                            "absent[{{ $key }}]": {
+                                validNum: true
+                            },
+                            "electricity[{{ $key }}]": {
+                                validNum: true
+                            },
+                            "koperasi[{{ $key }}]": {
                                 validNum: true
                             },
                         @endforeach

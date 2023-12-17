@@ -33,7 +33,7 @@
                         </form>
                         @if (request()->filled('id_status') && $users->isNotEmpty())
                             <hr class="horizontal dark my-2">
-                            <form action="{{ route('salarymonthly.store') }}" method="post" class="salary-annual-form">
+                            <form action="{{ route('salarymonthly.store') }}" method="post" class="salary-monthly-form">
                                 @csrf
                                 <div class="row">
                                     <div class="col">
