@@ -13,7 +13,7 @@
                     <div class="card-body p-3 pb-2">
                         <div class="row">
                             <div class="col-7">
-                                <a href="{{ route('salary.printpreview') }}"  class="btn btn-icon btn-3 btn-warning btn-sm">
+                                <a href=""  class="btn btn-icon btn-3 btn-warning btn-sm">
                                     <span class="btn-inner--icon"><i class="material-icons">print</i></span>
                                     <span class="btn-inner--text">Print All</span>
                                 </a>
@@ -41,7 +41,7 @@
                         <div class="table-responsive p-0">
                             <table
                                 class="table table-sm table-striped table-hover dtTableFix2 align-items-center small-tbl compact">
-                                <thead>
+                                <thead class="bg-thead">
                                     <tr>
                                         {{-- <th rowspan="2" class="text-center">No</th> --}}
                                         <th colspan="7" class="text-center p-0">Employee Identity</th>
@@ -57,8 +57,8 @@
                                     </tr>
                                     <tr>
                                         {{-- <th>No</th> --}}
-                                        <th>NIK</th>
-                                        <th>Name</th>
+                                        <th style="background-color: #1A73E8;color: white;">NIK</th>
+                                        <th style="background-color: #1A73E8;color: white;">Name</th>
                                         <th>Dept</th>
                                         <th>Status</th>
                                         <th>Grade</th>

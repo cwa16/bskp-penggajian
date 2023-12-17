@@ -51,6 +51,11 @@
             font-size: 10pt;
             font-family: 'Arial', sans-serif
         }
+
+        .bg-thead {
+            background-color: #1A73E8;
+            color: white;
+        }
     </style>
 </head>
 
@@ -342,7 +347,7 @@
     <script src="{{ asset('assets/libs/moment/moment.min.js') }}"></script>
     <script src="{{ asset('assets/libs/inputmask/jquery.inputmask.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/autonumeric@4"></script>
-    
+
     @include('layouts/script')
 
 </body>

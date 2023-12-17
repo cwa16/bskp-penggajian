@@ -40,7 +40,7 @@
                         </div>
                         <div class="table-responsive p-0">
                             <table class="table table-sm align-items-center dtTable small-tbl compact stripe">
-                                <thead>
+                                <thead class="bg-thead">
                                     <tr>
                                         <th>No</th>
                                         <th>Grade</th>

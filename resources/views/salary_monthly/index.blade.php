@@ -44,7 +44,7 @@
                         <div class="table-responsive p-0">
                             <table
                                 class="table table-sm table-striped table-hover dtTableFix2 align-items-center compact small-tbl">
-                                <thead>
+                                <thead class="bg-thead">
                                     <tr>
                                         <th colspan="6" class="text-center p-0">Employee Identity</th>
                                         <th colspan="2" class="text-center p-0">Salary Components
@@ -55,8 +55,8 @@
                                         {{-- <th rowspan="2" class="text-center">Action</th> --}}
                                     </tr>
                                     <tr>
-                                        <th>NIK</th>
-                                        <th>Name</th>
+                                        <th style="background-color: #1A73E8;color: white;">NIK</th>
+                                        <th style="background-color: #1A73E8;color: white;">Name</th>
                                         <th>Grade</th>
                                         <th>Status</th>
                                         <th>Dept</th>

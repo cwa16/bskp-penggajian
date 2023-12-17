@@ -43,18 +43,18 @@
                                         <div class="table-responsive p-0">
                                             <table
                                                 class="table align-items-center small-tbl dtTableFix3 compact stripe hover">
-                                                <thead>
+                                                <thead class="bg-thead">
                                                     <tr>
-                                                        <th rowspan="2" class="text-center p-0">#</th>
+                                                        <th rowspan="2" class="text-center" style="background-color: #1A73E8;color: white;">#</th>
                                                         <th  colspan="6" class="text-center p-0">Employee
                                                             Identity</th>
                                                         <th colspan="2" class="text-center p-0">Salary Components</th>
                                                         <th  colspan="4" class="text-center p-0">
                                                             Deduction</th>
                                                     </tr>
-                                                    <tr class="">
-                                                        <th class="cell-border">NIK</th>
-                                                        <th>Name</th>
+                                                    <tr>
+                                                        <th style="background-color: #1A73E8;color: white;">NIK</th>
+                                                        <th style="background-color: #1A73E8;color: white;">Name</th>
                                                         <th>Grade</th>
                                                         <th>Status</th>
                                                         <th>Dept</th>
