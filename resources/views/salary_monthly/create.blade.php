@@ -45,11 +45,12 @@
                                                 class="table align-items-center small-tbl dtTableFix3 compact stripe hover">
                                                 <thead class="bg-thead">
                                                     <tr>
-                                                        <th rowspan="2" class="text-center" style="background-color: #1A73E8;color: white;">#</th>
-                                                        <th  colspan="6" class="text-center p-0">Employee
+                                                        <th rowspan="2" class="text-center"
+                                                            style="background-color: #1A73E8;color: white;">#</th>
+                                                        <th colspan="6" class="text-center p-0">Employee
                                                             Identity</th>
-                                                        <th colspan="2" class="text-center p-0">Salary Components</th>
-                                                        <th  colspan="4" class="text-center p-0">
+                                                        <th colspan="3" class="text-center p-0">Salary Components</th>
+                                                        <th colspan="4" class="text-center p-0">
                                                             Deduction</th>
                                                     </tr>
                                                     <tr>
@@ -60,6 +61,7 @@
                                                         <th>Dept</th>
                                                         <th>Job</th>
                                                         <th>Rate Salary</th>
+                                                        <th>Overtime Hour</th>
                                                         <th>Total Overtime</th>
                                                         <th>Union</th>
                                                         <th>Absent</th>
@@ -95,11 +97,12 @@
                                                                 <div class="input-group input-group-outline">
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
-                                                                        style="width: 120px"
-                                                                        name="total_overtime[{{ $key }}]"
-                                                                        placeholder="Enter the total overtime">
+                                                                        style="width: 90px"
+                                                                        name="hour_call[{{ $key }}]"
+                                                                        placeholder="Enter the overtime hour call">
                                                                 </div>
                                                             </td>
+                                                            <td>Total Overtime</td>
                                                             <td>
                                                                 <div class="input-group input-group-outline">
                                                                     <input type="number"
