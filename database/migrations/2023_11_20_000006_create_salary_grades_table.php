@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('salary_grades', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_grade')->index();
-            $table->integer('rate_salary');
+            $table->integer('rate_salary')->nullable();
             $table->year('year');
             $table->timestamps();
 

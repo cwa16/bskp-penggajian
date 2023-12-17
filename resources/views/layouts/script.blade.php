@@ -238,7 +238,6 @@
                     @if (isset($grades))
                         @foreach ($grades as $grade)
                             "rate_salary[{{ $grade->id }}]": {
-                                required: true,
                                 positiveNum: true,
                                 validNum: true
                             },
@@ -257,7 +256,6 @@
                     @if (isset($users))
                         @foreach ($users as $key => $grade)
                             "ability[{{ $key }}]": {
-                                required: true,
                                 positiveNum: true,
                                 validNum: true
                             },
