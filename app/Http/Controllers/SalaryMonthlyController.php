@@ -37,14 +37,15 @@ class SalaryMonthlyController extends Controller
             ? Status::whereIn('name_status', $allowedStatusNames)->where('id', $selectedStatus)->pluck('id')
             : Status::whereIn('name_status', $allowedStatusNames)->pluck('id');
 
-        // Menggunakan eager loading untuk memuat relasi grade dan salary_grades
-        $users = User::with(['grade.salary_grades' => function ($query) {
-            $query->orderBy('year', 'desc'); // Jika Anda ingin mengurutkan berdasarkan tahun.
-        }])->whereIn('id_status', $selectedStatusIds)->get();
-
+        // Menggunakan eager loading untuk memuat relasi user, grade, dan salary_grades
+        $salaries = Salary::with(['user' => function ($query) use ($selectedStatusIds) {
+            $query->whereIn('id_status', $selectedStatusIds);
+        }, 'user.grade.salary_grades' => function ($query) {
+            $query->orderBy('year', 'desc');
+        }])->get();
 
         // Meneruskan data ke tampilan
-        return view('salary_monthly.create', compact('title', 'users', 'statuses', 'selectedStatus'));
+        return view('salary_monthly.create', compact('title', 'salaries', 'statuses', 'selectedStatus'));
     }
 
     /**

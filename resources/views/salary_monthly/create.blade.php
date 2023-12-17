@@ -31,7 +31,7 @@
                                 </div>
                             </div>
                         </form>
-                        @if (request()->filled('id_status') && $users->isNotEmpty())
+                        @if (request()->filled('id_status') && $salaries->isNotEmpty() && $salaries->every(fn($salary) => $salary->user))
                             <hr class="horizontal dark my-2">
                             <form action="{{ route('salarymonthly.store') }}" method="post" class="salary-monthly-form">
                                 @csrf
@@ -70,29 +70,29 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach ($users as $key => $user)
+                                                    @foreach ($salaries as $key => $salary)
                                                         <tr>
                                                             <td>{{ $key + 1 }}</td>
-                                                            <td class="text-nowrap text-end">{{ $user->nik }}</td>
-                                                            <td>{{ $user->name }}</td>
-                                                            <td>{{ $user->grade->name_grade ?? '-' }}</td>
-                                                            <td>{{ $user->status->name_status }}</td>
-                                                            <td>{{ $user->dept->name_dept }}</td>
-                                                            <td>{{ $user->job->name_job }}</td>
+                                                            <td class="text-nowrap text-end">{{ $salary->user->nik }}</td>
+                                                            <td>{{ $salary->user->name }}</td>
+                                                            <td>{{ $salary->user->grade->name_grade ?? '-' }}</td>
+                                                            <td>{{ $salary->user->status->name_status }}</td>
+                                                            <td>{{ $salary->user->dept->name_dept }}</td>
+                                                            <td>{{ $salary->user->job->name_job }}</td>
                                                             <td class="text-end">
-                                                                @if ($user->grade && $user->grade->salary_grades->isNotEmpty())
-                                                                    {{ number_format($user->grade->salary_grades->first()->rate_salary, 0, ',', '.') }}
+                                                                @if ($salary->user->grade && $salary->user->grade->salary_grades->isNotEmpty())
+                                                                    {{ number_format($salary->user->grade->salary_grades->first()->rate_salary, 0, ',', '.') }}
                                                                 @else
                                                                     -
                                                                 @endif
                                                             </td>
                                                             <td>
                                                                 <input type="hidden" name="id_user[]"
-                                                                    value="{{ $user->id }}">
+                                                                    value="{{ $salary->id }}">
                                                                 <input type="hidden" name="id_salary_grade[]"
-                                                                    value="{{ $user->grade->salary_grades->first()->id ?? '' }}">
+                                                                    value="{{ $salary->user->grade->salary_grades->first()->id ?? '' }}">
                                                                 <input type="hidden" name="rate_salary[]"
-                                                                    value="{{ $user->grade->salary_grades->first()->rate_salary ?? '' }}">
+                                                                    value="{{ $salary->user->grade->salary_grades->first()->rate_salary ?? '' }}">
 
                                                                 <div class="input-group input-group-outline">
                                                                     <input type="number"
