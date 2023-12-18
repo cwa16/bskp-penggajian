@@ -47,7 +47,7 @@
                                 <thead class="bg-thead">
                                     <tr>
                                         <th colspan="6" class="text-center p-0">Employee Identity</th>
-                                        <th colspan="2" class="text-center p-0">Salary Components
+                                        <th colspan="5" class="text-center p-0">Salary Components
                                         </th>
                                         <th colspan="4" class="text-center p-0">
                                             Deduction</th>
@@ -63,6 +63,9 @@
                                         <th>Job</th>
                                         <th>Salary Grade</th>
                                         <th>Total Overtime</th>
+                                        <th>THR</th>
+                                        <th>Bonus</th>
+                                        <th>Incentive</th>
                                         <th>Union</th>
                                         <th>Absent</th>
                                         <th>Electricity</th>
@@ -84,6 +87,15 @@
                                                 {{ number_format($salary->salary_grade->rate_salary, 0, ',', '.') }}</td>
                                             <td class="text-end">
                                                 {{ number_format($salary->salary_grade->total_overtime, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-end">
+                                                {{ number_format($salary->salary_grade->thr, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-end">
+                                                {{ number_format($salary->salary_grade->bonus, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-end">
+                                                {{ number_format($salary->salary_grade->incentive, 0, ',', '.') }}
                                             </td>
                                             <td class="text-end">
                                                 {{ number_format($salary->salary_grade->union, 0, ',', '.') }}</td>

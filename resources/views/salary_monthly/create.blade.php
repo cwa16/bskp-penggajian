@@ -49,7 +49,7 @@
                                                             style="background-color: #1A73E8;color: white;">#</th>
                                                         <th colspan="6" class="text-center p-0">Employee
                                                             Identity</th>
-                                                        <th colspan="3" class="text-center p-0">Salary Components</th>
+                                                        <th colspan="6" class="text-center p-0">Salary Components</th>
                                                         <th colspan="4" class="text-center p-0">
                                                             Deduction</th>
                                                     </tr>
@@ -63,6 +63,9 @@
                                                         <th>Rate Salary</th>
                                                         <th>Overtime Hour</th>
                                                         <th>Total Overtime</th>
+                                                        <th>THR</th>
+                                                        <th>Bonus</th>
+                                                        <th>Incentive</th>
                                                         <th>Union</th>
                                                         <th>Absent</th>
                                                         <th>Electricity</th>
@@ -103,6 +106,33 @@
                                                                 </div>
                                                             </td>
                                                             <td>Total Overtime</td>
+                                                            <td>
+                                                                <div class="input-group input-group-outline">
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm"
+                                                                        style="width: 120px"
+                                                                        name="thr[{{ $key }}]"
+                                                                        placeholder="Enter the THR">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="input-group input-group-outline">
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm"
+                                                                        style="width: 120px"
+                                                                        name="bonus[{{ $key }}]"
+                                                                        placeholder="Enter the bonus">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="input-group input-group-outline">
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm"
+                                                                        style="width: 120px"
+                                                                        name="incentive[{{ $key }}]"
+                                                                        placeholder="Enter the incentive">
+                                                                </div>
+                                                            </td>
                                                             <td>
                                                                 <div class="input-group input-group-outline">
                                                                     <input type="number"
