@@ -98,7 +98,7 @@
                                 </tr>
                                 <tr>
                                     <td>Tax Number</td>
-                                    <td>: -</td>
+                                    <td>: {{ $salary->user->kpj }}</td>
                                 </tr>
                             </table>
                         </div>
@@ -112,47 +112,62 @@
                                 </tr>
                                 <tr>
                                     <td>Grade</td>
-                                    <td>: {{ number_format($salary->salary_grade->rate_salary, 0, ',', '.') }}</td>
+                                    <td>:</td>
+                                    <td class="text-end">
+                                        {{ number_format($salary->salary_grade->rate_salary, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr>
                                     <td>Ability</td>
-                                    <td>: {{ number_format($salary->ability, 0, ',', '.') }}</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->ability, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr>
                                     <td>Fungtional Allowance</td>
-                                    <td>: {{ number_format($salary->fungtional_allowance, 0, ',', '.') }}</td>
+                                    <td>:</td>
+                                    <td class="text-end">
+                                        {{ number_format($salary->fungtional_allowance, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr>
                                     <td>Family Allowance</td>
-                                    <td>: {{ number_format($salary->family_allowance, 0, ',', '.') }}</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->family_allowance, 0, ',', '.') }}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Adjustment</td>
-                                    <td>: {{ number_format($salary->adjustment, 0, ',', '.') }}</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->adjustment, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr>
                                     <td>Transport Allowance</td>
-                                    <td>: {{ number_format($salary->transport_allowance, 0, ',', '.') }}</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->transport_allowance, 0, ',', '.') }}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Total Overtime</td>
-                                    <td>: {{ number_format($salary->total_overtime, 0, ',', '.') }}</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->total_overtime, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr>
                                     <td>THR</td>
-                                    <td>: {{ number_format($salary->thr, 0, ',', '.') }}</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->thr, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr>
                                     <td>Bonus</td>
-                                    <td>: {{ number_format($salary->bonus, 0, ',', '.') }}</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->bonus, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr>
                                     <td>Incentive</td>
-                                    <td>: {{ number_format($salary->incentive, 0, ',', '.') }}</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->incentive, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr class="top-border">
                                     <td><b>Salary Gross</b></td>
-                                    <td><b>:
+                                    <td>:</td>
+                                    <td class="text-end"><b>
                                             {{ number_format(
                                                 $salary->salary_grade->rate_salary +
                                                     $salary->ability +
@@ -175,91 +190,42 @@
                         <div class="col">
                             <table class="tb-detail">
                                 <tr>
-                                    <td colspan="2"><u><b>B. BENEFIT</b></u></td>
-                                </tr>
-                                <tr>
-                                    <td>Jamsostek JKK</td>
-                                    <td>: {{ number_format($salary->jamsostek_jkk_ben, 0, ',', '.') }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Jamsostek TK</td>
-                                    <td>: {{ number_format($salary->jamsostek_tk_ben, 0, ',', '.') }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Jamsostek THT</td>
-                                    <td>: {{ number_format($salary->jamsostek_tht_ben, 0, ',', '.') }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Tax PPh 21</td>
-                                    <td>: {{ number_format($salary->pph21_ben, 0, ',', '.') }}</td>
-                                </tr>
-                                <tr class="top-border">
-                                    <td><b>Sub Total</b></td>
-                                    <td><b>:
-                                            {{ number_format($salary->jamsostek_jkk_ben + $salary->jamsostek_tk_ben + $salary->jamsostek_tht_ben + $salary->pph21_ben, 0, ',', '.') }}</b>
-                                    </td>
-                                </tr>
-                            </table>
-                            <table class="tb-detail">
-                                <tr>
-                                    <td colspan="2"><u><b>C. DEDUCTION BENEFIT</b></u></td>
-                                </tr>
-                                <tr>
-                                    <td>Jamsostek JKK</td>
-                                    <td>: {{ number_format($salary->jamsostek_jkk_deb, 0, ',', '.') }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Jamsostek TK</td>
-                                    <td>: {{ number_format($salary->jamsostek_tk_deb, 0, ',', '.') }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Jamsostek THT</td>
-                                    <td>: {{ number_format($salary->jamsostek_tht_deb, 0, ',', '.') }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Tax PPh 21</td>
-                                    <td>: {{ number_format($salary->pph21_deb, 0, ',', '.') }}</td>
-                                </tr>
-                                <tr class="top-border">
-                                    <td><b>Sub Total</b></td>
-                                    <td><b>:
-                                            {{ number_format($salary->jamsostek_jkk_deb + $salary->jamsostek_tk_deb + $salary->jamsostek_tht_deb + $salary->pph21_deb, 0, ',', '.') }}</b>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="col">
-                            <table class="tb-detail">
-                                <tr>
-                                    <td colspan="2"><u><b>D. DEDUCTION</b></u></td>
+                                    <td colspan="2"><u><b>B. DEDUCTION</b></u></td>
                                 </tr>
                                 <tr>
                                     <td>BPJS</td>
-                                    <td>: {{ number_format($salary->bpjs, 0, ',', '.') }}</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->bpjs, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr>
                                     <td>Jamsostek</td>
-                                    <td>: {{ number_format($salary->jamsostek, 0, ',', '.') }}</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->jamsostek, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr>
                                     <td>Union</td>
-                                    <td>: {{ number_format($salary->union, 0, ',', '.') }}</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->union, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr>
                                     <td>Absent</td>
-                                    <td>: {{ number_format($salary->absent, 0, ',', '.') }}</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->absent, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr>
                                     <td>Electricity</td>
-                                    <td>: {{ number_format($salary->electricity, 0, ',', '.') }}</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->electricity, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr>
                                     <td>Koperasi</td>
-                                    <td>: {{ number_format($salary->koperasi, 0, ',', '.') }}</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->koperasi, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr class="top-border">
                                     <td><b>Sub Total</b></td>
-                                    <td><b>:
+                                    <td>:</td>
+                                    <td class="text-end"><b>
                                             {{ number_format(
                                                 $salary->bpjs + $salary->jamsostek + $salary->union + $salary->absent + $salary->electricity + $salary->koperasi,
                                                 0,
@@ -273,7 +239,8 @@
                                 <table class="tb-detail">
                                     <tr>
                                         <td>Salary Gross + <br>Total Benefit</td>
-                                        <td>:
+                                        <td>:</td>
+                                        <td class="text-end">
                                             {{ number_format(
                                                 $salary->salary_grade->rate_salary +
                                                     $salary->ability +
@@ -297,7 +264,8 @@
                                     </tr>
                                     <tr>
                                         <td>Total Deduction</td>
-                                        <td>:
+                                        <td>:</td>
+                                        <td class="text-end">
                                             {{ number_format(
                                                 $salary->bpjs +
                                                     $salary->jamsostek +
@@ -317,7 +285,8 @@
                                     </tr>
                                     <tr class="top-border">
                                         <td><b>Nett Salary</b></td>
-                                        <td><b>:
+                                        <td>:</td>
+                                        <td class="text-end"><b>
                                                 {{ number_format(
                                                     $salary->salary_grade->rate_salary +
                                                         $salary->ability +
@@ -346,13 +315,86 @@
                                 </table>
                             </div>
                         </div>
+                        <div class="col">
+                            <table class="tb-detail">
+                                <tr>
+                                    <td colspan="2"><u><b>C. BENEFIT</b></u></td>
+                                </tr>
+                                <tr>
+                                    <td>Jamsostek JKK</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->jamsostek_jkk_ben, 0, ',', '.') }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Jamsostek TK</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->jamsostek_tk_ben, 0, ',', '.') }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Jamsostek THT</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->jamsostek_tht_ben, 0, ',', '.') }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Tax PPh 21</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->pph21_ben, 0, ',', '.') }}</td>
+                                </tr>
+                                <tr class="top-border">
+                                    <td><b>Sub Total</b></td>
+                                    <td>:</td>
+                                    <td class="text-end"><b>
+                                            {{ number_format($salary->jamsostek_jkk_ben + $salary->jamsostek_tk_ben + $salary->jamsostek_tht_ben + $salary->pph21_ben, 0, ',', '.') }}</b>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class="tb-detail">
+                                <tr>
+                                    <td colspan="2"><u><b>D. DEDUCTION BENEFIT</b></u></td>
+                                </tr>
+                                <tr>
+                                    <td>Jamsostek JKK</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->jamsostek_jkk_deb, 0, ',', '.') }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Jamsostek TK</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->jamsostek_tk_deb, 0, ',', '.') }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Jamsostek THT</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->jamsostek_tht_deb, 0, ',', '.') }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Tax PPh 21</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($salary->pph21_deb, 0, ',', '.') }}</td>
+                                </tr>
+                                <tr class="top-border">
+                                    <td><b>Sub Total</b></td>
+                                    <td><b>:</b></td>
+                                    <td class="text-end"><b>
+                                            {{ number_format($salary->jamsostek_jkk_deb + $salary->jamsostek_tk_deb + $salary->jamsostek_tht_deb + $salary->pph21_deb, 0, ',', '.') }}</b>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-icon btn-3 btn-warning btn-sm" type="button">
+                    <a href="{{ url('/generate-pdf/' . $salary->id) }}" class="btn btn-icon btn-3 btn-warning btn-sm"
+                        target="_blank">
                         <span class="btn-inner--icon"><i class="material-icons">print</i></span>
                         <span class="btn-inner--text">Print</span>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
