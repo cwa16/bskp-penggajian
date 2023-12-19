@@ -46,10 +46,10 @@
                                         {{-- <th rowspan="2" class="text-center">No</th> --}}
                                         <th colspan="7" class="text-center p-0">Employee Identity</th>
                                         <th colspan="11" class="text-center p-0">Salary Components</th>
-                                        <th rowspan="2" class="text-center bg-light text-dark">Bruto Salary</th>
+                                        <th rowspan="2" class="text-center">Bruto Salary</th>
                                         <th colspan="7" class="text-center p-0">Deduction</th>
-                                        <th rowspan="2" class="text-center bg-light text-dark">Total Deduction</th>
-                                        <th rowspan="2" class="text-center bg-light text-dark">Nett Salary</th>
+                                        <th rowspan="2" class="text-center">Total Deduction</th>
+                                        <th rowspan="2" class="text-center">Nett Salary</th>
                                         <th rowspan="2" class="text-center">Date Input</th>
                                         <th rowspan="2" class="text-center">Check</th>
                                         <th rowspan="2" class="text-center">Approve</th>
