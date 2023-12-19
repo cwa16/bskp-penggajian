@@ -390,7 +390,14 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="{{ url('/generate-pdf/' . $salary->id) }}" class="btn btn-icon btn-3 btn-warning btn-sm"
+                    <button type="button" class="btn btn-sm  btn-outline-secondary btn-3"
+                        data-bs-dismiss="modal">Cancel</button>
+                    <a href="{{ url('/download-pdf/' . $salary->id) }}" class="btn btn-icon btn-3 btn-warning btn-sm"
+                        target="_blank">
+                        <span class="btn-inner--icon"><i class="material-icons">download</i></span>
+                        <span class="btn-inner--text">Download</span>
+                    </a>
+                    <a href="{{ url('/print-pdf/' . $salary->id) }}" class="btn btn-icon btn-3 btn-warning btn-sm"
                         target="_blank">
                         <span class="btn-inner--icon"><i class="material-icons">print</i></span>
                         <span class="btn-inner--text">Print</span>

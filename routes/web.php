@@ -45,3 +45,6 @@ Route::resource('status', StatusController::class);
 Route::resource('grade', GradeController::class);
 Route::resource('departement', DeptController::class);
 Route::resource('job', JobController::class);
+
+Route::get('/print-pdf/{id}', [SalaryController::class, 'print']);
+Route::get('/download-pdf/{id}', [SalaryController::class, 'download']);

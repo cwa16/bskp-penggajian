@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Salary;
 
 use Illuminate\Http\Request;
+use PDF;
 
 class SalaryController extends Controller
 {
@@ -67,12 +68,40 @@ class SalaryController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Print one salary data employee.
      */
-    public function print_preview()
+    public function print($id)
     {
-        $title = 'Salary';
-        $salaries = Salary::all();
-        return view('salary.index', compact('title', 'salaries'));
+        $salary = Salary::find($id);
+
+        // mengambeil date
+        $date = date('My', strtotime($salary->created_at));
+
+        if (!$salary) {
+            // Log or dd() the ID to see which ID is causing the issue.
+            dd("Salary with ID $id not found.");
+        }
+
+        $pdf = PDF::loadView('salary.print', compact('salary'));
+        return $pdf->setPaper('a5', 'landscape')->stream('SAL_' . $date . '_' . $salary->user->nik . '_' . $salary->user->name . '.pdf');
+    }
+
+    /**
+     * Download one salary data employee.
+     */
+    public function download($id)
+    {
+        $salary = Salary::find($id);
+
+        // mengambeil date
+        $date = date('My', strtotime($salary->created_at));
+
+        if (!$salary) {
+            // Log or dd() the ID to see which ID is causing the issue.
+            dd("Salary with ID $id not found.");
+        }
+
+        $pdf = PDF::loadView('salary.print', compact('salary'));
+        return $pdf->setPaper('a5', 'landscape')->download('SAL_' . $date . '_'  . $salary->user->nik . '_' . $salary->user->name . '.pdf');
     }
 }
