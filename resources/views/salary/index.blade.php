@@ -13,7 +13,8 @@
                     <div class="card-body p-3 pb-2">
                         <div class="row">
                             <div class="col-7">
-                                <a href=""  class="btn btn-icon btn-3 btn-warning btn-sm">
+                                <a href="{{ url('/print-all') }}" class="btn btn-icon btn-3 btn-warning btn-sm"
+                                    target="_blank">
                                     <span class="btn-inner--icon"><i class="material-icons">print</i></span>
                                     <span class="btn-inner--text">Print All</span>
                                 </a>

@@ -104,4 +104,20 @@ class SalaryController extends Controller
         $pdf = PDF::loadView('salary.print', compact('salary'));
         return $pdf->setPaper('a5', 'landscape')->download('SAL_' . $date . '_'  . $salary->user->nik . '_' . $salary->user->name . '.pdf');
     }
+
+    /**
+     * Print all salary data employee.
+     */
+    public function printall()
+    {
+        $salaries = Salary::all();
+
+        if (!$salaries) {
+            // Log or dd() the ID to see which ID is causing the issue.
+            dd("Salary not found.");
+        }
+
+        $pdf = PDF::loadView('salary.printall', compact('salaries'));
+        return $pdf->setPaper('a4')->stream('PrintAll.pdf');
+    }
 }
