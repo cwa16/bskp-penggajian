@@ -44,6 +44,7 @@
                                         <th colspan="6" class="text-center p-0">Employee Identity</th>
                                         <th colspan="6" class="text-center p-0">Salary Components</th>
                                         <th colspan="2" class="text-center p-0">Deduction</th>
+                                        <th rowspan="2" class="text-center">Year</th>
                                         {{-- <th rowspan="2" class="text-center">Action</th> --}}
                                     </tr>
                                     <tr>
@@ -85,6 +86,7 @@
                                             <td class="text-end">{{ number_format($sy->adjustment, 0, ',', '.') }}</td>
                                             <td class="text-end">{{ number_format($sy->bpjs, 0, ',', '.') }}</td>
                                             <td class="text-end">{{ number_format($sy->jamsostek, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ $sy->year }}</td>
                                             {{-- <td class="text-center m-0 p-0">
                                                 <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
                                                     <span class="btn-inner--icon"><i class="material-icons">edit</i></span>

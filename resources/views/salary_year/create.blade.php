@@ -49,6 +49,7 @@
                                                             style="background-color: #1A73E8;color: white;">#</th>
                                                         <th colspan="6" class="text-center p-0">Employee Identity</th>
                                                         <th colspan="6" class="text-center p-0">Salary Components</th>
+                                                        <th rowspan="2" class="text-center">Year</th>
                                                     </tr>
                                                     <tr class="">
                                                         <th style="background-color: #1A73E8;color: white;">NIK</th>
@@ -133,6 +134,9 @@
                                                                         name="adjustment[{{ $key }}]"
                                                                         placeholder="Enter the adjustment">
                                                                 </div>
+                                                            </td>
+                                                            <td class="text-end">
+                                                                {{ date('Y') }}
                                                             </td>
                                                         </tr>
                                                     @endforeach

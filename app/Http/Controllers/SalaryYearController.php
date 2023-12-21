@@ -93,6 +93,7 @@ class SalaryYearController extends Controller
             SalaryYear::create([
                 'id_user' => $input['id_user'][$key], // Pastikan Anda memiliki input user_id pada form
                 'id_salary_grade' => $input['id_salary_grade'][$key], // Pastikan Anda memiliki input salary_grade_id pada form
+                'year' => date('Y'),
                 'ability' => $ability,
                 'fungtional_alw' => $fungtional_alw,
                 'family_alw' => $family_alw,
