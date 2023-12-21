@@ -279,7 +279,7 @@
         });
 
         // Validasi untuk data salary per year
-        $('.salary-monthly-form').each(function() {
+        $('.salary-month-form').each(function() {
             var form = $(this);
             form.validate({
                 rules: {
@@ -287,6 +287,15 @@
                         @foreach ($users as $key => $grade)
                             "hour_call[{{ $key }}]": {
                                 positiveNum: true,
+                                validNum: true
+                            },
+                            "thr[{{ $key }}]": {
+                                validNum: true
+                            },
+                            "bonus[{{ $key }}]": {
+                                validNum: true
+                            },
+                            "incentive[{{ $key }}]": {
                                 validNum: true
                             },
                             "union[{{ $key }}]": {

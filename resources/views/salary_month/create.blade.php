@@ -11,7 +11,7 @@
                     </div>
 
                     <div class="card-body p-3 pb-2">
-                        <form action="{{ route('salarymonthly.create') }}" method="get">
+                        <form action="{{ route('salary-month.create') }}" method="get">
                             @csrf
                             <div class="row">
                                 <div class="col-auto">
@@ -26,14 +26,14 @@
                                 </div>
                                 <div class="col">
                                     <button type="submit" class="btn btn-primary btn-sm mb-2">Filter</button>
-                                    <a type="button" href="{{ route('salarymonthly.index') }}"
+                                    <a type="button" href="{{ route('salary-month.index') }}"
                                         class="btn btn-outline-secondary btn-sm mb-2">Cancel</a>
                                 </div>
                             </div>
                         </form>
                         @if (request()->filled('id_status') && $salaries->isNotEmpty() && $salaries->every(fn($salary) => $salary->user))
                             <hr class="horizontal dark my-2">
-                            <form action="{{ route('salarymonthly.store') }}" method="post" class="salary-monthly-form">
+                            <form action="{{ route('salary-month.store') }}" method="post" class="salary-month-form">
                                 @csrf
                                 <div class="row">
                                     <div class="col">

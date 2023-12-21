@@ -113,8 +113,8 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'salarymonthly') ? 'active bg-gradient-primary' : '' }}"
-                    href="{{ url('/salarymonthly') }}">
+                <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'salary-month') ? 'active bg-gradient-primary' : '' }}"
+                    href="{{ url('/salary-month') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons">payments</i>
                     </div>

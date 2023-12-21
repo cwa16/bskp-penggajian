@@ -13,8 +13,8 @@
                     <div class="card-body p-3 pb-2">
                         <div class="row">
                             <div class="col-7">
-                                <a href="{{ url('/salarymonthly/create') }}" class="btn btn-info btn-sm">Input Data</a>
-                                <a href="{{ url('/salarymonthly/edit') }}" class="btn btn-warning btn-sm">Edit Data</a>
+                                <a href="{{ url('/salary-month/create') }}" class="btn btn-info btn-sm">Input Data</a>
+                                <a href="{{ url('/salary-month/edit') }}" class="btn btn-warning btn-sm">Edit Data</a>
                             </div>
                             <div class="col-5 justify-content-end">
                                 <form action="{{ url('/salarygrade') }}" method="GET">

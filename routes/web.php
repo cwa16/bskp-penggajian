@@ -8,7 +8,8 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SalaryGradeController;
 use App\Http\Controllers\SalaryYearController;
-use App\Http\Controllers\SalaryMonthlyController;
+use App\Http\Controllers\SalaryMonthController;;
+
 use App\Http\Controllers\SalaryController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,7 +37,7 @@ Route::resource('user', UserController::class);
 
 Route::resource('salarygrade', SalaryGradeController::class);
 Route::resource('salary-year', SalaryYearController::class);
-Route::resource('salarymonthly', SalaryMonthlyController::class);
+Route::resource('salary-month', SalaryMonthController::class);
 Route::resource('salary', SalaryController::class);
 Route::resource('status', StatusController::class);
 Route::resource('grade', GradeController::class);
