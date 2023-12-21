@@ -13,8 +13,8 @@
                     <div class="card-body p-3 pb-2">
                         <div class="row">
                             <div class="col-7">
-                                <a href="{{ url('/salaryannual/create') }}" class="btn btn-info btn-sm">Input Data</a>
-                                <a href="{{ url('/salaryannual/edit') }}" class="btn btn-warning btn-sm">Edit Data</a>
+                                <a href="{{ url('/salary-year/create') }}" class="btn btn-info btn-sm">Input Data</a>
+                                <a href="{{ url('/salary-year/edit') }}" class="btn btn-warning btn-sm">Edit Data</a>
                             </div>
                             <div class="col-5 justify-content-end">
                                 <form action="{{ url('/salarygrade') }}" method="GET">
@@ -57,34 +57,34 @@
                                         <th>Ability</th>
                                         <th>Fungtional Allowance</th>
                                         <th>Family Allowance</th>
-                                        <th>Adjustment</th>
                                         <th>Transport Allowance</th>
+                                        <th>Adjustment</th>
                                         <th>BPJS Kesehatan</th>
                                         <th>Jamsostek</th>
                                         {{-- <th>Action</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($salaries as $key => $salary)
+                                    @foreach ($salary_years as $key => $sy)
                                         <tr>
-                                            <td class="text-nowrap text-end">{{ $salary->user->nik }}</td>
-                                            <td>{{ $salary->user->name }}</td>
-                                            <td>{{ $salary->user->grade->name_grade }}</td>
-                                            <td>{{ $salary->user->status->name_status }}</td>
-                                            <td>{{ $salary->user->dept->name_dept }}</td>
-                                            <td>{{ $salary->user->job->name_job }}</td>
+                                            <td class="text-nowrap text-end">{{ $sy->user->nik }}</td>
+                                            <td>{{ $sy->user->name }}</td>
+                                            <td>{{ $sy->user->grade->name_grade }}</td>
+                                            <td>{{ $sy->user->status->name_status }}</td>
+                                            <td>{{ $sy->user->dept->name_dept }}</td>
+                                            <td>{{ $sy->user->job->name_job }}</td>
                                             <td class="text-end">
-                                                {{ number_format($salary->salary_grade->rate_salary, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($salary->ability, 0, ',', '.') }}</td>
+                                                {{ number_format($sy->salary_grade->rate_salary, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($sy->ability, 0, ',', '.') }}</td>
                                             <td class="text-end">
-                                                {{ number_format($salary->fungtional_allowance, 0, ',', '.') }}</td>
+                                                {{ number_format($sy->fungtional_alw, 0, ',', '.') }}</td>
                                             <td class="text-end">
-                                                {{ number_format($salary->family_allowance, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($salary->adjustment, 0, ',', '.') }}</td>
+                                                {{ number_format($sy->family_alw, 0, ',', '.') }}</td>
                                             <td class="text-end">
-                                                {{ number_format($salary->transport_allowance, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($salary->bpjs, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($salary->jamsostek, 0, ',', '.') }}</td>
+                                                {{ number_format($sy->transport_alw, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($sy->adjustment, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($sy->bpjs, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($sy->jamsostek, 0, ',', '.') }}</td>
                                             {{-- <td class="text-center m-0 p-0">
                                                 <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
                                                     <span class="btn-inner--icon"><i class="material-icons">edit</i></span>

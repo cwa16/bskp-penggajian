@@ -102,21 +102,21 @@ class User extends Authenticatable
     }
 
     // Relasi dengan tabel Salary
-    public function salaries()
+    public function salary_years()
     {
-        return $this->hasMany(Salary::class, 'id_user');
+        return $this->hasMany(SalaryYear::class, 'id_user');
     }
 
-    // method mengecek apakah data user sudah berelasi dengan salaries tahun ini
+    // method mengecek apakah data user sudah berelasi dengan salary_years tahun ini
     public function hasSalaryForYear($year)
     {
-        return $this->salaries()->whereYear('created_at', $year)->exists();
+        return $this->salary_years()->whereYear('year', $year)->exists();
     }
 
-    // method mengecek apakah data user sudah berelasi dengan salaries tahun ini
+    // method mengecek apakah data user sudah berelasi dengan salary_years tahun ini
     public function hasSalaryForYearAndMonth($year, $month)
     {
-        return $this->salaries()
+        return $this->salary_years()
             ->whereYear('created_at', $year)
             ->whereMonth('created_at', $month)
             ->exists();

@@ -11,7 +11,7 @@
                     </div>
 
                     <div class="card-body p-3 pb-2">
-                        <form action="{{ route('salaryannual.create') }}" method="get">
+                        <form action="{{ route('salary-year.create') }}" method="get">
                             @csrf
                             <div class="row">
                                 <div class="col-auto">
@@ -26,14 +26,14 @@
                                 </div>
                                 <div class="col">
                                     <button type="submit" class="btn btn-primary btn-sm mb-2">Filter</button>
-                                    <a type="button" href="{{ route('salaryannual.index') }}"
+                                    <a type="button" href="{{ route('salary-year.index') }}"
                                         class="btn btn-outline-secondary btn-sm mb-2">Cancel</a>
                                 </div>
                             </div>
                         </form>
                         @if (request()->filled('id_status') && $users->isNotEmpty())
                             <hr class="horizontal dark my-2">
-                            <form action="{{ route('salaryannual.store') }}" method="post" class="salary-annual-form">
+                            <form action="{{ route('salary-year.store') }}" method="post" class="salary-year-form">
                                 @csrf
                                 <div class="row">
                                     <div class="col">
@@ -45,7 +45,8 @@
                                                 class="table align-items-center small-tbl dtTableFix3 compact stripe hover">
                                                 <thead class="bg-thead">
                                                     <tr>
-                                                        <th rowspan="2" class="text-center" style="background-color: #1A73E8;color: white;">#</th>
+                                                        <th rowspan="2" class="text-center"
+                                                            style="background-color: #1A73E8;color: white;">#</th>
                                                         <th colspan="6" class="text-center p-0">Employee Identity</th>
                                                         <th colspan="6" class="text-center p-0">Salary Components</th>
                                                     </tr>
@@ -60,8 +61,8 @@
                                                         <th>Ability</th>
                                                         <th>Fungtional Allowance</th>
                                                         <th>Family Allowance</th>
-                                                        <th>Adjustment</th>
                                                         <th>Transport Allowance</th>
+                                                        <th>Adjustment</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -102,7 +103,7 @@
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
                                                                         style="width: 120px"
-                                                                        name="fungtional_allowance[{{ $key }}]"
+                                                                        name="fungtional_alw[{{ $key }}]"
                                                                         placeholder="Enter the fungtional allowance">
                                                                 </div>
                                                             </td>
@@ -111,8 +112,17 @@
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
                                                                         style="width: 120px"
-                                                                        name="family_allowance[{{ $key }}]"
+                                                                        name="family_alw[{{ $key }}]"
                                                                         placeholder="Enter the family allowance">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="input-group input-group-outline">
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm"
+                                                                        style="width: 120px"
+                                                                        name="transport_alw[{{ $key }}]"
+                                                                        placeholder="Enter the transport allowance">
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -122,15 +132,6 @@
                                                                         style="width: 120px"
                                                                         name="adjustment[{{ $key }}]"
                                                                         placeholder="Enter the adjustment">
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="input-group input-group-outline">
-                                                                    <input type="number"
-                                                                        class="form-control form-control-sm"
-                                                                        style="width: 120px"
-                                                                        name="transport_allowance[{{ $key }}]"
-                                                                        placeholder="Enter the transport allowance">
                                                                 </div>
                                                             </td>
                                                         </tr>

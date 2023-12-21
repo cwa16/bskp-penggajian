@@ -249,7 +249,7 @@
         });
 
         // Validasi untuk data salary per year
-        $('.salary-annual-form').each(function() {
+        $('.salary-year-form').each(function() {
             var form = $(this);
             form.validate({
                 rules: {
