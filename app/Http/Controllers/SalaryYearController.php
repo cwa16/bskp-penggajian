@@ -102,7 +102,7 @@ class SalaryYearController extends Controller
                 'bpjs' => $bpjs,
                 'jamsostek' => $jamsostek,
                 'total_ben' => $total_jamsostek,
-                'total_ben_deb' => $total_jamsostek,
+                'total_ben_ded' => $total_jamsostek,
             ]);
         }
 
