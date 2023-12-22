@@ -82,7 +82,7 @@
                                         <th>Union</th>
                                         <th>Absent</th>
                                         <th>Electricity</th>
-                                        <th>Koperasi</th>
+                                        <th>Cooperative</th>
                                         <th>Sub Total Deduction</th>
                                         {{-- <th class=">Total Deduction</th> --}}
                                         {{-- <th class="bg-info text-white">Nett Salary</th> --}}
@@ -122,7 +122,7 @@
                                                 {{ number_format($sal->gross_salary, 0, ',', '.') }}
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($sal->gross_salary + $sal->total_ben, 0, ',', '.') }}
+                                                {{ number_format($sal->gross_salary + $sal->salary_year->total_ben, 0, ',', '.') }}
                                             </td>
                                             <td class="text-end">{{ number_format($sal->salary_year->bpjs, 0, ',', '.') }}
                                             </td>
@@ -135,12 +135,12 @@
                                             <td class="text-end">
                                                 {{ number_format($sal->electricity, 0, ',', '.') }}</td>
                                             <td class="text-end">
-                                                {{ number_format($sal->koperasi, 0, ',', '.') }}</td>
+                                                {{ number_format($sal->cooperative, 0, ',', '.') }}</td>
                                             <td class="text-end">
                                                 {{ number_format($sal->total_deduction, 0, ',', '.') }}
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($sal->total_deduction + $sal->total_ben_ded, 0, ',', '.') }}
+                                                {{ number_format($sal->total_deduction + $sal->salary_year->total_ben_ded, 0, ',', '.') }}
                                             </td>
                                             <td class="bg-light text-dark text-end">
                                                 {{ number_format($sal->net_salary, 0, ',', '.') }}
