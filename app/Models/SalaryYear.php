@@ -41,4 +41,10 @@ class SalaryYear extends Model
     {
         return $this->hasMany(SalaryMonth::class, 'id_salary_year');
     }
+
+    // method mengecek apakah data user sudah berelasi dengan salary_years tahun ini
+    public function hasSalaryForMonth($year, $month)
+    {
+        return $this->salary_months()->whereYear('date', $year)->whereMonth('date', $month)->exists();
+    }
 }

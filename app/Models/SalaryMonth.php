@@ -29,7 +29,7 @@ class SalaryMonth extends Model
     ];
 
     // Relasi dengan tabel User
-    public function user()
+    public function salary_year()
     {
         return $this->belongsTo(SalaryYear::class, 'id_salary_year');
     }

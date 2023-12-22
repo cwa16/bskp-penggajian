@@ -47,11 +47,11 @@
                                 <thead class="bg-thead">
                                     <tr>
                                         <th colspan="6" class="text-center p-0">Employee Identity</th>
-                                        <th colspan="5" class="text-center p-0">Salary Components
+                                        <th colspan="7" class="text-center p-0">Salary Components
                                         </th>
                                         <th colspan="4" class="text-center p-0">
                                             Deduction</th>
-                                        <th rowspan="2" class="text-center">Tanggal Pengisian</th>
+                                        <th rowspan="2" class="text-center">Month / Year</th>
                                         {{-- <th rowspan="2" class="text-center">Action</th> --}}
                                     </tr>
                                     <tr>
@@ -62,6 +62,8 @@
                                         <th>Dept</th>
                                         <th>Job</th>
                                         <th>Salary Grade</th>
+                                        <th>Ability</th>
+                                        <th>Hour Call</th>
                                         <th>Total Overtime</th>
                                         <th>THR</th>
                                         <th>Bonus</th>
@@ -69,43 +71,50 @@
                                         <th>Union</th>
                                         <th>Absent</th>
                                         <th>Electricity</th>
-                                        <th>Koperasi</th>
+                                        <th>Cooperative</th>
                                         {{-- <th>Tanggal Pengisian</th> --}}
                                         {{-- <th>Action</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($salaries as $key => $salary)
+                                    @foreach ($salary_months as $key => $sm)
                                         <tr>
-                                            <td class="text-nowrap text-end">{{ $salary->user->nik }}</td>
-                                            <td>{{ $salary->user->name }}</td>
-                                            <td>{{ $salary->user->grade->name_grade }}</td>
-                                            <td>{{ $salary->user->status->name_status }}</td>
-                                            <td>{{ $salary->user->dept->name_dept }}</td>
-                                            <td>{{ $salary->user->job->name_job }}</td>
+                                            <td class="text-nowrap text-end">{{ $sm->salary_year->user->nik }}</td>
+                                            <td>{{ $sm->salary_year->user->name }}</td>
+                                            <td>{{ $sm->salary_year->user->grade->name_grade }}</td>
+                                            <td>{{ $sm->salary_year->user->status->name_status }}</td>
+                                            <td>{{ $sm->salary_year->user->dept->name_dept }}</td>
+                                            <td>{{ $sm->salary_year->user->job->name_job }}</td>
                                             <td class="text-end">
-                                                {{ number_format($salary->salary_grade->rate_salary, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($salary->salary_grade->total_overtime, 0, ',', '.') }}
+                                                {{ number_format($sm->salary_year->salary_grade->rate_salary, 0, ',', '.') }}
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($salary->salary_grade->thr, 0, ',', '.') }}
+                                                {{ number_format($sm->salary_year->ability, 0, ',', '.') }}
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($salary->salary_grade->bonus, 0, ',', '.') }}
+                                                {{ number_format($sm->hour_call, 0, ',', '.') }} h
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($salary->salary_grade->incentive, 0, ',', '.') }}
+                                                {{ number_format($sm->total_overtime, 0, ',', '.') }}
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($salary->salary_grade->union, 0, ',', '.') }}</td>
+                                                {{ number_format($sm->thr, 0, ',', '.') }}
+                                            </td>
                                             <td class="text-end">
-                                                {{ number_format($salary->salary_grade->absent, 0, ',', '.') }}</td>
+                                                {{ number_format($sm->bonus, 0, ',', '.') }}
+                                            </td>
                                             <td class="text-end">
-                                                {{ number_format($salary->salary_grade->electricity, 0, ',', '.') }}</td>
+                                                {{ number_format($sm->incentive, 0, ',', '.') }}
+                                            </td>
                                             <td class="text-end">
-                                                {{ number_format($salary->salary_grade->koperasi, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ date('Y-m-d', strtotime($salary->created_at)) }}</td>
+                                                {{ number_format($sm->union, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($sm->absent, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($sm->electricity, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($sm->cooperative, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ date('Y-m-d', strtotime($sm->date)) }}</td>
                                             {{-- <td class="text-center m-0 p-0">
                                                 <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
                                                     <span class="btn-inner--icon"><i class="material-icons">edit</i></span>

@@ -254,7 +254,7 @@
             form.validate({
                 rules: {
                     @if (isset($users))
-                        @foreach ($users as $key => $grade)
+                        @foreach ($users as $key => $user)
                             "ability[{{ $key }}]": {
                                 positiveNum: true,
                                 validNum: true
@@ -283,8 +283,8 @@
             var form = $(this);
             form.validate({
                 rules: {
-                    @if (isset($users))
-                        @foreach ($users as $key => $grade)
+                    @if (isset($salary_years))
+                        @foreach ($salary_years as $key => $sy)
                             "hour_call[{{ $key }}]": {
                                 positiveNum: true,
                                 validNum: true
@@ -307,7 +307,7 @@
                             "electricity[{{ $key }}]": {
                                 validNum: true
                             },
-                            "koperasi[{{ $key }}]": {
+                            "cooperative[{{ $key }}]": {
                                 validNum: true
                             },
                         @endforeach

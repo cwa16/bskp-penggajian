@@ -19,7 +19,8 @@
                                         <option value="">- Pilih Status -</option>
                                         @foreach ($statuses as $status)
                                             <option value="{{ $status->id }}"
-                                                @if ($status->id == $selectedStatus) selected @endif>{{ $status->name_status }}
+                                                {{ request()->input('id_status') == $status->id ? 'selected' : '' }}>
+                                                {{ $status->name_status }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -31,7 +32,7 @@
                                 </div>
                             </div>
                         </form>
-                        @if (request()->filled('id_status') && $salaries->isNotEmpty() && $salaries->every(fn($salary) => $salary->user))
+                        @if (count($salary_years) > 0)
                             <hr class="horizontal dark my-2">
                             <form action="{{ route('salary-month.store') }}" method="post" class="salary-month-form">
                                 @csrf
@@ -49,9 +50,9 @@
                                                             style="background-color: #1A73E8;color: white;">#</th>
                                                         <th colspan="6" class="text-center p-0">Employee
                                                             Identity</th>
-                                                        <th colspan="6" class="text-center p-0">Salary Components</th>
-                                                        <th colspan="4" class="text-center p-0">
-                                                            Deduction</th>
+                                                        <th colspan="7" class="text-center p-0">Salary Components</th>
+                                                        <th colspan="4" class="text-center p-0">Deduction</th>
+                                                        <th rowspan="2" class="text-center">Month / Year</th>
                                                     </tr>
                                                     <tr>
                                                         <th style="background-color: #1A73E8;color: white;">NIK</th>
@@ -61,6 +62,7 @@
                                                         <th>Dept</th>
                                                         <th>Job</th>
                                                         <th>Rate Salary</th>
+                                                        <th>Ability</th>
                                                         <th>Overtime Hour</th>
                                                         <th>Total Overtime</th>
                                                         <th>THR</th>
@@ -69,43 +71,84 @@
                                                         <th>Union</th>
                                                         <th>Absent</th>
                                                         <th>Electricity</th>
-                                                        <th>Koperasi</th>
+                                                        <th>Cooperative</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach ($salaries as $key => $salary)
+                                                    @foreach ($salary_years as $key => $sy)
                                                         <tr>
-                                                            <td>{{ $key + 1 }}</td>
-                                                            <td class="text-nowrap text-end">{{ $salary->user->nik }}</td>
-                                                            <td>{{ $salary->user->name }}</td>
-                                                            <td>{{ $salary->user->grade->name_grade ?? '-' }}</td>
-                                                            <td>{{ $salary->user->status->name_status }}</td>
-                                                            <td>{{ $salary->user->dept->name_dept }}</td>
-                                                            <td>{{ $salary->user->job->name_job }}</td>
+                                                            <td class="text-end">{{ $key + 1 }}</td>
+                                                            <td class="text-nowrap text-end">{{ $sy->user->nik }}</td>
+                                                            <td>{{ $sy->user->name }}</td>
+                                                            <td>{{ $sy->user->grade->name_grade ?? '-' }}</td>
+                                                            <td>{{ $sy->user->status->name_status }}</td>
+                                                            <td>{{ $sy->user->dept->name_dept }}</td>
+                                                            <td>{{ $sy->user->job->name_job }}</td>
                                                             <td class="text-end">
-                                                                @if ($salary->user->grade && $salary->user->grade->salary_grades->isNotEmpty())
-                                                                    {{ number_format($salary->user->grade->salary_grades->first()->rate_salary, 0, ',', '.') }}
+                                                                @if ($sy->user->grade && $sy->user->grade->salary_grades->isNotEmpty())
+                                                                    {{ number_format($sy->user->grade->salary_grades->first()->rate_salary, 0, ',', '.') }}
                                                                 @else
                                                                     -
                                                                 @endif
                                                             </td>
+                                                            <td class="text-end">
+                                                                {{ number_format($sy->ability, 0, ',', '.') }}
+                                                            </td>
                                                             <td>
+                                                                {{-- INPUTAN HIDDEN --}}
                                                                 <input type="hidden" name="id_user[]"
-                                                                    value="{{ $salary->id }}">
+                                                                    value="{{ $sy->id_user }}">
                                                                 <input type="hidden" name="id_salary_grade[]"
-                                                                    value="{{ $salary->user->grade->salary_grades->first()->id ?? '' }}">
-                                                                <input type="hidden" name="rate_salary[]"
-                                                                    value="{{ $salary->user->grade->salary_grades->first()->rate_salary ?? '' }}">
+                                                                    value="{{ $sy->user->grade->salary_grades->first()->id ?? '' }}">
+                                                                <input type="hidden"
+                                                                    name="id_salary_year[{{ $key }}]"
+                                                                    value="{{ $sy->id ?? '' }}">
+                                                                <input type="hidden"
+                                                                    name="rate_salary[{{ $key }}]"
+                                                                    value="{{ $sy->user->grade->salary_grades->first()->rate_salary ?? '' }}">
+                                                                <input type="hidden" name="ability[{{ $key }}]"
+                                                                    value="{{ $sy->ability ?? '' }}">
+                                                                <input type="hidden"
+                                                                    name="fungtional_alw[{{ $key }}]"
+                                                                    value="{{ $sy->fungtional_alw ?? '' }}">
+                                                                <input type="hidden"
+                                                                    name="family_alw[{{ $key }}]"
+                                                                    value="{{ $sy->family_alw ?? '' }}">
+                                                                <input type="hidden"
+                                                                    name="transport_alw[{{ $key }}]"
+                                                                    value="{{ $sy->transport_alw ?? '' }}">
+                                                                <input type="hidden"
+                                                                    name="adjustment[{{ $key }}]"
+                                                                    value="{{ $sy->adjustment ?? '' }}">
+                                                                <input type="hidden" name="bpjs[{{ $key }}]"
+                                                                    value="{{ $sy->bpjs ?? '' }}">
+                                                                <input type="hidden" name="jamsostek[{{ $key }}]"
+                                                                    value="{{ $sy->jamsostek ?? '' }}">
+                                                                <input type="hidden" name="total_ben[{{ $key }}]"
+                                                                    value="{{ $sy->total_ben ?? '' }}">
+                                                                <input type="hidden"
+                                                                    name="total_ben_deb[{{ $key }}]"
+                                                                    value="{{ $sy->total_ben_deb ?? '' }}">
+                                                                {{-- /INPUTAN HIDDEN --}}
 
                                                                 <div class="input-group input-group-outline">
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
                                                                         style="width: 90px"
                                                                         name="hour_call[{{ $key }}]"
-                                                                        placeholder="Enter the overtime hour call">
+                                                                        placeholder="Enter the overtime hour call"
+                                                                        oninput="calculateTotalOvertime({{ $key }})">
                                                                 </div>
                                                             </td>
-                                                            <td>Total Overtime</td>
+                                                            <td>
+                                                                <div class="input-group input-group-outline">
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm"
+                                                                        style="width: 120px"
+                                                                        name="total_overtime[{{ $key }}]"
+                                                                        readonly>
+                                                                </div>
+                                                            </td>
                                                             <td>
                                                                 <div class="input-group input-group-outline">
                                                                     <input type="number"
@@ -165,10 +208,11 @@
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
                                                                         style="width: 120px"
-                                                                        name="koperasi[{{ $key }}]"
+                                                                        name="cooperative[{{ $key }}]"
                                                                         placeholder="Enter the koperasi">
                                                                 </div>
                                                             </td>
+                                                            <td class="text-end">{{ date('M/Y') }}</td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
@@ -177,8 +221,42 @@
                                     </div>
                                 </div>
                             </form>
+                        @else
+                            <div class="alert alert-light    mt-3">
+                                No data available for the selected filter.
+                            </div>
                         @endif
                     </div>
                 </div>
             </div>
+
+            {{-- SCRIPT untuk perhitungan Total Overtime otomatis berdasarkan jam --}}
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const hourCallInputs = document.querySelectorAll('[name^="hour_call["]');
+
+                    hourCallInputs.forEach(input => {
+                        input.addEventListener('input', function() {
+                            calculateTotalOvertime(this);
+                        });
+                    });
+
+                    function calculateTotalOvertime(input) {
+                        const key = input.name.match(/\[(\d+)\]/)[1];
+                        const rateSalary = parseFloat(document.querySelector(`[name="rate_salary[${key}]"]`).value) || 0;
+                        const ability = parseFloat(document.querySelector(`[name="ability[${key}]"]`).value) || 0;
+
+                        const totalOvertimeInput = document.querySelector(`[name="total_overtime[${key}]"]`);
+
+                        if (!isNaN(rateSalary) && !isNaN(ability)) {
+                            const hourCall = parseFloat(input.value) || 0;
+                            const totalOvertime = ((rateSalary + ability) / 173) * hourCall;
+                            totalOvertimeInput.value = totalOvertime.toFixed(2);
+                        } else {
+                            totalOvertimeInput.value = '';
+                        }
+                    }
+                });
+            </script>
+            {{-- /SCRIPT --}}
         @endsection
