@@ -91,131 +91,68 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($salaries as $key => $salary)
+                                    @foreach ($salary_months as $key => $sal)
                                         <tr>
-                                            <td class="text-nowrap text-end">{{ $salary->user->nik }}</td>
+                                            <td class="text-nowrap text-end">{{ $sal->salary_year->user->nik }}</td>
                                             <td><a data-bs-toggle="modal"
-                                                    href="#detailGaji{{ $salary->id }}">{{ $salary->user->name }}</a></td>
-                                            <td>{{ $salary->user->grade->name_grade }}</td>
-                                            <td>{{ $salary->user->status->name_status }}</td>
-                                            <td>{{ $salary->user->dept->name_dept }}</td>
-                                            <td>{{ $salary->user->job->name_job }}</td>
+                                                    href="#detailGaji{{ $sal->salary_year->id }}">{{ $sal->salary_year->user->name }}</a>
+                                            </td>
+                                            <td>{{ $sal->salary_year->user->grade->name_grade }}</td>
+                                            <td>{{ $sal->salary_year->user->status->name_status }}</td>
+                                            <td>{{ $sal->salary_year->user->dept->name_dept }}</td>
+                                            <td>{{ $sal->salary_year->user->job->name_job }}</td>
                                             <td>-</td>
                                             <td class="text-end">
-                                                {{ number_format($salary->salary_grade->rate_salary, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($salary->ability, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($salary->fungtional_allowance, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($salary->family_allowance, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($salary->adjustment, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($salary->transport_allowance, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($salary->total_overtime, 0, ',', '.') }}
+                                                {{ number_format($sal->salary_year->salary_grade->rate_salary, 0, ',', '.') }}
                                             </td>
-                                            <td class="text-end">{{ number_format($salary->thr, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($salary->bonus, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($salary->incentive, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($sal->ability, 0, ',', '.') }}</td>
                                             <td class="text-end">
-                                                {{ number_format(
-                                                    $salary->salary_grade->rate_salary +
-                                                        $salary->ability +
-                                                        $salary->fungtional_allowance +
-                                                        $salary->family_allowance +
-                                                        $salary->adjustment +
-                                                        $salary->transport_allowance +
-                                                        $salary->total_overtime +
-                                                        $salary->thr +
-                                                        $salary->bonus +
-                                                        $salary->incentive,
-                                                    0,
-                                                    ',',
-                                                    '.',
-                                                ) }}
+                                                {{ number_format($sal->fungtional_allowance, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($sal->family_allowance, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($sal->adjustment, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($sal->transport_allowance, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($sal->total_overtime, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-end">{{ number_format($sal->thr, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($sal->bonus, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($sal->incentive, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($sal->gross_salary, 0, ',', '.') }}
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format(
-                                                    $salary->salary_grade->rate_salary +
-                                                        $salary->ability +
-                                                        $salary->fungtional_allowance +
-                                                        $salary->family_allowance +
-                                                        $salary->adjustment +
-                                                        $salary->transport_allowance +
-                                                        $salary->total_overtime +
-                                                        $salary->thr +
-                                                        $salary->bonus +
-                                                        $salary->incentive +
-                                                        $salary->total_benefit,
-                                                    0,
-                                                    ',',
-                                                    '.',
-                                                ) }}
+                                                {{ number_format($sal->gross_salary + $sal->total_ben, 0, ',', '.') }}
                                             </td>
-                                            <td class="text-end">{{ number_format($salary->bpjs, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($salary->jamsostek, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($salary->salary_grade->union, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($salary->salary_grade->absent, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($salary->salary_grade->electricity, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($salary->salary_grade->koperasi, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format(
-                                                    $salary->bpjs + $salary->jamsostek + $salary->union + $salary->absent + $salary->electricity + $salary->koperasi,
-                                                    0,
-                                                    ',',
-                                                    '.',
-                                                ) }}
+                                            <td class="text-end">{{ number_format($sal->salary_year->bpjs, 0, ',', '.') }}
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format(
-                                                    $salary->bpjs +
-                                                        $salary->jamsostek +
-                                                        $salary->union +
-                                                        $salary->absent +
-                                                        $salary->electricity +
-                                                        $salary->koperasi +
-                                                        $salary->total_debenefit,
-                                                    0,
-                                                    ',',
-                                                    '.',
-                                                ) }}
+                                                {{ number_format($sal->salary_year->jamsostek, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($sal->union, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($sal->absent, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($sal->electricity, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($sal->koperasi, 0, ',', '.') }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($sal->total_deduction, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-end">
+                                                {{ number_format($sal->total_deduction + $sal->total_ben_ded, 0, ',', '.') }}
                                             </td>
                                             <td class="bg-light text-dark text-end">
-                                                {{ number_format(
-                                                    $salary->salary_grade->rate_salary +
-                                                        $salary->ability +
-                                                        $salary->fungtional_allowance +
-                                                        $salary->family_allowance +
-                                                        $salary->adjustment +
-                                                        $salary->transport_allowance +
-                                                        $salary->total_overtime +
-                                                        $salary->thr +
-                                                        $salary->bonus +
-                                                        $salary->incentive +
-                                                        $salary->total_benefit -
-                                                        ($salary->bpjs +
-                                                            $salary->jamsostek +
-                                                            $salary->union +
-                                                            $salary->absent +
-                                                            $salary->electricity +
-                                                            $salary->koperasi +
-                                                            $salary->total_debenefit),
-                                                    0,
-                                                    ',',
-                                                    '.',
-                                                ) }}
+                                                {{ number_format($sal->net_salary, 0, ',', '.') }}
                                             </td>
-                                            <td class="text-end">{{ date('d M Y', strtotime($salary->created_at)) }}</td>
+                                            <td class="text-end">{{ date('d M Y', strtotime($sal->date)) }}</td>
                                             <td class="align-middle text-center text-sm"><span
                                                     class="badge badge-sm bg-gradient-success"> &#10004;</td>
                                             <td class="align-middle text-center text-sm"><span
                                                     class="badge badge-sm bg-gradient-secondary">&#9744;</td>
                                             <td class="text-center m-0 p-0">
                                                 <button class="btn btn-primary btn-icon-only m-0 p-0 btn-sm" type="button"
-                                                    data-bs-toggle="modal" data-bs-target="#detailGaji{{ $salary->id }}">
+                                                    data-bs-toggle="modal" data-bs-target="#detailGaji{{ $sal->id }}">
                                                     <span class="btn-inner--icon"><i class="material-icons">info</i></span>
                                                 </button>
                                                 <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
@@ -232,5 +169,5 @@
             </div>
         </div>
 
-        @include('salary/modaldetail')
+        {{-- @include('salary/modaldetail') --}}
     @endsection

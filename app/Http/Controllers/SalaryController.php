@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Salary;
+use App\Models\SalaryMonth;
 
 use Illuminate\Http\Request;
 use PDF;
@@ -15,8 +15,8 @@ class SalaryController extends Controller
     public function index()
     {
         $title = 'Salary';
-        $salaries = Salary::all();
-        return view('salary.index', compact('title', 'salaries'));
+        $salary_months = SalaryMonth::all();
+        return view('salary.index', compact('title', 'salary_months'));
     }
 
     /**
