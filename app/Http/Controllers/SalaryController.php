@@ -126,14 +126,19 @@ class SalaryController extends Controller
      */
     public function printall()
     {
-        $salaries = SalaryMonth::all();
+        // $salaries = SalaryMonth::all();
+        // Mengambil seluruh data salary_months beserta relasi salary_years-user-status
+        $salaries = SalaryMonth::with(['salary_year.user.status'])->get();
 
-        if (!$salaries) {
-            // Log or dd() the ID to see which ID is causing the issue.
-            dd("Salary not found.");
+        // Mengelompokkan salary_months berdasarkan name_status
+        $salByStatus = $salaries->groupBy('salary_year.user.status.name_status');
+
+        foreach ($salaries as $sal) {
+            $date = date('F Y', strtotime($sal->date));
         }
-
-        $pdf = PDF::loadView('salary.printall', compact('salaries'));
-        return $pdf->setPaper('a4')->stream('PrintAll.pdf');
+        
+        // dd($salByStatus);
+        $pdf = PDF::loadView('salary.printall', compact('salByStatus', 'date'));
+        return $pdf->setPaper('a4', 'landscape')->stream('PrintAll.pdf');
     }
 }
