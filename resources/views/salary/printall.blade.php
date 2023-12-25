@@ -54,6 +54,7 @@
             border: 0.1px solid #000;
             border-collapse: collapse;
             font-size: 6pt;
+            padding: 0px 2px 0px 2px
         }
 
         .outline-border {
@@ -87,7 +88,7 @@
         </tr>
     </table>
 
-    <hr class="dash-line">
+    {{-- <hr class="dash-line"> --}}
     <div class="tb-collapse">
         <table>
             <tr>
