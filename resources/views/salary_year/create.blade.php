@@ -146,6 +146,10 @@
                                     </div>
                                 </div>
                             </form>
+                        @else
+                            <div class="alert alert-light    mt-3">
+                                No data available for the selected filter.
+                            </div>
                         @endif
                     </div>
                 </div>
