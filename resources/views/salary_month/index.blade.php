@@ -114,7 +114,7 @@
                                                 {{ number_format($sm->electricity, 0, ',', '.') }}</td>
                                             <td class="text-end">
                                                 {{ number_format($sm->cooperative, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ date('Y-m-d', strtotime($sm->date)) }}</td>
+                                            <td class="text-end">{{ date('M/Y', strtotime($sm->date)) }}</td>
                                             {{-- <td class="text-center m-0 p-0">
                                                 <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
                                                     <span class="btn-inner--icon"><i class="material-icons">edit</i></span>
