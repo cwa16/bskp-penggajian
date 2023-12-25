@@ -52,7 +52,7 @@
                                                         <th rowspan="2" class="text-center">Year</th>
                                                     </tr>
                                                     <tr class="">
-                                                        <th style="background-color: #1A73E8;color: white;">NIK</th>
+                                                        <th style="background-color: #1A73E8;color: white;">Emp Code</th>
                                                         <th style="background-color: #1A73E8;color: white;">Name</th>
                                                         <th>Status</th>
                                                         <th>Dept</th>

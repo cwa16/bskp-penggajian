@@ -16,7 +16,7 @@
                             <thead class="bg-thead">
                                 <tr>
                                     <th>Id</th>
-                                    <th>Nik</th>
+                                    <th>Emp Code</th>
                                     <th>Name</th>
                                     <th>Status</th>
                                     <th>Grade</th>

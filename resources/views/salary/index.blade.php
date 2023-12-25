@@ -58,7 +58,7 @@
                                     </tr>
                                     <tr>
                                         {{-- <th>No</th> --}}
-                                        <th style="background-color: #1A73E8;color: white;">Code Emp</th>
+                                        <th style="background-color: #1A73E8;color: white;">Emp Code</th>
                                         <th style="background-color: #1A73E8;color: white;">Name</th>
                                         <th>Status</th>
                                         <th>Dept</th>
