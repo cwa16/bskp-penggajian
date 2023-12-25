@@ -126,7 +126,7 @@
                                                                     value="{{ $sy->jamsostek ?? '' }}">
                                                                 <input type="hidden" name="total_ben[{{ $key }}]"
                                                                     value="{{ $sy->total_ben ?? '' }}">
-                                                                <input type="text"
+                                                                <input type="hidden"
                                                                     name="total_ben_ded[{{ $key }}]"
                                                                     value="{{ $sy->total_ben_ded ?? '' }}">
                                                                 {{-- /INPUTAN HIDDEN --}}
