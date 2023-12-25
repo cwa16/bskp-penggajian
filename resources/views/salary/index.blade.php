@@ -107,12 +107,12 @@
                                             </td>
                                             <td class="text-end">{{ number_format($sal->ability, 0, ',', '.') }}</td>
                                             <td class="text-end">
-                                                {{ number_format($sal->fungtional_allowance, 0, ',', '.') }}</td>
+                                                {{ number_format($sal->fungtional_alw, 0, ',', '.') }}</td>
                                             <td class="text-end">
-                                                {{ number_format($sal->family_allowance, 0, ',', '.') }}</td>
+                                                {{ number_format($sal->family_alw, 0, ',', '.') }}</td>
                                             <td class="text-end">{{ number_format($sal->adjustment, 0, ',', '.') }}</td>
                                             <td class="text-end">
-                                                {{ number_format($sal->transport_allowance, 0, ',', '.') }}</td>
+                                                {{ number_format($sal->transport_alw, 0, ',', '.') }}</td>
                                             <td class="text-end">{{ number_format($sal->total_overtime, 0, ',', '.') }}
                                             </td>
                                             <td class="text-end">{{ number_format($sal->thr, 0, ',', '.') }}</td>

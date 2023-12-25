@@ -135,13 +135,13 @@
                                     <td>Fungtional Allowance</td>
                                     <td>:</td>
                                     <td class="text-end">
-                                        {{ number_format($sal->salary_year->fungtional_allowance, 0, ',', '.') }}</td>
+                                        {{ number_format($sal->salary_year->fungtional_alw, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr>
                                     <td>Family Allowance</td>
                                     <td>:</td>
                                     <td class="text-end">
-                                        {{ number_format($sal->salary_year->family_allowance, 0, ',', '.') }}
+                                        {{ number_format($sal->salary_year->family_alw, 0, ',', '.') }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -154,7 +154,7 @@
                                     <td>Transport Allowance</td>
                                     <td>:</td>
                                     <td class="text-end">
-                                        {{ number_format($sal->salary_year->transport_allowance, 0, ',', '.') }}
+                                        {{ number_format($sal->salary_year->transport_alw, 0, ',', '.') }}
                                     </td>
                                 </tr>
                                 <tr>
