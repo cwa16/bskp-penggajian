@@ -332,7 +332,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm  btn-outline-secondary btn-3"
-                        data-bs-dismiss="modal">Cancel</button>
+                        data-bs-dismiss="modal">Close</button>
                     <a href="{{ url('/download-pdf/' . $sal->id) }}" class="btn btn-icon btn-3 btn-warning btn-sm"
                         target="_blank">
                         <span class="btn-inner--icon"><i class="material-icons">download</i></span>
