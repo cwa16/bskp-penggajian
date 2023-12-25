@@ -76,13 +76,13 @@ class SalaryMonthController extends Controller
             $absent = $request->input('absent')[$key];
             $electricity = $request->input('electricity')[$key];
             $cooperative = $request->input('cooperative')[$key];
-            $total_ben_deb = $request->input('total_ben_deb')[$key];
+            $total_ben_ded = $request->input('total_ben_ded')[$key];
 
             // Hitungan untuk mencari totalan
             $gross_sal = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw +
                 $adjustment + $total_overtime + $thr + $bonus + $incentive;
             $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative;
-            $net_salary = ($gross_sal + $total_ben) - ($total_deduction + $total_ben_deb);
+            $net_salary = ($gross_sal + $total_ben) - ($total_deduction + $total_ben_ded);
 
             SalaryMonth::create([
                 'id_salary_year' => $request->input('id_salary_year')[$key],
