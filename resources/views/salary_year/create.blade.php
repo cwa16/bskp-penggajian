@@ -54,10 +54,10 @@
                                                     <tr class="">
                                                         <th style="background-color: #1A73E8;color: white;">NIK</th>
                                                         <th style="background-color: #1A73E8;color: white;">Name</th>
-                                                        <th>Grade</th>
                                                         <th>Status</th>
                                                         <th>Dept</th>
                                                         <th>Job</th>
+                                                        <th>Grade</th>
                                                         <th>Salary Grade</th>
                                                         <th>Ability</th>
                                                         <th>Fungtional Allowance</th>
@@ -72,10 +72,10 @@
                                                             <td>{{ $key + 1 }}</td>
                                                             <td class="text-nowrap text-end">{{ $user->nik }}</td>
                                                             <td>{{ $user->name }}</td>
-                                                            <td>{{ $user->grade->name_grade ?? '-' }}</td>
                                                             <td>{{ $user->status->name_status }}</td>
                                                             <td>{{ $user->dept->name_dept }}</td>
                                                             <td>{{ $user->job->name_job }}</td>
+                                                            <td>{{ $user->grade->name_grade ?? '-' }}</td>
                                                             <td class="text-end">
                                                                 @if ($user->grade && $user->grade->salary_grades->isNotEmpty())
                                                                     {{ number_format($user->grade->salary_grades->first()->rate_salary, 0, ',', '.') }}

@@ -57,10 +57,10 @@
                                     <tr>
                                         <th style="background-color: #1A73E8;color: white;">NIK</th>
                                         <th style="background-color: #1A73E8;color: white;">Name</th>
-                                        <th>Grade</th>
                                         <th>Status</th>
                                         <th>Dept</th>
                                         <th>Job</th>
+                                        <th>Grade</th>
                                         <th>Salary Grade</th>
                                         <th>Ability</th>
                                         <th>Hour Call</th>
@@ -81,10 +81,10 @@
                                         <tr>
                                             <td class="text-nowrap text-end">{{ $sm->salary_year->user->nik }}</td>
                                             <td>{{ $sm->salary_year->user->name }}</td>
-                                            <td>{{ $sm->salary_year->user->grade->name_grade }}</td>
                                             <td>{{ $sm->salary_year->user->status->name_status }}</td>
                                             <td>{{ $sm->salary_year->user->dept->name_dept }}</td>
                                             <td>{{ $sm->salary_year->user->job->name_job }}</td>
+                                            <td>{{ $sm->salary_year->user->grade->name_grade }}</td>
                                             <td class="text-end">
                                                 {{ number_format($sm->salary_year->salary_grade->rate_salary, 0, ',', '.') }}
                                             </td>

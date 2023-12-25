@@ -57,10 +57,10 @@
                                                     <tr>
                                                         <th style="background-color: #1A73E8;color: white;">NIK</th>
                                                         <th style="background-color: #1A73E8;color: white;">Name</th>
-                                                        <th>Grade</th>
                                                         <th>Status</th>
                                                         <th>Dept</th>
                                                         <th>Job</th>
+                                                        <th>Grade</th>
                                                         <th>Rate Salary</th>
                                                         <th>Ability</th>
                                                         <th>Overtime Hour</th>
@@ -80,10 +80,10 @@
                                                             <td class="text-end">{{ $key + 1 }}</td>
                                                             <td class="text-nowrap text-end">{{ $sy->user->nik }}</td>
                                                             <td>{{ $sy->user->name }}</td>
-                                                            <td>{{ $sy->user->grade->name_grade ?? '-' }}</td>
                                                             <td>{{ $sy->user->status->name_status }}</td>
                                                             <td>{{ $sy->user->dept->name_dept }}</td>
                                                             <td>{{ $sy->user->job->name_job }}</td>
+                                                            <td>{{ $sy->user->grade->name_grade ?? '-' }}</td>
                                                             <td class="text-end">
                                                                 @if ($sy->user->grade && $sy->user->grade->salary_grades->isNotEmpty())
                                                                     {{ number_format($sy->user->grade->salary_grades->first()->rate_salary, 0, ',', '.') }}

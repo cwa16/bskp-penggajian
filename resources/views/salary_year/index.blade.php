@@ -50,10 +50,10 @@
                                     <tr>
                                         <th style="background-color: #1A73E8;color: white;">NIK</th>
                                         <th style="background-color: #1A73E8;color: white;">Name</th>
-                                        <th>Grade</th>
                                         <th>Status</th>
                                         <th>Dept</th>
                                         <th>Job</th>
+                                        <th>Grade</th>
                                         <th>Salary Grade</th>
                                         <th>Ability</th>
                                         <th>Fungtional Allowance</th>
@@ -70,10 +70,10 @@
                                         <tr>
                                             <td class="text-nowrap text-end">{{ $sy->user->nik }}</td>
                                             <td>{{ $sy->user->name }}</td>
-                                            <td>{{ $sy->user->grade->name_grade }}</td>
                                             <td>{{ $sy->user->status->name_status }}</td>
                                             <td>{{ $sy->user->dept->name_dept }}</td>
                                             <td>{{ $sy->user->job->name_job }}</td>
+                                            <td>{{ $sy->user->grade->name_grade }}</td>
                                             <td class="text-end">
                                                 {{ number_format($sy->salary_grade->rate_salary, 0, ',', '.') }}</td>
                                             <td class="text-end">{{ number_format($sy->ability, 0, ',', '.') }}</td>

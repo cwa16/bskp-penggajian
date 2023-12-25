@@ -58,12 +58,12 @@
                                     </tr>
                                     <tr>
                                         {{-- <th>No</th> --}}
-                                        <th style="background-color: #1A73E8;color: white;">NIK</th>
+                                        <th style="background-color: #1A73E8;color: white;">Code Emp</th>
                                         <th style="background-color: #1A73E8;color: white;">Name</th>
-                                        <th>Dept</th>
                                         <th>Status</th>
-                                        <th>Grade</th>
+                                        <th>Dept</th>
                                         <th>Job</th>
+                                        <th>Grade</th>
                                         <th>No Account</th>
                                         <th>Salary Grade</th>
                                         <th>Ability</th>
@@ -97,10 +97,10 @@
                                             <td><a data-bs-toggle="modal"
                                                     href="#detailGaji{{ $sal->id }}">{{ $sal->salary_year->user->name }}</a>
                                             </td>
-                                            <td>{{ $sal->salary_year->user->grade->name_grade }}</td>
                                             <td>{{ $sal->salary_year->user->status->name_status }}</td>
                                             <td>{{ $sal->salary_year->user->dept->name_dept }}</td>
                                             <td>{{ $sal->salary_year->user->job->name_job }}</td>
+                                            <td>{{ $sal->salary_year->user->grade->name_grade }}</td>
                                             <td>-</td>
                                             <td class="text-end">
                                                 {{ number_format($sal->salary_year->salary_grade->rate_salary, 0, ',', '.') }}
