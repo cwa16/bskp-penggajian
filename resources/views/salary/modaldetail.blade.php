@@ -41,7 +41,14 @@
                         border-top: 3px dashed #888;
                     }
                 </style>
-                {{-- {{ $rate_salary = }} --}}
+                @php
+                    $rate_salary = $sal->salary_year->salary_grade->rate_salary;
+                    $ability = $sal->salary_year->ability;
+                    $fungtional_alw = $sal->salary_year->fungtional_alw;
+                    $family_alw = $sal->salary_year->family_alw;
+
+                    $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
+                @endphp
                 <div class="modal-body">
                     <div class="row">
                         <div class="col">
@@ -257,19 +264,19 @@
                                 <tr>
                                     <td>Jamsostek JKK</td>
                                     <td>:</td>
-                                    <td class="text-end">{{ number_format($sal->jamsostek_jkk_ben, 0, ',', '.') }}
+                                    <td class="text-end">{{ number_format($total * 0.0054, 0, ',', '.') }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Jamsostek TK</td>
                                     <td>:</td>
-                                    <td class="text-end">{{ number_format($sal->jamsostek_tk_ben, 0, ',', '.') }}
+                                    <td class="text-end">{{ number_format($total * 0.003, 0, ',', '.') }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Jamsostek THT</td>
                                     <td>:</td>
-                                    <td class="text-end">{{ number_format($sal->jamsostek_tht_ben, 0, ',', '.') }}
+                                    <td class="text-end">{{ number_format($total * 0.037, 0, ',', '.') }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -292,19 +299,19 @@
                                 <tr>
                                     <td>Jamsostek JKK</td>
                                     <td>:</td>
-                                    <td class="text-end">{{ number_format($sal->jamsostek_jkk_deb, 0, ',', '.') }}
+                                    <td class="text-end">{{ number_format($total * 0.0054, 0, ',', '.') }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Jamsostek TK</td>
                                     <td>:</td>
-                                    <td class="text-end">{{ number_format($sal->jamsostek_tk_deb, 0, ',', '.') }}
+                                    <td class="text-end">{{ number_format($total * 0.003, 0, ',', '.') }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Jamsostek THT</td>
                                     <td>:</td>
-                                    <td class="text-end">{{ number_format($sal->jamsostek_tht_deb, 0, ',', '.') }}
+                                    <td class="text-end">{{ number_format($total * 0.037, 0, ',', '.') }}
                                     </td>
                                 </tr>
                                 <tr>
