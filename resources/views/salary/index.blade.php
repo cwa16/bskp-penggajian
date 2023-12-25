@@ -155,9 +155,10 @@
                                                     data-bs-toggle="modal" data-bs-target="#detailGaji{{ $sal->id }}">
                                                     <span class="btn-inner--icon"><i class="material-icons">info</i></span>
                                                 </button>
-                                                <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
+                                                <a href="{{ url('/print-pdf/' . $sal->id) }}"
+                                                    class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" target="_blank">
                                                     <span class="btn-inner--icon"><i class="material-icons">print</i></span>
-                                                </button>
+                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach
