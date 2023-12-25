@@ -72,18 +72,26 @@ class SalaryController extends Controller
      */
     public function print($id)
     {
-        $salary = Salary::find($id);
+        $sal = SalaryMonth::find($id);
 
         // mengambeil date
-        $date = date('My', strtotime($salary->created_at));
+        $date = date('My', strtotime($sal->date));
 
-        if (!$salary) {
+        if (!$sal) {
             // Log or dd() the ID to see which ID is causing the issue.
             dd("Salary with ID $id not found.");
         }
 
-        $pdf = PDF::loadView('salary.print', compact('salary'));
-        return $pdf->setPaper('a5', 'landscape')->stream('SAL_' . $date . '_' . $salary->user->nik . '_' . $salary->user->name . '.pdf');
+        // hitungan utuk mendapatkan total gaji bersih
+        $rate_salary = $sal->salary_year->salary_grade->rate_salary;
+        $ability = $sal->salary_year->ability;
+        $fungtional_alw = $sal->salary_year->fungtional_alw;
+        $family_alw = $sal->salary_year->family_alw;
+
+        $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
+
+        $pdf = PDF::loadView('salary.print', compact('sal', 'total'));
+        return $pdf->setPaper('a5', 'landscape')->stream('SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf');
     }
 
     /**
@@ -91,18 +99,26 @@ class SalaryController extends Controller
      */
     public function download($id)
     {
-        $salary = Salary::find($id);
+        $sal = SalaryMonth::find($id);
 
         // mengambeil date
-        $date = date('My', strtotime($salary->created_at));
+        $date = date('My', strtotime($sal->date));
 
-        if (!$salary) {
+        if (!$sal) {
             // Log or dd() the ID to see which ID is causing the issue.
             dd("Salary with ID $id not found.");
         }
 
-        $pdf = PDF::loadView('salary.print', compact('salary'));
-        return $pdf->setPaper('a5', 'landscape')->download('SAL_' . $date . '_'  . $salary->user->nik . '_' . $salary->user->name . '.pdf');
+        // hitungan utuk mendapatkan total gaji bersih
+        $rate_salary = $sal->salary_year->salary_grade->rate_salary;
+        $ability = $sal->salary_year->ability;
+        $fungtional_alw = $sal->salary_year->fungtional_alw;
+        $family_alw = $sal->salary_year->family_alw;
+
+        $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
+
+        $pdf = PDF::loadView('salary.print', compact('sal', 'total'));
+        return $pdf->setPaper('a5', 'landscape')->download('SAL_' . $date . '_'  . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf');
     }
 
     /**
@@ -110,7 +126,7 @@ class SalaryController extends Controller
      */
     public function printall()
     {
-        $salaries = Salary::all();
+        $salaries = SalaryMonth::all();
 
         if (!$salaries) {
             // Log or dd() the ID to see which ID is causing the issue.
