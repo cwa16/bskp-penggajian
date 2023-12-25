@@ -95,7 +95,7 @@
                                         <tr>
                                             <td class="text-nowrap text-end">{{ $sal->salary_year->user->nik }}</td>
                                             <td><a data-bs-toggle="modal"
-                                                    href="#detailGaji{{ $sal->salary_year->id }}">{{ $sal->salary_year->user->name }}</a>
+                                                    href="#detailGaji{{ $sal->id }}">{{ $sal->salary_year->user->name }}</a>
                                             </td>
                                             <td>{{ $sal->salary_year->user->grade->name_grade }}</td>
                                             <td>{{ $sal->salary_year->user->status->name_status }}</td>
@@ -169,5 +169,5 @@
             </div>
         </div>
 
-        {{-- @include('salary/modaldetail') --}}
+        @include('salary/modaldetail')
     @endsection
