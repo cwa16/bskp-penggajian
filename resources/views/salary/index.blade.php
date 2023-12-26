@@ -13,11 +13,17 @@
                     <div class="card-body p-3 pb-2">
                         <div class="row">
                             <div class="col-7">
-                                <a href="{{ url('/print-all') }}" class="btn btn-icon btn-3 btn-warning btn-sm"
+                                {{-- Print all tanpa filter tahun dan bulan --}}
+                                {{-- <a href="{{ url('/print-all') }}" class="btn btn-icon btn-3 btn-warning btn-sm"
                                     target="_blank">
                                     <span class="btn-inner--icon"><i class="material-icons">print</i></span>
                                     <span class="btn-inner--text">Print All</span>
-                                </a>
+                                </a> --}}
+                                <button data-bs-toggle="modal" data-bs-target="#printAll"
+                                    class="btn btn-icon btn-3 btn-warning btn-sm">
+                                    <span class="btn-inner--icon"><i class="material-icons">print</i></span>
+                                    <span class="btn-inner--text">Print All</span>
+                                </button>
                             </div>
                             <div class="col-5 justify-content-end">
                                 <form action="{{ url('/salarygrade') }}" method="GET">
@@ -171,4 +177,58 @@
         </div>
 
         @include('salary/modaldetail')
+        {{-- Modal Print All Select Year Month --}}
+        <div class="modal fade" id="printAll" tabindex="-1" role="dialog" aria-labelledby="modal-form"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body p-0">
+                        <div class="card card-plain">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Select Year & Month</h5>
+                            </div>
+                            <div class="card-body py-2">
+                                <form action="{{ url('/print-all') }}" method="get">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="row">
+                                                <label for="year" class="col pt-1">Year:</label>
+                                                <select name="year" id="year"
+                                                    class="col form-select form-select-sm">
+                                                    @foreach ($yearOpts as $yearOpt)
+                                                        <option value="{{ $yearOpt }}">{{ $yearOpt }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="row">
+                                                <label for="month" class="col pt-1">Month:</label>
+                                                <select name="month" id="month"
+                                                    class="col form-select form-select-sm">
+                                                    @foreach ($monthOpts as $monthOpt)
+                                                        <option value="{{ $monthOpt }}">{{ $monthOpt }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="submit" class="btn btn-warning btn-sm"><span
+                                                    class="btn-inner--icon"><i class="material-icons">print</i></span>
+                                                <span class="btn-inner--text">Print</span></button>
+                                        </div>
+                                        <div class="col-auto ps-0">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary btn-3"
+                                                data-bs-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     @endsection

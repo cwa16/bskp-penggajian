@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SalaryMonth;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use PDF;
 
 class SalaryController extends Controller
@@ -16,7 +17,16 @@ class SalaryController extends Controller
     {
         $title = 'Salary';
         $salary_months = SalaryMonth::all();
-        return view('salary.index', compact('title', 'salary_months'));
+
+        $monthOpts = SalaryMonth::select(DB::raw('MONTH(date) as month'))
+            ->distinct()
+            ->pluck('month');
+
+        $yearOpts = SalaryMonth::select(DB::raw('YEAR(date) as year'))
+            ->distinct()
+            ->pluck('year');
+
+        return view('salary.index', compact('title', 'salary_months', 'monthOpts', 'yearOpts'));
     }
 
     /**
@@ -126,9 +136,24 @@ class SalaryController extends Controller
      */
     public function printall()
     {
+        $monthOpts = SalaryMonth::select(DB::raw('MONTH(date) as month'))
+            ->distinct()
+            ->pluck('month');
+
+        $yearOpts = SalaryMonth::select(DB::raw('YEAR(date) as year'))
+            ->distinct()
+            ->pluck('year');
+
+        $year = request()->input('year');
+        $month = request()->input('month');
+
         // $salaries = SalaryMonth::all();
         // Mengambil seluruh data salary_months beserta relasi salary_years-user-status
-        $salaries = SalaryMonth::with(['salary_year.user.status'])->get();
+        // $salaries = SalaryMonth::with(['salary_year.user.status'])->get();
+        $salaries = SalaryMonth::with(['salary_year.user.status'])
+            ->whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->get();
 
         // Mengelompokkan salary_months berdasarkan name_status
         $salByStatus = $salaries->groupBy('salary_year.user.status.name_status');
@@ -136,7 +161,7 @@ class SalaryController extends Controller
         foreach ($salaries as $sal) {
             $date = date('F Y', strtotime($sal->date));
         }
-        
+
         // dd($salByStatus);
         $pdf = PDF::loadView('salary.printall', compact('salByStatus', 'date'));
         return $pdf->setPaper('a4', 'landscape')->stream('PrintAll.pdf');
