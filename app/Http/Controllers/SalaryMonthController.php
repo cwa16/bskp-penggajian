@@ -29,7 +29,7 @@ class SalaryMonthController extends Controller
      */
     public function create()
     {
-        $title = 'Input Data Gaji Per Tahun';
+        $title = 'Input Salary Per Month';
         $statuses = Status::all();
         $year = date('Y');
 
