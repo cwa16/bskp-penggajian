@@ -158,12 +158,17 @@ class SalaryController extends Controller
         // Mengelompokkan salary_months berdasarkan name_status
         $salByStatus = $salaries->groupBy('salary_year.user.status.name_status');
 
+        $date = null;
         foreach ($salaries as $sal) {
             $date = date('F Y', strtotime($sal->date));
         }
 
         // dd($salByStatus);
-        $pdf = PDF::loadView('salary.printall', compact('salByStatus', 'date'));
-        return $pdf->setPaper('a4', 'landscape')->stream('PrintAll.pdf');
+        if ($date) {
+            $pdf = PDF::loadView('salary.printall', compact('salByStatus', 'date'));
+            return $pdf->setPaper('a4', 'landscape')->stream('PrintAll.pdf');
+        } else {
+            return redirect()->route('salary.index');
+        }
     }
 }
