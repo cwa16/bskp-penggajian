@@ -17,21 +17,45 @@
                                 <a href="{{ url('/salary-month/edit') }}" class="btn btn-warning btn-sm">Edit Data</a>
                             </div>
                             <div class="col-5 justify-content-end">
-                                <form action="{{ url('/salarygrade') }}" method="GET">
+                                <form action="{{ url('/salary-month') }}" method="GET">
                                     <div class="row">
                                         <div class="col pe-0">
-                                            <select class="form-select form-select-sm " name="filter_year">
-                                                <option value="all">Show All Data</option>
+                                            <select class="form-select form-select-sm" name="filter_status">
+                                                <option value="" {{ $selectedStatus == 'all' ? 'selected' : '' }}>
+                                                    Show All Status
+                                                </option>
+                                                @foreach ($statuses as $status)
+                                                    <option value="{{ $status }}"
+                                                        {{ $selectedStatus == $status ? 'selected' : '' }}>
+                                                        {{ $status }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                         <div class="col pe-0">
-                                            <select class="form-select form-select-sm " name="filter_year">
-                                                <option value="all">Show All Data</option>
+                                            <select class="form-select form-select-sm" name="filter_year">
+                                                <option value="all" {{ $selectedYear == 'all' ? 'selected' : '' }}>
+                                                    Show All Year
+                                                </option>
+                                                @foreach ($years as $year)
+                                                    <option value="{{ $year }}"
+                                                        {{ $selectedYear == $year ? 'selected' : '' }}>
+                                                        {{ $year }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
-                                        <div class="col">
-                                            <select class="form-select form-select-sm " name="filter_month">
-                                                <option value="all">Show All Data</option>
+                                        <div class="col pe-0">
+                                            <select class="form-select form-select-sm" name="filter_month">
+                                                <option value="all" {{ $selectedMonth == 'all' ? 'selected' : '' }}>
+                                                    Show All Month
+                                                </option>
+                                                @foreach ($months as $month)
+                                                    <option value="{{ $month['value'] }}"
+                                                        {{ $selectedMonth == $month['value'] ? 'selected' : '' }}>
+                                                        {{ $month['label'] }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                         <div class="col-auto">
