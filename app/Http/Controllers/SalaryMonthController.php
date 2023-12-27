@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Status;
 use App\Models\SalaryYear;
 use App\Models\SalaryMonth;
+use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 
@@ -17,11 +18,55 @@ class SalaryMonthController extends Controller
     public function index()
     {
         $title = 'Salary Per Month';
-        $salary_months = SalaryMonth::all();
-        // foreach ($salary_months as $key => $sm) {
-        //     dd($sm->salary_year->user->name);
-        // }
-        return view('salary_month.index', compact('title', 'salary_months'));
+
+        // Get the range of years and months from the salary_months table
+        $years = SalaryMonth::distinct('date')->pluck('date')->map(function ($date) {
+            return Carbon::parse($date)->format('Y');
+        })->unique()->toArray();
+
+        $months = SalaryMonth::distinct('date')->pluck('date')->map(function ($date) {
+            return Carbon::parse($date)->format('F');
+        })->unique()->toArray();
+
+        // Get distinct status names through the relationships
+        $statuses = Status::distinct('name_status')->pluck('name_status')->toArray();
+
+        // Menyimpan query builder dalam variabel query
+        $query = SalaryMonth::with('salary_year');
+
+        // Set the default selected year to the current year
+        $selectedYear = date('Y');
+        $selectedMonth = Carbon::now()->format('F');  // Set the default selected month to "Month Now"
+        $selectedStatus = null;
+
+        // Check if a specific year is selected in the URL
+        if (in_array(request('filter_year'), $years)) {
+            $selectedYear = request('filter_year');
+            $query->whereYear('date', $selectedYear);
+        }
+
+        // Check if a specific month is selected in the URL
+        if (in_array(request('filter_month'), $months)) {
+            $selectedMonth = request('filter_month');
+            $query->whereMonth('date', Carbon::parse($selectedMonth)->month);
+        }
+
+        // Apply default filters for the current month and year
+        $query->whereYear('date', $selectedYear)
+            ->whereMonth('date', Carbon::parse($selectedMonth)->month);
+
+        // Check if a specific status is selected in the URL
+        if (in_array(request('filter_status'), $statuses)) {
+            $selectedStatus = request('filter_status');
+            $query->whereHas('salary_year.user.status', function ($subquery) use ($selectedStatus) {
+                $subquery->where('name_status', $selectedStatus);
+            });
+        }
+
+        // Query the salary_months based on the selected year, month, and status
+        $salary_months = $query->get();
+
+        return view('salary_month.index', compact('title', 'statuses', 'years', 'months', 'salary_months', 'selectedStatus', 'selectedYear', 'selectedMonth'));
     }
 
     /**

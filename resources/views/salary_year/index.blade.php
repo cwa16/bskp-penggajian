@@ -21,7 +21,7 @@
                                     <div class="row">
                                         <div class="col pe-0">
                                             <select class="form-select form-select-sm" name="filter_status">
-                                                <option value="" {{ !$selectedStatus ? 'selected' : '' }}>
+                                                <option value="" {{ $selectedStatus == 'all' ? 'selected' : '' }}>
                                                     Show All Status
                                                 </option>
                                                 @foreach ($statuses as $status)
