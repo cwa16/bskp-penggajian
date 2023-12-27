@@ -12,12 +12,43 @@ class SalaryYearController extends Controller
     /** 
      * Display a listing of the resource. 
      */
+
     public function index()
     {
         $title = 'Salary Per Year';
-        $salary_years = SalaryYear::all();
-        return view('salary_year.index', compact('title', 'salary_years'));
+
+        // Get the range of years from the salary_years table
+        $years = SalaryYear::distinct('year')->pluck('year')->toArray();
+        // Get distinct status names through the relationships
+        $statuses = Status::distinct('name_status')->pluck('name_status')->toArray();
+        // Menyimpan query builder dalam variabel query
+        $query = SalaryYear::with('salary_grade');
+
+        // Set the default selected year to the current year
+        $selectedYear = date('Y');
+        // Set the default selected status to "All"
+        $selectedStatus = null;
+
+        // Check if a specific year is selected in the URL
+        if (in_array(request('filter_year'), $years)) {
+            $selectedYear = request('filter_year');
+            $query->where('year', $selectedYear);
+        }
+
+        // Check if a specific status is selected in the URL
+        if (in_array(request('filter_status'), $statuses)) {
+            $selectedStatus = request('filter_status');
+            $query->whereHas('user.status', function ($subquery) use ($selectedStatus) {
+                $subquery->where('name_status', $selectedStatus);
+            });
+        }
+
+        // Query the salary_years based on the selected year and status
+        $salary_years = $query->get();
+
+        return view('salary_year.index', compact('title', 'salary_years', 'years', 'statuses', 'selectedYear', 'selectedStatus'));
     }
+
 
     /**
      * Show the form for creating a new resource.

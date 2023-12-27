@@ -17,16 +17,32 @@
                                 <a href="{{ url('/salary-year/edit') }}" class="btn btn-warning btn-sm">Edit Data</a>
                             </div>
                             <div class="col-5 justify-content-end">
-                                <form action="{{ url('/salarygrade') }}" method="GET">
+                                <form action="{{ url('/salary-year') }}" method="GET">
                                     <div class="row">
                                         <div class="col pe-0">
-                                            <select class="form-select form-select-sm " name="filter_year">
-                                                <option value="all">Show All Data</option>
+                                            <select class="form-select form-select-sm" name="filter_status">
+                                                <option value="" {{ !$selectedStatus ? 'selected' : '' }}>
+                                                    Show All Status
+                                                </option>
+                                                @foreach ($statuses as $status)
+                                                    <option value="{{ $status }}"
+                                                        {{ $selectedStatus == $status ? 'selected' : '' }}>
+                                                        {{ $status }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
-                                        <div class="col">
-                                            <select class="form-select form-select-sm " name="filter_year">
-                                                <option value="all">Show All Data</option>
+                                        <div class="col pe-0">
+                                            <select class="form-select form-select-sm" name="filter_year">
+                                                <option value="all" {{ $selectedYear == 'all' ? 'selected' : '' }}>
+                                                    Show All Year
+                                                </option>
+                                                @foreach ($years as $year)
+                                                    <option value="{{ $year }}"
+                                                        {{ $selectedYear == $year ? 'selected' : '' }}>
+                                                        {{ $year }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                         <div class="col-auto">
