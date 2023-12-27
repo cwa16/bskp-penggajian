@@ -6,13 +6,13 @@ use App\Models\Status;
 use App\Models\User;
 use App\Models\SalaryYear;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class SalaryYearController extends Controller
 {
     /** 
      * Display a listing of the resource. 
      */
-
     public function index()
     {
         $title = 'Salary Per Year';
@@ -21,34 +21,42 @@ class SalaryYearController extends Controller
         $years = SalaryYear::distinct('year')->pluck('year')->toArray();
         // Get distinct status names through the relationships
         $statuses = Status::distinct('name_status')->pluck('name_status')->toArray();
+
         // Menyimpan query builder dalam variabel query
         $query = SalaryYear::with('salary_grade');
 
-        // Set the default selected year to the current year
-        $selectedYear = date('Y');
-        // Set the default selected status to "All"
+        // set variabel default null
+        $selectedYear = null;
         $selectedStatus = null;
 
-        // Check if a specific year is selected in the URL
-        if (in_array(request('filter_year'), $years)) {
-            $selectedYear = request('filter_year');
-            $query->where('year', $selectedYear);
+        // percabangan untuk filter status
+        if (request('filter_status') != null) {
+            if (request('filter_status') != 'all') {
+                // Filter by the selected year
+                $selectedStatus = request('filter_status');
+                $query->whereHas('user.status', function ($subquery) use ($selectedStatus) {
+                    $subquery->where('name_status', $selectedStatus);
+                });
+            }
         }
 
-        // Check if a specific status is selected in the URL
-        if (in_array(request('filter_status'), $statuses)) {
-            $selectedStatus = request('filter_status');
-            $query->whereHas('user.status', function ($subquery) use ($selectedStatus) {
-                $subquery->where('name_status', $selectedStatus);
-            });
+        // percabangan untuk filter tahun
+        if (request('filter_year') != null) {
+            if (request('filter_year') != 'all') {
+                // Filter by the selected year
+                $selectedYear = request('filter_year');
+                $query->where('year', $selectedYear);
+            }
+        } else {
+            // untuk menetapkan tahun sekarang saat membuka halaman
+            $selectedYear = request('filter_year', Carbon::now()->year);
+            $query->where('year', $selectedYear);
         }
 
         // Query the salary_years based on the selected year and status
         $salary_years = $query->get();
-
         return view('salary_year.index', compact('title', 'salary_years', 'years', 'statuses', 'selectedYear', 'selectedStatus'));
     }
-
 
     /**
      * Show the form for creating a new resource.
