@@ -26,16 +26,45 @@
                                 </button>
                             </div>
                             <div class="col-5 justify-content-end">
-                                <form action="{{ url('/salarygrade') }}" method="GET">
+                                <form action="{{ url('/salary') }}" method="GET">
                                     <div class="row">
                                         <div class="col pe-0">
-                                            <select class="form-select form-select-sm " name="filter_year">
-                                                <option value="all">Show All Data</option>
+                                            <select class="form-select form-select-sm" name="filter_status">
+                                                <option value="" {{ $selectedStatus == 'all' ? 'selected' : '' }}>
+                                                    Show All Status
+                                                </option>
+                                                @foreach ($statuses as $status)
+                                                    <option value="{{ $status }}"
+                                                        {{ $selectedStatus == $status ? 'selected' : '' }}>
+                                                        {{ $status }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
-                                        <div class="col">
-                                            <select class="form-select form-select-sm " name="filter_month">
-                                                <option value="all">Show All Data</option>
+                                        <div class="col pe-0">
+                                            <select class="form-select form-select-sm" name="filter_year">
+                                                <option value="all" {{ $selectedYear == 'all' ? 'selected' : '' }}>
+                                                    Show All Year
+                                                </option>
+                                                @foreach ($years as $year)
+                                                    <option value="{{ $year }}"
+                                                        {{ $selectedYear == $year ? 'selected' : '' }}>
+                                                        {{ $year }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col pe-0">
+                                            <select class="form-select form-select-sm" name="filter_month">
+                                                <option value="all" {{ $selectedMonth == 'all' ? 'selected' : '' }}>
+                                                    Show All Month
+                                                </option>
+                                                @foreach ($months as $month)
+                                                    <option value="{{ $month['value'] }}"
+                                                        {{ $selectedMonth == $month['value'] ? 'selected' : '' }}>
+                                                        {{ $month['label'] }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                         <div class="col-auto">
@@ -163,7 +192,8 @@
                                                 </button>
                                                 <a href="{{ url('/print-pdf/' . $sal->id) }}"
                                                     class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" target="_blank">
-                                                    <span class="btn-inner--icon"><i class="material-icons">print</i></span>
+                                                    <span class="btn-inner--icon"><i
+                                                            class="material-icons">print</i></span>
                                                 </a>
                                             </td>
                                         </tr>
@@ -196,8 +226,8 @@
                                                 <label for="year" class="col pt-1">Year:</label>
                                                 <select name="year" id="year"
                                                     class="col form-select form-select-sm">
-                                                    @foreach ($yearOpts as $yearOpt)
-                                                        <option value="{{ $yearOpt }}">{{ $yearOpt }}</option>
+                                                    @foreach ($years as $year)
+                                                        <option value="{{ $year }}">{{ $year }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -207,8 +237,9 @@
                                                 <label for="month" class="col pt-1">Month:</label>
                                                 <select name="month" id="month"
                                                     class="col form-select form-select-sm">
-                                                    @foreach ($monthOpts as $monthOpt)
-                                                        <option value="{{ $monthOpt }}">{{ $monthOpt }}
+                                                    @foreach ($months as $month)
+                                                        <option value="{{ $month['value'] }}">
+                                                            {{ $month['label'] }}
                                                         </option>
                                                     @endforeach
                                                 </select>
