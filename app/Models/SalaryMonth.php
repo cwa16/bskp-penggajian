@@ -24,6 +24,7 @@ class SalaryMonth extends Model
         'gross_salary',
         'total_deduction',
         'net_salary',
+        'allocation',
         'is_checked',
         'is_approved',
     ];

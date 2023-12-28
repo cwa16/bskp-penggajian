@@ -29,6 +29,7 @@ return new class extends Migration
             $table->integer('gross_salary')->nullable();
             $table->integer('total_deduction')->nullable();
             $table->integer('net_salary')->nullable();
+            $table->string('allocation')->nullable();
             $table->boolean('is_checked')->default(0);
             $table->boolean('is_approved')->default(0);
             $table->timestamps();
