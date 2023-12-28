@@ -24,6 +24,11 @@
                                     <span class="btn-inner--icon"><i class="material-icons">print</i></span>
                                     <span class="btn-inner--text">Print All</span>
                                 </button>
+                                <button data-bs-toggle="modal" data-bs-target="#printAllocation"
+                                    class="btn btn-icon btn-3 btn-warning btn-sm">
+                                    <span class="btn-inner--icon"><i class="material-icons">print</i></span>
+                                    <span class="btn-inner--text">Print Allocation</span>
+                                </button>
                             </div>
                             <div class="col-5 justify-content-end">
                                 <form action="{{ url('/salary') }}" method="GET">
