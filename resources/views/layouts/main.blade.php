@@ -30,9 +30,11 @@
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('assets/css/material-dashboard.css?v=3.1.0') }}" rel="stylesheet" />
 
-
     <!-- Datatable CSS -->
     <link href="{{ asset('assets/libs/datatables/datatables.min.css') }}" rel="stylesheet" />
+
+    <!-- Select2 CSS -->
+    <link href="{{ asset('assets/libs/select2/css/select2.min.css') }}" rel="stylesheet" />
 
     <!-- Bootsrap 5.3.2 CSS -->
     {{-- <link href="{{ asset('assets/libs/bootstrap5/css/bootstrap.min.css') }}" rel="stylesheet" /> --}}
@@ -343,6 +345,11 @@
     <!-- JQuery Validation JS -->
     <script src="{{ asset('assets/libs/jquery-validation/jquery.validate.min.js') }}"></script>
     <script src=" {{ asset('assets/libs/jquery-validation/additional-methods.min.js') }}"></script>
+
+    {{-- Select2 JS --}}
+    <script src=" {{ asset('assets/libs/select2/js/select2.min.js') }}"></script>
+
+
     <!-- InputMask -->
     <script src="{{ asset('assets/libs/moment/moment.min.js') }}"></script>
     <script src="{{ asset('assets/libs/inputmask/jquery.inputmask.min.js') }}"></script>

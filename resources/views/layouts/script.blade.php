@@ -318,6 +318,13 @@
         });
     });
 </script>
+
+<script>
+    $(document).ready(function() {
+        $('.allocation').select2();
+    });
+</script>
+
 <script>
     function updateRealTimeClock() {
         var now = new Date();

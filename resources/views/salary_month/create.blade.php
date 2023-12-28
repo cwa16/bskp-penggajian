@@ -52,6 +52,7 @@
                                                             Identity</th>
                                                         <th colspan="7" class="text-center p-0">Salary Components</th>
                                                         <th colspan="4" class="text-center p-0">Deduction</th>
+                                                        <th rowspan="2" class="text-center">Allocation</th>
                                                         <th rowspan="2" class="text-center">Month / Year</th>
                                                     </tr>
                                                     <tr>
@@ -210,6 +211,24 @@
                                                                         style="width: 120px"
                                                                         name="cooperative[{{ $key }}]"
                                                                         placeholder="Enter the koperasi">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="input-group input-group-outline">
+                                                                    <select class="form-select form-select-sm allocation"
+                                                                        name="allocation[{{ $key }}]"
+                                                                        style="min-height: 20px;width: 100% !important;padding: 0 0 0 0;"
+                                                                        data-placeholder="Select allocation"
+                                                                        multiple="multiple">
+                                                                        <option value="A">A</option>
+                                                                        <option value="B">B</option>
+                                                                        <option value="C">C</option>
+                                                                        <option value="D">D</option>
+                                                                        <option value="E">E</option>
+                                                                        <option value="F">F</option>
+                                                                        <option value="Factory">Factory</option>
+                                                                        <option value="GAE">GAE</option>
+                                                                    </select>
                                                                 </div>
                                                             </td>
                                                             <td class="text-end">{{ date('M/Y') }}</td>
