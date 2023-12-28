@@ -146,6 +146,9 @@ class SalaryMonthController extends Controller
             $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative;
             $net_salary = ($gross_sal + $total_ben) - ($total_deduction + $total_ben_ded);
 
+            $allocations = $request->input('allocation')[$key];
+            $allocationJson = json_encode($allocations);
+
             SalaryMonth::create([
                 'id_salary_year' => $request->input('id_salary_year')[$key],
                 'date' => now(),
@@ -161,6 +164,7 @@ class SalaryMonthController extends Controller
                 'incentive' => $incentive,
                 'gross_salary' => $gross_sal,
                 'total_deduction' => $total_deduction,
+                'allocation' => $allocationJson,
                 'net_salary' => $net_salary,
             ]);
         }

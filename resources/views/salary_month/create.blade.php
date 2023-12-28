@@ -216,7 +216,7 @@
                                                             <td>
                                                                 <div class="input-group input-group-outline">
                                                                     <select class="form-select form-select-sm allocation"
-                                                                        name="allocation[{{ $key }}]"
+                                                                        name="allocation[{{ $key }}][]"
                                                                         style="min-height: 20px;width: 100% !important;padding: 0 0 0 0;"
                                                                         data-placeholder="Select allocation"
                                                                         multiple="multiple">

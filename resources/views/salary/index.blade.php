@@ -86,6 +86,7 @@
                                         <th colspan="7" class="text-center p-0">Deduction</th>
                                         <th rowspan="2" class="text-center">Total Deduction</th>
                                         <th rowspan="2" class="text-center">Nett Salary</th>
+                                        <th rowspan="2" class="text-center">Allocation</th>
                                         <th rowspan="2" class="text-center">Date Input</th>
                                         <th rowspan="2" class="text-center">Check</th>
                                         <th rowspan="2" class="text-center">Approve</th>
@@ -180,6 +181,14 @@
                                             <td class="bg-light text-dark text-end">
                                                 {{ number_format($sal->net_salary, 0, ',', '.') }}
                                             </td>
+                                            <td>@php
+                                                $allocations = json_decode($sal->allocation);
+                                                if (is_array($allocations)) {
+                                                    echo implode(', ', $allocations);
+                                                } else {
+                                                    echo $allocations;
+                                                }
+                                            @endphp</td>
                                             <td class="text-end">{{ date('d M Y', strtotime($sal->date)) }}</td>
                                             <td class="align-middle text-center text-sm"><span
                                                     class="badge badge-sm bg-gradient-success"> &#10004;</td>

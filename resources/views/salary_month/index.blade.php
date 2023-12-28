@@ -75,6 +75,7 @@
                                         </th>
                                         <th colspan="4" class="text-center p-0">
                                             Deduction</th>
+                                        <th rowspan="2" class="text-center">Allocation</th>
                                         <th rowspan="2" class="text-center">Month / Year</th>
                                         {{-- <th rowspan="2" class="text-center">Action</th> --}}
                                     </tr>
@@ -138,6 +139,14 @@
                                                 {{ number_format($sm->electricity, 0, ',', '.') }}</td>
                                             <td class="text-end">
                                                 {{ number_format($sm->cooperative, 0, ',', '.') }}</td>
+                                            <td>@php
+                                                $allocations = json_decode($sm->allocation);
+                                                if (is_array($allocations)) {
+                                                    echo implode(', ', $allocations);
+                                                } else {
+                                                    echo $allocations;
+                                                }
+                                            @endphp</td>
                                             <td class="text-end">{{ date('M/Y', strtotime($sm->date)) }}</td>
                                             {{-- <td class="text-center m-0 p-0">
                                                 <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
