@@ -47,3 +47,4 @@ Route::resource('job', JobController::class);
 Route::get('/print-pdf/{id}', [SalaryController::class, 'print']);
 Route::get('/download-pdf/{id}', [SalaryController::class, 'download']);
 Route::get('/print-all', [SalaryController::class, 'printall']);
+Route::get('/print-allocation', [SalaryController::class, 'printallocation']);

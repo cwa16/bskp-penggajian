@@ -200,9 +200,11 @@
                                             <td class="align-middle text-center text-sm"><span
                                                     class="badge badge-sm bg-gradient-secondary">&#9744;</td>
                                             <td class="text-center m-0 p-0">
-                                                <button class="btn btn-primary btn-icon-only m-0 p-0 btn-sm" type="button"
-                                                    data-bs-toggle="modal" data-bs-target="#detailGaji{{ $sal->id }}">
-                                                    <span class="btn-inner--icon"><i class="material-icons">info</i></span>
+                                                <button class="btn btn-primary btn-icon-only m-0 p-0 btn-sm"
+                                                    type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#detailGaji{{ $sal->id }}">
+                                                    <span class="btn-inner--icon"><i
+                                                            class="material-icons">info</i></span>
                                                 </button>
                                                 <a href="{{ url('/print-pdf/' . $sal->id) }}"
                                                     class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" target="_blank">
@@ -233,6 +235,61 @@
                             </div>
                             <div class="card-body py-2">
                                 <form action="{{ url('/print-all') }}" method="get">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="row">
+                                                <label for="year" class="col pt-1">Year:</label>
+                                                <select name="year" id="year"
+                                                    class="col form-select form-select-sm">
+                                                    @foreach ($years as $year)
+                                                        <option value="{{ $year }}">{{ $year }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="row">
+                                                <label for="month" class="col pt-1">Month:</label>
+                                                <select name="month" id="month"
+                                                    class="col form-select form-select-sm">
+                                                    @foreach ($months as $month)
+                                                        <option value="{{ $month['value'] }}">
+                                                            {{ $month['label'] }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="submit" class="btn btn-warning btn-sm"><span
+                                                    class="btn-inner--icon"><i class="material-icons">print</i></span>
+                                                <span class="btn-inner--text">Print</span></button>
+                                        </div>
+                                        <div class="col-auto ps-0">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary btn-3"
+                                                data-bs-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- Modal Print Allocation Select Year Month --}}
+        <div class="modal fade" id="printAllocation" tabindex="-1" role="dialog" aria-labelledby="modal-form"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body p-0">
+                        <div class="card card-plain">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Select Year & Month</h5>
+                            </div>
+                            <div class="card-body py-2">
+                                <form action="{{ url('/print-allocation') }}" method="get">
                                     @csrf
                                     <div class="row">
                                         <div class="col">
