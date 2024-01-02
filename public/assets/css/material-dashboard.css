@@ -24433,7 +24433,7 @@ hr.horizontal.gray-light {
 }
 
 .sidenav {
-  z-index: 1; 
+  z-index: 9; 
 }/* perubahan supaya dapat menampilkan modal lg */
 
 .sidenav .navbar-brand,
