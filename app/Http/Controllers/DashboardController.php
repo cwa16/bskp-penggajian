@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -13,7 +14,29 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('dashboard.index', ['title' => 'Dashboard']);
+        $managerCount = User::whereHas('status', function ($query) {
+            $query->where('name_status', 'manager');
+        })->count();
+
+        $staffCount = User::whereHas('status', function ($query) {
+            $query->where('name_status', 'staff');
+        })->count();
+
+        $assistantTraineeCount = User::whereHas('status', function ($query) {
+            $query->where('name_status', 'assistant trainee');
+        })->count();
+
+        $monthlyCount = User::whereHas('status', function ($query) {
+            $query->where('name_status', 'monthly');
+        })->count();
+
+        return view('dashboard.index', [
+            'title' => 'Dashboard',
+            'managerCount' => $managerCount,
+            'staffCount' => $staffCount,
+            'assistantTraineeCount' => $assistantTraineeCount,
+            'monthlyCount' => $monthlyCount,
+        ]);
     }
 
     /**
