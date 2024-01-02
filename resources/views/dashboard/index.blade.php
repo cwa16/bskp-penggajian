@@ -22,7 +22,7 @@
                             <div class="card-header p-3 pt-2">
                                 <div
                                     class="icon icon-lg icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-xl mt-n4 position-absolute">
-                                    <i class="material-icons opacity-10">person</i>
+                                    <i class="material-icons opacity-10">account_box</i>
                                 </div>
                                 <div class="text-end pt-1">
                                     <p class="text-sm mb-0 text-capitalize">Total</p>
@@ -44,7 +44,7 @@
                             <div class="card-header p-3 pt-2">
                                 <div
                                     class="icon icon-lg icon-shape bg-gradient-primary shadow-primary shadow text-center border-radius-xl mt-n4 position-absolute">
-                                    <i class="material-icons opacity-10">leaderboard</i>
+                                    <i class="material-icons opacity-10">assignment_ind</i>
                                 </div>
                                 <div class="text-end pt-1">
                                     <p class="text-sm mb-0 text-capitalize">Total</p>
@@ -66,7 +66,7 @@
                             <div class="card-header p-3 pt-2 bg-transparent">
                                 <div
                                     class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
-                                    <i class="material-icons opacity-10">person</i>
+                                    <i class="material-icons opacity-10">supervisor_account</i>
                                 </div>
                                 <div class="text-end pt-1">
                                     <p class="text-sm mb-0 text-capitalize">Total</p>
@@ -89,7 +89,7 @@
                             <div class="card-header p-3 pt-2 bg-transparent">
                                 <div
                                     class="icon icon-lg icon-shape bg-gradient-primary shadow-primary text-center border-radius-xl mt-n4 position-absolute">
-                                    <i class="material-icons opacity-10">leaderboard</i>
+                                    <i class="material-icons opacity-10">groups</i>
                                 </div>
                                 <div class="text-end pt-1">
                                     <p class="text-sm mb-0 text-capitalize">Total</p>
