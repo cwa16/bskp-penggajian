@@ -330,14 +330,19 @@
         var now = new Date();
         var hours = now.getHours();
         var minutes = now.getMinutes();
-        var seconds = now.getSeconds();
+        var day = now.getDate();
+        // var month = now.getMonth() + 1; // Bulan dimulai dari 0, sehingga perlu ditambahkan 1
+        var monthAbbreviations = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var month = monthAbbreviations[now.getMonth()];
+        var year = now.getFullYear();
 
-        // Format waktu sesuai kebutuhan
-        var formattedTime = hours + ':' + (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') +
-            seconds;
+        // Format waktu dan tanggal sesuai kebutuhan
+        var formattedTime = hours + ':' + (minutes < 10 ? '0' : '') + minutes;
 
-        // Update elemen HTML dengan waktu terbaru
-        document.getElementById('real-time-clock').innerHTML = '[' + formattedTime + ']';
+        var formattedDate = day + '/' + month + '/' + year;
+
+        // Update elemen HTML dengan waktu dan tanggal terbaru
+        document.getElementById('real-time-clock').innerHTML = '[' + formattedTime + ' ' + formattedDate + ']';
     }
 
     // Pembaruan setiap detik (1000 milidetik)
