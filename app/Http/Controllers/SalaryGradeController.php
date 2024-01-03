@@ -85,10 +85,31 @@ class SalaryGradeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $selectedIds = $request->input('ids', []);
+
+        // Konversi string parameter ke dalam bentuk array
+        if (is_string($selectedIds)) {
+            $selectedIds = explode(',', $selectedIds);
+        }
+
+        // Jika tidak ada id yang dipilih, redirect kembali atau tampilkan pesan sesuai kebutuhan
+        if (empty($selectedIds)) {
+            return redirect()->route('salarygrade.index')->with('error', 'No data selected for editing.');
+        }
+
+        $title = 'Salary Per Grade';
+        $grades = Grade::all();
+        $salary_grades = SalaryGrade::whereIn('id', $selectedIds)->get();
+        $currentYear = date('Y');
+
+        return view('salary_grade.edit', compact('title', 'grades', 'salary_grades', 'currentYear'));
     }
+
+
+
+
 
     /**
      * Update the specified resource in storage.
