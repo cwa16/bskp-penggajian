@@ -214,30 +214,33 @@ class SalaryController extends Controller
         $data = [];
         foreach ($sal_allocation as $item) {
             $allocations = json_decode($item->allocation);
-
-            foreach ($allocations as $div) {
-                $data[$div]['allocation'][] = $div;
-                $data[$div]['rate_salary'][] = $item->salary_year->salary_grade->rate_salary;
-                $data[$div]['ability'][] = $item->salary_year->ability;
-                $data[$div]['fungtional_alw'][] = $item->salary_year->fungtional_alw;
-                $data[$div]['family_alw'][] = $item->salary_year->family_alw;
-                $data[$div]['transport_alw'][] = $item->salary_year->transport_alw;
-                $data[$div]['adjustment'][] = $item->salary_year->adjustment;
-                $data[$div]['bpjs'][] = $item->salary_year->bpjs;
-                $data[$div]['jamsostek'][] = $item->salary_year->jamsostek;
-                $data[$div]['total_ben'][] = $item->salary_year->total_ben;
-                $data[$div]['total_ben_ded'][] = $item->salary_year->total_ben_ded;
-                $data[$div]['total_overtime'][] = $item->total_overtime;
-                $data[$div]['thr'][] = $item->thr;
-                $data[$div]['bonus'][] = $item->bonus;
-                $data[$div]['incentive'][] = $item->incentive;
-                $data[$div]['union'][] = $item->union;
-                $data[$div]['absent'][] = $item->absent;
-                $data[$div]['electricity'][] = $item->electricity;
-                $data[$div]['cooperative'][] = $item->cooperative;
-                $data[$div]['gross_salary'][] = $item->gross_salary;
-                $data[$div]['total_deduction'][] = $item->total_deduction;
-                $data[$div]['net_salary'][] = $item->net_salary;
+            if ($allocations) {
+                foreach ($allocations as $div) {
+                    $data[$div]['allocation'][] = $div;
+                    $data[$div]['rate_salary'][] = $item->salary_year->salary_grade->rate_salary;
+                    $data[$div]['ability'][] = $item->salary_year->ability;
+                    $data[$div]['fungtional_alw'][] = $item->salary_year->fungtional_alw;
+                    $data[$div]['family_alw'][] = $item->salary_year->family_alw;
+                    $data[$div]['transport_alw'][] = $item->salary_year->transport_alw;
+                    $data[$div]['adjustment'][] = $item->salary_year->adjustment;
+                    $data[$div]['bpjs'][] = $item->salary_year->bpjs;
+                    $data[$div]['jamsostek'][] = $item->salary_year->jamsostek;
+                    $data[$div]['total_ben'][] = $item->salary_year->total_ben;
+                    $data[$div]['total_ben_ded'][] = $item->salary_year->total_ben_ded;
+                    $data[$div]['total_overtime'][] = $item->total_overtime;
+                    $data[$div]['thr'][] = $item->thr;
+                    $data[$div]['bonus'][] = $item->bonus;
+                    $data[$div]['incentive'][] = $item->incentive;
+                    $data[$div]['union'][] = $item->union;
+                    $data[$div]['absent'][] = $item->absent;
+                    $data[$div]['electricity'][] = $item->electricity;
+                    $data[$div]['cooperative'][] = $item->cooperative;
+                    $data[$div]['gross_salary'][] = $item->gross_salary;
+                    $data[$div]['total_deduction'][] = $item->total_deduction;
+                    $data[$div]['net_salary'][] = $item->net_salary;
+                }
+            } else {
+                return redirect()->route('salary.index');
             }
         }
 
