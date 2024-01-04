@@ -14,17 +14,43 @@
                         <form action="{{ route('salary-month.create') }}" method="get">
                             @csrf
                             <div class="row">
-                                <div class="col-auto">
+                                <div class="col-auto pe-0">
                                     <select name="id_status" class="form-select form-select-sm">
-                                        <option value="">- Pilih Status -</option>
+                                        <option value="" {{ $statusFilter == null ? 'selected' : '' }}>
+                                            - Choose Status -</option>
                                         @foreach ($statuses as $status)
                                             <option value="{{ $status->id }}"
-                                                {{ request()->input('id_status') == $status->id ? 'selected' : '' }}>
+                                                {{ $statusFilter == $status->id ? 'selected' : '' }}>
                                                 {{ $status->name_status }}
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
+                                <div class="col-auto pe-0">
+                                    <select name="year" class="form-select form-select-sm">
+                                        <option value="" {{ $yearFilter == null ? 'selected' : '' }}>
+                                            - Choose Year - </option>
+                                        @foreach ($years as $year)
+                                            <option value="{{ $year }}"
+                                                {{ $yearFilter == $year ? 'selected' : '' }}>
+                                                {{ $year }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <select name="month" class="form-select form-select-sm">
+                                        <option value="" {{ $monthFilter == null ? 'selected' : '' }}>
+                                            - Choose Month - </option>
+                                        @for ($month = 1; $month <= 12; $month++)
+                                            <option value="{{ $month }}"
+                                                {{ $monthFilter == $month ? 'selected' : '' }}>
+                                                {{ date('F', mktime(0, 0, 0, $month, 1)) }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                </div>
+
                                 <div class="col">
                                     <button type="submit" class="btn btn-primary btn-sm mb-2">Filter</button>
                                     <a type="button" href="{{ route('salary-month.index') }}"
@@ -130,6 +156,11 @@
                                                                 <input type="hidden"
                                                                     name="total_ben_ded[{{ $key }}]"
                                                                     value="{{ $sy->total_ben_ded ?? '' }}">
+
+                                                                <input type="hidden" name="year"
+                                                                    value="{{ $yearFilter }}">
+                                                                <input type="hidden" name="month"
+                                                                    value="{{ $monthFilter }}">
                                                                 {{-- /INPUTAN HIDDEN --}}
 
                                                                 <div class="input-group input-group-outline">
@@ -231,7 +262,9 @@
                                                                     </select>
                                                                 </div>
                                                             </td>
-                                                            <td class="text-end">{{ date('M/Y') }}</td>
+                                                            <td class="text-end">
+                                                                {{ $monthFilter ? date('M/Y', strtotime($yearFilter . '-' . $monthFilter . '-01')) : '' }}
+                                                            </td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
