@@ -287,7 +287,6 @@
                         @foreach ($salary_years as $key => $sy)
                             "hour_call[{{ $key }}]": {
                                 positiveNum: true,
-                                validNum: true
                             },
                             "thr[{{ $key }}]": {
                                 validNum: true

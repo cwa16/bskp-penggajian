@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_salary_year')->index();
             $table->date('date')->nullable();
-            $table->integer('hour_call')->nullable();
+            $table->float('hour_call', 8, 2)->nullable();
             $table->integer('total_overtime')->nullable();
             $table->integer('thr')->nullable();
             $table->integer('bonus')->nullable();

@@ -117,7 +117,7 @@
                                                 {{ number_format($sm->salary_year->ability, 0, ',', '.') }}
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($sm->hour_call, 0, ',', '.') }} h
+                                                {{ $sm->hour_call }} h
                                             </td>
                                             <td class="text-end">
                                                 {{ number_format($sm->total_overtime, 0, ',', '.') }}
