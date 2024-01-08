@@ -81,7 +81,7 @@
                         </div>
                         <div class="table-responsive p-0">
                             <table
-                                class="table table-sm table-striped table-hover dtTableFix2 align-items-center small-tbl compact">
+                                class="table table-sm table-striped table-hover dtTable100 align-items-center small-tbl compact">
                                 <thead class="bg-thead">
                                     <tr>
                                         {{-- <th rowspan="2" class="text-center">No</th> --}}

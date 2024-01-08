@@ -67,7 +67,7 @@
                         </div>
                         <div class="table-responsive p-0">
                             <table
-                                class="table table-sm table-striped table-hover dtTableFix2 align-items-center compact small-tbl">
+                                class="table table-sm table-striped table-hover dtTable100 align-items-center compact small-tbl">
                                 <thead class="bg-thead">
                                     <tr>
                                         <th colspan="6" class="text-center p-0">Employee Identity</th>

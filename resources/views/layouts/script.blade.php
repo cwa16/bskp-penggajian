@@ -32,6 +32,24 @@
             "pageLength": 100
         });
     })
+    $(document).ready(function() {
+        $('.dtTable100').DataTable({
+            "lengthChange": true,
+            "autoWidth": true,
+            "initComplete": function(settings, json) {
+                $(".dtTable100").wrap(
+                    "<div style='overflow:auto; width:100%;position:relative;'></div>");
+            },
+            "fixedColumns": {
+                leftColumns: 2,
+            },
+            "lengthMenu": [
+                [10, 25, 50, 100, 200, -1],
+                [10, 25, 50, 100, 200, "All"]
+            ], // Customize the entries per page
+            "pageLength": 100
+        });
+    })
 </script>
 <script>
     $(document).ready(function() {

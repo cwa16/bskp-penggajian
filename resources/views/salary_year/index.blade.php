@@ -53,7 +53,7 @@
                             </div>
                         </div>
                         <div class="table-responsive p-0">
-                            <table class="table table-sm dtTableFix2 align-items-center small-tbl compact stripe hover"
+                            <table class="table table-sm dtTable100 align-items-center small-tbl compact stripe hover"
                                 style="font-size: 10pt; font-family: 'Arial', sans-serif;">
                                 <thead class="bg-thead">
                                     <tr>
