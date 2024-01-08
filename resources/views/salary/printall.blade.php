@@ -69,82 +69,101 @@
         .text-end {
             text-align: right;
         }
+
+        .page-break {
+            page-break-after: always;
+        }
     </style>
 </head>
 
 <body>
-    <table class="tb-noborder" width="100%">
-        <tr>
-            <td>PT BRIDGESTONE KALIMANTAN PLANTATION</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Bentok Darat, Bati-Bati, Kab.Tanah Laut</td>
-            <td align="right" class="uppercase">SALARY PAYMENT {{ $date }}</td>
-        </tr>
-        <tr>
-            <td> Kalimantan Selatan - 70852</td>
-            <td></td>
-        </tr>
-    </table>
+    @php
+        $grandTotal = 0; // Inisialisasi grand total
+    @endphp
 
-    {{-- <hr class="dash-line"> --}}
-    <div class="tb-collapse">
-        <table>
+    @foreach ($salByStatus as $status => $salaries)
+        <table class="tb-noborder" width="100%">
             <tr>
-                <th colspan="5">Employee Identity</th>
-                <th colspan="11">Salary Component</th>
-                <th rowspan="2">Salary Gross + Benefite</th>
-                <th colspan="7">Deduction</th>
-                <th rowspan="2">Total Deduction + Benefite Deduction</th>
-                <th rowspan="2">Net Salary</th>
+                <td align="center">PT BRIDGESTONE KALIMANTAN PLANTATION</td>
             </tr>
             <tr>
-                <th>Emp Code</th>
-                <th>Name</th>
-                <th>Dept</th>
-                <th>Job</th>
-                <th>Grade</th>
-                <th>Salary Grade</th>
-                <th>Ability</th>
-                <th>Fungtional Allowance</th>
-                <th>Family Allowance</th>
-                <th>Adjustment</th>
-                <th>Transport Allowance</th>
-                <th>Total Overtime</th>
-                <th>THR</th>
-                <th>Bonus</th>
-                <th>Incentive</th>
-                <th>Salary Gross</th>
-                {{-- <th>Salary gross + Benefite</th> --}}
-                <th>BPJS Kesehatan</th>
-                <th>Jamsostek</th>
-                <th>Union</th>
-                <th>Absent</th>
-                <th>Electricity</th>
-                <th>Koperasi</th>
-                <th>Sub Total Deduction</th>
-                {{-- <th>Total Deduction</th> --}}
-                {{-- <th>Net Salary</th> --}}
+                <td align="center" class="uppercase">SALARY PAYMENT {{ $date }}</td>
             </tr>
+            <tr></tr>
+        </table>
 
-            @php
-                $grandTotal = 0; // Inisialisasi grand total
-            @endphp
+        {{-- <hr class="dash-line"> --}}
+        <div class="tb-collapse">
+            <table>
+                <tr>
+                    <th colspan="5">Employee Identity</th>
+                    <th colspan="11">Salary Component</th>
+                    <th rowspan="2">Salary Gross + Benefite</th>
+                    <th colspan="7">Deduction</th>
+                    <th rowspan="2">Total Deduction + Benefite Deduction</th>
+                    <th rowspan="2">Net Salary</th>
+                </tr>
+                <tr>
+                    <th>Emp Code</th>
+                    <th>Name</th>
+                    <th>Dept</th>
+                    <th>Job</th>
+                    <th>Grade</th>
+                    <th>Salary Grade</th>
+                    <th>Ability</th>
+                    <th>Fungtional Allowance</th>
+                    <th>Family Allowance</th>
+                    <th>Adjustment</th>
+                    <th>Transport Allowance</th>
+                    <th>Total Overtime</th>
+                    <th>THR</th>
+                    <th>Bonus</th>
+                    <th>Incentive</th>
+                    <th>Salary Gross</th>
+                    {{-- <th>Salary gross + Benefite</th> --}}
+                    <th>BPJS Kesehatan</th>
+                    <th>Jamsostek</th>
+                    <th>Union</th>
+                    <th>Absent</th>
+                    <th>Electricity</th>
+                    <th>Koperasi</th>
+                    <th>Sub Total Deduction</th>
+                    {{-- <th>Total Deduction</th> --}}
+                    {{-- <th>Net Salary</th> --}}
+                </tr>
 
-            @foreach ($salByStatus as $status => $salaries)
                 <tr>
                     <td colspan="26"> {{ $status }}</td>
                 </tr>
 
                 @php
+                    $rate_salary_t = 0;
+                    $ability_t = 0;
+                    $fungtional_alw_t = 0;
+                    $family_alw_t = 0;
+                    $transport_alw_t = 0;
+                    $adjustment_t = 0;
+                    $total_overtime_t = 0;
+                    $thr_t = 0;
+                    $bonus_t = 0;
+                    $incentive_t = 0;
+                    $gross_salary_t = 0;
+                    $total_ben_t = 0;
+                    $bpjs_t = 0;
+                    $jamsostek_t = 0;
+                    $union_t = 0;
+                    $absent_t = 0;
+                    $electricity_t = 0;
+                    $cooperative_t = 0;
+                    $total_deduction_t = 0;
+                    $total_ben_ded_t = 0;
                     $subtotal = 0; // Inisialisasi subtotal per status
                 @endphp
 
                 @foreach ($salaries as $sal)
                     <tr>
                         <td class="text-end">{{ $sal->salary_year->user->nik }}</td>
-                        <td>{{ $sal->salary_year->user->name }}</td>
+                        <td  width="100px">{{ $sal->salary_year->user->name }}</td>
                         <td>{{ $sal->salary_year->user->dept->name_dept }}</td>
                         <td>{{ $sal->salary_year->user->job->name_job }}</td>
                         <td>{{ $sal->salary_year->user->grade->name_grade }}</td>
@@ -179,25 +198,65 @@
                     </tr>
 
                     @php
+                        $rate_salary_t += $sal->salary_year->salary_grade->rate_salary;
+                        $ability_t += $sal->salary_year->ability;
+                        $fungtional_alw_t += $sal->salary_year->fungtional_alw;
+                        $family_alw_t += $sal->salary_year->family_alw;
+                        $adjustment_t += $sal->salary_year->adjustment;
+                        $transport_alw_t += $sal->salary_year->transport_alw;
+                        $total_overtime_t += $sal->total_overtime;
+                        $thr_t += $sal->thr;
+                        $bonus_t += $sal->bonus;
+                        $incentive_t += $sal->incentive;
+                        $gross_salary_t += $sal->gross_salary;
+                        $total_ben_t += $sal->salary_year->total_ben;
+                        $bpjs_t += $sal->salary_year->bpjs;
+                        $jamsostek_t += $sal->salary_year->jamsostek;
+                        $union_t += $sal->union;
+                        $absent_t += $sal->absent;
+                        $electricity_t += $sal->electricity;
+                        $cooperative_t += $sal->cooperative;
+                        $total_deduction_t += $sal->total_deduction;
+                        $total_ben_ded_t += $sal->salary_year->total_ben_ded;
                         $subtotal += $sal->net_salary; // Menambahkan net_salary barang ke subtotal
                     @endphp
                 @endforeach
                 <tr>
-                    <td colspan="25">Sub Total</td>
-                    <td>{{ number_format($subtotal, 0, ',', '.') }}</td>
+                    <td colspan="5">Total</td>
+                    <td class="text-end">{{ number_format($rate_salary_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($ability_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($fungtional_alw_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($family_alw_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($adjustment_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($transport_alw_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($total_overtime_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($thr_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($bonus_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($incentive_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($gross_salary_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($gross_salary_t + $total_ben_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($bpjs_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($jamsostek_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($union_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($absent_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($electricity_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($cooperative_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($total_deduction_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($total_deduction_t + $total_ben_ded_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($subtotal, 0, ',', '.') }}</td>
                     {{-- <td>{{ number_format($salaries->sum('net_salary'), 0, ',', '.') }}</td> --}}
                 </tr>
-
                 @php
                     $grandTotal += $subtotal; // Menambahkan subtotal ke grand total
                 @endphp
-            @endforeach
-            <tr style="background: #dddddd">
+                {{-- <tr style="background: #dddddd">
                 <td colspan="25">Grand Total</td>
                 <td>{{ number_format($grandTotal, 0, ',', '.') }}</td>
-            </tr>
-        </table>
-    </div>
+            </tr> --}}
+            </table>
+        </div>
+        <div class="page-break"></div>
+    @endforeach
 </body>
 
 </html>
