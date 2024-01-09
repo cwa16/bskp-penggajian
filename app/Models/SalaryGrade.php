@@ -21,7 +21,7 @@ class SalaryGrade extends Model
         return $this->belongsTo(Grade::class, 'id_grade');
     }
 
-    public function salaries()
+    public function salary_years()
     {
         return $this->hasMany(Salary::class, 'id_salary_grade');
     }
