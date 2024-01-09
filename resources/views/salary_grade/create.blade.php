@@ -26,7 +26,8 @@
                         </div>
                         {{-- bagian ditampilkan di awal --}}
                         {{-- bagian ditampilkan setelah menekan tombol --}}
-                        <form action="{{ route('salarygrade.store') }}" method="post" id="salaryForm" style="display:none" class="salary-grade-form">
+                        <form action="{{ route('salarygrade.store') }}" method="post" id="salaryForm" style="display:none"
+                            class="salary-grade-form">
                             <hr class="horizontal dark my-3">
                             @csrf
                             <div class="row">
@@ -38,7 +39,8 @@
                                 <div class="col">
                                     <div class="table-responsive p-0">
                                         <table
-                                            class="table table-sm align-items-center mb-0 dtTable small-tbl compact stripe">
+                                            class="table table-sm align-items-center mb-0 dtTable small-tbl compact stripe ms-0"
+                                            width="50%">
                                             <thead class="bg-thead">
                                                 <tr>
                                                     <th>No</th>

@@ -25,7 +25,7 @@
                         <div class="row">
                             <div class="col">
                                 <div class="table-responsive p-0">
-                                    <table class="table table-sm align-items-center mb-0 dtTable small-tbl compact stripe">
+                                    <table class="table table-sm align-items-center mb-0 dtTable small-tbl compact stripe ms-0" width="50%">
                                         <thead class="bg-thead">
                                             <tr>
                                                 <th>No</th>

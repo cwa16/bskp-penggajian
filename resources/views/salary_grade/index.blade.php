@@ -44,7 +44,7 @@
                             </div>
                         </div>
                         <div class="table-responsive p-0">
-                            <table class="table table-sm align-items-center dtTable small-tbl compact stripe">
+                            <table class="table table-sm align-items-center dtTable small-tbl compact stripe ms-0" width="50%">
                                 <thead class="bg-thead">
                                     <tr>
                                         <th style="display: none;"><input type="checkbox" id="checkAll"></th>
