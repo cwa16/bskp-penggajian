@@ -71,7 +71,7 @@
         }
 
         .page-break {
-            page-break-after: always;
+            page-break-before: always;
         }
     </style>
 </head>
@@ -79,9 +79,17 @@
 <body>
     @php
         $grandTotal = 0; // Inisialisasi grand total
+        $firstIteration = true;
     @endphp
 
     @foreach ($salByStatus as $status => $salaries)
+        @if (!$firstIteration)
+            <div class="page-break"></div>
+        @else
+            @php
+                $firstIteration = false;
+            @endphp
+        @endif
         <table class="tb-noborder" width="100%">
             <tr>
                 <td align="center">PT BRIDGESTONE KALIMANTAN PLANTATION</td>
@@ -163,7 +171,7 @@
                 @foreach ($salaries as $sal)
                     <tr>
                         <td class="text-end">{{ $sal->salary_year->user->nik }}</td>
-                        <td  width="100px">{{ $sal->salary_year->user->name }}</td>
+                        <td width="100px">{{ $sal->salary_year->user->name }}</td>
                         <td>{{ $sal->salary_year->user->dept->name_dept }}</td>
                         <td>{{ $sal->salary_year->user->job->name_job }}</td>
                         <td>{{ $sal->salary_year->user->grade->name_grade }}</td>
@@ -255,7 +263,6 @@
             </tr> --}}
             </table>
         </div>
-        <div class="page-break"></div>
     @endforeach
 </body>
 
