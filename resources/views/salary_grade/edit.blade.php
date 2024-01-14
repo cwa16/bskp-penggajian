@@ -11,55 +11,58 @@
                     </div>
 
                     <div class="card-body p-3 pb-2">
-                        {{-- <form action="{{ route('salarygrade.update', ['id' => $sg->id]) }}" method="post">
+                        <form action="{{ route('salarygrade.update_multiple') }}" method="post">
                             @csrf
-                            @method('PUT') --}}
-                        <div class="row">
-                            <div class="col">
-                                <button type="submit" class="btn btn-info btn-sm">Save</button>
-                                <a href="{{ route('salarygrade.index') }}"
-                                    class="btn btn-outline-secondary btn-sm">Cancel</a>
-                            </div>
+                            @method('PUT')
+                            <div class="row">
+                                <div class="col">
+                                    <button type="submit" class="btn btn-info btn-sm">Save</button>
+                                    <a href="{{ route('salarygrade.index') }}"
+                                        class="btn btn-outline-secondary btn-sm">Cancel</a>
+                                </div>
 
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="table-responsive p-0">
-                                    <table
-                                        class="table table-sm align-items-center mb-0 dtTable small-tbl compact stripe ms-0"
-                                        width="50%">
-                                        <thead class="bg-thead">
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Grade</th>
-                                                <th>Salary Grade</th>
-                                                <th>Year</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($salary_grades as $key => $sg)
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="table-responsive p-0">
+                                        <table
+                                            class="table table-sm align-items-center mb-0 dtTable small-tbl compact stripe ms-0"
+                                            width="50%">
+                                            <thead class="bg-thead">
                                                 <tr>
-                                                    <td>{{ $key + 1 }}</td>
-                                                    <td>{{ $sg->grade->name_grade }}</td>
-                                                    <td>
-                                                        <div class="input-group input-group-outline">
-                                                            <input type="number" class="form-control form-control-sm"
-                                                                name="rate_salary[{{ $sg->id_grade }}]"
-                                                                value="{{ $sg->rate_salary }}"
-                                                                placeholder="Enter the salary amount">
-                                                        </div>
-                                                        {{-- <input type="number" name="rate_salary[{{ $grade->id }}]"
-                                                                    placeholder="Enter the salary amount"> --}}
-                                                    </td>
-                                                    <td>{{ $sg->year }}</td>
+                                                    <th>No</th>
+                                                    <th>Grade</th>
+                                                    <th>Salary Grade</th>
+                                                    <th>Year</th>
                                                 </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($salary_grades as $key => $sg)
+                                                    <tr>
+                                                        <input type="hidden" name="ids[]" value="{{ $sg->id }}">
+                                                        <input type="hidden" name="grade_ids[{{ $sg->id }}]"
+                                                            value="{{ $sg->id_grade }}">
+                                                        <td>{{ $key + 1 }}</td>
+                                                        <td>{{ $sg->grade->name_grade }}</td>
+                                                        <td>
+                                                            <div class="input-group input-group-outline">
+                                                                <input type="number" class="form-control form-control-sm"
+                                                                    name="rate_salary[{{ $sg->id }}]"
+                                                                    value="{{ $sg->rate_salary }}"
+                                                                    placeholder="Enter the salary amount">
+                                                            </div>
+                                                            {{-- <input type="number" name="rate_salary[{{ $grade->id }}]"
+                                                                    placeholder="Enter the salary amount"> --}}
+                                                        </td>
+                                                        <td>{{ $sg->year }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        {{-- </form> --}}
+                        </form>
                     </div>
                 </div>
             </div>
