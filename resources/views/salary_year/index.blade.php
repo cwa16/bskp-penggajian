@@ -14,7 +14,11 @@
                         <div class="row">
                             <div class="col-7">
                                 <a href="{{ url('/salary-year/create') }}" class="btn btn-info btn-sm">Input Data</a>
-                                <a href="{{ url('/salary-year/edit') }}" class="btn btn-warning btn-sm">Edit Data</a>
+                                <button type="button" class="btn btn-warning btn-sm" id="editButton">Edit Data</button>
+                                <button type="button" class="btn btn-warning btn-sm" id="chooseButton"
+                                    style="display: none;">Choose Data</button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" id="cancelButton"
+                                    style="display: none;">Cancel</button>
                             </div>
                             <div class="col-5 justify-content-end">
                                 <form action="{{ url('/salary-year') }}" method="GET">
@@ -61,7 +65,8 @@
                                         <th colspan="6" class="text-center p-0">Salary Components</th>
                                         <th colspan="2" class="text-center p-0">Deduction</th>
                                         <th rowspan="2" class="text-center">Year</th>
-                                        {{-- <th rowspan="2" class="text-center">Action</th> --}}
+                                        <th rowspan="2" style="display: none;"><input type="checkbox" id="checkAll">
+                                        </th>
                                     </tr>
                                     <tr>
                                         <th style="background-color: #1A73E8;color: white;">Emp Code</th>
@@ -78,7 +83,6 @@
                                         <th>Adjustment</th>
                                         <th>BPJS Kesehatan</th>
                                         <th>Jamsostek</th>
-                                        {{-- <th>Action</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -103,11 +107,8 @@
                                             <td class="text-end">{{ number_format($sy->bpjs, 0, ',', '.') }}</td>
                                             <td class="text-end">{{ number_format($sy->jamsostek, 0, ',', '.') }}</td>
                                             <td class="text-end">{{ $sy->year }}</td>
-                                            {{-- <td class="text-center m-0 p-0">
-                                                <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
-                                                    <span class="btn-inner--icon"><i class="material-icons">edit</i></span>
-                                                </button>
-                                            </td> --}}
+                                            <td style="display: none;"><input type="checkbox" name="selected[]"
+                                                    value="{{ $sy->id }}"></td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -117,4 +118,60 @@
                 </div>
             </div>
         </div>
+
+        {{-- Script untuk menangani tombol dan check dinamis --}}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const editButton = document.getElementById('editButton');
+                const chooseButton = document.getElementById('chooseButton');
+                const cancelButton = document.getElementById('cancelButton');
+                const checkAll = document.getElementById('checkAll');
+                const checkboxes = document.querySelectorAll('input[name="selected[]"]');
+                const hiddenTh = document.querySelector('th[style="display: none;"]');
+                const hiddenTd = document.querySelectorAll('td[style="display: none;"]');
+
+                // Handle event "Check All"
+                checkAll.addEventListener('change', function() {
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = checkAll.checked;
+                    });
+                });
+
+
+                editButton.addEventListener('click', function() {
+                    checkboxes.forEach(checkbox => {
+                        checkbox.closest('td').style.display = 'block';
+                    });
+
+                    chooseButton.style.display = 'inline-block';
+                    cancelButton.style.display = 'inline-block';
+                    editButton.style.display = 'none';
+                    hiddenTh.style.display = 'block';
+                    hiddenTd.forEach(td => td.style.display = 'block');
+                });
+
+                cancelButton.addEventListener('click', function() {
+                    checkboxes.forEach(checkbox => {
+                        checkbox.closest('td').style.display = 'none';
+                    });
+
+                    chooseButton.style.display = 'none';
+                    cancelButton.style.display = 'none';
+                    editButton.style.display = 'inline-block';
+                    hiddenTh.style.display = 'none';
+                    hiddenTd.forEach(td => td.style.display = 'none');
+                });
+
+                chooseButton.addEventListener('click', function() {
+                    const selectedIds = Array.from(checkboxes)
+                        .filter(checkbox => checkbox.checked)
+                        .map(checkbox => `ids[]=${checkbox.value}`)
+                        .join('&');
+
+                    // Redirect ke halaman edit dengan parameter ids yang dipilih
+                    window.location.href = `/salary-year/edit?${selectedIds}`;
+                });
+
+            });
+        </script>
     @endsection

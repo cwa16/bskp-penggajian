@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Status;
 use App\Models\User;
 use App\Models\SalaryYear;
+use App\Models\SalaryMonth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -147,5 +148,105 @@ class SalaryYearController extends Controller
 
         // Redirect atau lakukan sesuatu setelah penyimpanan berhasil
         return redirect()->route('salary-year.index')->with('success', 'Data gaji berhasil disimpan.');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Request $request)
+    {
+        $selectedIds = $request->input('ids', []);
+
+        // Konversi string parameter ke dalam bentuk array
+        if (is_string($selectedIds)) {
+            $selectedIds = explode(',', $selectedIds);
+        }
+
+        // Jika tidak ada id yang dipilih, redirect kembali atau tampilkan pesan sesuai kebutuhan
+        if (empty($selectedIds)) {
+            return redirect()->route('salary-year.index')->with('error', 'No data selected for editing.');
+        }
+
+        $title = 'Salary Per Grade';
+        $salary_years = SalaryYear::whereIn('id', $selectedIds)->get();
+        $currentYear = date('Y');
+
+        return view('salary_year.edit', compact('title', 'salary_years'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request)
+    {
+        foreach ($request->input('ids') as $id) {
+            $rate_salary = $request->input('rate_salary.' . $id);
+            $ability =  $request->input('ability.' . $id);
+            $fungtional_alw =  $request->input('fungtional_alw.' . $id);
+            $family_alw =  $request->input('family_alw.' . $id);
+            $transport_alw =  $request->input('transport_alw.' . $id);
+            $adjustment =  $request->input('adjustment.' . $id);
+
+            $total = $rate_salary +  $ability + $fungtional_alw + $family_alw;
+
+            // untuk kolom deduction
+            if ($total > 12000000) {
+                $bpjs = 12000000 * 0.01;
+            } else {
+                $bpjs = $total * 0.01;
+            }
+            $jamsostek = $total * 0.02;
+
+            // untuk menghitung data benefit
+            $jamsostek_jkk = $total * 0.0054;
+            $jamsostek_tk = $total * 0.003;
+            $jamsostek_tht = $total * 0.037;
+            $total_jamsostek = $jamsostek_jkk + $jamsostek_tk + $jamsostek_tht;
+            // Perbarui data di tabel salary_grades
+            SalaryYear::where('id', $id)->update([
+                'ability' => $ability,
+                'fungtional_alw' => $fungtional_alw,
+                'family_alw' => $family_alw,
+                'transport_alw' => $transport_alw,
+                'adjustment' => $adjustment,
+                'bpjs' => $bpjs,
+                'jamsostek' => $jamsostek,
+                'total_ben' => $total_jamsostek,
+                'total_ben_ded' => $total_jamsostek,
+            ]);
+
+            // menggunakan untuk mendapatkan value atribut yang tidak ada di form edit
+            $salary_months = SalaryMonth::where('id_salary_year', $id)->get();
+            foreach ($salary_months as $salary_month) {
+                $thr = $salary_month->thr;
+                $bonus = $salary_month->bonus;
+                $incentive = $salary_month->incentive;
+
+                $union = $salary_month->union;
+                $absent = $salary_month->absent;
+                $electricity = $salary_month->electricity;
+                $cooperative = $salary_month->cooperative;
+
+                // Hitungan total overtime
+                $hour_call = $salary_month->hour_call;
+                $total_overtime = (($rate_salary + $ability) / 173) * $hour_call;
+
+                // Hitungan untuk mencari totalan
+                $gross_sal = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw +
+                    $adjustment + $total_overtime + $thr + $bonus + $incentive;
+                $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative;
+                $net_salary = ($gross_sal + $total_jamsostek) - ($total_deduction + $total_jamsostek);
+
+                SalaryMonth::where('id_salary_year', $id)->update([
+                    'total_overtime' => $total_overtime,
+                    'gross_salary' => $gross_sal,
+                    'total_deduction' => $total_deduction,
+                    'net_salary' => $net_salary,
+                ]);
+            }
+        }
+
+        // Redirect atau lakukan aksi lainnya setelah pembaruan selesai
+        return redirect()->route('salary-year.index')->with('success', 'Data gaji berhasil diperbarui.');
     }
 }
