@@ -16,7 +16,7 @@
                             @method('PUT')
                             <div class="row">
                                 <div class="col">
-                                    <button type="submit" class="btn btn-info btn-sm">Save</button>
+                                    <button type="submit" class="btn btn-success btn-sm">Save</button>
                                     <a href="{{ route('salary-year.index') }}"
                                         class="btn btn-outline-secondary btn-sm">Cancel</a>
                                 </div>
