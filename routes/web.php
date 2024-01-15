@@ -30,6 +30,8 @@ Route::resource('user', UserController::class);
 // route edit tanpa parameter id, karena id nya menggunakan request
 Route::get('/salarygrade/edit', [SalaryGradeController::class, 'edit'])->name('salarygrade.edit');
 Route::put('/salarygrade/update', [SalaryGradeController::class, 'update'])->name('salarygrade.update_multiple');
+Route::get('/salary-month/edit', [SalaryMonthController::class, 'edit'])->name('salary-month.edit');
+Route::put('/salary-month/update', [SalaryMonthController::class, 'update'])->name('salary-month.update_multiple');
 
 Route::resource('salarygrade', SalaryGradeController::class);
 Route::resource('salary-year', SalaryYearController::class);

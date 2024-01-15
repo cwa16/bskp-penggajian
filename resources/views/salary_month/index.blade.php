@@ -12,11 +12,16 @@
 
                     <div class="card-body p-3 pb-2">
                         <div class="row">
-                            <div class="col-7">
+                            <div class="col-8">
                                 <a href="{{ url('/salary-month/create') }}" class="btn btn-info btn-sm">Input Data</a>
-                                <a href="{{ url('/salary-month/edit') }}" class="btn btn-warning btn-sm">Edit Data</a>
+                                {{-- <a href="{{ url('/salarygrade/create') }}" class="btn btn-warning btn-sm">Edit Data</a> --}}
+                                <button type="button" class="btn btn-warning btn-sm" id="editButton">Edit Data</button>
+                                <button type="button" class="btn btn-warning btn-sm" id="chooseButton"
+                                    style="display: none;">Choose Data</button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" id="cancelButton"
+                                    style="display: none;">Cancel</button>
                             </div>
-                            <div class="col-5 justify-content-end">
+                            <div class="col-4 justify-content-end">
                                 <form action="{{ url('/salary-month') }}" method="GET">
                                     <div class="row">
                                         <div class="col pe-0">
@@ -71,12 +76,12 @@
                                 <thead class="bg-thead">
                                     <tr>
                                         <th colspan="6" class="text-center p-0">Employee Identity</th>
-                                        <th colspan="7" class="text-center p-0">Salary Components
-                                        </th>
-                                        <th colspan="4" class="text-center p-0">
-                                            Deduction</th>
+                                        <th colspan="7" class="text-center p-0">Salary Components</th>
+                                        <th colspan="4" class="text-center p-0">Deduction</th>
                                         <th rowspan="2" class="text-center">Allocation</th>
                                         <th rowspan="2" class="text-center">Month / Year</th>
+                                        <th rowspan="2" style="display: none;"><input type="checkbox" id="checkAll">
+                                        </th>
                                         {{-- <th rowspan="2" class="text-center">Action</th> --}}
                                     </tr>
                                     <tr>
@@ -148,11 +153,8 @@
                                                 }
                                             @endphp</td>
                                             <td class="text-end">{{ date('M/Y', strtotime($sm->date)) }}</td>
-                                            {{-- <td class="text-center m-0 p-0">
-                                                <button class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" type="button">
-                                                    <span class="btn-inner--icon"><i class="material-icons">edit</i></span>
-                                                </button>
-                                            </td> --}}
+                                            <td style="display: none;"><input type="checkbox" name="selected[]"
+                                                    value="{{ $sm->id }}"></td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -162,4 +164,60 @@
                 </div>
             </div>
         </div>
+
+        {{-- Script untuk menangani tombol dan check dinamis --}}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const editButton = document.getElementById('editButton');
+                const chooseButton = document.getElementById('chooseButton');
+                const cancelButton = document.getElementById('cancelButton');
+                const checkAll = document.getElementById('checkAll');
+                const checkboxes = document.querySelectorAll('input[name="selected[]"]');
+                const hiddenTh = document.querySelector('th[style="display: none;"]');
+                const hiddenTd = document.querySelectorAll('td[style="display: none;"]');
+
+                // Handle event "Check All"
+                checkAll.addEventListener('change', function() {
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = checkAll.checked;
+                    });
+                });
+
+
+                editButton.addEventListener('click', function() {
+                    checkboxes.forEach(checkbox => {
+                        checkbox.closest('td').style.display = 'block';
+                    });
+
+                    chooseButton.style.display = 'inline-block';
+                    cancelButton.style.display = 'inline-block';
+                    editButton.style.display = 'none';
+                    hiddenTh.style.display = 'block';
+                    hiddenTd.forEach(td => td.style.display = 'block');
+                });
+
+                cancelButton.addEventListener('click', function() {
+                    checkboxes.forEach(checkbox => {
+                        checkbox.closest('td').style.display = 'none';
+                    });
+
+                    chooseButton.style.display = 'none';
+                    cancelButton.style.display = 'none';
+                    editButton.style.display = 'inline-block';
+                    hiddenTh.style.display = 'none';
+                    hiddenTd.forEach(td => td.style.display = 'none');
+                });
+
+                chooseButton.addEventListener('click', function() {
+                    const selectedIds = Array.from(checkboxes)
+                        .filter(checkbox => checkbox.checked)
+                        .map(checkbox => `ids[]=${checkbox.value}`)
+                        .join('&');
+
+                    // Redirect ke halaman edit dengan parameter ids yang dipilih
+                    window.location.href = `/salary-month/edit?${selectedIds}`;
+                });
+
+            });
+        </script>
     @endsection

@@ -191,4 +191,89 @@ class SalaryMonthController extends Controller
         // Redirect or return response as needed
         return redirect()->route('salary-month.index')->with('success', 'Salary data stored successfully');
     }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Request $request)
+    {
+        $selectedIds = $request->input('ids', []);
+
+        // Konversi string parameter ke dalam bentuk array
+        if (is_string($selectedIds)) {
+            $selectedIds = explode(',', $selectedIds);
+        }
+
+        // Jika tidak ada id yang dipilih, redirect kembali atau tampilkan pesan sesuai kebutuhan
+        if (empty($selectedIds)) {
+            return redirect()->route('salary-month.index')->with('error', 'No data selected for editing.');
+        }
+
+        $title = 'Salary Per Month';
+        $salary_months = SalaryMonth::whereIn('id', $selectedIds)->get();
+
+        return view('salary_month.edit', compact('title', 'salary_months'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request)
+    {
+        foreach ($request->input('ids') as $id) {
+
+            $rate_salary = $request->input('rate_salary.' . $id);
+            $ability = $request->input('ability.' . $id);
+            $fungtional_alw = $request->input('fungtional_alw.' . $id);
+            $family_alw = $request->input('family_alw.' . $id);
+            $transport_alw = $request->input('transport_alw.' . $id);
+            $adjustment = $request->input('adjustment.' . $id);
+            $total_overtime = $request->input('total_overtime.' . $id);
+            $thr = $request->input('thr.' . $id);
+            $bonus = $request->input('bonus.' . $id);
+            $incentive = $request->input('incentive.' . $id);
+            $total_ben = $request->input('total_ben.' . $id);
+
+            $bpjs = $request->input('bpjs.' . $id);
+            $jamsostek = $request->input('jamsostek.' . $id);
+            $union = $request->input('union.' . $id);
+            $absent = $request->input('absent.' . $id);
+            $electricity = $request->input('electricity.' . $id);
+            $cooperative = $request->input('cooperative.' . $id);
+            $total_ben_ded = $request->input('total_ben_ded.' . $id);
+
+            // Hitungan untuk mencari totalan
+            $gross_sal = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw +
+                $adjustment + $total_overtime + $thr + $bonus + $incentive;
+            $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative;
+            $net_salary = ($gross_sal + $total_ben) - ($total_deduction + $total_ben_ded);
+
+            $allocations = $request->input('allocation.' . $id) ?? NULL;
+            if ($allocations) {
+                $allocationJson = json_encode($allocations);
+            } else {
+                $allocationJson = $allocations;
+            }
+
+            SalaryMonth::where('id', $id)->update([
+                'hour_call' => $request->input('hour_call.' . $id),
+                'total_overtime' => $total_overtime,
+                'thr' => $thr,
+                'bonus' => $bonus,
+                'incentive' => $incentive,
+                'union' => $union,
+                'absent' => $absent,
+                'electricity' => $electricity,
+                'cooperative' => $cooperative,
+                'incentive' => $incentive,
+                'gross_salary' => $gross_sal,
+                'total_deduction' => $total_deduction,
+                'allocation' => $allocationJson,
+                'net_salary' => $net_salary,
+            ]);
+        }
+
+        // Redirect atau lakukan aksi lainnya setelah pembaruan selesai
+        return redirect()->route('salary-month.index')->with('success', 'Data gaji berhasil diperbarui.');
+    }
 }
