@@ -113,7 +113,7 @@
                                                             <td>{{ $sy->user->grade->name_grade ?? '-' }}</td>
                                                             <td class="text-end">
                                                                 @if ($sy->user->grade && $sy->user->grade->salary_grades->isNotEmpty())
-                                                                    {{ number_format($sy->user->grade->salary_grades->first()->rate_salary, 0, ',', '.') }}
+                                                                    {{ number_format($sy->salary_grade->rate_salary, 0, ',', '.') }}
                                                                 @else
                                                                     -
                                                                 @endif
@@ -126,13 +126,13 @@
                                                                 <input type="hidden" name="id_user[]"
                                                                     value="{{ $sy->id_user }}">
                                                                 <input type="hidden" name="id_salary_grade[]"
-                                                                    value="{{ $sy->user->grade->salary_grades->first()->id ?? '' }}">
+                                                                    value="{{ $sy->salary_grade->id ?? '' }}">
                                                                 <input type="hidden"
                                                                     name="id_salary_year[{{ $key }}]"
                                                                     value="{{ $sy->id ?? '' }}">
                                                                 <input type="hidden"
                                                                     name="rate_salary[{{ $key }}]"
-                                                                    value="{{ $sy->user->grade->salary_grades->first()->rate_salary ?? '' }}">
+                                                                    value="{{ $sy->salary_grade->rate_salary ?? '' }}">
                                                                 <input type="hidden" name="ability[{{ $key }}]"
                                                                     value="{{ $sy->ability ?? '' }}">
                                                                 <input type="hidden"
