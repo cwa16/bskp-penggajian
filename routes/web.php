@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\GradeController;
@@ -23,6 +24,9 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/login', [AuthController::class, 'index'])->name('login');
+Route::post('/login/action', [AuthController::class, 'login'])->name('login.action');
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 Route::resource('user', UserController::class);
