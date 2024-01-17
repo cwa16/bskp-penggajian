@@ -75,7 +75,7 @@
                                                                 value="{{ $sy->user->id }}">
                                                             <input type="hidden" name="id_salary_grade[]"
                                                                 value="{{ $sy->salary_grade->id }}">
-                                                            <input type="hidden" name="rate_salary[]"
+                                                            <input type="hidden" name="rate_salary[{{ $sy->id }}]"
                                                                 value="{{ $sy->salary_grade->rate_salary }}">
 
                                                             <div class="input-group input-group-outline">
