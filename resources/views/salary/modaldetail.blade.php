@@ -102,7 +102,7 @@
                                 </tr>
                                 <tr>
                                     <td>Start working</td>
-                                    <td>: {{ date('H:i', strtotime($sal->salary_year->user->start_work_user)) }}</td>
+                                    <td>: {{ date('M d, Y', strtotime($sal->salary_year->user->start)) }}</td>
                                 </tr>
                                 <tr>
                                     <td>Tax Number</td>
