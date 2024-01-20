@@ -12,7 +12,7 @@
         <a class="navbar-brand m-0" href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard "
             target="_blank">
             <img src="{{ asset('/assets/img/bridgestone_outline.png') }}" class="navbar-brand-img h-100" alt="main_logo">
-            <span class="ms-1 font-weight-bold text-white">BSKP-Penggajian</span>
+            <span class="ms-1 font-weight-bold text-white">BSKP-SIP</span>
         </a>
     </div>
 
