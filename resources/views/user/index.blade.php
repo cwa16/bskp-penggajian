@@ -15,34 +15,34 @@
                         <table class="table table-striped table-hover dtTable align-items-center small_tbl compact">
                             <thead class="bg-thead">
                                 <tr>
-                                    <th>Id</th>
+                                    <th>ID</th>
                                     <th>Emp Code</th>
                                     <th>Name</th>
                                     <th>Status</th>
-                                    <th>Grade</th>
                                     <th>Dept</th>
                                     <th>Job</th>
-                                    <th>Sex</th>
-                                    <th>Ttl</th>
+                                    <th>Grade</th>
+                                    <th>Gender</th>
+                                    <th>D.O.B</th>
                                     <th>Start</th>
                                     <th>Education</th>
                                     <th>Religion</th>
                                     <th>Domisili</th>
                                     <th>Email</th>
-                                    <th>No Ktp</th>
+                                    <th>No KTP</th>
                                     <th>No Telpon</th>
-                                    <th>Kis</th>
-                                    <th>Kpj</th>
+                                    <th>KIS</th>
+                                    <th>KJP</th>
                                     <th>Suku</th>
-                                    <th>No Sepatu Safety</th>
-                                    <th>Start Work User</th>
-                                    <th>End Work User</th>
+                                    {{-- <th>No Sepatu Safety</th> --}}
+                                    {{-- <th>Start Work User</th> --}}
+                                    {{-- <th>End Work User</th> --}}
                                     <th>Loc Kerja</th>
                                     <th>Loc</th>
-                                    <th>Sistem Absensi</th>
-                                    <th>Latitude</th>
-                                    <th>Longitude</th>
-                                    <th>Aktual Cuti</th>
+                                    {{-- <th>Sistem Absensi</th> --}}
+                                    {{-- <th>Latitude</th> --}}
+                                    {{-- <th>Longitude</th> --}}
+                                    {{-- <th>Aktual Cuti</th> --}}
                                     <th>Status Pernikahan</th>
                                     <th>Istri Suami</th>
                                     <th>Anak 1</th>
@@ -61,9 +61,9 @@
                                         <td>{{ $user->nik }}</td>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->status->name_status }}</td>
-                                        <td>{{ $user->grade->name_grade ?? '-' }}</td>
                                         <td>{{ $user->dept->name_dept }}</td>
                                         <td>{{ $user->job->name_job }}</td>
+                                        <td>{{ $user->grade->name_grade ?? '-' }}</td>
                                         <td>{{ $user->sex }}</td>
                                         <td>{{ $user->ttl }}</td>
                                         <td>{{ $user->start }}</td>
@@ -76,15 +76,15 @@
                                         <td>{{ $user->kis }}</td>
                                         <td>{{ $user->kpj }}</td>
                                         <td>{{ $user->suku }}</td>
-                                        <td>{{ $user->no_sepatu_safety }}</td>
-                                        <td>{{ $user->start_work_user }}</td>
-                                        <td>{{ $user->end_work_user }}</td>
+                                        {{-- <td>{{ $user->no_sepatu_safety }}</td> --}}
+                                        {{-- <td>{{ $user->start_work_user }}</td> --}}
+                                        {{-- <td>{{ $user->end_work_user }}</td> --}}
                                         <td>{{ $user->loc_kerja }}</td>
                                         <td>{{ $user->loc }}</td>
-                                        <td>{{ $user->sistem_absensi }}</td>
-                                        <td>{{ $user->latitude }}</td>
-                                        <td>{{ $user->longitude }}</td>
-                                        <td>{{ $user->aktual_cuti }}</td>
+                                        {{-- <td>{{ $user->sistem_absensi }}</td> --}}
+                                        {{-- <td>{{ $user->latitude }}</td> --}}
+                                        {{-- <td>{{ $user->longitude }}</td> --}}
+                                        {{-- <td>{{ $user->aktual_cuti }}</td> --}}
                                         <td>{{ $user->status_pernikahan }}</td>
                                         <td>{{ $user->istri_suami }}</td>
                                         <td>{{ $user->anak_1 }}</td>
