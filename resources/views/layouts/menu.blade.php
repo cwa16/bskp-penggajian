@@ -36,7 +36,7 @@
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons">groups</i>
                     </div>
-                    <span class="nav-link-text ms-1">Employees Data</span>
+                    <span class="nav-link-text ms-1">Users Data</span>
                 </a>
             </li>
             <li class="nav-item">
