@@ -113,7 +113,7 @@
                         <div class="card mt-3">
                             <div class="card-body">
                                 <p>Selamat datang di Sistem Informasi Penggajian</p>
-                                <p><b>PT. Bridgestone Kalimantan Plantation</b></p>
+                                <p class="mb-0"><b>PT. Bridgestone Kalimantan Plantation</b></p>
                             </div>
                         </div>
                     </div>
