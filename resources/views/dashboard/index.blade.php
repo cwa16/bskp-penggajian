@@ -108,6 +108,16 @@
 
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <p>Selamat datang di Sistem Informasi Penggajian</p>
+                                <p><b>PT. Bridgestone Kalimantan Plantation</b></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
             </div>
