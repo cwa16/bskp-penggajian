@@ -57,13 +57,6 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'grade') ? 'active bg-gradient-primary' : '' }}"
-                                href="{{ route('grade.index') }}">
-                                <span class="sidenav-mini-icon"> G </span>
-                                <span class="sidenav-normal  ms-2  ps-1"> Grade </span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'departement') ? 'active bg-gradient-primary' : '' }}"
                                 href="{{ route('departement.index') }}">
                                 <span class="sidenav-mini-icon"> D </span>
@@ -75,6 +68,13 @@
                                 href="{{ route('job.index') }}">
                                 <span class="sidenav-mini-icon"> J </span>
                                 <span class="sidenav-normal  ms-2  ps-1"> Job </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'grade') ? 'active bg-gradient-primary' : '' }}"
+                                href="{{ route('grade.index') }}">
+                                <span class="sidenav-mini-icon"> G </span>
+                                <span class="sidenav-normal  ms-2  ps-1"> Grade </span>
                             </a>
                         </li>
                         <li class="nav-item">
