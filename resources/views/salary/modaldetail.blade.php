@@ -106,7 +106,7 @@
                                 </tr>
                                 <tr>
                                     <td>Tax Number</td>
-                                    <td>: {{ $sal->salary_year->user->kpj }}</td>
+                                    <td>:- </td>
                                 </tr>
                             </table>
                         </div>
