@@ -45,7 +45,7 @@
                                     {{-- <th>Latitude</th> --}}
                                     {{-- <th>Longitude</th> --}}
                                     {{-- <th>Aktual Cuti</th> --}}
-                                    <th>Status Pernikahan</th>
+                                    <th>Marital Status</th>
                                     {{-- <th>Istri Suami</th>
                                     <th>Anak 1</th>
                                     <th>Anak 2</th>

@@ -16,7 +16,7 @@
                             <div class="row">
                                 <div class="col-auto">
                                     <select name="id_status" class="form-select form-select-sm">
-                                        <option value="">- Pilih Status -</option>
+                                        <option value="">- Choose Status -</option>
                                         @foreach ($statuses as $status)
                                             <option value="{{ $status->id }}"
                                                 @if ($status->id == $selectedStatus) selected @endif>{{ $status->name_status }}
