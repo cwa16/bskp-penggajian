@@ -30,6 +30,10 @@ Route::post('/login/action', [AuthController::class, 'login'])->name('login.acti
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 Route::resource('user', UserController::class);
+// Route::post('/check-empcode', 'UserController@checkEmpCode');
+Route::post('/check-empcode',  [UserController::class, 'checkEmpCode']);
+Route::get('/check-email', 'UserController@checkEmail');
+
 
 // route edit tanpa parameter id, karena id nya menggunakan request
 Route::get('/salarygrade/edit', [SalaryGradeController::class, 'edit'])->name('salarygrade.edit');

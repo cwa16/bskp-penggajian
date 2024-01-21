@@ -129,7 +129,7 @@
         // custom rules
         jQuery.validator.addMethod("letter", function(value, element) {
             return this.optional(element) || /^[A-Za-z.',-\s]+$/.test(value);
-        }, "Inputan harus berupa huruf!");
+        }, "Input must be letters.");
 
         jQuery.validator.addMethod("alphanum", function(value, element) {
             return this.optional(element) || /^[a-z][a-z0-9\._]*$/.test(value);
@@ -137,7 +137,7 @@
 
         // variable untuk rule yg sama
         var req = "Data harus diisi!"
-        var chose = "Data harus dipilih!"
+        var chose = "This field must be selected."
         var element = {
             errorElement: 'span',
             errorPlacement: function(error, element) {
@@ -212,6 +212,129 @@
                 ...element
             })
         });
+
+    });
+</script>
+<script>
+    // fungsi memberikan rule dan pesan serta elemen pada form
+    $(function() {
+        // custom rules
+        jQuery.validator.addMethod("letter", function(value, element) {
+            return this.optional(element) || /^[A-Za-z.',-\s]+$/.test(value);
+        }, "Input must be letters.");
+
+        jQuery.validator.addMethod("alphanum", function(value, element) {
+            return this.optional(element) || /^[a-z][a-z0-9\._]*$/.test(value);
+        }, "Inputan harus berupa dan diawali huruf kecil, angka, underscore (_), atau titik (.) ");
+
+        // variable untuk rule yg sama
+        var req = "Data harus diisi!"
+        var chose = "This field must be selected."
+        var element = {
+            errorElement: 'span',
+            errorPlacement: function(error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.input-group').append(error);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+                $(element).closest('.input-group').removeClass('is-valid').addClass('is-invalid');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+                var parentInputGroup = $(element).closest('.input-group');
+                if (parentInputGroup.find('.is-invalid').length == 0) {
+                    parentInputGroup.removeClass('is-invalid');
+                }
+            }
+        };
+
+        // Validasi untuk data user
+        $('.add_edit_user').each(function() {
+            var form = $(this);
+            form.validate({
+                rules: {
+                    // nik: {
+                    //     required: true,
+                    //     remote: {
+                    //         url: '/check-empcode',
+                    //         type: 'post',
+                    //         data: {
+                    //             nik: function() {
+                    //                 return $('#nik').val();
+                    //             }
+                    //         }
+                    //     }
+                    // },
+                    name: {
+                        required: true,
+                        letter: true,
+                    },
+                    id_status: "required",
+                    id_dept: "required",
+                    id_job: "required",
+                    id_grade: "required",
+                    sex: "required",
+                    start: "required",
+                    email: {
+                        required: true,
+                        email: true,
+                        // remote: {
+                        //     url: '/check-email',
+                        //     type: 'get',
+                        //     data: {
+                        //         email: function() {
+                        //             return $('#email').val();
+                        //         }
+                        //     }
+                        // }
+                    },
+                    no_ktp: {
+                        required: true,
+                        number: true,
+                    },
+                    no_telpon: {
+                        required: true,
+                        number: true,
+                    },
+                    tax_number: {
+                        number: true,
+                    },
+                    account_number: {
+                        number: true,
+                    },
+                    status_pernikahan: "required",
+                    role_app: "required",
+                },
+                messages: {
+                    // nik: {
+                    //     remote: "Emp Code already exists."
+                    // },
+                    id_status: {
+                        required: chose
+                    },
+                    id_dept: {
+                        required: chose
+                    },
+                    id_job: {
+                        required: chose
+                    },
+                    id_grade: {
+                        required: chose
+                    },
+                    sex: {
+                        required: chose
+                    },
+                    status_pernikahan: {
+                        required: chose
+                    },
+                    role_app: {
+                        required: chose
+                    },
+                },
+                ...element
+            })
+        });
     });
 </script>
 
@@ -219,7 +342,7 @@
     // fungsi memberikan rule dan pesan serta elemen pada form
     $(function() {
         // custom rules
-        jQuery.validator.addMethod("letter", function(value, element) {
+        jQuery.validator.addMethod("alpha", function(value, element) {
             return this.optional(element) || /^[A-Za-z.',-\s]+$/.test(value);
         }, "Input must alphabet!");
 

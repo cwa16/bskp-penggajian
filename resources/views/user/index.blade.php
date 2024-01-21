@@ -11,6 +11,8 @@
                 </div>
 
                 <div class="card-body p-3 pb-2">
+                    <button data-bs-toggle="modal" data-bs-target="#addUser" class="btn btn-info btn-sm">Add
+                        Data</button>
                     <div class="table-responsive p-0">
                         <table class="table table-striped table-hover dtTable align-items-center small_tbl compact">
                             <thead class="bg-thead">
@@ -104,4 +106,5 @@
         </div>
     </div>
     {{-- /Bagian  Isi Konten --}}
+    @include('user/modaladd')
 @endsection
