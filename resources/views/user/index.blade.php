@@ -33,8 +33,8 @@
                                     <th>Email</th>
                                     <th>No KTP</th>
                                     <th>No Telpon</th>
-                                    <th>KIS</th>
-                                    <th>KJP</th>
+                                    {{-- <th>KIS</th> --}}
+                                    {{-- <th>KJP</th> --}}
                                     {{-- <th>Suku</th> --}}
                                     {{-- <th>No Sepatu Safety</th> --}}
                                     {{-- <th>Start Work User</th> --}}
@@ -75,8 +75,8 @@
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->no_ktp }}</td>
                                         <td>{{ $user->no_telpon }}</td>
-                                        <td>{{ $user->kis }}</td>
-                                        <td>{{ $user->kpj }}</td>
+                                        {{-- <td>{{ $user->kis }}</td> --}}
+                                        {{-- <td>{{ $user->kpj }}</td> --}}
                                         {{-- <td>{{ $user->suku }}</td> --}}
                                         {{-- <td>{{ $user->no_sepatu_safety }}</td> --}}
                                         {{-- <td>{{ $user->start_work_user }}</td> --}}
