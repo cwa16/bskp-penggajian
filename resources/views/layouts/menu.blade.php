@@ -91,7 +91,7 @@
                 <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Salary Data
                 </h6>
             </li>
-{{-- 
+{{--
             <li class="nav-item">
                 <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'salarygrade') ? 'active bg-gradient-primary' : '' }}"
                     href="{{ url('/salarygrade') }}">
