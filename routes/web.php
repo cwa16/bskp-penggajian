@@ -10,6 +10,7 @@ use App\Http\Controllers\SalaryGradeController;
 use App\Http\Controllers\SalaryYearController;
 use App\Http\Controllers\SalaryMonthController;
 use App\Http\Controllers\SalaryController;
+use App\Http\Controllers\WhatsAppController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -28,12 +29,12 @@ Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 Route::resource('user', UserController::class);
 
 // route edit tanpa parameter id, karena id nya menggunakan request
-Route::get('/salarygrade/edit', [SalaryGradeController::class, 'edit'])->name('salarygrade.edit');
-Route::put('/salarygrade/update', [SalaryGradeController::class, 'update'])->name('salarygrade.update_multiple');
-Route::get('/salary-year/edit', [SalaryYearController::class, 'edit'])->name('salary-year.edit');
-Route::put('/salary-year/update', [SalaryYearController::class, 'update'])->name('salary-year.update_multiple');
-Route::get('/salary-month/edit', [SalaryMonthController::class, 'edit'])->name('salary-month.edit');
-Route::put('/salary-month/update', [SalaryMonthController::class, 'update'])->name('salary-month.update_multiple');
+// Route::get('/salarygrade/edit', [SalaryGradeController::class, 'edit'])->name('salarygrade.edit');
+// Route::put('/salarygrade/update', [SalaryGradeController::class, 'update'])->name('salarygrade.update_multiple');
+// Route::get('/salary-year/edit', [SalaryYearController::class, 'edit'])->name('salary-year.edit');
+// Route::put('/salary-year/update', [SalaryYearController::class, 'update'])->name('salary-year.update_multiple');
+// Route::get('/salary-month/edit', [SalaryMonthController::class, 'edit'])->name('salary-month.edit');
+// Route::put('/salary-month/update', [SalaryMonthController::class, 'update'])->name('salary-month.update_multiple');
 
 Route::resource('salarygrade', SalaryGradeController::class);
 Route::resource('salary-year', SalaryYearController::class);
@@ -48,3 +49,5 @@ Route::get('/print-pdf/{id}', [SalaryController::class, 'print']);
 Route::get('/download-pdf/{id}', [SalaryController::class, 'download']);
 Route::get('/print-all', [SalaryController::class, 'printall']);
 Route::get('/print-allocation', [SalaryController::class, 'printallocation']);
+
+Route::post('/send-whatsapp', [WhatsAppController::class, 'sendWhatsAppMessage'])->name('send-whatsapp');
