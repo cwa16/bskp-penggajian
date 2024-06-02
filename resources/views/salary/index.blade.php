@@ -113,11 +113,11 @@
                                         <th>Transport All</th>
                                         <th>Skill All</th>
                                         <th>Telephone All</th>
-                                        <th>Adjustment</th>
                                         <th>Total Overtime</th>
                                         <th>THR</th>
                                         <th>Bonus</th>
                                         <th>Incentive</th>
+                                        <th>Adjustment</th>
                                         <th>Salary Gross</th>
                                         {{-- <th class=">Bruto Salary</th> --}}
                                         <th>BPJS Kesehatan</th>
@@ -159,12 +159,13 @@
                                                 {{ number_format($sal->salary_year->skill_alw, 0, ',', '.') }}</td>
                                             <td class="text-end">
                                                 {{ number_format($sal->salary_year->telephone_alw, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($sal->salary_year->adjustment, 0, ',', '.') }}</td>
+
                                             <td class="text-end">{{ number_format($sal->total_overtime, 0, ',', '.') }}
                                             </td>
                                             <td class="text-end">{{ number_format($sal->thr, 0, ',', '.') }}</td>
                                             <td class="text-end">{{ number_format($sal->bonus, 0, ',', '.') }}</td>
                                             <td class="text-end">{{ number_format($sal->incentive, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($sal->salary_year->adjustment, 0, ',', '.') }}</td>
                                             <td class="text-end">
                                                 {{ number_format($sal->gross_salary, 0, ',', '.') }}
                                             </td>

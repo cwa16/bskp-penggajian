@@ -73,10 +73,28 @@
         .page-break {
             page-break-before: always;
         }
+
+        footer {
+            position: fixed;
+            bottom: -30px;
+            left: 0px;
+            right: 0px;
+            height: 50px;
+            text-align: center;
+            line-height: 35px;
+            font-size: 9pt;
+        }
+
+        .pagenum:before {
+            content: counter(page);
+        }
     </style>
 </head>
 
 <body>
+    <footer>
+        <span class="pagenum"></span>
+    </footer>
     @php
         $grandTotal = 0; // Inisialisasi grand total
         $firstIteration = true;
@@ -105,10 +123,11 @@
             <table>
                 <tr>
                     <th colspan="5">Employee Identity</th>
-                    <th colspan="11">Salary Component</th>
+                    <th colspan="10">Salary Component</th>
                     <th rowspan="2">Salary Gross + Benefite</th>
                     <th colspan="7">Deduction</th>
                     <th rowspan="2">Total Deduction + Benefite Deduction</th>
+                    <th rowspan="2">Adjustment</th>
                     <th rowspan="2">Net Salary</th>
                 </tr>
                 <tr>
@@ -121,7 +140,6 @@
                     <th>Ability</th>
                     <th>Fungtional Allowance</th>
                     <th>Family Allowance</th>
-                    <th>Adjustment</th>
                     <th>Transport Allowance</th>
                     <th>Total Overtime</th>
                     <th>THR</th>
@@ -182,12 +200,12 @@
                             {{ number_format($sal->salary_year->fungtional_alw, 0, ',', '.') }}</td>
                         <td class="text-end">{{ number_format($sal->salary_year->family_alw, 0, ',', '.') }}
                         </td>
-                        <td class="text-end">{{ number_format($sal->salary_year->adjustment, 0, ',', '.') }}</td>
                         <td class="text-end">{{ number_format($sal->salary_year->transport_alw, 0, ',', '.') }}</td>
                         <td class="text-end">{{ number_format($sal->total_overtime, 0, ',', '.') }}</td>
                         <td class="text-end">{{ number_format($sal->thr, 0, ',', '.') }}</td>
                         <td class="text-end">{{ number_format($sal->bonus, 0, ',', '.') }}</td>
                         <td class="text-end">{{ number_format($sal->incentive, 0, ',', '.') }}</td>
+                        <td class="text-end">{{ number_format($sal->salary_year->adjustment, 0, ',', '.') }}</td>
                         <td class="text-end">{{ number_format($sal->gross_salary, 0, ',', '.') }}</td>
                         <td class="text-end">
                             {{ number_format($sal->gross_salary + $sal->salary_year->total_ben, 0, ',', '.') }}
@@ -198,10 +216,10 @@
                         <td class="text-end">{{ number_format($sal->absent, 0, ',', '.') }}</td>
                         <td class="text-end">{{ number_format($sal->electricity, 0, ',', '.') }}</td>
                         <td class="text-end">{{ number_format($sal->cooperative, 0, ',', '.') }}</td>
-                        <td class="text-end">{{ number_format($sal->total_deduction, 0, ',', '.') }}</td>
                         <td class="text-end">
                             {{ number_format($sal->total_deduction + $sal->salary_year->total_ben_ded, 0, ',', '.') }}
                         </td>
+                        <td class="text-end">{{ number_format($sal->total_deduction, 0, ',', '.') }}</td>
                         <td class="text-end">{{ number_format($sal->net_salary, 0, ',', '.') }}</td>
                     </tr>
 
@@ -235,7 +253,6 @@
                     <td class="text-end">{{ number_format($ability_t, 0, ',', '.') }}</td>
                     <td class="text-end">{{ number_format($fungtional_alw_t, 0, ',', '.') }}</td>
                     <td class="text-end">{{ number_format($family_alw_t, 0, ',', '.') }}</td>
-                    <td class="text-end">{{ number_format($adjustment_t, 0, ',', '.') }}</td>
                     <td class="text-end">{{ number_format($transport_alw_t, 0, ',', '.') }}</td>
                     <td class="text-end">{{ number_format($total_overtime_t, 0, ',', '.') }}</td>
                     <td class="text-end">{{ number_format($thr_t, 0, ',', '.') }}</td>
@@ -251,6 +268,7 @@
                     <td class="text-end">{{ number_format($cooperative_t, 0, ',', '.') }}</td>
                     <td class="text-end">{{ number_format($total_deduction_t, 0, ',', '.') }}</td>
                     <td class="text-end">{{ number_format($total_deduction_t + $total_ben_ded_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($adjustment_t, 0, ',', '.') }}</td>
                     <td class="text-end">{{ number_format($subtotal, 0, ',', '.') }}</td>
                     {{-- <td>{{ number_format($salaries->sum('net_salary'), 0, ',', '.') }}</td> --}}
                 </tr>
