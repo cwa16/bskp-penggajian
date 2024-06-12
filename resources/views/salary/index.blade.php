@@ -220,13 +220,18 @@
                                                     <span class="btn-inner--icon"><i
                                                             class="material-icons">print</i></span>
                                                 </a>
-                                                <form action="{{ route('send-whatsapp') }}" method="POST">
+                                                <a href="{{ url('/send-whatsapp/' . $sal->id) }}"
+                                                    class="btn btn-success btn-icon-only m-0 p-0 btn-sm" target="_blank">
+                                                    <span class="btn-inner--icon"><i
+                                                            class="material-icons">mail</i></span>
+                                                </a>
+                                                {{-- <form action="{{ route('send-whatsapp') }}" method="POST">
                                                     @csrf
                                                     <input type="hidden" name="message" id="message" value="Test">
                                                     <input type="hidden" name="number_phone" id="number_phone" value="{{ $sal->salary_year->user->no_telpon }}">
                                                     <button type="submit" class="btn btn-success btn-icon-only m-0 p-0 btn-sm"><span class="btn-inner--icon"><i
                                                         class="material-icons">mail</i></span></button>
-                                                </form>
+                                                </form> --}}
                                             </td>
                                         </tr>
                                     @endforeach

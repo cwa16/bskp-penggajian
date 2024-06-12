@@ -50,4 +50,4 @@ Route::get('/download-pdf/{id}', [SalaryController::class, 'download']);
 Route::get('/print-all', [SalaryController::class, 'printall']);
 Route::get('/print-allocation', [SalaryController::class, 'printallocation']);
 
-Route::post('/send-whatsapp', [WhatsAppController::class, 'sendWhatsAppMessage'])->name('send-whatsapp');
+Route::get('/send-whatsapp/{id}', [SalaryController::class, 'send'])->name('send-whatsapp');

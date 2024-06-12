@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use PDF;
+use WaAPI\WaAPI;
 
 class SalaryController extends Controller
 {
@@ -122,6 +123,41 @@ class SalaryController extends Controller
 
         $pdf = PDF::loadView('salary.print', compact('sal', 'total'));
         return $pdf->setPaper('a5', 'landscape')->stream('SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf');
+    }
+
+    public function send($id)
+    {
+        $sal = SalaryMonth::find($id);
+
+        // mengambeil date
+        $date = date('My', strtotime($sal->date));
+
+        if (!$sal) {
+            // Log or dd() the ID to see which ID is causing the issue.
+            dd("Salary with ID $id not found.");
+        }
+
+        // hitungan utuk mendapatkan total gaji bersih
+        $rate_salary = $sal->salary_year->salary_grade->rate_salary;
+        $ability = $sal->salary_year->ability;
+        $fungtional_alw = $sal->salary_year->fungtional_alw;
+        $family_alw = $sal->salary_year->family_alw;
+
+        $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
+
+        $pdf = PDF::loadView('salary.print', compact('sal', 'total'))->setPaper('a5', 'landscape');
+
+        $fileName = 'SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf';
+
+        $mediaUrl = asset('slip_gaji/SAL_Jun24_199-073_Sulastri.pdf');
+
+        // dd($mediaUrl);
+
+        $waAPI = new WaAPI\WaAPI();
+        $waAPI->sendMediaFromUrl('6287878998251@c.us', 'file:///C:/laragon/www/bskp-penggajian/public/slip_gaji/SAL_Jun24_199-073_Sulastri.pdf', 'slip gaji', 'bskp-penggajian.pdf');
+        // $waAPI->fetchMessages('6287878998251@c.us', '25', null, null, null );
+
+        // return $pdf->setPaper('a5', 'landscape')->stream('SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf');
     }
 
     /**

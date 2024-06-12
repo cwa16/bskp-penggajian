@@ -123,7 +123,7 @@
             <table>
                 <tr>
                     <th colspan="5">Employee Identity</th>
-                    <th colspan="10">Salary Component</th>
+                    <th colspan="12">Salary Component</th>
                     <th rowspan="2">Salary Gross + Benefite</th>
                     <th colspan="7">Deduction</th>
                     <th rowspan="2">Total Deduction + Benefite Deduction</th>
@@ -138,9 +138,11 @@
                     <th>Grade</th>
                     <th>Salary Grade</th>
                     <th>Ability</th>
-                    <th>Fungtional Allowance</th>
-                    <th>Family Allowance</th>
-                    <th>Transport Allowance</th>
+                    <th>Fungtional All</th>
+                    <th>Family All</th>
+                    <th>Transport All</th>
+                    <th>Skill All</th>
+                    <th>Telephone All</th>
                     <th>Total Overtime</th>
                     <th>THR</th>
                     <th>Bonus</th>
@@ -168,6 +170,8 @@
                     $fungtional_alw_t = 0;
                     $family_alw_t = 0;
                     $transport_alw_t = 0;
+                    $telephone_alw_t = 0;
+                    $skill_alw_t = 0;
                     $adjustment_t = 0;
                     $total_overtime_t = 0;
                     $thr_t = 0;
@@ -201,6 +205,8 @@
                         <td class="text-end">{{ number_format($sal->salary_year->family_alw, 0, ',', '.') }}
                         </td>
                         <td class="text-end">{{ number_format($sal->salary_year->transport_alw, 0, ',', '.') }}</td>
+                        <td class="text-end">{{ number_format($sal->salary_year->skill_alw, 0, ',', '.') }}</td>
+                        <td class="text-end">{{ number_format($sal->salary_year->telephone_alw, 0, ',', '.') }}</td>
                         <td class="text-end">{{ number_format($sal->total_overtime, 0, ',', '.') }}</td>
                         <td class="text-end">{{ number_format($sal->thr, 0, ',', '.') }}</td>
                         <td class="text-end">{{ number_format($sal->bonus, 0, ',', '.') }}</td>
@@ -228,6 +234,8 @@
                         $ability_t += $sal->salary_year->ability;
                         $fungtional_alw_t += $sal->salary_year->fungtional_alw;
                         $family_alw_t += $sal->salary_year->family_alw;
+                        $skill_alw_t += $sal->salary_year->skill_alw;
+                        $telephone_alw_t += $sal->salary_year->telephone_alw;
                         $adjustment_t += $sal->salary_year->adjustment;
                         $transport_alw_t += $sal->salary_year->transport_alw;
                         $total_overtime_t += $sal->total_overtime;
@@ -254,6 +262,8 @@
                     <td class="text-end">{{ number_format($fungtional_alw_t, 0, ',', '.') }}</td>
                     <td class="text-end">{{ number_format($family_alw_t, 0, ',', '.') }}</td>
                     <td class="text-end">{{ number_format($transport_alw_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($skill_alw_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($telephone_alw_t, 0, ',', '.') }}</td>
                     <td class="text-end">{{ number_format($total_overtime_t, 0, ',', '.') }}</td>
                     <td class="text-end">{{ number_format($thr_t, 0, ',', '.') }}</td>
                     <td class="text-end">{{ number_format($bonus_t, 0, ',', '.') }}</td>

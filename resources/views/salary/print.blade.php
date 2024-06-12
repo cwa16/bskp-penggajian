@@ -180,11 +180,7 @@
                             <td class="text-end">{{ number_format($sal->salary_year->family_alw, 0, ',', '.') }}
                             </td>
                         </tr>
-                        <tr>
-                            <td>Adjustment</td>
-                            <td>:</td>
-                            <td class="text-end">{{ number_format($sal->salary_year->adjustment, 0, ',', '.') }}</td>
-                        </tr>
+
                         <tr>
                             <td>Transport All</td>
                             <td>:</td>
@@ -225,6 +221,11 @@
                             <td>Incentive</td>
                             <td>:</td>
                             <td class="text-end">{{ number_format($sal->incentive, 0, ',', '.') }}</td>
+                        </tr>
+                        <tr>
+                            <td>Adjustment</td>
+                            <td>:</td>
+                            <td class="text-end">{{ number_format($sal->salary_year->adjustment, 0, ',', '.') }}</td>
                         </tr>
                         <tr class="top-border">
                             <td><b>Salary Gross</b></td>
