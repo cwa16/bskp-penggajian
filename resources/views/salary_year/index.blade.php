@@ -13,7 +13,7 @@
                     <div class="card-body p-3 pb-2">
                         <div class="row">
                             <div class="col-7">
-                                <a href="{{ url('/salary-year/create') }}" class="btn btn-info btn-sm">Input Data</a>
+                                <a href="{{ url('/salary-year/filter') }}" class="btn btn-info btn-sm">Input Data</a>
                                 <button type="button" class="btn btn-warning btn-sm" id="editButton">Edit Data</button>
                                 <button type="button" class="btn btn-warning btn-sm" id="chooseButton"
                                     style="display: none;">Choose Data</button>
@@ -134,7 +134,6 @@
             </div>
         </div>
 
-        {{-- Script untuk menangani tombol dan check dinamis --}}
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const editButton = document.getElementById('editButton');
@@ -178,13 +177,23 @@
                 });
 
                 chooseButton.addEventListener('click', function() {
+                    // const selectedIds = Array.from(checkboxes)
+                    //     .filter(checkbox => checkbox.checked)
+                    //     .map(checkbox => `ids[]=${checkbox.value}`)
+                    //     .join('&');
+
                     const selectedIds = Array.from(checkboxes)
                         .filter(checkbox => checkbox.checked)
-                        .map(checkbox => `ids[]=${checkbox.value}`)
-                        .join('&');
+                        .map(checkbox => checkbox.value)
+                        .join(',');
 
-                    // Redirect ke halaman edit dengan parameter ids yang dipilih
-                    window.location.href = `/salary-year/edit?${selectedIds}`;
+                        if (selectedIds.length > 0) {
+                            window.location.href = `/salary-year/edit?ids=${selectedIds}`;
+                        } else {
+                            alert('No data selected for editing.');
+                        }
+
+                    // window.location.href = `/salary-year/edit/${selectedIds}`;
                 });
 
             });

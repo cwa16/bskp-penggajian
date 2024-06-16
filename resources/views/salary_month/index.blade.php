@@ -13,7 +13,7 @@
                     <div class="card-body p-3 pb-2">
                         <div class="row">
                             <div class="col-8">
-                                <a href="{{ url('/salary-month/create') }}" class="btn btn-info btn-sm">Input Data</a>
+                                <a href="{{ url('/salary-month/filter') }}" class="btn btn-info btn-sm">Input Data</a>
                                 {{-- <a href="{{ url('/salarygrade/create') }}" class="btn btn-warning btn-sm">Edit Data</a> --}}
                                 <button type="button" class="btn btn-warning btn-sm" id="editButton">Edit Data</button>
                                 <button type="button" class="btn btn-warning btn-sm" id="chooseButton"
@@ -75,6 +75,7 @@
                                 class="table table-sm table-striped table-hover dtTable100 align-items-center compact small-tbl">
                                 <thead class="bg-thead">
                                     <tr>
+                                        {{-- <th rowspan="2" class="text-center">No</th> --}}
                                         <th colspan="6" class="text-center p-0">Employee Identity</th>
                                         <th colspan="5" class="text-center p-0">Salary Components</th>
                                         <th colspan="4" class="text-center p-0">Deduction</th>
@@ -105,14 +106,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($salary_months as $key => $sm)
+                                    @foreach ($data as $key => $sm)
                                         <tr>
-                                            <td class="text-nowrap text-end">{{ $sm->salary_year->user->nik }}</td>
-                                            <td>{{ $sm->salary_year->user->name }}</td>
-                                            <td>{{ $sm->salary_year->user->status->name_status }}</td>
-                                            <td>{{ $sm->salary_year->user->dept->name_dept }}</td>
-                                            <td>{{ $sm->salary_year->user->job->name_job }}</td>
-                                            <td>{{ $sm->salary_year->user->grade->name_grade }}</td>
+                                            {{-- <td>{{ $key+1 }}</td> --}}
+                                            <td class="text-nowrap text-end">{{ $sm->nik }}</td>
+                                            <td>{{ $sm->name }}</td>
+                                            <td>{{ $sm->name_status }}</td>
+                                            <td>{{ $sm->name_dept }}</td>
+                                            <td>{{ $sm->name_job }}</td>
+                                            <td>{{ $sm->name_grade }}</td>
                                             <td class="text-end">
                                                 {{ $sm->hour_call }} h
                                             </td>
@@ -146,7 +148,7 @@
                                             @endphp</td> --}}
                                             <td class="text-end">{{ date('M/Y', strtotime($sm->date)) }}</td>
                                             <td style="display: none;"><input type="checkbox" name="selected[]"
-                                                    value="{{ $sm->id }}"></td>
+                                                    value="{{ $sm->id_salary_month }}"></td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -201,13 +203,24 @@
                 });
 
                 chooseButton.addEventListener('click', function() {
+                    // const selectedIds = Array.from(checkboxes)
+                    //     .filter(checkbox => checkbox.checked)
+                    //     .map(checkbox => `ids[]=${checkbox.value}`)
+                    //     .join('&');
+
                     const selectedIds = Array.from(checkboxes)
                         .filter(checkbox => checkbox.checked)
-                        .map(checkbox => `ids[]=${checkbox.value}`)
-                        .join('&');
+                        .map(checkbox => checkbox.value)
+                        .join(',');
+
+                    if (selectedIds.length > 0) {
+                        window.location.href = `/salary-month/edit?ids=${selectedIds}`;
+                    } else {
+                        alert('No data selected for editing.');
+                    }
 
                     // Redirect ke halaman edit dengan parameter ids yang dipilih
-                    window.location.href = `/salary-month/edit?${selectedIds}`;
+                    // window.location.href = `/salary-month/edit?${selectedIds}`;
                 });
 
             });

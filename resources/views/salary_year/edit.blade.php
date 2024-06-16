@@ -11,13 +11,13 @@
                     </div>
 
                     <div class="card-body p-3 pb-2">
-                        <form action="{{ route('salary-year.update_multiple') }}" method="post">
+                        <form action="{{ route('salary-year.update') }}" method="post">
                             @csrf
                             @method('PUT')
                             <div class="row">
                                 <div class="col">
                                     <button type="submit" class="btn btn-success btn-sm">Save</button>
-                                    <a href="{{ route('salary-year.index') }}"
+                                    <a href="{{ route('salary-year') }}"
                                         class="btn btn-outline-secondary btn-sm">Cancel</a>
                                 </div>
 
@@ -86,7 +86,7 @@
                                                                     style="width: 120px"
                                                                     name="ability[{{ $sy->id }}]"
                                                                     placeholder="Enter the ability"
-                                                                    value="{{ $sy->ability }}">
+                                                                    value="{{ $sy->ability != 0 ? $sy->ability : '' }}">
                                                             </div>
                                                         </td>
                                                         <td>
@@ -95,7 +95,7 @@
                                                                     style="width: 120px"
                                                                     name="fungtional_alw[{{ $sy->id }}]"
                                                                     placeholder="Enter the fungtional allowance"
-                                                                    value="{{ $sy->fungtional_alw }}">
+                                                                    value="{{ $sy->fungtional_alw != 0 ? $sy->fungtional_alw : '' }}">
                                                             </div>
                                                         </td>
                                                         <td>
@@ -104,7 +104,7 @@
                                                                     style="width: 120px"
                                                                     name="family_alw[{{ $sy->id }}]"
                                                                     placeholder="Enter the family allowance"
-                                                                    value="{{ $sy->family_alw }}">
+                                                                    value="{{ $sy->family_alw != 0 ? $sy->family_alw : '' }}">
                                                             </div>
                                                         </td>
                                                         <td>
@@ -113,7 +113,7 @@
                                                                     style="width: 120px"
                                                                     name="transport_alw[{{ $sy->id }}]"
                                                                     placeholder="Enter the transport allowance"
-                                                                    value="{{ $sy->transport_alw }}">
+                                                                    value="{{ $sy->transport_alw != 0 ? $sy->transport_alw : '' }}">
                                                             </div>
                                                         </td>
                                                         <td>
@@ -122,7 +122,7 @@
                                                                     style="width: 120px"
                                                                     name="skill_alw[{{ $sy->id }}]"
                                                                     placeholder="Enter the skill allowance"
-                                                                    value="{{ $sy->skill_alw }}">
+                                                                    value="{{ $sy->skill_alw != 0 ? $sy->skill_alw : '' }}">
                                                             </div>
                                                         </td>
                                                         <td>
@@ -131,7 +131,7 @@
                                                                     style="width: 120px"
                                                                     name="telephone_alw[{{ $sy->id }}]"
                                                                     placeholder="Enter the telephone allowance"
-                                                                    value="{{ $sy->telephone_alw }}">
+                                                                    value="{{ $sy->telephone_alw != 0 ? $sy->telephone_alw : '' }}">
                                                             </div>
                                                         </td>
                                                         <td>
@@ -140,7 +140,7 @@
                                                                     style="width: 120px"
                                                                     name="adjustment[{{ $sy->id }}]"
                                                                     placeholder="Enter the adjustment"
-                                                                    value="{{ $sy->adjustment }}">
+                                                                    value="{{ $sy->adjustment != 0 ? $sy->adjustment : '' }}">
                                                             </div>
                                                         </td>
                                                         <td>

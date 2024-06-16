@@ -11,13 +11,13 @@
                     </div>
 
                     <div class="card-body p-3 pb-2">
-                        <form action="{{ route('salary-month.update_multiple') }}" method="post">
+                        <form action="{{ route('salary-month.update') }}" method="post">
                             @csrf
                             @method('PUT')
                             <div class="row">
                                 <div class="col">
                                     <button type="submit" class="btn btn-success btn-sm">Save</button>
-                                    <a href="{{ route('salary-month.index') }}"
+                                    <a href="{{ route('salary-month') }}"
                                         class="btn btn-outline-secondary btn-sm">Cancel</a>
                                 </div>
                             </div>
@@ -110,7 +110,7 @@
                                                                     style="width: 90px"
                                                                     name="hour_call[{{ $sm->id }}]"
                                                                     placeholder="Enter the overtime hour call"
-                                                                    value="{{ $sm->hour_call }}"
+                                                                    value="{{ $sm->hour_call != 0 ? $sm->hour_call : '' }}"
                                                                     oninput="calculateTotalOvertime({{ $sm->id }})">
                                                             </div>
                                                         </td>
@@ -126,7 +126,7 @@
                                                                 <input type="number" class="form-control form-control-sm"
                                                                     style="width: 120px" name="thr[{{ $sm->id }}]"
                                                                     placeholder="Enter the THR"
-                                                                    value="{{ $sm->thr }}">
+                                                                    value="{{ $sm->thr != 0 ? $sm->thr : '' }}">
                                                             </div>
                                                         </td>
                                                         <td>
@@ -135,7 +135,7 @@
                                                                     style="width: 120px"
                                                                     name="bonus[{{ $sm->id }}]"
                                                                     placeholder="Enter the bonus"
-                                                                    value="{{ $sm->bonus }}">
+                                                                    value="{{ $sm->bonus != 0 ? $sm->bonus : '' }}">
                                                             </div>
                                                         </td>
                                                         <td>
@@ -144,7 +144,7 @@
                                                                     style="width: 120px"
                                                                     name="incentive[{{ $sm->id }}]"
                                                                     placeholder="Enter the incentive"
-                                                                    value="{{ $sm->incentive }}">
+                                                                    value="{{ $sm->incentive != 0 ? $sm->incentive : '' }}">
                                                             </div>
                                                         </td>
                                                         <td>
@@ -153,7 +153,7 @@
                                                                     style="width: 120px"
                                                                     name="union[{{ $sm->id }}]"
                                                                     placeholder="Enter the union"
-                                                                    value="{{ $sm->union }}">
+                                                                    value="{{ $sm->union != 0 ? $sm->union : '' }}">
                                                             </div>
                                                         </td>
                                                         <td>
@@ -162,7 +162,7 @@
                                                                     style="width: 120px"
                                                                     name="absent[{{ $sm->id }}]"
                                                                     placeholder="Enter the absent"
-                                                                    value="{{ $sm->absent }}">
+                                                                    value="{{ $sm->absent != 0 ? $sm->absent : '' }}">
                                                             </div>
                                                         </td>
                                                         <td>
@@ -171,7 +171,7 @@
                                                                     style="width: 120px"
                                                                     name="electricity[{{ $sm->id }}]"
                                                                     placeholder="Enter the electricity"
-                                                                    value="{{ $sm->electricity }}">
+                                                                    value="{{ $sm->electricity != 0 ? $sm->electricity : '' }}">
                                                             </div>
                                                         </td>
                                                         <td>
@@ -180,7 +180,7 @@
                                                                     style="width: 120px"
                                                                     name="cooperative[{{ $sm->id }}]"
                                                                     placeholder="Enter the koperasi"
-                                                                    value="{{ $sm->cooperative }}">
+                                                                    value="{{ $sm->cooperative != 0 ? $sm->cooperative : '' }}">
                                                             </div>
                                                         </td>
                                                         {{-- <td>

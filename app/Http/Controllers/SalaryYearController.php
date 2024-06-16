@@ -8,32 +8,24 @@ use App\Models\SalaryYear;
 use App\Models\SalaryMonth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use DB;
 
 class SalaryYearController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $title = 'Salary Per Year';
 
-        // Get the range of years from the salary_years table
         $years = SalaryYear::distinct('year')->pluck('year')->toArray();
-        // Get distinct status names through the relationships
         $statuses = Status::distinct('name_status')->pluck('name_status')->toArray();
 
-        // Menyimpan query builder dalam variabel query
         $query = SalaryYear::with('salary_grade');
 
-        // set variabel default null
         $selectedYear = null;
         $selectedStatus = null;
 
-        // percabangan untuk filter status
         if (request('filter_status') != null) {
             if (request('filter_status') != 'all') {
-                // Filter by the selected year
                 $selectedStatus = request('filter_status');
                 $query->whereHas('user.status', function ($subquery) use ($selectedStatus) {
                     $subquery->where('name_status', $selectedStatus);
@@ -41,66 +33,80 @@ class SalaryYearController extends Controller
             }
         }
 
-        // percabangan untuk filter tahun
         if (request('filter_year') != null) {
             if (request('filter_year') != 'all') {
-                // Filter by the selected year
                 $selectedYear = request('filter_year');
                 $query->where('year', $selectedYear);
             }
         } else {
-            // untuk menetapkan tahun sekarang saat membuka halaman
             $selectedYear = request('filter_year', Carbon::now()->year);
             $query->where('year', $selectedYear);
         }
 
-        // Query the salary_years based on the selected year and status
         $salary_years = $query->get();
+
+        // dd($salary_years);
+
         return view('salary_year.index', compact('title', 'salary_years', 'years', 'statuses', 'selectedYear', 'selectedStatus'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
+    public function filter(){
         $title = 'Salary Per Year';
         $statuses = Status::all();
-        $currentYear = date('Y'); //menetapkan tahun sekarang
+        $currentYear = date('Y');
+        // $currentYear = '2025';
 
-        // Mendapatkan ID status yang diizinkan
         $allowedStatusNames = ['Assistant trainee', 'Manager', 'Monthly', 'Staff'];
         $selectedStatus = request()->input('id_status');
 
-        // Jika filter status dipilih, ambil ID status yang dipilih
         $selectedStatusIds = $selectedStatus
             ? Status::whereIn('name_status', $allowedStatusNames)->where('id', $selectedStatus)->pluck('id')
             : Status::whereIn('name_status', $allowedStatusNames)->pluck('id');
 
-        // Menggunakan eager loading untuk memuat relasi grade dan salary_grades
-        $users = User::with(['grade.salary_grades' => function ($query) {
-            $query->orderBy('year', 'desc'); // Jika Anda ingin mengurutkan berdasarkan tahun.
-        }])->whereIn('id_status', $selectedStatusIds)->get();
-
-        // Filter users yang telah memiliki data gaji untuk tahun ini
-        $users = $users->filter(function ($user) {
-            return !$user->hasSalaryForYear(date('Y'));
-        });
-
-        // Meneruskan data ke tampilan
-        return view('salary_year.create', compact('title', 'users', 'statuses', 'selectedStatus'));
+        return view('salary_year.filter', compact('title', 'statuses', 'selectedStatus'));
     }
+    public function create()
+    {
+        $title = 'Salary Per Year';
+        $statuses = Status::all();
+        $currentYear = date('Y');
 
+        $checkYear = SalaryYear::where('year', $currentYear)->first();
+        $allowedStatusNames = ['Assistant trainee', 'Manager', 'Monthly', 'Staff'];
+        $selectedStatus = request()->input('id_status');
 
-    /**
-     * Store a newly created resource in storage.
-     */
+        if ($checkYear) {
+            $users = DB::table('users')
+                ->join('statuses', 'users.id_status', '=', 'statuses.id')
+                ->join('depts', 'users.id_dept', '=', 'depts.id')
+                ->join('jobs', 'users.id_job', '=', 'jobs.id')
+                ->join('grades', 'users.id_grade', '=', 'grades.id')
+                ->join('salary_grades', 'grades.id', '=', 'salary_grades.id_grade')
+                ->join('salary_years', 'salary_years.id_user', '=', 'users.id')
+                ->where('users.id_status', $selectedStatus)
+                ->where('salary_years.year', $currentYear)
+                ->where('salary_years.ability', 0)
+                ->select('users.*', 'salary_grades.*', 'grades.*', 'statuses.*', 'depts.*', 'jobs.*', 'salary_grades.id as id_salary_grade', 'users.id as id_user')
+                ->get();
+        } else {
+            $users = DB::table('users')
+                ->join('statuses', 'users.id_status', '=', 'statuses.id')
+                ->join('depts', 'users.id_dept', '=', 'depts.id')
+                ->join('jobs', 'users.id_job', '=', 'jobs.id')
+                ->join('grades', 'users.id_grade', '=', 'grades.id')
+                ->join('salary_grades', 'grades.id', '=', 'salary_grades.id_grade')
+                ->join('salary_years', 'salary_years.id_user', '=', 'users.id')
+                ->where('users.id_status', $selectedStatus)
+                ->select('users.*', 'salary_grades.*', 'grades.*', 'statuses.*', 'depts.*', 'jobs.*', 'salary_grades.id as id_salary_grade', 'users.id as id_user')
+                ->get();
+        }
+
+        return view('salary_year.create', compact('title', 'users', 'statuses', 'selectedStatus', 'currentYear'));
+    }
     public function store(Request $request)
     {
-        // Lakukan iterasi pada data yang dikirimkan melalui form
         foreach ($request->input('id_user') as $key => $value) {
 
-            // Simpan nilai input dalam variabel
             $input = $request->only([
                 'id_user', 'id_salary_grade', 'rate_salary',
                 'ability', 'fungtional_alw', 'family_alw',
@@ -115,9 +121,8 @@ class SalaryYearController extends Controller
             $skill_alw = $input['skill_alw'][$key]  ?? 0;
             $adjustment = $input['adjustment'][$key]  ?? 0;
 
-            $total = $input['rate_salary'][$key] +  $ability + $fungtional_alw + $family_alw;
+            $total = $input['rate_salary'][$key] +  $ability + $fungtional_alw + $family_alw + $transport_alw + $telephone_alw + $skill_alw;
 
-            // untuk kolom deduction
             if ($total > 12000000) {
                 $bpjs = 12000000 * 0.01;
             } else {
@@ -125,7 +130,6 @@ class SalaryYearController extends Controller
             }
             $jamsostek = $total * 0.02;
 
-            // untuk menghitung data benefit
             $jamsostek_jkk = $total * 0.0054;
             $jamsostek_tk = $total * 0.003;
             $jamsostek_tht = $total * 0.037;
@@ -138,46 +142,46 @@ class SalaryYearController extends Controller
                 $allocationJson = $allocations;
             }
 
-            // Simpan data ke dalam database
-            SalaryYear::create([
-                'id_user' => $input['id_user'][$key], // Pastikan Anda memiliki input user_id pada form
-                'id_salary_grade' => $input['id_salary_grade'][$key], // Pastikan Anda memiliki input salary_grade_id pada form
-                'year' => date('Y'),
-                'ability' => $ability,
-                'fungtional_alw' => $fungtional_alw,
-                'family_alw' => $family_alw,
-                'transport_alw' => $transport_alw,
-                'telephone_alw' => $telephone_alw,
-                'skill_alw' => $skill_alw,
-                'adjustment' => $adjustment,
-                'bpjs' => $bpjs,
-                'jamsostek' => $jamsostek,
-                'total_ben' => $total_jamsostek,
-                'total_ben_ded' => $total_jamsostek,
-                'allocation' => $allocationJson,
-            ]);
+            SalaryYear::updateOrCreate(
+                [
+                    'id_user' => $input['id_user'][$key],
+                    'year' => date('Y'),
+                ],
+                [
+                    'id_salary_grade' => $input['id_salary_grade'][$key],
+                    'ability' => $ability,
+                    'fungtional_alw' => $fungtional_alw,
+                    'family_alw' => $family_alw,
+                    'transport_alw' => $transport_alw,
+                    'telephone_alw' => $telephone_alw,
+                    'skill_alw' => $skill_alw,
+                    'adjustment' => $adjustment,
+                    'bpjs' => $bpjs,
+                    'jamsostek' => $jamsostek,
+                    'total_ben' => $total_jamsostek,
+                    'total_ben_ded' => $total_jamsostek,
+                    'allocation' => $allocationJson,
+                ]
+            );
         }
 
-        // Redirect atau lakukan sesuatu setelah penyimpanan berhasil
-        return redirect()->route('salary-year.index')->with('success', 'Data gaji berhasil disimpan.');
+        return redirect()->route('salary-year')->with('success', 'Data gaji berhasil disimpan.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Request $request)
     {
-        $selectedIds = $request->input('ids', []);
+        // $selectedIds = $request->input('ids', []);
+        $selectedIds = $request->input('ids', '');
 
-        // Konversi string parameter ke dalam bentuk array
         if (is_string($selectedIds)) {
             $selectedIds = explode(',', $selectedIds);
         }
 
-        // Jika tidak ada id yang dipilih, redirect kembali atau tampilkan pesan sesuai kebutuhan
         if (empty($selectedIds)) {
-            return redirect()->route('salary-year.index')->with('error', 'No data selected for editing.');
+            return redirect()->route('salary-year')->with('error', 'No data selected for editing.');
         }
+
+        // dd($selectedIds);
 
         $title = 'Salary Per Grade';
         $salary_years = SalaryYear::whereIn('id', $selectedIds)->get();
@@ -186,9 +190,6 @@ class SalaryYearController extends Controller
         return view('salary_year.edit', compact('title', 'salary_years'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request)
     {
         foreach ($request->input('ids') as $id) {
@@ -201,9 +202,8 @@ class SalaryYearController extends Controller
             $skill_alw =  $request->input('skill_alw.' . $id);
             $adjustment =  $request->input('adjustment.' . $id);
 
-            $total = $rate_salary +  $ability + $fungtional_alw + $family_alw;
+            $total = $rate_salary +  $ability + $fungtional_alw + $family_alw + $transport_alw + $telephone_alw + $skill_alw;
 
-            // untuk kolom deduction
             if ($total > 12000000) {
                 $bpjs = 12000000 * 0.01;
             } else {
@@ -211,7 +211,6 @@ class SalaryYearController extends Controller
             }
             $jamsostek = $total * 0.02;
 
-            // untuk menghitung data benefit
             $jamsostek_jkk = $total * 0.0054;
             $jamsostek_tk = $total * 0.003;
             $jamsostek_tht = $total * 0.037;
@@ -224,7 +223,6 @@ class SalaryYearController extends Controller
                 $allocationJson = $allocations;
             }
 
-            // Perbarui data di tabel salary_grades
             SalaryYear::where('id', $id)->update([
                 'ability' => $ability,
                 'fungtional_alw' => $fungtional_alw,
@@ -240,7 +238,6 @@ class SalaryYearController extends Controller
                 'allocation' => $allocationJson,
             ]);
 
-            // menggunakan untuk mendapatkan value atribut yang tidak ada di form edit
             $salary_months = SalaryMonth::where('id_salary_year', $id)->get();
             foreach ($salary_months as $salary_month) {
                 $thr = $salary_month->thr;
@@ -252,11 +249,9 @@ class SalaryYearController extends Controller
                 $electricity = $salary_month->electricity;
                 $cooperative = $salary_month->cooperative;
 
-                // Hitungan total overtime
                 $hour_call = $salary_month->hour_call;
                 $total_overtime = (($rate_salary + $ability) / 173) * $hour_call;
 
-                // Hitungan untuk mencari totalan
                 $gross_sal = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw + $telephone_alw + $skill_alw +
                     $adjustment + $total_overtime + $thr + $bonus + $incentive;
                 $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative;
@@ -271,7 +266,11 @@ class SalaryYearController extends Controller
             }
         }
 
-        // Redirect atau lakukan aksi lainnya setelah pembaruan selesai
-        return redirect()->route('salary-year.index')->with('success', 'Data gaji berhasil diperbarui.');
+        return redirect()->route('salary-year')->with('success', 'Data gaji berhasil diperbarui.');
+    }
+
+    public function show()
+    {
+
     }
 }

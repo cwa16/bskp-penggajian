@@ -7,9 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Print All</title>
 
-
-    <!-- CSS Files -->
-    {{-- <link id="pagestyle" href="{{ public_path ('assets/libs/bootstrap5/css/bootstrap.min.css') }}" rel="stylesheet" /> --}}
     <style>
         * {
             font-family: Arial, Helvetica, sans-serif;
@@ -88,6 +85,11 @@
         .pagenum:before {
             content: counter(page);
         }
+
+        .total-column {
+            padding: 8px; /* Atur lebar sesuai keinginan */
+        }
+
     </style>
 </head>
 
@@ -96,7 +98,7 @@
         <span class="pagenum"></span>
     </footer>
     @php
-        $grandTotal = 0; // Inisialisasi grand total
+        $grandTotal = 0;
         $firstIteration = true;
     @endphp
 
@@ -122,6 +124,7 @@
         <div class="tb-collapse">
             <table>
                 <tr>
+                    <th rowspan="2">No</th>
                     <th colspan="5">Employee Identity</th>
                     <th colspan="12">Salary Component</th>
                     <th rowspan="2">Salary Gross + Benefite</th>
@@ -161,7 +164,7 @@
                 </tr>
 
                 <tr>
-                    <td colspan="26"> {{ $status }}</td>
+                    <td colspan="29"> {{ $status }}</td>
                 </tr>
 
                 @php
@@ -190,43 +193,129 @@
                     $subtotal = 0; // Inisialisasi subtotal per status
                 @endphp
 
-                @foreach ($salaries as $sal)
+                @foreach ($salaries as $key => $sal)
                     <tr>
+                        <td style="text-align: center">{{ $key+1 }}</td>
                         <td class="text-end">{{ $sal->salary_year->user->nik }}</td>
                         <td width="100px">{{ $sal->salary_year->user->name }}</td>
                         <td>{{ $sal->salary_year->user->dept->name_dept }}</td>
                         <td>{{ $sal->salary_year->user->job->name_job }}</td>
                         <td>{{ $sal->salary_year->user->grade->name_grade }}</td>
+
                         <td class="text-end">
                             {{ number_format($sal->salary_year->salary_grade->rate_salary, 0, ',', '.') }}</td>
-                        <td class="text-end">{{ number_format($sal->salary_year->ability, 0, ',', '.') }}</td>
-                        <td class="text-end">
-                            {{ number_format($sal->salary_year->fungtional_alw, 0, ',', '.') }}</td>
-                        <td class="text-end">{{ number_format($sal->salary_year->family_alw, 0, ',', '.') }}
-                        </td>
-                        <td class="text-end">{{ number_format($sal->salary_year->transport_alw, 0, ',', '.') }}</td>
-                        <td class="text-end">{{ number_format($sal->salary_year->skill_alw, 0, ',', '.') }}</td>
-                        <td class="text-end">{{ number_format($sal->salary_year->telephone_alw, 0, ',', '.') }}</td>
-                        <td class="text-end">{{ number_format($sal->total_overtime, 0, ',', '.') }}</td>
-                        <td class="text-end">{{ number_format($sal->thr, 0, ',', '.') }}</td>
-                        <td class="text-end">{{ number_format($sal->bonus, 0, ',', '.') }}</td>
-                        <td class="text-end">{{ number_format($sal->incentive, 0, ',', '.') }}</td>
-                        <td class="text-end">{{ number_format($sal->salary_year->adjustment, 0, ',', '.') }}</td>
-                        <td class="text-end">{{ number_format($sal->gross_salary, 0, ',', '.') }}</td>
+
+                        @if ($sal->salary_year->ability == 0)
+                            <td class="text-end">-</td>
+                        @else
+                            <td class="text-end">{{ number_format($sal->salary_year->ability, 0, ',', '.')}}</td>
+                        @endif
+
+                        @if ($sal->salary_year->fungtional_alw == 0)
+                            <td class="text-end">-</td>
+                        @else
+                            <td class="text-end">{{ number_format($sal->salary_year->fungtional_alw, 0, ',', '.')}}</td>
+                        @endif
+
+                        @if ($sal->salary_year->family_alw == 0)
+                            <td class="text-end">-</td>
+                        @else
+                            <td class="text-end">{{ number_format($sal->salary_year->family_alw, 0, ',', '.')}}</td>
+                        @endif
+
+                        @if ($sal->salary_year->transport_alw == 0)
+                            <td class="text-end">-</td>
+                        @else
+                            <td class="text-end">{{ number_format($sal->salary_year->transport_alw, 0, ',', '.')}}</td>
+                        @endif
+
+                        @if ($sal->salary_year->skill_alw == 0)
+                            <td class="text-end">-</td>
+                        @else
+                            <td class="text-end">{{ number_format($sal->salary_year->skill_alw, 0, ',', '.')}}</td>
+                        @endif
+
+                        @if ($sal->salary_year->telephone_alw == 0)
+                            <td class="text-end">-</td>
+                        @else
+                            <td class="text-end">{{ number_format($sal->salary_year->telephone_alw, 0, ',', '.')}}</td>
+                        @endif
+
+                        @if ($sal->total_overtime == 0)
+                            <td class="text-end">-</td>
+                        @else
+                            <td class="text-end">{{ number_format($sal->total_overtime, 0, ',', '.')}}</td>
+                        @endif
+
+                        @if ($sal->thr == 0)
+                            <td class="text-end">-</td>
+                        @else
+                            <td class="text-end">{{ number_format($sal->thr, 0, ',', '.')}}</td>
+                        @endif
+
+                        @if ($sal->bonus == 0)
+                            <td class="text-end">-</td>
+                        @else
+                            <td class="text-end">{{ number_format($sal->bonus, 0, ',', '.')}}</td>
+                        @endif
+
+                        @if ($sal->incentive == 0)
+                            <td class="text-end">-</td>
+                        @else
+                            <td class="text-end">{{ number_format($sal->incentive, 0, ',', '.')}}</td>
+                        @endif
+
+                        @if ($sal->gross_salary == 0)
+                            <td class="text-end">-</td>
+                        @else
+                            <td class="text-end">{{ number_format($sal->gross_salary, 0, ',', '.')}}</td>
+                        @endif
+
                         <td class="text-end">
                             {{ number_format($sal->gross_salary + $sal->salary_year->total_ben, 0, ',', '.') }}
                         </td>
+
                         <td class="text-end">{{ number_format($sal->salary_year->bpjs, 0, ',', '.') }}</td>
                         <td class="text-end">{{ number_format($sal->salary_year->jamsostek, 0, ',', '.') }}</td>
-                        <td class="text-end">{{ number_format($sal->union, 0, ',', '.') }}</td>
-                        <td class="text-end">{{ number_format($sal->absent, 0, ',', '.') }}</td>
-                        <td class="text-end">{{ number_format($sal->electricity, 0, ',', '.') }}</td>
-                        <td class="text-end">{{ number_format($sal->cooperative, 0, ',', '.') }}</td>
+
+                        @if ($sal->union == 0)
+                            <td class="text-end">-</td>
+                        @else
+                            <td class="text-end">{{ number_format($sal->union, 0, ',', '.')}}</td>
+                        @endif
+
+                        @if ($sal->absent == 0)
+                            <td class="text-end">-</td>
+                        @else
+                            <td class="text-end">{{ number_format($sal->absent, 0, ',', '.')}}</td>
+                        @endif
+
+                        @if ($sal->electricity == 0)
+                            <td class="text-end">-</td>
+                        @else
+                            <td class="text-end">{{ number_format($sal->electricity, 0, ',', '.')}}</td>
+                        @endif
+
+                        @if ($sal->cooperative == 0)
+                            <td class="text-end">-</td>
+                        @else
+                            <td class="text-end">{{ number_format($sal->cooperative, 0, ',', '.')}}</td>
+                        @endif
+
+                        <td class="text-end">{{ number_format($sal->total_deduction, 0, ',', '.') }}</td>
+
                         <td class="text-end">
                             {{ number_format($sal->total_deduction + $sal->salary_year->total_ben_ded, 0, ',', '.') }}
                         </td>
-                        <td class="text-end">{{ number_format($sal->total_deduction, 0, ',', '.') }}</td>
+
+                        @if ($sal->salary_year->adjustment == 0)
+                            <td class="text-end">-</td>
+                        @else
+                            <td class="text-end">{{ number_format($sal->salary_year->adjustment, 0, ',', '.')}}</td>
+                        @endif
+
                         <td class="text-end">{{ number_format($sal->net_salary, 0, ',', '.') }}</td>
+
                     </tr>
 
                     @php
@@ -256,9 +345,9 @@
                     @endphp
                 @endforeach
                 <tr>
-                    <td colspan="5">Total</td>
+                    <td colspan="6" class="total-column">Total</td>
                     <td class="text-end">{{ number_format($rate_salary_t, 0, ',', '.') }}</td>
-                    <td class="text-end">{{ number_format($ability_t, 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($ability_t, 0, ',', '.')}}</td>
                     <td class="text-end">{{ number_format($fungtional_alw_t, 0, ',', '.') }}</td>
                     <td class="text-end">{{ number_format($family_alw_t, 0, ',', '.') }}</td>
                     <td class="text-end">{{ number_format($transport_alw_t, 0, ',', '.') }}</td>
@@ -292,6 +381,10 @@
             </table>
         </div>
     @endforeach
+
+    <script>
+        window.print();
+    </script>
 </body>
 
 </html>

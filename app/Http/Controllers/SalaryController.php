@@ -20,6 +20,18 @@ class SalaryController extends Controller
     public function index()
     {
         $title = 'Salary';
+
+        $data = DB::table('salary_months')
+            ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+            ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
+            ->join('users', 'users.id', '=', 'salary_years.id_user')
+            ->join('statuses', 'users.id_status', '=', 'statuses.id')
+            ->join('depts', 'users.id_dept', '=', 'depts.id')
+            ->join('jobs', 'users.id_job', '=', 'jobs.id')
+            ->join('grades', 'users.id_grade', '=', 'grades.id')
+            ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*')
+            ->get();
+
         $salary_months = SalaryMonth::all();
 
         // $monthOpts = SalaryMonth::select(DB::raw('MONTH(date) as month'))
@@ -95,7 +107,9 @@ class SalaryController extends Controller
         // Query the salary_months based on the selected year, month, and status
         $salary_months = $query->get();
 
-        return view('salary.index', compact('title', 'statuses', 'years', 'months', 'salary_months', 'selectedStatus', 'selectedYear', 'selectedMonth'));
+        return view('salary.index', compact(
+            'title', 'statuses', 'years', 'months', 'salary_months', 'selectedStatus', 'selectedYear', 'selectedMonth', 'data'
+        ));
     }
 
     /**
@@ -122,7 +136,7 @@ class SalaryController extends Controller
         $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
 
         $pdf = PDF::loadView('salary.print', compact('sal', 'total'));
-        return $pdf->setPaper('a5', 'landscape')->stream('SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf');
+        return $pdf->setPaper('a4', 'landscape')->stream('SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf');
     }
 
     public function send($id)
@@ -220,9 +234,11 @@ class SalaryController extends Controller
         }
 
         // dd($salByStatus);
+        // dd($date);
         if ($date) {
             $pdf = PDF::loadView('salary.printall', compact('salByStatus', 'date'));
-            return $pdf->setPaper('a4', 'landscape')->stream('PrintAll.pdf');
+            return $pdf->setPaper(array(0, 0, 609.4488, 935.433), 'landscape')->stream('PrintAll.pdf');
+            // return view('salary.printall', compact('salByStatus', 'date'));
         } else {
             return redirect()->route('salary.index');
         }

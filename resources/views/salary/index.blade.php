@@ -134,48 +134,48 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($salary_months as $key => $sal)
+                                    @foreach ($data as $key => $sal)
                                         <tr>
-                                            <td class="text-nowrap text-end">{{ $sal->salary_year->user->nik }}</td>
+                                            <td class="text-nowrap text-end">{{ $sal->nik }}</td>
                                             <td><a data-bs-toggle="modal"
-                                                    href="#detailGaji{{ $sal->id }}">{{ $sal->salary_year->user->name }}</a>
+                                                    href="#detailGaji{{ $sal->id }}">{{ $sal->name }}</a>
                                             </td>
-                                            <td>{{ $sal->salary_year->user->status->name_status }}</td>
-                                            <td>{{ $sal->salary_year->user->dept->name_dept }}</td>
-                                            <td>{{ $sal->salary_year->user->job->name_job }}</td>
-                                            <td>{{ $sal->salary_year->user->grade->name_grade }}</td>
+                                            <td>{{ $sal->name_status }}</td>
+                                            <td>{{ $sal->name_dept }}</td>
+                                            <td>{{ $sal->name_job }}</td>
+                                            <td>{{ $sal->name_grade }}</td>
                                             <td>-</td>
                                             <td class="text-end">
-                                                {{ number_format($sal->salary_year->salary_grade->rate_salary, 0, ',', '.') }}
+                                                {{ number_format($sal->rate_salary, 0, ',', '.') }}
                                             </td>
-                                            <td class="text-end">{{ number_format($sal->salary_year->ability, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($sal->ability, 0, ',', '.') }}</td>
                                             <td class="text-end">
-                                                {{ number_format($sal->salary_year->fungtional_alw, 0, ',', '.') }}</td>
+                                                {{ number_format($sal->fungtional_alw, 0, ',', '.') }}</td>
                                             <td class="text-end">
-                                                {{ number_format($sal->salary_year->family_alw, 0, ',', '.') }}</td>
+                                                {{ number_format($sal->family_alw, 0, ',', '.') }}</td>
                                             <td class="text-end">
-                                                {{ number_format($sal->salary_year->transport_alw, 0, ',', '.') }}</td>
+                                                {{ number_format($sal->transport_alw, 0, ',', '.') }}</td>
                                             <td class="text-end">
-                                                {{ number_format($sal->salary_year->skill_alw, 0, ',', '.') }}</td>
+                                                {{ number_format($sal->skill_alw, 0, ',', '.') }}</td>
                                             <td class="text-end">
-                                                {{ number_format($sal->salary_year->telephone_alw, 0, ',', '.') }}</td>
+                                                {{ number_format($sal->telephone_alw, 0, ',', '.') }}</td>
 
                                             <td class="text-end">{{ number_format($sal->total_overtime, 0, ',', '.') }}
                                             </td>
                                             <td class="text-end">{{ number_format($sal->thr, 0, ',', '.') }}</td>
                                             <td class="text-end">{{ number_format($sal->bonus, 0, ',', '.') }}</td>
                                             <td class="text-end">{{ number_format($sal->incentive, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($sal->salary_year->adjustment, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($sal->adjustment, 0, ',', '.') }}</td>
                                             <td class="text-end">
                                                 {{ number_format($sal->gross_salary, 0, ',', '.') }}
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($sal->gross_salary + $sal->salary_year->total_ben, 0, ',', '.') }}
+                                                {{ number_format($sal->gross_salary + $sal->total_ben, 0, ',', '.') }}
                                             </td>
-                                            <td class="text-end">{{ number_format($sal->salary_year->bpjs, 0, ',', '.') }}
+                                            <td class="text-end">{{ number_format($sal->bpjs, 0, ',', '.') }}
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($sal->salary_year->jamsostek, 0, ',', '.') }}</td>
+                                                {{ number_format($sal->jamsostek, 0, ',', '.') }}</td>
                                             <td class="text-end">
                                                 {{ number_format($sal->union, 0, ',', '.') }}</td>
                                             <td class="text-end">
@@ -188,13 +188,13 @@
                                                 {{ number_format($sal->total_deduction, 0, ',', '.') }}
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($sal->total_deduction + $sal->salary_year->total_ben_ded, 0, ',', '.') }}
+                                                {{ number_format($sal->total_deduction + $sal->total_ben_ded, 0, ',', '.') }}
                                             </td>
                                             <td class="bg-light text-dark text-end">
                                                 {{ number_format($sal->net_salary, 0, ',', '.') }}
                                             </td>
                                             <td>@php
-                                                $allocations = json_decode($sal->salary_year->allocation);
+                                                $allocations = json_decode($sal->allocation);
                                                 if (is_array($allocations)) {
                                                     echo implode(', ', $allocations);
                                                 } else {

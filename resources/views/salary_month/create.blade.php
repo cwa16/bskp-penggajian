@@ -11,54 +11,7 @@
                     </div>
 
                     <div class="card-body p-3 pb-2">
-                        <form action="{{ route('salary-month.create') }}" method="get">
-                            @csrf
-                            <div class="row">
-                                <div class="col-auto pe-0">
-                                    <select name="id_status" class="form-select form-select-sm">
-                                        <option value="" {{ $statusFilter == null ? 'selected' : '' }}>
-                                            - Choose Status -</option>
-                                        @foreach ($statuses as $status)
-                                            <option value="{{ $status->id }}"
-                                                {{ $statusFilter == $status->id ? 'selected' : '' }}>
-                                                {{ $status->name_status }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-auto pe-0">
-                                    <select name="year" class="form-select form-select-sm">
-                                        <option value="" {{ $yearFilter == null ? 'selected' : '' }}>
-                                            - Choose Year - </option>
-                                        @foreach ($years as $year)
-                                            <option value="{{ $year }}"
-                                                {{ $yearFilter == $year ? 'selected' : '' }}>
-                                                {{ $year }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-auto">
-                                    <select name="month" class="form-select form-select-sm">
-                                        <option value="" {{ $monthFilter == null ? 'selected' : '' }}>
-                                            - Choose Month - </option>
-                                        @for ($month = 1; $month <= 12; $month++)
-                                            <option value="{{ $month }}"
-                                                {{ $monthFilter == $month ? 'selected' : '' }}>
-                                                {{ date('F', mktime(0, 0, 0, $month, 1)) }}
-                                            </option>
-                                        @endfor
-                                    </select>
-                                </div>
-
-                                <div class="col">
-                                    <button type="submit" class="btn btn-primary btn-sm mb-2">Filter</button>
-                                    <a type="button" href="{{ route('salary-month.index') }}"
-                                        class="btn btn-outline-secondary btn-sm mb-2">Cancel</a>
-                                </div>
-                            </div>
-                        </form>
-                        @if (count($salary_years) > 0)
+                        @if ($data)
                             <hr class="horizontal dark my-2">
                             <form action="{{ route('salary-month.store') }}" method="post" class="salary-month-form">
                                 @csrf
@@ -102,15 +55,15 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach ($salary_years as $key => $sy)
+                                                    @foreach ($data as $key => $sy)
                                                         <tr>
                                                             <td class="text-end">{{ $key + 1 }}</td>
-                                                            <td class="text-nowrap text-end">{{ $sy->user->nik }}</td>
-                                                            <td>{{ $sy->user->name }}</td>
-                                                            <td>{{ $sy->user->status->name_status }}</td>
-                                                            <td>{{ $sy->user->dept->name_dept }}</td>
-                                                            <td>{{ $sy->user->job->name_job }}</td>
-                                                            <td>{{ $sy->user->grade->name_grade ?? '-' }}</td>
+                                                            <td class="text-nowrap text-end">{{ $sy->nik }}</td>
+                                                            <td>{{ $sy->name }}</td>
+                                                            <td>{{ $sy->name_status }}</td>
+                                                            <td>{{ $sy->name_dept }}</td>
+                                                            <td>{{ $sy->name_job }}</td>
+                                                            <td>{{ $sy->name_grade ?? '-' }}</td>
                                                             {{-- <td class="text-end">
                                                                 @if ($sy->user->grade && $sy->user->grade->salary_grades->isNotEmpty())
                                                                     {{ number_format($sy->salary_grade->rate_salary, 0, ',', '.') }}
@@ -125,14 +78,17 @@
                                                                 {{-- INPUTAN HIDDEN --}}
                                                                 <input type="hidden" name="id_user[]"
                                                                     value="{{ $sy->id_user }}">
+
                                                                 <input type="hidden" name="id_salary_grade[]"
-                                                                    value="{{ $sy->salary_grade->id ?? '' }}">
+                                                                    value="{{ $sy->id_salary_grade ?? '' }}">
+
                                                                 <input type="hidden"
                                                                     name="id_salary_year[{{ $key }}]"
-                                                                    value="{{ $sy->id ?? '' }}">
+                                                                    value="{{ $sy->id_salary_year ?? '' }}">
+
                                                                 <input type="hidden"
                                                                     name="rate_salary[{{ $key }}]"
-                                                                    value="{{ $sy->salary_grade->rate_salary ?? '' }}">
+                                                                    value="{{ $sy->rate_salary ?? '' }}">
                                                                 <input type="hidden" name="ability[{{ $key }}]"
                                                                     value="{{ $sy->ability ?? '' }}">
                                                                 <input type="hidden"
