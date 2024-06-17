@@ -118,13 +118,24 @@
                 });
 
                 chooseButton.addEventListener('click', function() {
+                    // const selectedIds = Array.from(checkboxes)
+                    //     .filter(checkbox => checkbox.checked)
+                    //     .map(checkbox => `ids[]=${checkbox.value}`)
+                    //     .join('&');
+
                     const selectedIds = Array.from(checkboxes)
                         .filter(checkbox => checkbox.checked)
-                        .map(checkbox => `ids[]=${checkbox.value}`)
-                        .join('&');
+                        .map(checkbox => checkbox.value)
+                        .join(',');
+
+                    if (selectedIds.length > 0) {
+                        window.location.href = `/salarygrade/edit?ids=${selectedIds}`;
+                    } else {
+                        alert('No data selected for editing.');
+                    }
 
                     // Redirect ke halaman edit dengan parameter ids yang dipilih
-                    window.location.href = `/salarygrade/edit?${selectedIds}`;
+                    // window.location.href = `/salarygrade/edit?${selectedIds}`;
                 });
 
             });

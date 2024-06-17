@@ -98,21 +98,35 @@
                                             <td>{{ $sy->user->job->name_job }}</td>
                                             <td>{{ $sy->user->grade->name_grade }}</td>
                                             <td class="text-end">
-                                                {{ number_format($sy->salary_grade->rate_salary, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($sy->ability, 0, ',', '.') }}</td>
+                                                {{ $sy->salary_grade->rate_salary != 0 ? number_format($sy->salary_grade->rate_salary, 0, ',', '.') : '-' }}
+                                            </td>
                                             <td class="text-end">
-                                                {{ number_format($sy->fungtional_alw, 0, ',', '.') }}</td>
+                                                {{ $sy->ability != 0 ? number_format($sy->ability, 0, ',', '.') : '-' }}
+                                            </td>
                                             <td class="text-end">
-                                                {{ number_format($sy->family_alw, 0, ',', '.') }}</td>
+                                                {{ $sy->fungtional_alw != 0 ? number_format($sy->fungtional_alw, 0, ',', '.') : '-' }}
+                                            </td>
                                             <td class="text-end">
-                                                {{ number_format($sy->transport_alw, 0, ',', '.') }}</td>
+                                                {{ $sy->family_alw != 0 ? number_format($sy->family_alw, 0, ',', '.') : '-' }}
+                                            </td>
                                             <td class="text-end">
-                                                {{ number_format($sy->skill_alw, 0, ',', '.') }}</td>
+                                                {{ $sy->transport_alw != 0 ? number_format($sy->transport_alw, 0, ',', '.') : '-' }}
+                                            </td>
                                             <td class="text-end">
-                                                {{ number_format($sy->telephone_alw, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($sy->adjustment, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($sy->bpjs, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($sy->jamsostek, 0, ',', '.') }}</td>
+                                                {{ $sy->skill_alw != 0 ? number_format($sy->skill_alw, 0, ',', '.') : '-' }}
+                                            </td>
+                                            <td class="text-end">
+                                                {{ $sy->telephone_alw != 0 ? number_format($sy->telephone_alw, 0, ',', '.') : '-' }}
+                                            </td>
+                                            <td class="text-end">
+                                                {{ $sy->adjustment != 0 ? number_format($sy->adjustment, 0, ',', '.') : '-' }}
+                                            </td>
+                                            <td class="text-end">
+                                                {{ $sy->bpjs != 0 ? number_format($sy->bpjs, 0, ',', '.') : '-' }}
+                                            </td>
+                                            <td class="text-end">
+                                                {{ $sy->jamsostek != 0 ? number_format($sy->jamsostek, 0, ',', '.') : '-' }}
+                                            </td>
                                             <td>@php
                                                 $allocations = json_decode($sy->allocation);
                                                 if (is_array($allocations)) {

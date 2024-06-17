@@ -11,13 +11,13 @@
                     </div>
 
                     <div class="card-body p-3 pb-2">
-                        <form action="{{ route('salarygrade.update_multiple') }}" method="post">
+                        <form action="{{ route('salarygrade.update') }}" method="post">
                             @csrf
                             @method('PUT')
                             <div class="row">
                                 <div class="col">
                                     <button type="submit" class="btn btn-success btn-sm">Save</button>
-                                    <a href="{{ route('salarygrade.index') }}"
+                                    <a href="{{ route('salarygrade') }}"
                                         class="btn btn-outline-secondary btn-sm">Cancel</a>
                                 </div>
 

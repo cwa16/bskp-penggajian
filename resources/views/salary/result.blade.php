@@ -6,32 +6,30 @@
                 <div class="card my-4">
                     <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                         <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                            <h6 class="text-white text-capitalize ps-3">All Salary Data</h6>
+                            <h6 class="text-white text-capitalize ps-3">All Salary Data - {{ $name->name }} - {{ $yearFilter }}</h6>
                         </div>
                     </div>
 
                     <div class="card-body p-3 pb-2">
                         <div class="row">
                             <div class="col-7">
-                                {{-- Print all tanpa filter tahun dan bulan --}}
-                                {{-- <a href="{{ url('/print-all') }}" class="btn btn-icon btn-3 btn-warning btn-sm"
-                                    target="_blank">
-                                    <span class="btn-inner--icon"><i class="material-icons">print</i></span>
-                                    <span class="btn-inner--text">Print All</span>
-                                </a> --}}
-                                <button data-bs-toggle="modal" data-bs-target="#printAll"
-                                    class="btn btn-icon btn-3 btn-warning btn-sm">
-                                    <span class="btn-inner--icon"><i class="material-icons">print</i></span>
-                                    <span class="btn-inner--text">Print All</span>
+                                {{-- <button data-bs-toggle="modal" data-bs-target="#printAll"
+                                    class="btn btn-icon btn-3 btn-success btn-sm">
+                                    <span class="btn-inner--icon"><i class="fas fa-file-excel"></i></span>
+                                    <span class="btn-inner--text"> Export</span>
+                                </button> --}}
+                                <button class="btn btn-icon btn-3 btn-success btn-sm" id="btn-d">
+                                    <span class="btn-inner--icon"><i class="fas fa-file-excel"></i></span>
+                                    <span class="btn-inner--text"> Export</span>
                                 </button>
-                                <button data-bs-toggle="modal" data-bs-target="#printAllocation"
+                                {{-- <button data-bs-toggle="modal" data-bs-target="#printAllocation"
                                     class="btn btn-icon btn-3 btn-warning btn-sm">
                                     <span class="btn-inner--icon"><i class="material-icons">print</i></span>
                                     <span class="btn-inner--text">Print Allocation</span>
-                                </button>
+                                </button> --}}
                             </div>
                             <div class="col-5 justify-content-end">
-                                <form action="{{ url('/salary') }}" method="GET">
+                                {{-- <form action="{{ url('/salary') }}" method="GET">
                                     <div class="row">
                                         <div class="col pe-0">
                                             <select class="form-select form-select-sm" name="filter_status">
@@ -76,15 +74,16 @@
                                             <button type="submit" class="btn btn-primary btn-sm">Filter</button>
                                         </div>
                                     </div>
-                                </form>
+                                </form> --}}
                             </div>
                         </div>
                         <div class="table-responsive p-0">
                             <table
-                                class="table table-sm table-striped table-hover dtTable100 align-items-center small-tbl compact">
+                                class="table table-sm table-striped table-hover dtTable100 align-items-center small-tbl compact" id="example">
                                 <thead class="bg-thead">
                                     <tr>
-                                        {{-- <th rowspan="2" class="text-center">No</th> --}}
+                                        <th style="background-color: #1A73E8;color: white;" rowspan="2" class="text-center">Year</th>
+                                        <th style="background-color: #1A73E8;color: white;" rowspan="2" class="text-center">Month</th>
                                         <th colspan="7" class="text-center p-0">Employee Identity</th>
                                         <th colspan="13" class="text-center p-0">Salary Components</th>
                                         <th rowspan="2" class="text-center">Bruto Salary</th>
@@ -93,12 +92,11 @@
                                         <th rowspan="2" class="text-center">Nett Salary</th>
                                         <th rowspan="2" class="text-center">Allocation</th>
                                         <th rowspan="2" class="text-center">Date Input</th>
-                                        <th rowspan="2" class="text-center">Check</th>
-                                        <th rowspan="2" class="text-center">Approve</th>
-                                        <th rowspan="2" class="text-center">Action</th>
+                                        {{-- <th rowspan="2" class="text-center">Check</th> --}}
+                                        {{-- <th rowspan="2" class="text-center">Approve</th> --}}
+                                        {{-- <th rowspan="2" class="text-center">Action</th> --}}
                                     </tr>
                                     <tr>
-                                        {{-- <th>No</th> --}}
                                         <th style="background-color: #1A73E8;color: white;">Emp Code</th>
                                         <th style="background-color: #1A73E8;color: white;">Name</th>
                                         <th>Status</th>
@@ -119,7 +117,6 @@
                                         <th>Incentive</th>
                                         <th>Adjustment</th>
                                         <th>Salary Gross</th>
-                                        {{-- <th class=">Bruto Salary</th> --}}
                                         <th>BPJS Kesehatan</th>
                                         <th>Jamsostek</th>
                                         <th>Union</th>
@@ -127,15 +124,13 @@
                                         <th>Electricity</th>
                                         <th>Cooperative</th>
                                         <th>Sub Total Deduction</th>
-                                        {{-- <th class=">Total Deduction</th> --}}
-                                        {{-- <th class="bg-info text-white">Nett Salary</th> --}}
-                                        {{-- <th>Tanggal Pengisian</th> --}}
-                                        {{-- <th>Action</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($data as $key => $sal)
                                         <tr>
+                                            <td class="text-nowrap text-end">{{ $yearFilter }}</td>
+                                            <td class="text-nowrap text-end">{{ date('F', strtotime($sal->date)) }}</td>
                                             <td class="text-nowrap text-end">{{ $sal->nik }}</td>
                                             <td><a data-bs-toggle="modal"
                                                     href="#detailGaji{{ $sal->id }}">{{ $sal->name }}</a>
@@ -215,51 +210,6 @@
                                                 {{ $sal->net_salary != 0 ? number_format($sal->net_salary, 0, ',', '.') : '-' }}
                                             </td>
 
-                                            {{-- <td class="text-end">{{ number_format($sal->ability, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->fungtional_alw, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->family_alw, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->transport_alw, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->skill_alw, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->telephone_alw, 0, ',', '.') }}</td>
-
-                                            <td class="text-end">{{ number_format($sal->total_overtime, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-end">{{ number_format($sal->thr, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($sal->bonus, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($sal->incentive, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($sal->adjustment, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->gross_salary, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->gross_salary + $sal->total_ben, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-end">{{ number_format($sal->bpjs, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->jamsostek, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->union, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->absent, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->electricity, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->cooperative, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->total_deduction, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->total_deduction + $sal->total_ben_ded, 0, ',', '.') }}
-                                            </td>
-                                            <td class="bg-light text-dark text-end">
-                                                {{ number_format($sal->net_salary, 0, ',', '.') }}
-                                            </td> --}}
                                             <td>@php
                                                 $allocations = json_decode($sal->allocation);
                                                 if (is_array($allocations)) {
@@ -271,7 +221,7 @@
 
                                             {{-- <td class="text-end"> {{ $sal->allocation }}</td> --}}
                                             <td class="text-end">{{ date('d M Y', strtotime($sal->date)) }}</td>
-                                            <td class="align-middle text-center text-sm"><span
+                                            {{-- <td class="align-middle text-center text-sm"><span
                                                     class="badge badge-sm bg-gradient-success"> &#10004;</td>
                                             <td class="align-middle text-center text-sm"><span
                                                     class="badge badge-sm bg-gradient-secondary">&#9744;</td>
@@ -292,14 +242,7 @@
                                                     <span class="btn-inner--icon"><i
                                                             class="material-icons">mail</i></span>
                                                 </a>
-                                                {{-- <form action="{{ route('send-whatsapp') }}" method="POST">
-                                                    @csrf
-                                                    <input type="hidden" name="message" id="message" value="Test">
-                                                    <input type="hidden" name="number_phone" id="number_phone" value="{{ $sal->salary_year->user->no_telpon }}">
-                                                    <button type="submit" class="btn btn-success btn-icon-only m-0 p-0 btn-sm"><span class="btn-inner--icon"><i
-                                                        class="material-icons">mail</i></span></button>
-                                                </form> --}}
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -310,9 +253,19 @@
             </div>
         </div>
 
-        @include('salary/modaldetail')
+        <script src="{{ asset('assets/libs/jquery/jquery.js') }}"></script>
+        <script src="{{ asset('assets/js/tableToExcel.js') }}"></script>
+        <script>
+            $("#btn-d").click(function() {
+                TableToExcel.convert(document.getElementById("example"), {
+                    name: "All Salary Data - {{ $name->name }} - {{ $yearFilter }}.xlsx",
+                });
+            });
+        </script>
+
+        {{-- @include('salary/modaldetail') --}}
         {{-- Modal Print All Select Year Month --}}
-        <div class="modal fade" id="printAll" tabindex="-1" role="dialog" aria-labelledby="modal-form"
+        {{-- <div class="modal fade" id="printAll" tabindex="-1" role="dialog" aria-labelledby="modal-form"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -365,9 +318,9 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         {{-- Modal Print Allocation Select Year Month --}}
-        <div class="modal fade" id="printAllocation" tabindex="-1" role="dialog" aria-labelledby="modal-form"
+        {{-- <div class="modal fade" id="printAllocation" tabindex="-1" role="dialog" aria-labelledby="modal-form"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -420,5 +373,5 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     @endsection

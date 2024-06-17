@@ -45,7 +45,14 @@ Route::post('/salary-year/store', [SalaryYearController::class, 'store'])->name(
 Route::get('/salary-year/edit', [SalaryYearController::class, 'edit'])->name('salary-year.edit');
 Route::put('/salary-year/update', [SalaryYearController::class, 'update'])->name('salary-year.update');
 
-Route::resource('salarygrade', SalaryGradeController::class);
+// Route::resource('salarygrade', SalaryGradeController::class);
+
+Route::get('/salarygrade', [SalaryGradeController::class, 'index'])->name('salarygrade');
+Route::get('/salarygrade/filter', [SalaryGradeController::class, 'filter'])->name('salarygrade.filter');
+Route::get('/salarygrade/create', [SalaryGradeController::class, 'create'])->name('salarygrade.create');
+Route::post('/salarygrade/store', [SalaryGradeController::class, 'store'])->name('salarygrade.store');
+Route::get('/salarygrade/edit', [SalaryGradeController::class, 'edit'])->name('salarygrade.edit');
+Route::put('/salarygrade/update', [SalaryGradeController::class, 'update'])->name('salarygrade.update');
 
 // Route::resource('salary-month', SalaryMonthController::class);
 
@@ -57,6 +64,8 @@ Route::get('/salary-month/edit', [SalaryMonthController::class, 'edit'])->name('
 Route::put('/salary-month/update', [SalaryMonthController::class, 'update'])->name('salary-month.update');
 
 Route::resource('salary', SalaryController::class);
+Route::get('/summary', [SalaryController::class, 'summary'])->name('summary');
+Route::get('/result', [SalaryController::class, 'result'])->name('result');
 Route::resource('status', StatusController::class);
 Route::resource('grade', GradeController::class);
 Route::resource('departement', DeptController::class);

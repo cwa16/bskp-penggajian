@@ -187,6 +187,9 @@
     <!-- Jquery JS-->
     <script src="{{ asset('assets/libs/jquery/jquery.js') }}"></script>
 
+    {{-- <script src="{{ asset('assets/js/jquery.tableToExcel') }}"></script> --}}
+    {{-- <script src="{{ asset('assets/js/tableToExcel.js') }}"></script> --}}
+
     <!--   Core JS Files   -->
     <script src="{{ asset('assets/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('assets/js/core/bootstrap.min.js') }}"></script>

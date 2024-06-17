@@ -76,6 +76,9 @@
                                                             </td> --}}
                                                             <td>
                                                                 {{-- INPUTAN HIDDEN --}}
+                                                                <input type="hidden" name="id_salary_month[]"
+                                                                    value="{{ $sy->id_user }}">
+
                                                                 <input type="hidden" name="id_user[]"
                                                                     value="{{ $sy->id_user }}">
 

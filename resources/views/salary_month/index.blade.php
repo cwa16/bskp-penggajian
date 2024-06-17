@@ -119,25 +119,29 @@
                                                 {{ $sm->hour_call }} h
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($sm->total_overtime, 0, ',', '.') }}
+                                                {{ $sm->total_overtime != 0 ? number_format($sm->total_overtime, 0, ',', '.') : '-' }}
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($sm->thr, 0, ',', '.') }}
+                                                {{ $sm->thr != 0 ? number_format($sm->thr, 0, ',', '.') : '-' }}
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($sm->bonus, 0, ',', '.') }}
+                                                {{ $sm->bonus != 0 ? number_format($sm->bonus, 0, ',', '.') : '-' }}
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($sm->incentive, 0, ',', '.') }}
+                                                {{ $sm->incentive != 0 ? number_format($sm->incentive, 0, ',', '.') : '-' }}
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($sm->union, 0, ',', '.') }}</td>
+                                                {{ $sm->union != 0 ? number_format($sm->union, 0, ',', '.') : '-' }}
+                                            </td>
                                             <td class="text-end">
-                                                {{ number_format($sm->absent, 0, ',', '.') }}</td>
+                                                {{ $sm->absent != 0 ? number_format($sm->absent, 0, ',', '.') : '-' }}
+                                            </td>
                                             <td class="text-end">
-                                                {{ number_format($sm->electricity, 0, ',', '.') }}</td>
+                                                {{ $sm->electricity != 0 ? number_format($sm->electricity, 0, ',', '.') : '-' }}
+                                            </td>
                                             <td class="text-end">
-                                                {{ number_format($sm->cooperative, 0, ',', '.') }}</td>
+                                                {{ $sm->cooperative != 0 ? number_format($sm->cooperative, 0, ',', '.') : '-' }}
+                                            </td>
                                             {{-- <td>@php
                                                 $allocations = json_decode($sm->allocation);
                                                 if (is_array($allocations)) {

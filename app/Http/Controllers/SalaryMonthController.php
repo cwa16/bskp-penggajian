@@ -144,7 +144,7 @@ class SalaryMonthController extends Controller
                     ->join('depts', 'users.id_dept', '=', 'depts.id')
                     ->join('jobs', 'users.id_job', '=', 'jobs.id')
                     ->join('grades', 'users.id_grade', '=', 'grades.id')
-                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*')
+                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
                     ->whereYear('salary_months.date', $yearFilter)
                     ->whereMonth('salary_months.date', $monthFilter)
                     ->where('salary_months.thr', 0)
@@ -161,10 +161,8 @@ class SalaryMonthController extends Controller
                     ->join('depts', 'users.id_dept', '=', 'depts.id')
                     ->join('jobs', 'users.id_job', '=', 'jobs.id')
                     ->join('grades', 'users.id_grade', '=', 'grades.id')
-                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*')
+                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
                     ->get();
-
-                echo 'isi data baru';
 
             } else {
                 echo 'isi data tahun dulu';
@@ -202,6 +200,7 @@ class SalaryMonthController extends Controller
     public function store(Request $request)
     {
         // Mengambil tahun dan bulan dari filter
+    $idFilter = $request->input('id_salary_month');
     $yearFilter = $request->input('year');
     $monthFilter = $request->input('month');
 
@@ -257,9 +256,10 @@ class SalaryMonthController extends Controller
 
         SalaryMonth::updateOrCreate(
             [
-                'id_salary_year' => $request->input('id_salary_year')[$key] ?? null,
+                'id' => $request->input('id_salary_month')[$key] ?? null,
             ],
             [
+                'id_salary_year' => $request->input('id_salary_year')[$key] ?? null,
                 'date' => $date,
                 'hour_call' => $request->input('hour_call')[$key] ?? 0,
                 'total_overtime' => $total_overtime,

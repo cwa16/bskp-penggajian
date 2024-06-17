@@ -6,6 +6,7 @@ use App\Models\SalaryMonth;
 use App\Models\Status;
 use App\Models\SalaryYear;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -14,9 +15,6 @@ use WaAPI\WaAPI;
 
 class SalaryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $title = 'Salary';
@@ -34,43 +32,27 @@ class SalaryController extends Controller
 
         $salary_months = SalaryMonth::all();
 
-        // $monthOpts = SalaryMonth::select(DB::raw('MONTH(date) as month'))
-        //     ->distinct()
-        //     ->pluck('month');
-
-        // $yearOpts = SalaryMonth::select(DB::raw('YEAR(date) as year'))
-        //     ->distinct()
-        //     ->pluck('year');
-
-        // Get the range of years and months from the salary_months table
         $years = SalaryMonth::distinct('date')->pluck('date')->map(function ($date) {
             return Carbon::parse($date)->format('Y');
         })->unique()->toArray();
         $months = SalaryMonth::distinct('date')->pluck('date')->map(function ($date) {
             $carbonDate = Carbon::parse($date);
-            // format keluaran yang berbeda menggunakan array
             return [
-                'value' => $carbonDate->format('m'), // Nilai bulan dalam format numerik
-                'label' => $carbonDate->format('F'), // Nama bulan dalam format teks
+                'value' => $carbonDate->format('m'),
+                'label' => $carbonDate->format('F'),
             ];
         })->unique()->toArray();
 
-        // Get distinct status names through the relationships
         $statuses = Status::distinct('name_status')->pluck('name_status')->toArray();
 
-        // Menyimpan query builder dalam variabel query
         $query = SalaryMonth::with('salary_year');
 
-        // Set the default selected year to the current year
         $selectedYear =  null;
         $selectedMonth = null;
-        // $selectedMonth = Carbon::now()->format('F');
         $selectedStatus = null;
 
-        // percabangan untuk filter status
         if (request('filter_status') != null) {
             if (request('filter_status') != 'all') {
-                // Filter by the selected status
                 $selectedStatus = request('filter_status');
                 $query->whereHas('salary_year.user.status', function ($subquery) use ($selectedStatus) {
                     $subquery->where('name_status', $selectedStatus);
@@ -78,33 +60,26 @@ class SalaryController extends Controller
             }
         }
 
-        // percabangan untuk filter tahun
         if (request('filter_year') != null) {
             if (request('filter_year') != 'all') {
-                // Filter by the selected year
                 $selectedYear = request('filter_year');
                 $query->whereYear('date', $selectedYear);
             }
         } else {
-            // untuk menetapkan tahun sekarang saat membuka halaman
             $selectedYear = request('filter_year', Carbon::now()->year);
             $query->whereYear('date', $selectedYear);
         }
 
-        // percabangan untuk filter bulan
         if (request('filter_month') != null) {
             if (request('filter_month') != 'all') {
-                // Filter by the selected month
                 $selectedMonth = request('filter_month');
                 $query->wheremonth('date', $selectedMonth);
             }
         } else {
-            // untuk menetapkan bulan sekarang saat membuka halaman
             $selectedMonth = request('filter_month', Carbon::now()->month);
             $query->whereMonth('date', $selectedMonth);
         }
 
-        // Query the salary_months based on the selected year, month, and status
         $salary_months = $query->get();
 
         return view('salary.index', compact(
@@ -112,22 +87,16 @@ class SalaryController extends Controller
         ));
     }
 
-    /**
-     * Print one salary data employee.
-     */
     public function print($id)
     {
         $sal = SalaryMonth::find($id);
 
-        // mengambeil date
         $date = date('My', strtotime($sal->date));
 
         if (!$sal) {
-            // Log or dd() the ID to see which ID is causing the issue.
             dd("Salary with ID $id not found.");
         }
 
-        // hitungan utuk mendapatkan total gaji bersih
         $rate_salary = $sal->salary_year->salary_grade->rate_salary;
         $ability = $sal->salary_year->ability;
         $fungtional_alw = $sal->salary_year->fungtional_alw;
@@ -174,22 +143,16 @@ class SalaryController extends Controller
         // return $pdf->setPaper('a5', 'landscape')->stream('SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf');
     }
 
-    /**
-     * Download one salary data employee.
-     */
     public function download($id)
     {
         $sal = SalaryMonth::find($id);
 
-        // mengambeil date
         $date = date('My', strtotime($sal->date));
 
         if (!$sal) {
-            // Log or dd() the ID to see which ID is causing the issue.
             dd("Salary with ID $id not found.");
         }
 
-        // hitungan utuk mendapatkan total gaji bersih
         $rate_salary = $sal->salary_year->salary_grade->rate_salary;
         $ability = $sal->salary_year->ability;
         $fungtional_alw = $sal->salary_year->fungtional_alw;
@@ -201,9 +164,6 @@ class SalaryController extends Controller
         return $pdf->setPaper('a5', 'landscape')->download('SAL_' . $date . '_'  . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf');
     }
 
-    /**
-     * Print all salary data employee.
-     */
     public function printall()
     {
         $monthOpts = SalaryMonth::select(DB::raw('MONTH(date) as month'))
@@ -217,15 +177,11 @@ class SalaryController extends Controller
         $year = request()->input('year');
         $month = request()->input('month');
 
-        // $salaries = SalaryMonth::all();
-        // Mengambil seluruh data salary_months beserta relasi salary_years-user-status
-        // $salaries = SalaryMonth::with(['salary_year.user.status'])->get();
         $salaries = SalaryMonth::with(['salary_year.user.status'])
             ->whereYear('date', $year)
             ->whereMonth('date', $month)
             ->get();
 
-        // Mengelompokkan salary_months berdasarkan name_status
         $salByStatus = $salaries->groupBy('salary_year.user.status.name_status');
 
         $date = null;
@@ -233,20 +189,14 @@ class SalaryController extends Controller
             $date = date('F Y', strtotime($sal->date));
         }
 
-        // dd($salByStatus);
-        // dd($date);
         if ($date) {
             $pdf = PDF::loadView('salary.printall', compact('salByStatus', 'date'));
             return $pdf->setPaper(array(0, 0, 609.4488, 935.433), 'landscape')->stream('PrintAll.pdf');
-            // return view('salary.printall', compact('salByStatus', 'date'));
         } else {
             return redirect()->route('salary.index');
         }
     }
 
-    /**
-     * Print all salary data employee.
-     */
     public function printallocation()
     {
         $monthOpts = SalaryMonth::select(DB::raw('MONTH(date) as month'))
@@ -378,9 +328,6 @@ class SalaryController extends Controller
             ];
         }
 
-        // debuging
-        // dd($grandTotal['rate_salary']);
-
         $date = null;
         foreach ($sal_allocation as $sal) {
             $date = date('F Y', strtotime($sal->date));
@@ -392,5 +339,39 @@ class SalaryController extends Controller
         } else {
             return redirect()->route('salary.index');
         }
+    }
+
+    public function summary()
+    {
+        $title = 'Summary';
+        $emp = User::orderBy('name', 'asc')->get();
+        $years = SalaryYear::distinct('year')->pluck('year')->toArray();
+
+        return view ('salary.summary', compact('title', 'emp', 'years'));
+    }
+
+    public function result()
+    {
+        $title = 'Summary';
+        $empFilter = request()->input('id_user', null);
+        $yearFilter = request()->input('year', null);
+
+        $data = DB::table('salary_months')
+            ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+            ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
+            ->join('users', 'users.id', '=', 'salary_years.id_user')
+            ->join('statuses', 'users.id_status', '=', 'statuses.id')
+            ->join('depts', 'users.id_dept', '=', 'depts.id')
+            ->join('jobs', 'users.id_job', '=', 'jobs.id')
+            ->join('grades', 'users.id_grade', '=', 'grades.id')
+            ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*')
+            ->where('users.id', $empFilter)
+            ->get();
+
+        $name = User::where('id', $empFilter)->select('name')->first();
+
+        // dd($empFilter, $yearFilter, $data);
+
+        return view('salary.result', compact('title', 'empFilter', 'yearFilter', 'data', 'name'));
     }
 }

@@ -11,8 +11,8 @@ use Carbon\Carbon;
 
 class SalaryGradeController extends Controller
 {
-    /** 
-     * Display a listing of the resource. 
+    /**
+     * Display a listing of the resource.
      */
     public function index()
     {
@@ -73,7 +73,7 @@ class SalaryGradeController extends Controller
         }
 
         // Redirect atau lakukan aksi lainnya setelah penyimpanan selesai
-        return redirect()->route('salarygrade.index')->with('success', 'Data gaji berhasil disimpan.');
+        return redirect()->route('salarygrade')->with('success', 'Data gaji berhasil disimpan.');
     }
 
     /**
@@ -81,7 +81,8 @@ class SalaryGradeController extends Controller
      */
     public function edit(Request $request)
     {
-        $selectedIds = $request->input('ids', []);
+        // $selectedIds = $request->input('ids', []);
+        $selectedIds = $request->input('ids', '');
 
         // Konversi string parameter ke dalam bentuk array
         if (is_string($selectedIds)) {
@@ -90,7 +91,7 @@ class SalaryGradeController extends Controller
 
         // Jika tidak ada id yang dipilih, redirect kembali atau tampilkan pesan sesuai kebutuhan
         if (empty($selectedIds)) {
-            return redirect()->route('salarygrade.index')->with('error', 'No data selected for editing.');
+            return redirect()->route('salarygrade')->with('error', 'No data selected for editing.');
         }
 
         $title = 'Salary Per Grade';
@@ -182,7 +183,7 @@ class SalaryGradeController extends Controller
         }
 
         // Redirect atau lakukan aksi lainnya setelah pembaruan selesai
-        return redirect()->route('salarygrade.index')->with('success', 'Data gaji berhasil diperbarui.');
+        return redirect()->route('salarygrade')->with('success', 'Data gaji berhasil diperbarui.');
     }
 
     // public function update(Request $request)
@@ -220,6 +221,11 @@ class SalaryGradeController extends Controller
     //     // }
 
     //     // Redirect atau lakukan aksi lainnya setelah pembaruan selesai
-    //     return redirect()->route('salarygrade.index')->with('success', 'Data gaji berhasil diperbarui.');
+    //     return redirect()->route('salarygrade')->with('success', 'Data gaji berhasil diperbarui.');
     // }
+
+    public function show()
+    {
+
+    }
 }
