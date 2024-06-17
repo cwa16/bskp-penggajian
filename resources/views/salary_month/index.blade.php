@@ -20,6 +20,16 @@
                                     style="display: none;">Choose Data</button>
                                 <button type="button" class="btn btn-outline-secondary btn-sm" id="cancelButton"
                                     style="display: none;">Cancel</button>
+                                <button data-bs-toggle="modal" data-bs-target="#exportData"
+                                    class="btn btn-icon btn-3 btn-success btn-sm">
+                                    <span class="btn-inner--icon"><i class="fas fa-file-excel"></i></span>
+                                    <span class="btn-inner--text"> Export Data</span>
+                                </button>
+                                <button data-bs-toggle="modal" data-bs-target="#importData"
+                                    class="btn btn-icon btn-3 btn-secondary btn-sm">
+                                    <span class="btn-inner--icon"><i class="fas fa-file-excel"></i></span>
+                                    <span class="btn-inner--text"> Import Data</span>
+                                </button>
                             </div>
                             <div class="col-4 justify-content-end">
                                 <form action="{{ url('/salary-month') }}" method="GET">
@@ -157,6 +167,52 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="importData" tabindex="-1" role="dialog" aria-labelledby="modal-form"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body p-0">
+                        <div class="card card-plain">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Choose File</h5>
+                            </div>
+                            <div class="card-body py-2">
+                                <form action="{{ route('salary-month.import') }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="file" name="file" class="form-control">
+                                    <br>
+                                    <button class="btn btn-success">Import Data</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="exportData" tabindex="-1" role="dialog" aria-labelledby="modal-form"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body p-0">
+                        <div class="card card-plain">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Choose Date</h5>
+                            </div>
+                            <div class="card-body py-2">
+                                <form action="{{ route('salary-month.export') }}" method="POST">
+                                    @csrf
+                                    <input type="date" name="date" class="form-control">
+                                    <br>
+                                    <button class="btn btn-success">Import Data</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

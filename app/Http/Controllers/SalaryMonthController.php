@@ -8,14 +8,14 @@ use App\Models\SalaryYear;
 use App\Models\SalaryMonth;
 use Carbon\Carbon;
 use DB;
+use App\Exports\SalaryMonthExport;
+use App\Imports\SalaryMonthImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 use Illuminate\Http\Request;
 
 class SalaryMonthController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $title = 'Salary Per Month';
@@ -281,9 +281,6 @@ class SalaryMonthController extends Controller
         return redirect()->route('salary-month')->with('success', 'Salary data stored successfully');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Request $request)
     {
         // $selectedIds = $request->input('ids', []);
@@ -300,14 +297,25 @@ class SalaryMonthController extends Controller
         }
 
         $title = 'Salary Per Month';
+        // $salary_months = DB::table('salary_months')
+        //     ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+        //     ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
+        //     ->join('users', 'users.id', '=', 'salary_years.id_user')
+        //     ->join('statuses', 'users.id_status', '=', 'statuses.id')
+        //     ->join('depts', 'users.id_dept', '=', 'depts.id')
+        //     ->join('jobs', 'users.id_job', '=', 'jobs.id')
+        //     ->join('grades', 'users.id_grade', '=', 'grades.id')
+        //     ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
+        //     ->whereIn('salary_months.id', $selectedIds)
+        //     ->get();
+
         $salary_months = SalaryMonth::whereIn('id', $selectedIds)->get();
+
+        // dd($salary_months);
 
         return view('salary_month.edit', compact('title', 'salary_months'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request)
     {
         foreach ($request->input('ids') as $id) {
@@ -336,8 +344,10 @@ class SalaryMonthController extends Controller
 
             // Hitungan untuk mencari totalan
             $gross_sal = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw + $skill_alw + $telephone_alw +
-                $adjustment + $total_overtime + $thr + $bonus + $incentive;
+            $adjustment + $total_overtime + $thr + $bonus + $incentive;
+
             $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative;
+
             $net_salary = ($gross_sal + $total_ben) - ($total_deduction + $total_ben_ded);
 
             // $allocations = $request->input('allocation.' . $id) ?? NULL;
@@ -347,7 +357,9 @@ class SalaryMonthController extends Controller
             //     $allocationJson = $allocations;
             // }
 
-            SalaryMonth::where('id', $id)->update([
+            // dd($gross_sal, $total_deduction, $net_salary);
+
+            $update = SalaryMonth::where('id', $id)->update([
                 'hour_call' => $request->input('hour_call.' . $id),
                 'total_overtime' => $total_overtime,
                 'thr' => $thr,
@@ -357,15 +369,34 @@ class SalaryMonthController extends Controller
                 'absent' => $absent,
                 'electricity' => $electricity,
                 'cooperative' => $cooperative,
-                'incentive' => $incentive,
                 'gross_salary' => $gross_sal,
                 'total_deduction' => $total_deduction,
-                // 'allocation' => $allocationJson,
                 'net_salary' => $net_salary,
             ]);
         }
 
+        if ($update) {
+            return redirect()->route('salary-month')->with('success', 'Data gaji berhasil diperbarui.');
+        } else {
+            return redirect()->back();
+        }
+
         // Redirect atau lakukan aksi lainnya setelah pembaruan selesai
-        return redirect()->route('salary-month')->with('success', 'Data gaji berhasil diperbarui.');
+        // return redirect()->route('salary-month')->with('success', 'Data gaji berhasil diperbarui.');
+    }
+
+    public function export(Request $request)
+    {
+        $date = $request->input('date');
+        return (new SalaryMonthExport($date))->download($date . '_salary_month.xlsx');
+
+        // return Excel::download(new SalaryMonthExport, 'salary_month.xlsx');
+    }
+
+    public function import()
+    {
+        Excel::import(new SalaryMonthImport,request()->file('file'));
+
+        return back();
     }
 }

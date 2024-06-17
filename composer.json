@@ -11,6 +11,7 @@
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
+        "maatwebsite/excel": "^3.1",
         "symfony/console": "^6.4",
         "twilio/sdk": "^8.1",
         "waapi/waapi-laravel-sdk": "^1.0"

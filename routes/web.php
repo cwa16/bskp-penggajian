@@ -62,6 +62,8 @@ Route::get('/salary-month/create', [SalaryMonthController::class, 'create'])->na
 Route::post('/salary-month/store', [SalaryMonthController::class, 'store'])->name('salary-month.store');
 Route::get('/salary-month/edit', [SalaryMonthController::class, 'edit'])->name('salary-month.edit');
 Route::put('/salary-month/update', [SalaryMonthController::class, 'update'])->name('salary-month.update');
+Route::post('/salary-month/export', [SalaryMonthController::class, 'export'])->name('salary-month.export');
+Route::post('/salary-month/import', [SalaryMonthController::class, 'import'])->name('salary-month.import');
 
 Route::resource('salary', SalaryController::class);
 Route::get('/summary', [SalaryController::class, 'summary'])->name('summary');

@@ -73,16 +73,18 @@
 
                                                             <input type="hidden" name="id_user[]"
                                                                 value="{{ $sm->id_user }}">
-                                                            <input type="hidden" name="id_user[]"
-                                                                value="{{ $sm->id_user }}">
+
                                                             <input type="hidden"
                                                                 name="id_salary_year[{{ $sm->id }}]"
-                                                                value="{{ $sm->id ?? '' }}">
+                                                                value="{{ $sm->id_salary_year ?? '' }}">
+
                                                             <input type="hidden"
                                                                 name="rate_salary[{{ $sm->id }}]"
-                                                                value="{{ $sm->id ?? '' }}">
+                                                                value="{{ $sm->salary_year->salary_grade->rate_salary ?? '' }}">
+
                                                             <input type="hidden" name="ability[{{ $sm->id }}]"
-                                                                value="{{ $sm->id ?? '' }}">
+                                                                value="{{ $sm->salary_year->ability ?? '' }}">
+
                                                             <input type="hidden"
                                                                 name="fungtional_alw[{{ $sm->id }}]"
                                                                 value="{{ $sm->fungtional_alw ?? '' }}">
