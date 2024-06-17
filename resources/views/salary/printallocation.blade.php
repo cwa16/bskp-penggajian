@@ -53,7 +53,8 @@
             <td align="center">PT BRIDGESTONE KALIMANTAN PLANTATION</td>
         </tr>
         <tr>
-            <td align="center" class="uppercase">SALARY ALLOCATION {{ $date }}</td>
+            {{-- <td align="center" class="uppercase">SALARY ALLOCATION {{ $date }}</td> --}}
+            <td align="center" class="uppercase">SALARY ALLOCATION</td>
         </tr>
         <tr></tr>
     </table>
@@ -94,12 +95,11 @@
                 {{-- <th>Net Salary</th> --}}
             </tr>
 
-            @foreach ($finalResult as $index => $sal)
+            {{-- @foreach ($finalResult as $index => $sal)
                 @php
-                    $subtotal = 0; // Inisialisasi subtotal per status
+                    $subtotal = 0;
                 @endphp
 
-                {{-- @foreach ($salaries as $sal) --}}
                 <tr>
                     <td class="text-end">{{ $index + 1 }}</td>
                     <td>{{ $sal['allocation'] }}</td>
@@ -129,12 +129,11 @@
                     </td>
                     <td class="text-end">{{ number_format($sal['net_salary'], 0, ',', '.') }}</td>
                 </tr>
-            @endforeach
+            @endforeach --}}
 
             {{-- tr untuk grand total data alokasi gaji --}}
-            <tr style="background: #dddddd">
+            {{-- <tr style="background: #dddddd">
                 <td colspan="2" style="font-weight: bold">Grand Total</td>
-                {{-- <td></td> --}}
                 <td class="text-end">{{ number_format($grandTotal['rate_salary'], 0, ',', '.') }}</td>
                 <td class="text-end">{{ number_format($grandTotal['ability'], 0, ',', '.') }}</td>
                 <td class="text-end">{{ number_format($grandTotal['fungtional_alw'], 0, ',', '.') }}</td>
@@ -159,7 +158,7 @@
                     {{ number_format($grandTotal['total_deduction'] + $grandTotal['total_ben_ded'], 0, ',', '.') }}
                 </td>
                 <td class="text-end">{{ number_format($grandTotal['net_salary'], 0, ',', '.') }}</td>
-            </tr>
+            </tr> --}}
         </table>
     </div>
 </body>
