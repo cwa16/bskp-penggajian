@@ -247,6 +247,50 @@
                 </div>
             </div>
 
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    // Ambil semua elemen input dan select dalam form
+                    let inputs = document.querySelectorAll('.salary-month-form input, .salary-month-form select');
+
+                    // Fungsi untuk menemukan indeks elemen dalam NodeList
+                    function findIndex(element) {
+                        return Array.prototype.indexOf.call(inputs, element);
+                    }
+
+                    // Fungsi untuk berpindah ke elemen berikutnya atau sebelumnya berdasarkan baris dan kolom
+                    function moveFocus(currentIndex, direction) {
+                        const cols = 8; // Jumlah kolom yang memiliki input
+                        const rows = 27;
+                        let newIndex;
+
+                        if (direction === 'ArrowDown') {
+                            newIndex = currentIndex + rows;
+                        } else if (direction === 'ArrowUp') {
+                            newIndex = currentIndex - rows;
+                        } else if (direction === 'ArrowRight') {
+                            newIndex = currentIndex + 1;
+                        } else if (direction === 'ArrowLeft') {
+                            newIndex = currentIndex - 1;
+                        }
+
+                        if (newIndex >= 0 && newIndex < inputs.length) {
+                            inputs[newIndex].focus();
+                        }
+                    }
+
+                    // Tambahkan event listener pada setiap input dan select
+                    inputs.forEach(function (input) {
+                        input.addEventListener('keydown', function (e) {
+                            const currentIndex = findIndex(e.target);
+                            if (['ArrowDown', 'ArrowUp', 'ArrowRight', 'ArrowLeft'].includes(e.key)) {
+                                e.preventDefault();
+                                moveFocus(currentIndex, e.key);
+                            }
+                        });
+                    });
+                });
+            </script>
+
             {{-- SCRIPT untuk perhitungan Total Overtime otomatis berdasarkan jam --}}
             <script>
                 document.addEventListener("DOMContentLoaded", function() {

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use PDF;
+use Twilio\Rest\Client;
 use WaAPI\WaAPI;
 
 class SalaryController extends Controller
@@ -110,37 +111,67 @@ class SalaryController extends Controller
 
     public function send($id)
     {
-        $sal = SalaryMonth::find($id);
+        // $sal = SalaryMonth::find($id);
 
-        // mengambeil date
-        $date = date('My', strtotime($sal->date));
+        // // mengambeil date
+        // $date = date('My', strtotime($sal->date));
 
-        if (!$sal) {
-            // Log or dd() the ID to see which ID is causing the issue.
-            dd("Salary with ID $id not found.");
-        }
+        // if (!$sal) {
+        //     // Log or dd() the ID to see which ID is causing the issue.
+        //     dd("Salary with ID $id not found.");
+        // }
 
-        // hitungan utuk mendapatkan total gaji bersih
-        $rate_salary = $sal->salary_year->salary_grade->rate_salary;
-        $ability = $sal->salary_year->ability;
-        $fungtional_alw = $sal->salary_year->fungtional_alw;
-        $family_alw = $sal->salary_year->family_alw;
+        // // hitungan utuk mendapatkan total gaji bersih
+        // $rate_salary = $sal->salary_year->salary_grade->rate_salary;
+        // $ability = $sal->salary_year->ability;
+        // $fungtional_alw = $sal->salary_year->fungtional_alw;
+        // $family_alw = $sal->salary_year->family_alw;
 
-        $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
+        // $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
 
-        $pdf = PDF::loadView('salary.print', compact('sal', 'total'))->setPaper('a5', 'landscape');
+        // $pdf = PDF::loadView('salary.print', compact('sal', 'total'))->setPaper('a5', 'landscape');
 
-        $fileName = 'SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf';
+        // $fileName = 'SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf';
 
-        $mediaUrl = asset('slip_gaji/SAL_Jun24_199-073_Sulastri.pdf');
+        // $mediaUrl = asset('slip_gaji/SAL_Jun24_199-073_Sulastri.pdf');
 
-        // dd($mediaUrl);
+        // // dd($mediaUrl);
 
-        $waAPI = new WaAPI\WaAPI();
-        $waAPI->sendMediaFromUrl('6287878998251@c.us', 'file:///C:/laragon/www/bskp-penggajian/public/slip_gaji/SAL_Jun24_199-073_Sulastri.pdf', 'slip gaji', 'bskp-penggajian.pdf');
-        // $waAPI->fetchMessages('6287878998251@c.us', '25', null, null, null );
+        // $waAPI = new WaAPI\WaAPI();
+        // $waAPI->sendMediaFromUrl('6287878998251@c.us', 'file:///C:/laragon/www/bskp-penggajian/public/slip_gaji/SAL_Jun24_199-073_Sulastri.pdf', 'slip gaji', 'bskp-penggajian.pdf');
+        // // $waAPI->fetchMessages('6287878998251@c.us', '25', null, null, null );
 
-        // return $pdf->setPaper('a5', 'landscape')->stream('SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf');
+        // // return $pdf->setPaper('a5', 'landscape')->stream('SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf');
+        // $product = \App\Product::findOrFail($id);
+        // $user = User::find(1); // replace this with the authenticated user
+
+        // $data = [
+        //     'product' => $product,
+        //     'user' => $user
+        // ];
+
+        $invoiceFile = "SAL_Jun24_199-073_Sulastri.pdf";
+        $invoicePath = public_path("slip_gaji/".$invoiceFile);
+
+        $phoneNumber = +6287878998251;
+
+        // $sid = env('TWILIO_AUTH_SID');
+        // $auth = env('TWILIO_AUTH_TOKEN');
+
+        // dd($sid, $auth);
+
+        // PDF::loadView('invoice', $data)->save($invoicePath);
+        $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
+
+        $twilio->messages->create(
+                "whatsapp:+6287878998251", [
+                "from" => "whatsapp:".env('TWILIO_WHATSAPP_FROM'),
+                "body" => "Here's your invoice!",
+                "mediaUrl" => [env("NGROK_URL")."slip_gaji/".$invoiceFile]
+            ]
+        );
+
+        return redirect()->back();
     }
 
     public function download($id)
@@ -371,9 +402,7 @@ class SalaryController extends Controller
             ->where('users.id', $empFilter)
             ->get();
 
-        $name = User::where('id', $empFilter)->select('name')->first();
-
-        // dd($empFilter, $yearFilter, $data);
+        $name = User::where('id', $empFilter)->select('nik','name')->first();
 
         return view('salary.result', compact('title', 'empFilter', 'yearFilter', 'data', 'name'));
     }

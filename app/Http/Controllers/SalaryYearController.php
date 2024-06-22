@@ -49,7 +49,6 @@ class SalaryYearController extends Controller
 
         return view('salary_year.index', compact('title', 'salary_years', 'years', 'statuses', 'selectedYear', 'selectedStatus'));
     }
-
     public function filter(){
         $title = 'Salary Per Year';
         $statuses = Status::all();

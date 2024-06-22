@@ -13,68 +13,25 @@
                     <div class="card-body p-3 pb-2">
                         <div class="row">
                             <div class="col-7">
-                                {{-- <button data-bs-toggle="modal" data-bs-target="#printAll"
-                                    class="btn btn-icon btn-3 btn-success btn-sm">
-                                    <span class="btn-inner--icon"><i class="fas fa-file-excel"></i></span>
-                                    <span class="btn-inner--text"> Export</span>
-                                </button> --}}
                                 <button class="btn btn-icon btn-3 btn-success btn-sm" id="btn-d">
                                     <span class="btn-inner--icon"><i class="fas fa-file-excel"></i></span>
                                     <span class="btn-inner--text"> Export</span>
                                 </button>
-                                {{-- <button data-bs-toggle="modal" data-bs-target="#printAllocation"
-                                    class="btn btn-icon btn-3 btn-warning btn-sm">
-                                    <span class="btn-inner--icon"><i class="material-icons">print</i></span>
-                                    <span class="btn-inner--text">Print Allocation</span>
-                                </button> --}}
                             </div>
                             <div class="col-5 justify-content-end">
-                                {{-- <form action="{{ url('/salary') }}" method="GET">
-                                    <div class="row">
-                                        <div class="col pe-0">
-                                            <select class="form-select form-select-sm" name="filter_status">
-                                                <option value="" {{ $selectedStatus == 'all' ? 'selected' : '' }}>
-                                                    Show All Status
-                                                </option>
-                                                @foreach ($statuses as $status)
-                                                    <option value="{{ $status }}"
-                                                        {{ $selectedStatus == $status ? 'selected' : '' }}>
-                                                        {{ $status }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col pe-0">
-                                            <select class="form-select form-select-sm" name="filter_year">
-                                                <option value="all" {{ $selectedYear == 'all' ? 'selected' : '' }}>
-                                                    Show All Year
-                                                </option>
-                                                @foreach ($years as $year)
-                                                    <option value="{{ $year }}"
-                                                        {{ $selectedYear == $year ? 'selected' : '' }}>
-                                                        {{ $year }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col pe-0">
-                                            <select class="form-select form-select-sm" name="filter_month">
-                                                <option value="all" {{ $selectedMonth == 'all' ? 'selected' : '' }}>
-                                                    Show All Month
-                                                </option>
-                                                @foreach ($months as $month)
-                                                    <option value="{{ $month['value'] }}"
-                                                        {{ $selectedMonth == $month['value'] ? 'selected' : '' }}>
-                                                        {{ $month['label'] }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-auto">
-                                            <button type="submit" class="btn btn-primary btn-sm">Filter</button>
-                                        </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>NIK</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                        <p>NIK : </p>
+                                        <p>Nama : {{ $name->name }}</p>
                                     </div>
-                                </form> --}}
+                                </div>
                             </div>
                         </div>
                         <div class="table-responsive p-0">
@@ -92,9 +49,6 @@
                                         <th rowspan="2" class="text-center">Nett Salary</th>
                                         <th rowspan="2" class="text-center">Allocation</th>
                                         <th rowspan="2" class="text-center">Date Input</th>
-                                        {{-- <th rowspan="2" class="text-center">Check</th> --}}
-                                        {{-- <th rowspan="2" class="text-center">Approve</th> --}}
-                                        {{-- <th rowspan="2" class="text-center">Action</th> --}}
                                     </tr>
                                     <tr>
                                         <th style="background-color: #1A73E8;color: white;">Emp Code</th>
@@ -219,30 +173,7 @@
                                                 }
                                             @endphp</td>
 
-                                            {{-- <td class="text-end"> {{ $sal->allocation }}</td> --}}
                                             <td class="text-end">{{ date('d M Y', strtotime($sal->date)) }}</td>
-                                            {{-- <td class="align-middle text-center text-sm"><span
-                                                    class="badge badge-sm bg-gradient-success"> &#10004;</td>
-                                            <td class="align-middle text-center text-sm"><span
-                                                    class="badge badge-sm bg-gradient-secondary">&#9744;</td>
-                                            <td class="text-center m-0 p-0">
-                                                <button class="btn btn-primary btn-icon-only m-0 p-0 btn-sm"
-                                                    type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#detailGaji{{ $sal->id }}">
-                                                    <span class="btn-inner--icon"><i
-                                                            class="material-icons">info</i></span>
-                                                </button>
-                                                <a href="{{ url('/print-pdf/' . $sal->id) }}"
-                                                    class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" target="_blank">
-                                                    <span class="btn-inner--icon"><i
-                                                            class="material-icons">print</i></span>
-                                                </a>
-                                                <a href="{{ url('/send-whatsapp/' . $sal->id) }}"
-                                                    class="btn btn-success btn-icon-only m-0 p-0 btn-sm" target="_blank">
-                                                    <span class="btn-inner--icon"><i
-                                                            class="material-icons">mail</i></span>
-                                                </a>
-                                            </td> --}}
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -263,115 +194,4 @@
             });
         </script>
 
-        {{-- @include('salary/modaldetail') --}}
-        {{-- Modal Print All Select Year Month --}}
-        {{-- <div class="modal fade" id="printAll" tabindex="-1" role="dialog" aria-labelledby="modal-form"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-body p-0">
-                        <div class="card card-plain">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Select Year & Month</h5>
-                            </div>
-                            <div class="card-body py-2">
-                                <form action="{{ url('/print-all') }}" method="get">
-                                    @csrf
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="row">
-                                                <label for="year" class="col pt-1">Year:</label>
-                                                <select name="year" id="year"
-                                                    class="col form-select form-select-sm">
-                                                    @foreach ($years as $year)
-                                                        <option value="{{ $year }}">{{ $year }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="row">
-                                                <label for="month" class="col pt-1">Month:</label>
-                                                <select name="month" id="month"
-                                                    class="col form-select form-select-sm">
-                                                    @foreach ($months as $month)
-                                                        <option value="{{ $month['value'] }}">
-                                                            {{ $month['label'] }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <button type="submit" class="btn btn-warning btn-sm"><span
-                                                    class="btn-inner--icon"><i class="material-icons">print</i></span>
-                                                <span class="btn-inner--text">Print</span></button>
-                                        </div>
-                                        <div class="col-auto ps-0">
-                                            <button type="button" class="btn btn-sm btn-outline-secondary btn-3"
-                                                data-bs-dismiss="modal">Cancel</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-        {{-- Modal Print Allocation Select Year Month --}}
-        {{-- <div class="modal fade" id="printAllocation" tabindex="-1" role="dialog" aria-labelledby="modal-form"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-body p-0">
-                        <div class="card card-plain">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Select Year & Month</h5>
-                            </div>
-                            <div class="card-body py-2">
-                                <form action="{{ url('/print-allocation') }}" method="get">
-                                    @csrf
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="row">
-                                                <label for="year" class="col pt-1">Year:</label>
-                                                <select name="year" id="year"
-                                                    class="col form-select form-select-sm">
-                                                    @foreach ($years as $year)
-                                                        <option value="{{ $year }}">{{ $year }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="row">
-                                                <label for="month" class="col pt-1">Month:</label>
-                                                <select name="month" id="month"
-                                                    class="col form-select form-select-sm">
-                                                    @foreach ($months as $month)
-                                                        <option value="{{ $month['value'] }}">
-                                                            {{ $month['label'] }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <button type="submit" class="btn btn-warning btn-sm"><span
-                                                    class="btn-inner--icon"><i class="material-icons">print</i></span>
-                                                <span class="btn-inner--text">Print</span></button>
-                                        </div>
-                                        <div class="col-auto ps-0">
-                                            <button type="button" class="btn btn-sm btn-outline-secondary btn-3"
-                                                data-bs-dismiss="modal">Cancel</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
     @endsection
