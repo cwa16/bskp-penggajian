@@ -6,7 +6,7 @@
                 <div class="card my-4">
                     <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                         <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                            <h6 class="text-white text-capitalize ps-3">All Salary Data - {{ $name->name }} - {{ $yearFilter }}</h6>
+                            <h6 class="text-white text-capitalize ps-3">Annual Salary Data {{ $yearFilter }}</h6>
                         </div>
                     </div>
 
@@ -18,18 +18,23 @@
                                     <span class="btn-inner--text"> Export</span>
                                 </button>
                             </div>
-                            <div class="col-5 justify-content-end">
+                            <div class="col-2" style="margin-right: 500px; margin-bottom: 20px;">
                                 <div class="card">
                                     <div class="card-body">
                                         <table>
                                             <thead>
                                                 <tr>
                                                     <th>NIK</th>
+                                                    <th> : </th>
+                                                    <th>{{ $name->nik }}</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th> : </th>
+                                                    <th>{{ $name->name }}</th>
                                                 </tr>
                                             </thead>
                                         </table>
-                                        <p>NIK : </p>
-                                        <p>Nama : {{ $name->name }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -41,7 +46,7 @@
                                     <tr>
                                         <th style="background-color: #1A73E8;color: white;" rowspan="2" class="text-center">Year</th>
                                         <th style="background-color: #1A73E8;color: white;" rowspan="2" class="text-center">Month</th>
-                                        <th colspan="7" class="text-center p-0">Employee Identity</th>
+                                        <th colspan="5" class="text-center p-0">Employee Identity</th>
                                         <th colspan="13" class="text-center p-0">Salary Components</th>
                                         <th rowspan="2" class="text-center">Bruto Salary</th>
                                         <th colspan="7" class="text-center p-0">Deduction</th>
@@ -51,8 +56,6 @@
                                         <th rowspan="2" class="text-center">Date Input</th>
                                     </tr>
                                     <tr>
-                                        <th style="background-color: #1A73E8;color: white;">Emp Code</th>
-                                        <th style="background-color: #1A73E8;color: white;">Name</th>
                                         <th>Status</th>
                                         <th>Dept</th>
                                         <th>Job</th>
@@ -85,10 +88,6 @@
                                         <tr>
                                             <td class="text-nowrap text-end">{{ $yearFilter }}</td>
                                             <td class="text-nowrap text-end">{{ date('F', strtotime($sal->date)) }}</td>
-                                            <td class="text-nowrap text-end">{{ $sal->nik }}</td>
-                                            <td><a data-bs-toggle="modal"
-                                                    href="#detailGaji{{ $sal->id }}">{{ $sal->name }}</a>
-                                            </td>
                                             <td>{{ $sal->name_status }}</td>
                                             <td>{{ $sal->name_dept }}</td>
                                             <td>{{ $sal->name_job }}</td>
