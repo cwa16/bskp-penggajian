@@ -31,8 +31,6 @@ class SalaryMonthController extends Controller
             ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
             ->get();
 
-        // dd($data);
-
         $years = SalaryMonth::distinct('date')->pluck('date')->map(function ($date) {
             return Carbon::parse($date)->format('Y');
         })->unique()->toArray();
@@ -44,59 +42,47 @@ class SalaryMonthController extends Controller
             ];
         })->unique()->toArray();
         $statuses = Status::distinct('name_status')->pluck('name_status')->toArray();
-        // $query = SalaryMonth::with('salary_year');
+        $statuses_id = Status::all();
 
-        $selectedYear =  null;
-        $selectedMonth = null;
-        $selectedStatus = null;
+        // $selectedYear =  null;
+        // $selectedMonth = null;
+        // $selectedStatus = null;
 
-        // // percabangan untuk filter status
-        // if (request('filter_status') != null) {
-        //     if (request('filter_status') != 'all') {
-        //         // Filter by the selected status
-        //         $selectedStatus = request('filter_status');
-        //         $query->whereHas('salary_year.user.status', function ($subquery) use ($selectedStatus) {
-        //             $subquery->where('name_status', $selectedStatus);
-        //         });
-        //     }
-        // }
+        $selectedYear =  request()->input('filter_status', null);
+        $selectedMonth = request()->input('filter_year', null);
+        $selectedStatus = request()->input('filter_month', null);
 
-        // // percabangan untuk filter tahun
-        // if (request('filter_year') != null) {
-        //     if (request('filter_year') != 'all') {
-        //         // Filter by the selected year
-        //         $selectedYear = request('filter_year');
-        //         $query->whereYear('date', $selectedYear);
-        //     }
-        // } else {
-        //     // untuk menetapkan tahun sekarang saat membuka halaman
-        //     $selectedYear = request('filter_year', Carbon::now()->year);
-        //     $query->whereYear('date', $selectedYear);
-        // }
+        if ($selectedYear == null && $selectedYear == null && $selectedYear == null) {
+            $data = DB::table('salary_months')
+                ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
+                ->join('users', 'users.id', '=', 'salary_years.id_user')
+                ->join('statuses', 'users.id_status', '=', 'statuses.id')
+                ->join('depts', 'users.id_dept', '=', 'depts.id')
+                ->join('jobs', 'users.id_job', '=', 'jobs.id')
+                ->join('grades', 'users.id_grade', '=', 'grades.id')
+                ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
+                ->get();
+        } else {
+            $data = DB::table('salary_months')
+                ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
+                ->join('users', 'users.id', '=', 'salary_years.id_user')
+                ->join('statuses', 'users.id_status', '=', 'statuses.id')
+                ->join('depts', 'users.id_dept', '=', 'depts.id')
+                ->join('jobs', 'users.id_job', '=', 'jobs.id')
+                ->join('grades', 'users.id_grade', '=', 'grades.id')
+                ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
+                ->where('users.id_status', $selectedStatus)
+                ->whereYear('salary_months.date', $selectedYear)
+                ->whereMonth('salary_months.date', $selectedMonth)
+                ->get();
+        }
 
-        // // percabangan untuk filter bulan
-        // if (request('filter_month') != null) {
-        //     if (request('filter_month') != 'all') {
-        //         // Filter by the selected month
-        //         $selectedMonth = request('filter_month');
-        //         $query->wheremonth('date', $selectedMonth);
-        //     }
-        // } else {
-        //     // untuk menetapkan bulan sekarang saat membuka halaman
-        //     $selectedMonth = request('filter_month', Carbon::now()->month);
-        //     $query->whereMonth('date', $selectedMonth);
-        // }
-
-        // // Query the salary_months based on the selected year, month, and status
-        // $salary_months = $query->get();
-
-        // return view('salary_month.index', compact(
-        //     'title', 'statuses', 'years', 'months', 'salary_months', 'selectedStatus', 'selectedYear', 'selectedMonth', 'data'
-        // ));
-
+        dd($selectedYear, $selectedMonth, $selectedStatus, $data);
 
         return view('salary_month.index', compact(
-            'title', 'selectedStatus', 'data', 'statuses', 'selectedYear', 'years', 'selectedMonth', 'months',
+            'title', 'selectedStatus', 'data', 'statuses', 'selectedYear', 'years', 'selectedMonth', 'months', 'statuses_id',
         ));
     }
 
@@ -161,54 +147,36 @@ class SalaryMonthController extends Controller
                     ->join('depts', 'users.id_dept', '=', 'depts.id')
                     ->join('jobs', 'users.id_job', '=', 'jobs.id')
                     ->join('grades', 'users.id_grade', '=', 'grades.id')
+                    ->where('users.id_status', $statusFilter)
                     ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
                     ->get();
 
-            } else {
-                echo 'isi data tahun dulu';
             }
         } else {
-            echo 'Data tahun belum diinput';
+            $data = DB::table('users')
+                ->join('statuses', 'users.id_status', '=', 'statuses.id')
+                ->join('depts', 'users.id_dept', '=', 'depts.id')
+                ->join('jobs', 'users.id_job', '=', 'jobs.id')
+                ->join('grades', 'users.id_grade', '=', 'grades.id')
+                ->join('salary_grades', 'grades.id', '=', 'salary_grades.id_grade')
+                ->join('salary_years', 'salary_years.id_user', '=', 'users.id')
+                ->where('users.id_status', $statusFilter)
+                ->select('users.*', 'salary_grades.*', 'grades.*', 'statuses.*', 'depts.*', 'jobs.*', 'salary_grades.id as id_salary_grade', 'users.id as id_user', 'salary_years.id as id_salary_year')
+                ->get();
         }
-
-        // dd($data);
-
-        // // Check if all filters are provided, then fetch data
-        // $salary_years = [];
-        // if ($statusFilter !== null && $yearFilter !== null && $monthFilter !== null) {
-        //     $salary_years = SalaryYear::when($statusFilter, function ($query) use ($statusFilter) {
-        //         $query->whereHas('user', function ($subquery) use ($statusFilter) {
-        //             $subquery->where('id_status', $statusFilter);
-        //         });
-        //     })
-        //         ->when($yearFilter, function ($query) use ($yearFilter) {
-        //             $query->where('year', $yearFilter);
-        //         })
-        //         ->with('user')
-        //         ->get();
-
-        //     // Filter out the years that already have data for the selected month
-        //     $salary_years = $salary_years->filter(function ($salary_year) use ($monthFilter) {
-        //         return !$salary_year->hasSalaryForMonth($salary_year->year, $monthFilter);
-        //     });
-        // }
-
 
         return view('salary_month.create', compact('title', 'statuses', 'years', 'statusFilter', 'yearFilter', 'monthFilter', 'data'));
     }
 
     public function store(Request $request)
     {
-        // Mengambil tahun dan bulan dari filter
     $idFilter = $request->input('id_salary_month');
     $yearFilter = $request->input('year');
     $monthFilter = $request->input('month');
 
     foreach ($request->input('id_user') as $key => $id_user) {
-        // Menggabungkan tahun, bulan, dan tanggal tertentu (misalnya, tanggal 13)
         $date = $yearFilter . '-' . $monthFilter . '-13';
 
-        // Menggunakan null coalescing operator (??) untuk memastikan nilai default jika tidak ada
         $rate_salary = $request->input('rate_salary')[$key] ?? 0;
         $ability = $request->input('ability')[$key] ?? 0;
         $fungtional_alw = $request->input('fungtional_alw')[$key] ?? 0;
@@ -231,28 +199,10 @@ class SalaryMonthController extends Controller
         $cooperative = $request->input('cooperative')[$key] ?? 0;
         $total_ben_ded = $request->input('total_ben_ded')[$key] ?? 0;
 
-        // Hitungan untuk mencari totalan
         $gross_sal = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw + $skill_alw + $telephone_alw +
             $adjustment + $total_overtime + $thr + $bonus + $incentive;
         $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative;
         $net_salary = ($gross_sal + $total_ben) - ($total_deduction + $total_ben_ded);
-
-        // SalaryMonth::create([
-        //     'id_salary_year' => $request->input('id_salary_year')[$key] ?? null,
-        //     'date' => $date,
-        //     'hour_call' => $request->input('hour_call')[$key] ?? 0,
-        //     'total_overtime' => $total_overtime,
-        //     'thr' => $thr,
-        //     'bonus' => $bonus,
-        //     'incentive' => $incentive,
-        //     'union' => $union,
-        //     'absent' => $absent,
-        //     'electricity' => $electricity,
-        //     'cooperative' => $cooperative,
-        //     'gross_salary' => $gross_sal,
-        //     'total_deduction' => $total_deduction,
-        //     'net_salary' => $net_salary,
-        // ]);
 
         SalaryMonth::updateOrCreate(
             [
@@ -277,7 +227,6 @@ class SalaryMonthController extends Controller
         );
     }
 
-        // Redirect or return response as needed
         return redirect()->route('salary-month')->with('success', 'Salary data stored successfully');
     }
 
@@ -388,9 +337,8 @@ class SalaryMonthController extends Controller
     public function export(Request $request)
     {
         $date = $request->input('date');
-        return (new SalaryMonthExport($date))->download($date . '_salary_month.xlsx');
-
-        // return Excel::download(new SalaryMonthExport, 'salary_month.xlsx');
+        $status = $request->input('filter_status');
+        return (new SalaryMonthExport($date, $status))->download($date . '_salary_month_' . $status .'.xlsx');
     }
 
     public function import()

@@ -14,7 +14,6 @@
                         <div class="row">
                             <div class="col-8">
                                 <a href="{{ url('/salary-month/filter') }}" class="btn btn-info btn-sm">Input Data</a>
-                                {{-- <a href="{{ url('/salarygrade/create') }}" class="btn btn-warning btn-sm">Edit Data</a> --}}
                                 <button type="button" class="btn btn-warning btn-sm" id="editButton">Edit Data</button>
                                 <button type="button" class="btn btn-warning btn-sm" id="chooseButton"
                                     style="display: none;">Choose Data</button>
@@ -36,14 +35,9 @@
                                     <div class="row">
                                         <div class="col pe-0">
                                             <select class="form-select form-select-sm" name="filter_status">
-                                                <option value="" {{ $selectedStatus == 'all' ? 'selected' : '' }}>
-                                                    Show All Status
-                                                </option>
-                                                @foreach ($statuses as $status)
-                                                    <option value="{{ $status }}"
-                                                        {{ $selectedStatus == $status ? 'selected' : '' }}>
-                                                        {{ $status }}
-                                                    </option>
+                                                <option selected disabled>-- Pilih Status --</option>
+                                                @foreach ($statuses_id as $status)
+                                                    <option value="{{ $status->id }}">{{ $status->name_status }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -85,15 +79,11 @@
                                 class="table table-sm table-striped table-hover dtTable100 align-items-center compact small-tbl">
                                 <thead class="bg-thead">
                                     <tr>
-                                        {{-- <th rowspan="2" class="text-center">No</th> --}}
                                         <th colspan="6" class="text-center p-0">Employee Identity</th>
                                         <th colspan="5" class="text-center p-0">Salary Components</th>
                                         <th colspan="4" class="text-center p-0">Deduction</th>
-                                        {{-- <th rowspan="2" class="text-center">Allocation</th> --}}
                                         <th rowspan="2" class="text-center">Month / Year</th>
-                                        <th rowspan="2" style="display: none;"><input type="checkbox" id="checkAll">
-                                        </th>
-                                        {{-- <th rowspan="2" class="text-center">Action</th> --}}
+                                        <th rowspan="2" style="display: none;"><input type="checkbox" id="checkAll"></th>
                                     </tr>
                                     <tr>
                                         <th style="background-color: #1A73E8;color: white;">Emp Code</th>
@@ -111,14 +101,11 @@
                                         <th>Absent</th>
                                         <th>Electricity</th>
                                         <th>Cooperative</th>
-                                        {{-- <th>Tanggal Pengisian</th> --}}
-                                        {{-- <th>Action</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($data as $key => $sm)
                                         <tr>
-                                            {{-- <td>{{ $key+1 }}</td> --}}
                                             <td class="text-nowrap text-end">{{ $sm->nik }}</td>
                                             <td>{{ $sm->name }}</td>
                                             <td>{{ $sm->name_status }}</td>
@@ -126,7 +113,11 @@
                                             <td>{{ $sm->name_job }}</td>
                                             <td>{{ $sm->name_grade }}</td>
                                             <td class="text-end">
-                                                {{ $sm->hour_call }} h
+                                                @if ($sm->hour_call == null || $sm->hour_call == 0)
+                                                    -
+                                                @else
+                                                    {{ $sm->hour_call }} h
+                                                @endif
                                             </td>
                                             <td class="text-end">
                                                 {{ $sm->total_overtime != 0 ? number_format($sm->total_overtime, 0, ',', '.') : '-' }}
@@ -152,14 +143,6 @@
                                             <td class="text-end">
                                                 {{ $sm->cooperative != 0 ? number_format($sm->cooperative, 0, ',', '.') : '-' }}
                                             </td>
-                                            {{-- <td>@php
-                                                $allocations = json_decode($sm->allocation);
-                                                if (is_array($allocations)) {
-                                                    echo implode(', ', $allocations);
-                                                } else {
-                                                    echo $allocations;
-                                                }
-                                            @endphp</td> --}}
                                             <td class="text-end">{{ date('M/Y', strtotime($sm->date)) }}</td>
                                             <td style="display: none;"><input type="checkbox" name="selected[]"
                                                     value="{{ $sm->id_salary_month }}"></td>
@@ -208,6 +191,13 @@
                             <div class="card-body py-2">
                                 <form action="{{ route('salary-month.export') }}" method="POST">
                                     @csrf
+                                    <select class="form-select form-select-sm" name="filter_status">
+                                        <option selected disabled>-- Pilih Status --</option>
+                                        @foreach ($statuses_id as $status)
+                                            <option value="{{ $status->id }}">{{ $status->name_status }}</option>
+                                        @endforeach
+                                    </select>
+                                    <hr>
                                     <input type="date" name="date" class="form-control">
                                     <br>
                                     <button class="btn btn-success">Import Data</button>
@@ -219,7 +209,6 @@
             </div>
         </div>
 
-        {{-- Script untuk menangani tombol dan check dinamis --}}
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const editButton = document.getElementById('editButton');
@@ -230,7 +219,6 @@
                 const hiddenTh = document.querySelector('th[style="display: none;"]');
                 const hiddenTd = document.querySelectorAll('td[style="display: none;"]');
 
-                // Handle event "Check All"
                 checkAll.addEventListener('change', function() {
                     checkboxes.forEach(checkbox => {
                         checkbox.checked = checkAll.checked;
@@ -263,11 +251,6 @@
                 });
 
                 chooseButton.addEventListener('click', function() {
-                    // const selectedIds = Array.from(checkboxes)
-                    //     .filter(checkbox => checkbox.checked)
-                    //     .map(checkbox => `ids[]=${checkbox.value}`)
-                    //     .join('&');
-
                     const selectedIds = Array.from(checkboxes)
                         .filter(checkbox => checkbox.checked)
                         .map(checkbox => checkbox.value)
@@ -278,9 +261,6 @@
                     } else {
                         alert('No data selected for editing.');
                     }
-
-                    // Redirect ke halaman edit dengan parameter ids yang dipilih
-                    // window.location.href = `/salary-month/edit?${selectedIds}`;
                 });
 
             });

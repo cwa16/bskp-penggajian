@@ -18,7 +18,7 @@
                                     <span class="btn-inner--text"> Export</span>
                                 </button>
                             </div>
-                            <div class="col-2" style="margin-right: 500px; margin-bottom: 20px;">
+                            <div class="col-2" style="margin-right: 800px; margin-bottom: 20px;">
                                 <div class="card">
                                     <div class="card-body">
                                         <table>

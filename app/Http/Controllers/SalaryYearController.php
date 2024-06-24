@@ -74,19 +74,39 @@ class SalaryYearController extends Controller
         $allowedStatusNames = ['Assistant trainee', 'Manager', 'Monthly', 'Staff'];
         $selectedStatus = request()->input('id_status');
 
-        if ($checkYear) {
-            $users = DB::table('users')
-                ->join('statuses', 'users.id_status', '=', 'statuses.id')
-                ->join('depts', 'users.id_dept', '=', 'depts.id')
-                ->join('jobs', 'users.id_job', '=', 'jobs.id')
-                ->join('grades', 'users.id_grade', '=', 'grades.id')
-                ->join('salary_grades', 'grades.id', '=', 'salary_grades.id_grade')
-                ->join('salary_years', 'salary_years.id_user', '=', 'users.id')
-                ->where('users.id_status', $selectedStatus)
-                ->where('salary_years.year', $currentYear)
-                ->where('salary_years.ability', 0)
-                ->select('users.*', 'salary_grades.*', 'grades.*', 'statuses.*', 'depts.*', 'jobs.*', 'salary_grades.id as id_salary_grade', 'users.id as id_user')
-                ->get();
+        $checkStatus = DB::table('salary_months')
+            ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+            ->join('users', 'users.id', '=', 'salary_years.id_user')
+            ->join('statuses', 'users.id_status', '=', 'statuses.id')
+            ->where('users.id_status', $selectedStatus)
+            ->first();
+
+        if ($checkStatus != null) {
+            if ($checkYear) {
+                $users = DB::table('users')
+                    ->join('statuses', 'users.id_status', '=', 'statuses.id')
+                    ->join('depts', 'users.id_dept', '=', 'depts.id')
+                    ->join('jobs', 'users.id_job', '=', 'jobs.id')
+                    ->join('grades', 'users.id_grade', '=', 'grades.id')
+                    ->join('salary_grades', 'grades.id', '=', 'salary_grades.id_grade')
+                    ->join('salary_years', 'salary_years.id_user', '=', 'users.id')
+                    ->where('users.id_status', $selectedStatus)
+                    ->where('salary_years.year', $currentYear)
+                    ->where('salary_years.ability', 0)
+                    ->select('users.*', 'salary_grades.*', 'grades.*', 'statuses.*', 'depts.*', 'jobs.*', 'salary_grades.id as id_salary_grade', 'users.id as id_user')
+                    ->get();
+            } else {
+                $users = DB::table('users')
+                    ->join('statuses', 'users.id_status', '=', 'statuses.id')
+                    ->join('depts', 'users.id_dept', '=', 'depts.id')
+                    ->join('jobs', 'users.id_job', '=', 'jobs.id')
+                    ->join('grades', 'users.id_grade', '=', 'grades.id')
+                    ->join('salary_grades', 'grades.id', '=', 'salary_grades.id_grade')
+                    ->join('salary_years', 'salary_years.id_user', '=', 'users.id')
+                    ->where('users.id_status', $selectedStatus)
+                    ->select('users.*', 'salary_grades.*', 'grades.*', 'statuses.*', 'depts.*', 'jobs.*', 'salary_grades.id as id_salary_grade', 'users.id as id_user')
+                    ->get();
+            }
         } else {
             $users = DB::table('users')
                 ->join('statuses', 'users.id_status', '=', 'statuses.id')
@@ -94,11 +114,12 @@ class SalaryYearController extends Controller
                 ->join('jobs', 'users.id_job', '=', 'jobs.id')
                 ->join('grades', 'users.id_grade', '=', 'grades.id')
                 ->join('salary_grades', 'grades.id', '=', 'salary_grades.id_grade')
-                ->join('salary_years', 'salary_years.id_user', '=', 'users.id')
                 ->where('users.id_status', $selectedStatus)
                 ->select('users.*', 'salary_grades.*', 'grades.*', 'statuses.*', 'depts.*', 'jobs.*', 'salary_grades.id as id_salary_grade', 'users.id as id_user')
                 ->get();
         }
+
+
 
         return view('salary_year.create', compact('title', 'users', 'statuses', 'selectedStatus', 'currentYear'));
     }
