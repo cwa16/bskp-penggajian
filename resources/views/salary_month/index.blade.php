@@ -36,6 +36,7 @@
                                         <div class="col pe-0">
                                             <select class="form-select form-select-sm" name="filter_status">
                                                 <option selected disabled>-- Pilih Status --</option>
+                                                    <option value="All Status">All Status</option>
                                                 @foreach ($statuses_id as $status)
                                                     <option value="{{ $status->id }}">{{ $status->name_status }}</option>
                                                 @endforeach
