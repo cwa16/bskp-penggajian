@@ -148,8 +148,6 @@ class SalaryMonthController extends Controller
                     ->where('salary_months.thr', 0)
                     ->get();
 
-                echo 'update data kosong';
-
             } elseif ($checkYear != null && $checkMonth == null) {
                 $data = DB::table('salary_months')
                     ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
@@ -176,6 +174,8 @@ class SalaryMonthController extends Controller
                 ->select('users.*', 'salary_grades.*', 'grades.*', 'statuses.*', 'depts.*', 'jobs.*', 'salary_grades.id as id_salary_grade', 'users.id as id_user', 'salary_years.id as id_salary_year')
                 ->get();
         }
+
+        // dd($data);
 
         return view('salary_month.create', compact('title', 'statuses', 'years', 'statusFilter', 'yearFilter', 'monthFilter', 'data'));
     }
@@ -218,11 +218,11 @@ class SalaryMonthController extends Controller
 
         SalaryMonth::updateOrCreate(
             [
-                'id' => $request->input('id_salary_month')[$key] ?? null,
+                'id' => $request->input('id_salary_month')[$key],
+                'date' => $request->input('date_input')[$key],
             ],
             [
                 'id_salary_year' => $request->input('id_salary_year')[$key] ?? null,
-                'date' => $date,
                 'hour_call' => $request->input('hour_call')[$key] ?? 0,
                 'total_overtime' => $total_overtime,
                 'thr' => $thr,

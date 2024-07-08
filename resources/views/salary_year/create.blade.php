@@ -70,42 +70,42 @@
                                                     <input type="hidden" name="rate_salary[]" value="{{ $user->rate_salary ?? '' }}">
 
                                                     <div class="input-group input-group-outline">
-                                                        <input type="number" class="form-control form-control-sm number-format" style="width: 120px" name="ability[{{ $key }}]" placeholder="Enter the ability">
+                                                        <input type="text" class="form-control form-control-sm number-format" style="width: 120px" name="ability[]" placeholder="Enter the ability">
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="input-group input-group-outline">
-                                                        <input type="number" class="form-control form-control-sm number-format" style="width: 120px" name="fungtional_alw[{{ $key }}]" placeholder="Enter the fungtional allowance">
+                                                        <input type="number" class="form-control form-control-sm number-format" style="width: 120px" name="fungtional_alw[]" placeholder="Enter the fungtional allowance">
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="input-group input-group-outline">
-                                                        <input type="number" class="form-control form-control-sm number-format" style="width: 120px" name="family_alw[{{ $key }}]" placeholder="Enter the family allowance">
+                                                        <input type="number" class="form-control form-control-sm number-format" style="width: 120px" name="family_alw[]" placeholder="Enter the family allowance">
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="input-group input-group-outline">
-                                                        <input type="number" class="form-control form-control-sm number-format" style="width: 120px" name="transport_alw[{{ $key }}]" placeholder="Enter the transport allowance">
+                                                        <input type="number" class="form-control form-control-sm number-format" style="width: 120px" name="transport_alw[]" placeholder="Enter the transport allowance">
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="input-group input-group-outline">
-                                                        <input type="number" class="form-control form-control-sm number-format" style="width: 120px" name="telephone_alw[{{ $key }}]" placeholder="Enter the telephone allowance">
+                                                        <input type="number" class="form-control form-control-sm number-format" style="width: 120px" name="telephone_alw[]" placeholder="Enter the telephone allowance">
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="input-group input-group-outline">
-                                                        <input type="number" class="form-control form-control-sm number-format" style="width: 120px" name="skill_alw[{{ $key }}]" placeholder="Enter the skill allowance">
+                                                        <input type="number" class="form-control form-control-sm number-format" style="width: 120px" name="skill_alw[]" placeholder="Enter the skill allowance">
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="input-group input-group-outline">
-                                                        <input type="number" class="form-control form-control-sm number-format" style="width: 120px" name="adjustment[{{ $key }}]" placeholder="Enter the adjustment">
+                                                        <input type="number" class="form-control form-control-sm number-format" style="width: 120px" name="adjustment[]" placeholder="Enter the adjustment">
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="input-group input-group-outline">
-                                                        <select class="form-select form-select-sm allocation" name="allocation[{{ $key }}][]" style="min-height: 20px;width: 100% !important;padding: 0 0 0 0;" data-placeholder="Select allocation" multiple="multiple">
+                                                        <select class="form-select form-select-sm allocation" name="allocation[]" style="min-height: 20px;width: 100% !important;padding: 0 0 0 0;" data-placeholder="Select allocation" multiple="multiple">
                                                             <option value="A">A</option>
                                                             <option value="B">B</option>
                                                             <option value="C">C</option>

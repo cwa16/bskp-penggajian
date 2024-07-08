@@ -74,12 +74,12 @@ class SalaryYearController extends Controller
         $allowedStatusNames = ['Assistant trainee', 'Manager', 'Monthly', 'Staff'];
         $selectedStatus = request()->input('id_status');
 
-        $checkStatus = DB::table('salary_months')
-            ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+        $checkStatus = DB::table('salary_years')
             ->join('users', 'users.id', '=', 'salary_years.id_user')
             ->join('statuses', 'users.id_status', '=', 'statuses.id')
             ->where('users.id_status', $selectedStatus)
             ->first();
+
 
         if ($checkStatus != null) {
             if ($checkYear) {
@@ -95,6 +95,7 @@ class SalaryYearController extends Controller
                     ->where('salary_years.ability', 0)
                     ->select('users.*', 'salary_grades.*', 'grades.*', 'statuses.*', 'depts.*', 'jobs.*', 'salary_grades.id as id_salary_grade', 'users.id as id_user')
                     ->get();
+                    // dd($users);
             } else {
                 $users = DB::table('users')
                     ->join('statuses', 'users.id_status', '=', 'statuses.id')
@@ -118,8 +119,6 @@ class SalaryYearController extends Controller
                 ->select('users.*', 'salary_grades.*', 'grades.*', 'statuses.*', 'depts.*', 'jobs.*', 'salary_grades.id as id_salary_grade', 'users.id as id_user')
                 ->get();
         }
-
-
 
         return view('salary_year.create', compact('title', 'users', 'statuses', 'selectedStatus', 'currentYear'));
     }

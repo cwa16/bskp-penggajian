@@ -7,9 +7,11 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use DB;
 
-class SalaryMonthExport implements FromCollection, WithHeadings
+class SalaryMonthExport implements FromCollection, WithHeadings, WithStyles
 {
     use Exportable;
 
@@ -29,11 +31,6 @@ class SalaryMonthExport implements FromCollection, WithHeadings
             ->select('salary_months.id', 'users.nik', 'users.name', 'salary_months.hour_call', 'salary_months.thr', 'salary_months.bonus', 'salary_months.incentive', 'salary_months.union', 'salary_months.absent', 'salary_months.electricity', 'salary_months.cooperative', 'salary_months.date')
             ->whereDate('salary_months.date', $this->date)
             ->where('users.id_status', $this->status);
-
-        // $query = SalaryMonth::select([
-        //         'id', 'hour_call', 'total_overtime', 'thr', 'bonus', 'incentive', 'union', 'absent', 'electricity', 'cooperative'
-        //     ])
-        //     ->whereDate('date', $this->date);
 
         return $query->get();
     }
@@ -56,8 +53,11 @@ class SalaryMonthExport implements FromCollection, WithHeadings
         ];
     }
 
-    // public function query()
-    // {
-    //     return SalaryMonth::query()->whereDate('date', $this->date);
-    // }
+    public function styles(Worksheet $sheet)
+    {
+        $sheet->freezePane('A2');
+
+        return [];
+    }
+
 }

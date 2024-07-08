@@ -77,7 +77,7 @@
                                                             <td>
                                                                 {{-- INPUTAN HIDDEN --}}
                                                                 <input type="hidden" name="id_salary_month[]"
-                                                                    value="{{ $sy->id_user }}">
+                                                                    value="{{ $sy->id_salary_month }}">
 
                                                                 <input type="hidden" name="id_user[]"
                                                                     value="{{ $sy->id_user }}">
@@ -228,6 +228,7 @@
                                                                 </div>
                                                             </td> --}}
                                                             <td class="text-end">
+                                                                <input type="hidden" name="date_input[]" id="" value="{{ $yearFilter . '-' . $monthFilter . '-13' }}">
                                                                 {{ $monthFilter ? date('M/Y', strtotime($yearFilter . '-' . $monthFilter . '-01')) : '' }}
                                                             </td>
                                                         </tr>
