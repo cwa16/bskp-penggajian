@@ -68,12 +68,14 @@
 </script>
 <script>
     $(document).ready(function() {
-        $('.dtTableFix3').DataTable({
+        var table = $('.dtTableFix3').DataTable({
             "lengthChange": true,
             "autoWidth": true,
+            "scrollX": true,
+            "scrollY": '570px',
+            "paging": false,
             "initComplete": function(settings, json) {
-                $(".dtTableFix3").wrap(
-                    "<div style='overflow:auto; width:100%;position:relative;'></div>");
+                $(".dtTableFix3").wrap("<div width:100%;position:relative;'></div>");
             },
             "fixedColumns": {
                 leftColumns: 3,
@@ -82,10 +84,16 @@
             "lengthMenu": [
                 [10, 50, 100, 200, -1],
                 [10, 50, 100, 200, "All"]
-            ], // Customize the entries per page
+            ],
             "pageLength": -1
         });
-    })
+
+        $('a.toggle-vis').on('click', function(e) {
+            e.preventDefault();
+            var column = table.column($(this).attr('data-column'));
+            column.visible(!column.visible());
+        });
+    });
 </script>
 <script>
     $(document).ready(function() {

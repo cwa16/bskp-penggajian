@@ -90,6 +90,10 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($salary_years as $key => $sy)
+                                    {{-- @php
+                                        $totalFamilyAlw = 0;
+                                        $totalFamilyAlw += $sy->family_alw;
+                                    @endphp --}}
                                         <tr>
                                             <td class="text-nowrap text-end">{{ $sy->user->nik }}</td>
                                             <td>{{ $sy->user->name }}</td>
@@ -141,6 +145,23 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="6" style="background-color: #1A73E8;color: white;"></td>
+                                        <td></td>
+                                        <td class="text-end">{{ number_format($totalAbility, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalFungtionalAlw, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalFamilyAlw, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalTransportAlw, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalTelephoneAlw, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalSkillAlw, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalAdjustment, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalBpjs, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalJamsostek, 0, ',', '.') }}</td>
+                                        <td class="text-end">0</td>
+                                        <td style="background-color: #1A73E8;color: white;"></td>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>

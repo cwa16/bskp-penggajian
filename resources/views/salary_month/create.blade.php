@@ -77,7 +77,7 @@
                                                             <td>
                                                                 {{-- INPUTAN HIDDEN --}}
                                                                 <input type="hidden" name="id_salary_month[]"
-                                                                    value="{{ $sy->id_salary_month }}">
+                                                                    value="{{ $sy->id_salary_month ?? '' }}">
 
                                                                 <input type="hidden" name="id_user[]"
                                                                     value="{{ $sy->id_user }}">
@@ -103,8 +103,7 @@
                                                                 <input type="hidden"
                                                                     name="transport_alw[{{ $key }}]"
                                                                     value="{{ $sy->transport_alw ?? '' }}">
-                                                                <input type="hidden"
-                                                                    name="skill_alw[{{ $key }}]"
+                                                                <input type="hidden" name="skill_alw[{{ $key }}]"
                                                                     value="{{ $sy->skill_alw ?? '' }}">
                                                                 <input type="hidden"
                                                                     name="telephone_alw[{{ $key }}]"
@@ -149,10 +148,12 @@
                                                             <td>
                                                                 <div class="input-group input-group-outline">
                                                                     <input type="number"
-                                                                        class="form-control form-control-sm"
+                                                                        class="form-control form-control-sm "
                                                                         style="width: 120px"
                                                                         name="thr[{{ $key }}]"
-                                                                        placeholder="Enter the THR">
+                                                                        placeholder="Enter the THR"
+                                                                        {{-- oninput="formatCurrency(this)" --}}
+                                                                        >
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -228,7 +229,8 @@
                                                                 </div>
                                                             </td> --}}
                                                             <td class="text-end">
-                                                                <input type="hidden" name="date_input[]" id="" value="{{ $yearFilter . '-' . $monthFilter . '-13' }}">
+                                                                <input type="hidden" name="date_input[]" id=""
+                                                                    value="{{ $yearFilter . '-' . $monthFilter . '-13' }}">
                                                                 {{ $monthFilter ? date('M/Y', strtotime($yearFilter . '-' . $monthFilter . '-01')) : '' }}
                                                             </td>
                                                         </tr>
@@ -249,7 +251,17 @@
             </div>
 
             <script>
-                document.addEventListener('DOMContentLoaded', function () {
+                function formatCurrency(input) {
+                    // Remove any non-digit characters
+                    let value = input.value.replace(/[^0-9.]/g, '');
+                    // Format the number with commas
+                    input.value = new Intl.NumberFormat().format(value);
+                }
+            </script>
+
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
                     // Ambil semua elemen input dan select dalam form
                     let inputs = document.querySelectorAll('.salary-month-form input, .salary-month-form select');
 
@@ -261,7 +273,7 @@
                     // Fungsi untuk berpindah ke elemen berikutnya atau sebelumnya berdasarkan baris dan kolom
                     function moveFocus(currentIndex, direction) {
                         const cols = 8; // Jumlah kolom yang memiliki input
-                        const rows = 27;
+                        const rows = 28;
                         let newIndex;
 
                         if (direction === 'ArrowDown') {
@@ -280,8 +292,8 @@
                     }
 
                     // Tambahkan event listener pada setiap input dan select
-                    inputs.forEach(function (input) {
-                        input.addEventListener('keydown', function (e) {
+                    inputs.forEach(function(input) {
+                        input.addEventListener('keydown', function(e) {
                             const currentIndex = findIndex(e.target);
                             if (['ArrowDown', 'ArrowUp', 'ArrowRight', 'ArrowLeft'].includes(e.key)) {
                                 e.preventDefault();

@@ -132,6 +132,8 @@ class SalaryMonthController extends Controller
             ->where('users.id_status', $statusFilter)
             ->first();
 
+            // dd($checkYear, $checkMonth);
+
         if ($checkStatus != null) {
             if ($checkYear != null && $checkMonth != null) {
                 $data = DB::table('salary_months')
@@ -149,16 +151,27 @@ class SalaryMonthController extends Controller
                     ->get();
 
             } elseif ($checkYear != null && $checkMonth == null) {
-                $data = DB::table('salary_months')
-                    ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-                    ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
-                    ->join('users', 'users.id', '=', 'salary_years.id_user')
+                // $data = DB::table('salary_months')
+                //     ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                //     ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
+                //     ->join('users', 'users.id', '=', 'salary_years.id_user')
+                //     ->join('statuses', 'users.id_status', '=', 'statuses.id')
+                //     ->join('depts', 'users.id_dept', '=', 'depts.id')
+                //     ->join('jobs', 'users.id_job', '=', 'jobs.id')
+                //     ->join('grades', 'users.id_grade', '=', 'grades.id')
+                //     ->where('users.id_status', $statusFilter)
+                //     ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
+                //     ->get();
+
+                $data = DB::table('users')
                     ->join('statuses', 'users.id_status', '=', 'statuses.id')
                     ->join('depts', 'users.id_dept', '=', 'depts.id')
                     ->join('jobs', 'users.id_job', '=', 'jobs.id')
                     ->join('grades', 'users.id_grade', '=', 'grades.id')
+                    ->join('salary_grades', 'grades.id', '=', 'salary_grades.id_grade')
+                    ->join('salary_years', 'salary_years.id_user', '=', 'users.id')
                     ->where('users.id_status', $statusFilter)
-                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
+                    ->select('users.*', 'salary_grades.*', 'grades.*', 'statuses.*', 'depts.*', 'jobs.*', 'salary_grades.id as id_salary_grade', 'users.id as id_user', 'salary_years.id as id_salary_year')
                     ->get();
 
             }
@@ -179,6 +192,83 @@ class SalaryMonthController extends Controller
 
         return view('salary_month.create', compact('title', 'statuses', 'years', 'statusFilter', 'yearFilter', 'monthFilter', 'data'));
     }
+
+    // public function store(Request $request)
+    // {
+    //     $idFilter = $request->input('id_salary_month');
+    //     $yearFilter = $request->input('year');
+    //     $monthFilter = $request->input('month');
+
+    //     // Pastikan semua array memiliki jumlah elemen yang sama
+    //     $count = count($request->input('id_user'));
+    //     $arrays = [
+    //         'id_salary_month', 'id_salary_grade', 'id_salary_year', 'rate_salary', 'ability', 'fungtional_alw',
+    //         'family_alw', 'transport_alw', 'skill_alw', 'telephone_alw', 'adjustment', 'total_overtime',
+    //         'thr', 'bonus', 'incentive', 'total_ben', 'bpjs', 'jamsostek', 'union', 'absent',
+    //         'electricity', 'cooperative', 'total_ben_ded', 'date_input', 'hour_call'
+    //     ];
+
+    //     foreach ($arrays as $array) {
+    //         if (count($request->input($array)) != $count) {
+    //             return redirect()->back()->withErrors(['msg' => "Array length mismatch for {$array}"]);
+    //         }
+    //     }
+
+    //     foreach ($request->input('id_user') as $key => $id_user) {
+    //         $date = $yearFilter . '-' . $monthFilter . '-13';
+
+    //         $rate_salary = $request->input('rate_salary')[$key] ?? 0;
+    //         $ability = $request->input('ability')[$key] ?? 0;
+    //         $fungtional_alw = $request->input('fungtional_alw')[$key] ?? 0;
+    //         $family_alw = $request->input('family_alw')[$key] ?? 0;
+    //         $transport_alw = $request->input('transport_alw')[$key] ?? 0;
+    //         $skill_alw = $request->input('skill_alw')[$key] ?? 0;
+    //         $telephone_alw = $request->input('telephone_alw')[$key] ?? 0;
+    //         $adjustment = $request->input('adjustment')[$key] ?? 0;
+    //         $total_overtime = $request->input('total_overtime')[$key] ?? 0;
+    //         $thr = $request->input('thr')[$key] ?? 0;
+    //         $bonus = $request->input('bonus')[$key] ?? 0;
+    //         $incentive = $request->input('incentive')[$key] ?? 0;
+    //         $total_ben = $request->input('total_ben')[$key] ?? 0;
+
+    //         $bpjs = $request->input('bpjs')[$key] ?? 0;
+    //         $jamsostek = $request->input('jamsostek')[$key] ?? 0;
+    //         $union = $request->input('union')[$key] ?? 0;
+    //         $absent = $request->input('absent')[$key] ?? 0;
+    //         $electricity = $request->input('electricity')[$key] ?? 0;
+    //         $cooperative = $request->input('cooperative')[$key] ?? 0;
+    //         $total_ben_ded = $request->input('total_ben_ded')[$key] ?? 0;
+
+    //         $gross_sal = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw + $skill_alw + $telephone_alw +
+    //             $adjustment + $total_overtime + $thr + $bonus + $incentive;
+    //         $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative;
+    //         $net_salary = ($gross_sal + $total_ben) - ($total_deduction + $total_ben_ded);
+
+    //         SalaryMonth::updateOrCreate(
+    //             [
+    //                 'id' => $request->input('id_salary_month')[$key],
+    //                 'date' => $request->input('date_input')[$key],
+    //             ],
+    //             [
+    //                 'id_salary_year' => $request->input('id_salary_year')[$key] ?? 0,
+    //                 'hour_call' => $request->input('hour_call')[$key] ?? 0,
+    //                 'total_overtime' => $total_overtime,
+    //                 'thr' => $thr,
+    //                 'bonus' => $bonus,
+    //                 'incentive' => $incentive,
+    //                 'union' => $union,
+    //                 'absent' => $absent,
+    //                 'electricity' => $electricity,
+    //                 'cooperative' => $cooperative,
+    //                 'gross_salary' => $gross_sal,
+    //                 'total_deduction' => $total_deduction,
+    //                 'net_salary' => $net_salary,
+    //             ]
+    //         );
+    //     }
+
+    //     return redirect()->route('salary-month')->with('success', 'Salary data stored successfully');
+    // }
 
     public function store(Request $request)
     {
@@ -222,7 +312,7 @@ class SalaryMonthController extends Controller
                 'date' => $request->input('date_input')[$key],
             ],
             [
-                'id_salary_year' => $request->input('id_salary_year')[$key] ?? null,
+                'id_salary_year' => $request->input('id_salary_year')[$key],
                 'hour_call' => $request->input('hour_call')[$key] ?? 0,
                 'total_overtime' => $total_overtime,
                 'thr' => $thr,

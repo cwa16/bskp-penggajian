@@ -45,10 +45,22 @@ class SalaryYearController extends Controller
 
         $salary_years = $query->get();
 
-        // dd($salary_years);
+        $totalAbility = $salary_years->sum('ability');
+        $totalFungtionalAlw = $salary_years->sum('fungtional_alw');
+        $totalFamilyAlw = $salary_years->sum('family_alw');
+        $totalTransportAlw = $salary_years->sum('transport_alw');
+        $totalTelephoneAlw = $salary_years->sum('telephone_alw');
+        $totalSkillAlw = $salary_years->sum('skill_alw');
+        $totalAdjustment = $salary_years->sum('adjustment');
+        $totalBpjs = $salary_years->sum('bpjs');
+        $totalJamsostek = $salary_years->sum('jamsostek');
 
-        return view('salary_year.index', compact('title', 'salary_years', 'years', 'statuses', 'selectedYear', 'selectedStatus'));
+        return view('salary_year.index', compact(
+            'title', 'salary_years', 'years', 'statuses', 'selectedYear', 'selectedStatus', 'totalFamilyAlw', 'totalAbility', 'totalFungtionalAlw',
+            'totalTransportAlw', 'totalTelephoneAlw', 'totalSkillAlw', 'totalAdjustment', 'totalBpjs', 'totalJamsostek'
+        ));
     }
+
     public function filter(){
         $title = 'Salary Per Year';
         $statuses = Status::all();
@@ -64,6 +76,7 @@ class SalaryYearController extends Controller
 
         return view('salary_year.filter', compact('title', 'statuses', 'selectedStatus'));
     }
+
     public function create()
     {
         $title = 'Salary Per Year';
@@ -80,7 +93,6 @@ class SalaryYearController extends Controller
             ->where('users.id_status', $selectedStatus)
             ->first();
 
-
         if ($checkStatus != null) {
             if ($checkYear) {
                 $users = DB::table('users')
@@ -92,9 +104,20 @@ class SalaryYearController extends Controller
                     ->join('salary_years', 'salary_years.id_user', '=', 'users.id')
                     ->where('users.id_status', $selectedStatus)
                     ->where('salary_years.year', $currentYear)
-                    ->where('salary_years.ability', 0)
-                    ->select('users.*', 'salary_grades.*', 'grades.*', 'statuses.*', 'depts.*', 'jobs.*', 'salary_grades.id as id_salary_grade', 'users.id as id_user')
+                    ->where(function ($query) {
+                        $query->where('salary_years.ability', 0)
+                            ->orWhere('salary_years.fungtional_alw', 0)
+                            ->orWhere('salary_years.family_alw', 0)
+                            ->orWhere('salary_years.transport_alw', 0)
+                            ->orWhere('salary_years.telephone_alw', 0)
+                            ->orWhere('salary_years.skill_alw', 0)
+                            ->orWhere('salary_years.adjustment', 0)
+                            ->orWhere('salary_years.bpjs', 0)
+                            ->orWhere('salary_years.jamsostek', 0);
+                    })
+                    ->select('users.*', 'salary_grades.*', 'salary_years.*', 'grades.*', 'statuses.*', 'depts.*', 'jobs.*', 'salary_grades.id as id_salary_grade', 'users.id as id_user')
                     ->get();
+
                     // dd($users);
             } else {
                 $users = DB::table('users')
@@ -122,6 +145,7 @@ class SalaryYearController extends Controller
 
         return view('salary_year.create', compact('title', 'users', 'statuses', 'selectedStatus', 'currentYear'));
     }
+
     public function store(Request $request)
     {
         foreach ($request->input('id_user') as $key => $value) {
@@ -132,15 +156,16 @@ class SalaryYearController extends Controller
                 'transport_alw', 'telephone_alw', 'skill_alw', 'adjustment'
             ]);
 
-            $ability = $input['ability'][$key] ?? 0;
-            $fungtional_alw = $input['fungtional_alw'][$key]  ?? 0;
-            $family_alw = $input['family_alw'][$key]  ?? 0;
-            $transport_alw = $input['transport_alw'][$key]  ?? 0;
-            $telephone_alw = $input['telephone_alw'][$key]  ?? 0;
-            $skill_alw = $input['skill_alw'][$key]  ?? 0;
-            $adjustment = $input['adjustment'][$key]  ?? 0;
+            $rate_salary = isset($input['rate_salary'][$key]) ? (int) str_replace(',', '', $input['rate_salary'][$key]) : 0;
+            $ability = isset($input['ability'][$key]) ? (int) str_replace(',', '', $input['ability'][$key]) : 0;
+            $fungtional_alw = isset($input['fungtional_alw'][$key]) ? (int) str_replace(',', '', $input['fungtional_alw'][$key]) : 0;
+            $family_alw = isset($input['family_alw'][$key]) ? (int) str_replace(',', '', $input['family_alw'][$key]) : 0;
+            $transport_alw = isset($input['transport_alw'][$key]) ? (int) str_replace(',', '', $input['transport_alw'][$key]) : 0;
+            $telephone_alw = isset($input['telephone_alw'][$key]) ? (int) str_replace(',', '', $input['telephone_alw'][$key]) : 0;
+            $skill_alw = isset($input['skill_alw'][$key]) ? (int) str_replace(',', '', $input['skill_alw'][$key]) : 0;
+            $adjustment = isset($input['adjustment'][$key]) ? (int) str_replace(',', '', $input['adjustment'][$key]) : 0;
 
-            $total = $input['rate_salary'][$key] +  $ability + $fungtional_alw + $family_alw + $transport_alw + $telephone_alw + $skill_alw;
+            $total = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw + $telephone_alw + $skill_alw;
 
             if ($total > 12000000) {
                 $bpjs = 12000000 * 0.01;
@@ -168,6 +193,7 @@ class SalaryYearController extends Controller
                 ],
                 [
                     'id_salary_grade' => $input['id_salary_grade'][$key],
+                    'rate_salary' => $rate_salary,
                     'ability' => $ability,
                     'fungtional_alw' => $fungtional_alw,
                     'family_alw' => $family_alw,

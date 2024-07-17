@@ -46,13 +46,12 @@
                                     <tr>
                                         <th style="background-color: #1A73E8;color: white;" rowspan="2" class="text-center">Year</th>
                                         <th style="background-color: #1A73E8;color: white;" rowspan="2" class="text-center">Month</th>
-                                        <th colspan="5" class="text-center p-0">Employee Identity</th>
+                                        <th colspan="4" class="text-center p-0">Employee Identity</th>
                                         <th colspan="13" class="text-center p-0">Salary Components</th>
                                         <th rowspan="2" class="text-center">Bruto Salary</th>
                                         <th colspan="7" class="text-center p-0">Deduction</th>
                                         <th rowspan="2" class="text-center">Total Deduction</th>
                                         <th rowspan="2" class="text-center">Nett Salary</th>
-                                        <th rowspan="2" class="text-center">Allocation</th>
                                         <th rowspan="2" class="text-center">Date Input</th>
                                     </tr>
                                     <tr>
@@ -60,7 +59,6 @@
                                         <th>Dept</th>
                                         <th>Job</th>
                                         <th>Grade</th>
-                                        <th>No Account</th>
                                         <th>Salary Grade</th>
                                         <th>Ability</th>
                                         <th>Fungtional All</th>
@@ -92,7 +90,6 @@
                                             <td>{{ $sal->name_dept }}</td>
                                             <td>{{ $sal->name_job }}</td>
                                             <td>{{ $sal->name_grade }}</td>
-                                            <td>-</td>
                                             <td class="text-end">
                                                 {{ $sal->rate_salary != 0 ? number_format($sal->rate_salary, 0, ',', '.') : '-' }}
                                             </td>
@@ -162,15 +159,6 @@
                                             <td class="text-end">
                                                 {{ $sal->net_salary != 0 ? number_format($sal->net_salary, 0, ',', '.') : '-' }}
                                             </td>
-
-                                            <td>@php
-                                                $allocations = json_decode($sal->allocation);
-                                                if (is_array($allocations)) {
-                                                    echo implode(', ', $allocations);
-                                                } else {
-                                                    echo $allocations;
-                                                }
-                                            @endphp</td>
 
                                             <td class="text-end">{{ date('d M Y', strtotime($sal->date)) }}</td>
                                         </tr>
