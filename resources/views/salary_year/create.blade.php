@@ -20,7 +20,7 @@
                                     <button type="submit" class="btn btn-success btn-sm px-4">Save</button>
                                 </div>
                                 <div class="col">
-                                    <div>
+                                    {{-- <div>
                                         Toggle column:
                                         <a class="toggle-vis" data-column="7">Salary Grade</a> -
                                         <a class="toggle-vis" data-column="8">Ability</a> -
@@ -30,7 +30,7 @@
                                         <a class="toggle-vis" data-column="12">Telephone Alw</a> -
                                         <a class="toggle-vis" data-column="13">Skill All</a> -
                                         <a class="toggle-vis" data-column="14">Adjustment</a>
-                                    </div><br>
+                                    </div><br> --}}
                                     <div class="table-responsive p-0">
                                         <table class="table align-items-center small-tbl dtTableFix3 compact stripe hover">
                                             <thead class="bg-thead">

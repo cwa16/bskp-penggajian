@@ -147,32 +147,32 @@ class SalaryMonthController extends Controller
                     ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
                     ->whereYear('salary_months.date', $yearFilter)
                     ->whereMonth('salary_months.date', $monthFilter)
-                    ->where('salary_months.thr', 0)
+                    ->where('salary_months.hour_call', 0)
                     ->get();
 
             } elseif ($checkYear != null && $checkMonth == null) {
-                // $data = DB::table('salary_months')
-                //     ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-                //     ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
-                //     ->join('users', 'users.id', '=', 'salary_years.id_user')
-                //     ->join('statuses', 'users.id_status', '=', 'statuses.id')
-                //     ->join('depts', 'users.id_dept', '=', 'depts.id')
-                //     ->join('jobs', 'users.id_job', '=', 'jobs.id')
-                //     ->join('grades', 'users.id_grade', '=', 'grades.id')
-                //     ->where('users.id_status', $statusFilter)
-                //     ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
-                //     ->get();
-
-                $data = DB::table('users')
+                $data = DB::table('salary_months')
+                    ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                    ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
+                    ->join('users', 'users.id', '=', 'salary_years.id_user')
                     ->join('statuses', 'users.id_status', '=', 'statuses.id')
                     ->join('depts', 'users.id_dept', '=', 'depts.id')
                     ->join('jobs', 'users.id_job', '=', 'jobs.id')
                     ->join('grades', 'users.id_grade', '=', 'grades.id')
-                    ->join('salary_grades', 'grades.id', '=', 'salary_grades.id_grade')
-                    ->join('salary_years', 'salary_years.id_user', '=', 'users.id')
                     ->where('users.id_status', $statusFilter)
-                    ->select('users.*', 'salary_grades.*', 'grades.*', 'statuses.*', 'depts.*', 'jobs.*', 'salary_grades.id as id_salary_grade', 'users.id as id_user', 'salary_years.id as id_salary_year')
+                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
                     ->get();
+
+                // $data = DB::table('users')
+                //     ->join('statuses', 'users.id_status', '=', 'statuses.id')
+                //     ->join('depts', 'users.id_dept', '=', 'depts.id')
+                //     ->join('jobs', 'users.id_job', '=', 'jobs.id')
+                //     ->join('grades', 'users.id_grade', '=', 'grades.id')
+                //     ->join('salary_grades', 'grades.id', '=', 'salary_grades.id_grade')
+                //     ->join('salary_years', 'salary_years.id_user', '=', 'users.id')
+                //     ->where('users.id_status', $statusFilter)
+                //     ->select('users.*', 'salary_grades.*', 'grades.*', 'statuses.*', 'depts.*', 'jobs.*', 'salary_grades.id as id_salary_grade', 'users.id as id_user', 'salary_years.id as id_salary_year')
+                //     ->get();
 
             }
         } else {
@@ -299,6 +299,7 @@ class SalaryMonthController extends Controller
         $absent = $request->input('absent')[$key] ?? 0;
         $electricity = $request->input('electricity')[$key] ?? 0;
         $cooperative = $request->input('cooperative')[$key] ?? 0;
+        $pinjaman = $request->input('pinjaman')[$key] ?? 0;
         $total_ben_ded = $request->input('total_ben_ded')[$key] ?? 0;
 
         $gross_sal = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw + $skill_alw + $telephone_alw +

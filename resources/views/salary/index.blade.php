@@ -88,7 +88,7 @@
                                         <th colspan="7" class="text-center p-0">Employee Identity</th>
                                         <th colspan="13" class="text-center p-0">Salary Components</th>
                                         <th rowspan="2" class="text-center">Bruto Salary</th>
-                                        <th colspan="7" class="text-center p-0">Deduction</th>
+                                        <th colspan="8" class="text-center p-0">Deduction</th>
                                         <th rowspan="2" class="text-center">Total Deduction</th>
                                         <th rowspan="2" class="text-center">Nett Salary</th>
                                         <th rowspan="2" class="text-center">Allocation</th>
@@ -126,6 +126,7 @@
                                         <th>Absent</th>
                                         <th>Electricity</th>
                                         <th>Cooperative</th>
+                                        <th>Pinjaman</th>
                                         <th>Sub Total Deduction</th>
                                         {{-- <th class=">Total Deduction</th> --}}
                                         {{-- <th class="bg-info text-white">Nett Salary</th> --}}
@@ -204,6 +205,9 @@
                                             </td>
                                             <td class="text-end">
                                                 {{ $sal->cooperative != 0 ? number_format($sal->cooperative, 0, ',', '.') : '-' }}
+                                            </td>
+                                            <td class="text-end">
+                                                {{ $sal->pinjaman != 0 ? number_format($sal->pinjaman, 0, ',', '.') : '-' }}
                                             </td>
                                             <td class="text-end">
                                                 {{ $sal->total_deduction != 0 ? number_format($sal->total_deduction, 0, ',', '.') : '-' }}

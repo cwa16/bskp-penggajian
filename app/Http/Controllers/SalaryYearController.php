@@ -55,9 +55,16 @@ class SalaryYearController extends Controller
         $totalBpjs = $salary_years->sum('bpjs');
         $totalJamsostek = $salary_years->sum('jamsostek');
 
+        // Menghitung total rate_salary
+        $totalRateSalary = $salary_years->sum(function ($sy) {
+            return $sy->salary_grade->rate_salary;
+        });
+
+        // dd($totalRateSalary);
+
         return view('salary_year.index', compact(
             'title', 'salary_years', 'years', 'statuses', 'selectedYear', 'selectedStatus', 'totalFamilyAlw', 'totalAbility', 'totalFungtionalAlw',
-            'totalTransportAlw', 'totalTelephoneAlw', 'totalSkillAlw', 'totalAdjustment', 'totalBpjs', 'totalJamsostek'
+            'totalTransportAlw', 'totalTelephoneAlw', 'totalSkillAlw', 'totalAdjustment', 'totalBpjs', 'totalJamsostek', 'totalRateSalary'
         ));
     }
 
@@ -237,23 +244,34 @@ class SalaryYearController extends Controller
 
     public function update(Request $request)
     {
-        foreach ($request->input('ids') as $id) {
-            $rate_salary = $request->input('rate_salary.' . $id);
-            $ability =  $request->input('ability.' . $id);
-            $fungtional_alw =  $request->input('fungtional_alw.' . $id);
-            $family_alw =  $request->input('family_alw.' . $id);
-            $transport_alw =  $request->input('transport_alw.' . $id);
-            $telephone_alw =  $request->input('telephone_alw.' . $id);
-            $skill_alw =  $request->input('skill_alw.' . $id);
-            $adjustment =  $request->input('adjustment.' . $id);
+        foreach ($request->input('ids') as $key => $value) {
+            $rate_salary = $request->input('rate_salary')[$key];
+            $ability =  $request->input('ability')[$key];
+            $fungtional_alw =  $request->input('fungtional_alw')[$key];
+            $family_alw =  $request->input('family_alw')[$key];
+            $transport_alw =  $request->input('transport_alw')[$key];
+            $telephone_alw =  $request->input('telephone_alw')[$key];
+            $skill_alw =  $request->input('skill_alw')[$key];
+            $adjustment =  $request->input('adjustment')[$key];
 
-            $total = $rate_salary +  $ability + $fungtional_alw + $family_alw + $transport_alw + $telephone_alw + $skill_alw;
+            $total = $rate_salary + $ability + $family_alw;
 
             if ($total > 12000000) {
                 $bpjs = 12000000 * 0.01;
             } else {
                 $bpjs = $total * 0.01;
             }
+
+            // $total = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw + $telephone_alw + $skill_alw;
+            // if ($total2 > 12000000) {
+            //     $bpjs2 = 12000000 * 0.01;
+            // } else {
+            //     $bpjs2 = $total2 * 0.01;
+            // }
+
+            // dd($total, $total2, $bpjs, $bpjs2);
+
+
             $jamsostek = $total * 0.02;
 
             $jamsostek_jkk = $total * 0.0054;
@@ -261,14 +279,14 @@ class SalaryYearController extends Controller
             $jamsostek_tht = $total * 0.037;
             $total_jamsostek = $jamsostek_jkk + $jamsostek_tk + $jamsostek_tht;
 
-            $allocations = $request->input('allocation.' . $id) ?? NULL;
+            $allocations = $request->input('allocations')[$key] ?? NULL;
             if ($allocations) {
                 $allocationJson = json_encode($allocations);
             } else {
                 $allocationJson = $allocations;
             }
 
-            SalaryYear::where('id', $id)->update([
+            SalaryYear::where('id', $request->input('ids'))->update([
                 'ability' => $ability,
                 'fungtional_alw' => $fungtional_alw,
                 'family_alw' => $family_alw,
@@ -283,7 +301,7 @@ class SalaryYearController extends Controller
                 'allocation' => $allocationJson,
             ]);
 
-            $salary_months = SalaryMonth::where('id_salary_year', $id)->get();
+            $salary_months = SalaryMonth::where('id_salary_year', $request->input('ids'))->get();
             foreach ($salary_months as $salary_month) {
                 $thr = $salary_month->thr;
                 $bonus = $salary_month->bonus;
@@ -297,12 +315,16 @@ class SalaryYearController extends Controller
                 $hour_call = $salary_month->hour_call;
                 $total_overtime = (($rate_salary + $ability) / 173) * $hour_call;
 
-                $gross_sal = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw + $telephone_alw + $skill_alw +
-                    $adjustment + $total_overtime + $thr + $bonus + $incentive;
-                $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative;
-                $net_salary = ($gross_sal + $total_jamsostek) - ($total_deduction + $total_jamsostek);
+                // dd($hour_call, $total_overtime);
 
-                SalaryMonth::where('id_salary_year', $id)->update([
+                $gross_sal = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw + $telephone_alw + $skill_alw +
+                $adjustment + $total_overtime + $thr + $bonus + $incentive;
+                $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative;
+                // $net_salary = ($gross_sal + $total_jamsostek) - ($total_deduction + $total_jamsostek);
+                $net_salary = $gross_sal - $total_deduction;
+                // dd($gross_sal, $total_deduction, $net_salary);
+
+                SalaryMonth::where('id_salary_year', $request->input('ids'))->update([
                     'total_overtime' => $total_overtime,
                     'gross_salary' => $gross_sal,
                     'total_deduction' => $total_deduction,

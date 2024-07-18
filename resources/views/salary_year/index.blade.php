@@ -148,7 +148,7 @@
                                 <tfoot>
                                     <tr>
                                         <td colspan="6" style="background-color: #1A73E8;color: white;"></td>
-                                        <td></td>
+                                        <td class="text-end">{{ number_format($totalRateSalary, 0, ',', '.') }}</td>
                                         <td class="text-end">{{ number_format($totalAbility, 0, ',', '.') }}</td>
                                         <td class="text-end">{{ number_format($totalFungtionalAlw, 0, ',', '.') }}</td>
                                         <td class="text-end">{{ number_format($totalFamilyAlw, 0, ',', '.') }}</td>

@@ -84,7 +84,7 @@
                                                             <div class="input-group input-group-outline">
                                                                 <input type="number" class="form-control form-control-sm"
                                                                     style="width: 120px"
-                                                                    name="ability[{{ $sy->id }}]"
+                                                                    name="ability[]"
                                                                     placeholder="Enter the ability"
                                                                     value="{{ $sy->ability != 0 ? $sy->ability : '' }}">
                                                             </div>
@@ -93,7 +93,7 @@
                                                             <div class="input-group input-group-outline">
                                                                 <input type="number" class="form-control form-control-sm"
                                                                     style="width: 120px"
-                                                                    name="fungtional_alw[{{ $sy->id }}]"
+                                                                    name="fungtional_alw[]"
                                                                     placeholder="Enter the fungtional allowance"
                                                                     value="{{ $sy->fungtional_alw != 0 ? $sy->fungtional_alw : '' }}">
                                                             </div>
@@ -102,7 +102,7 @@
                                                             <div class="input-group input-group-outline">
                                                                 <input type="number" class="form-control form-control-sm"
                                                                     style="width: 120px"
-                                                                    name="family_alw[{{ $sy->id }}]"
+                                                                    name="family_alw[]"
                                                                     placeholder="Enter the family allowance"
                                                                     value="{{ $sy->family_alw != 0 ? $sy->family_alw : '' }}">
                                                             </div>
@@ -111,7 +111,7 @@
                                                             <div class="input-group input-group-outline">
                                                                 <input type="number" class="form-control form-control-sm"
                                                                     style="width: 120px"
-                                                                    name="transport_alw[{{ $sy->id }}]"
+                                                                    name="transport_alw[]"
                                                                     placeholder="Enter the transport allowance"
                                                                     value="{{ $sy->transport_alw != 0 ? $sy->transport_alw : '' }}">
                                                             </div>
@@ -120,7 +120,7 @@
                                                             <div class="input-group input-group-outline">
                                                                 <input type="number" class="form-control form-control-sm"
                                                                     style="width: 120px"
-                                                                    name="skill_alw[{{ $sy->id }}]"
+                                                                    name="skill_alw[]"
                                                                     placeholder="Enter the skill allowance"
                                                                     value="{{ $sy->skill_alw != 0 ? $sy->skill_alw : '' }}">
                                                             </div>
@@ -129,7 +129,7 @@
                                                             <div class="input-group input-group-outline">
                                                                 <input type="number" class="form-control form-control-sm"
                                                                     style="width: 120px"
-                                                                    name="telephone_alw[{{ $sy->id }}]"
+                                                                    name="telephone_alw[]"
                                                                     placeholder="Enter the telephone allowance"
                                                                     value="{{ $sy->telephone_alw != 0 ? $sy->telephone_alw : '' }}">
                                                             </div>
@@ -138,7 +138,7 @@
                                                             <div class="input-group input-group-outline">
                                                                 <input type="number" class="form-control form-control-sm"
                                                                     style="width: 120px"
-                                                                    name="adjustment[{{ $sy->id }}]"
+                                                                    name="adjustment[]"
                                                                     placeholder="Enter the adjustment"
                                                                     value="{{ $sy->adjustment != 0 ? $sy->adjustment : '' }}">
                                                             </div>
@@ -146,7 +146,7 @@
                                                         <td>
                                                             <div class="input-group input-group-outline">
                                                                 <select class="form-select form-select-sm allocation"
-                                                                    name="allocation[{{ $sy->id }}][]"
+                                                                    name="allocation[]"
                                                                     style="min-height: 20px;width: 100% !important;padding: 0 0 0 0;"
                                                                     data-placeholder="Select allocation"
                                                                     multiple="multiple">

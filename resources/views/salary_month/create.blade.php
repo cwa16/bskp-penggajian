@@ -30,7 +30,7 @@
                                                         <th colspan="6" class="text-center p-0">Employee
                                                             Identity</th>
                                                         <th colspan="5" class="text-center p-0">Salary Components</th>
-                                                        <th colspan="4" class="text-center p-0">Deduction</th>
+                                                        <th colspan="5" class="text-center p-0">Deduction</th>
                                                         {{-- <th rowspan="2" class="text-center">Allocation</th> --}}
                                                         <th rowspan="2" class="text-center">Month / Year</th>
                                                     </tr>
@@ -52,6 +52,7 @@
                                                         <th>Absent</th>
                                                         <th>Electricity</th>
                                                         <th>Cooperative</th>
+                                                        <th>Pinjaman</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -207,6 +208,15 @@
                                                                         class="form-control form-control-sm"
                                                                         style="width: 120px"
                                                                         name="cooperative[{{ $key }}]"
+                                                                        placeholder="Enter the koperasi">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="input-group input-group-outline">
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm"
+                                                                        style="width: 120px"
+                                                                        name="pinjaman[{{ $key }}]"
                                                                         placeholder="Enter the koperasi">
                                                                 </div>
                                                             </td>

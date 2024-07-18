@@ -82,7 +82,7 @@
                                     <tr>
                                         <th colspan="6" class="text-center p-0">Employee Identity</th>
                                         <th colspan="5" class="text-center p-0">Salary Components</th>
-                                        <th colspan="4" class="text-center p-0">Deduction</th>
+                                        <th colspan="5" class="text-center p-0">Deduction</th>
                                         <th rowspan="2" class="text-center">Month / Year</th>
                                         <th rowspan="2" style="display: none;"><input type="checkbox" id="checkAll"></th>
                                     </tr>
@@ -102,6 +102,7 @@
                                         <th>Absent</th>
                                         <th>Electricity</th>
                                         <th>Cooperative</th>
+                                        <th>Pinjaman</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -143,6 +144,9 @@
                                             </td>
                                             <td class="text-end">
                                                 {{ $sm->cooperative != 0 ? number_format($sm->cooperative, 0, ',', '.') : '-' }}
+                                            </td>
+                                            <td class="text-end">
+                                                {{ $sm->pinjaman != 0 ? number_format($sm->pinjaman, 0, ',', '.') : '-' }}
                                             </td>
                                             <td class="text-end">{{ date('M/Y', strtotime($sm->date)) }}</td>
                                             <td style="display: none;"><input type="checkbox" name="selected[]"
