@@ -83,12 +83,34 @@
         }
 
         .pagenum:before {
-            content: counter(page);
+            counter-increment: currentPage;
+            content: counter(currentPage) " of 5";
         }
 
         .total-column {
             padding: 8px; /* Atur lebar sesuai keinginan */
         }
+
+        thead {
+            display: table-header-group; /* Ensures header repeats on each page */
+        }
+
+        /* #pageCounter {
+        counter-reset: pageTotal;
+        }
+        #pageCounter span {
+        counter-increment: pageTotal;
+        }
+        #pageNumbers {
+        counter-reset: currentPage;
+        }
+        #pageNumbers div:before {
+        counter-increment: currentPage;
+        content: "Page " counter(currentPage) " of ";
+        }
+        #pageNumbers div:after {
+        content: counter(pageTotal);
+        } */
 
     </style>
 </head>
@@ -121,8 +143,9 @@
         </table>
 
         {{-- <hr class="dash-line"> --}}
-        <div class="tb-collapse">
+        <div class="tb-collapse" id="pageCounter">
             <table>
+                <thead>
                 <tr>
                     <th rowspan="2">No</th>
                     <th colspan="5">Employee Identity</th>
@@ -166,6 +189,7 @@
                 <tr>
                     <td colspan="29"> {{ $status }}</td>
                 </tr>
+            </thead>
 
                 @php
                     $rate_salary_t = 0;
@@ -383,8 +407,17 @@
     @endforeach
 
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var totalPages = Math.ceil(document.body.scrollHeight / window.innerHeight);
+            document.querySelectorAll(".total-pages").forEach(function(el) {
+                el.textContent = totalPages;
+            });
+        });
+    </script>
+    <script>
         window.print();
     </script>
+
 </body>
 
 </html>

@@ -92,9 +92,22 @@ class SalaryMonthController extends Controller
                     ->get();
             }
         }
+        $totalHourCall = $data->sum('hour_call');
+        $totalTotalOT = $data->sum('total_overtime');
+        $totalThr = $data->sum('thr');
+        $totalBonus = $data->sum('bonus');
+        $totalIncentive = $data->sum('incentive');
+        $totalUnion = $data->sum('union');
+        $totalAbsent = $data->sum('absent');
+        $totalElectricity = $data->sum('electricity');
+        $totalCooperative = $data->sum('cooperative');
+        $totalPinjaman = $data->sum('pinjaman');
+        $totalOther = $data->sum('other');
+        // dd($totalUnion);
 
         return view('salary_month.index', compact(
             'title', 'selectedStatus', 'data', 'statuses', 'selectedYear', 'years', 'selectedMonth', 'months', 'statuses_id',
+            'totalHourCall', 'totalTotalOT', 'totalThr', 'totalBonus', 'totalIncentive', 'totalUnion', 'totalAbsent', 'totalElectricity', 'totalCooperative', 'totalPinjaman', 'totalOther',
         ));
     }
 
@@ -147,7 +160,7 @@ class SalaryMonthController extends Controller
                     ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
                     ->whereYear('salary_months.date', $yearFilter)
                     ->whereMonth('salary_months.date', $monthFilter)
-                    ->where('salary_months.hour_call', 0)
+                    // ->where('salary_months.hour_call', 0)
                     ->get();
 
             } elseif ($checkYear != null && $checkMonth == null) {
@@ -300,11 +313,12 @@ class SalaryMonthController extends Controller
         $electricity = $request->input('electricity')[$key] ?? 0;
         $cooperative = $request->input('cooperative')[$key] ?? 0;
         $pinjaman = $request->input('pinjaman')[$key] ?? 0;
+        $other = $request->input('other')[$key] ?? 0;
         $total_ben_ded = $request->input('total_ben_ded')[$key] ?? 0;
 
         $gross_sal = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw + $skill_alw + $telephone_alw +
             $adjustment + $total_overtime + $thr + $bonus + $incentive;
-        $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative;
+        $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative + $pinjaman + $other;
         $net_salary = ($gross_sal + $total_ben) - ($total_deduction + $total_ben_ded);
 
         SalaryMonth::updateOrCreate(
@@ -323,6 +337,8 @@ class SalaryMonthController extends Controller
                 'absent' => $absent,
                 'electricity' => $electricity,
                 'cooperative' => $cooperative,
+                'pinjaman' => $pinjaman,
+                'other' => $other,
                 'gross_salary' => $gross_sal,
                 'total_deduction' => $total_deduction,
                 'net_salary' => $net_salary,

@@ -154,6 +154,23 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="6" style="background-color: #1A73E8;color: white;"></td>
+                                        <td class="text-end">{{ number_format($totalHourCall, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalTotalOT, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalThr, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalBonus, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalIncentive, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalUnion, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalAbsent, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalElectricity, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalCooperative, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalPinjaman, 0, ',', '.') }}</td>
+                                        {{-- <td class="text-end">{{ number_format($totalJamsostek, 0, ',', '.') }}</td> --}}
+                                        <td style="background-color: #1A73E8;color: white;"></td>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
