@@ -30,7 +30,7 @@
                                                         <th colspan="6" class="text-center p-0">Employee
                                                             Identity</th>
                                                         <th colspan="5" class="text-center p-0">Salary Components</th>
-                                                        <th colspan="4" class="text-center p-0">Deduction</th>
+                                                        <th colspan="6" class="text-center p-0">Deduction</th>
                                                         {{-- <th rowspan="2" class="text-center">Allocation</th> --}}
                                                         <th rowspan="2" class="text-center">Month / Year</th>
                                                     </tr>
@@ -52,6 +52,8 @@
                                                         <th>Absent</th>
                                                         <th>Electricity</th>
                                                         <th>Cooperative</th>
+                                                        <th>Pinjaman</th>
+                                                        <th>Other</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -133,7 +135,7 @@
                                                                         style="width: 90px"
                                                                         name="hour_call[{{ $key }}]"
                                                                         placeholder="Enter the overtime hour call"
-                                                                        oninput="calculateTotalOvertime({{ $key }})">
+                                                                        oninput="calculateTotalOvertime({{ $key }})" value="{{ $sy->hour_call }}">
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -141,7 +143,7 @@
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
                                                                         style="width: 120px"
-                                                                        name="total_overtime[{{ $key }}]"
+                                                                        name="total_overtime[{{ $key }}]" value="{{ $sy->total_overtime }}"
                                                                         readonly>
                                                                 </div>
                                                             </td>
@@ -151,7 +153,7 @@
                                                                         class="form-control form-control-sm "
                                                                         style="width: 120px"
                                                                         name="thr[{{ $key }}]"
-                                                                        placeholder="Enter the THR"
+                                                                        placeholder="Enter the THR" value="{{ $sy->thr }}"
                                                                         {{-- oninput="formatCurrency(this)" --}}
                                                                         >
                                                                 </div>
@@ -161,7 +163,7 @@
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
                                                                         style="width: 120px"
-                                                                        name="bonus[{{ $key }}]"
+                                                                        name="bonus[{{ $key }}]" value="{{ $sy->bonus }}"
                                                                         placeholder="Enter the bonus">
                                                                 </div>
                                                             </td>
@@ -170,7 +172,7 @@
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
                                                                         style="width: 120px"
-                                                                        name="incentive[{{ $key }}]"
+                                                                        name="incentive[{{ $key }}]" value="{{ $sy->incentive }}"
                                                                         placeholder="Enter the incentive">
                                                                 </div>
                                                             </td>
@@ -179,7 +181,7 @@
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
                                                                         style="width: 120px"
-                                                                        name="union[{{ $key }}]"
+                                                                        name="union[{{ $key }}]" value="{{ $sy->union }}"
                                                                         placeholder="Enter the union">
                                                                 </div>
                                                             </td>
@@ -188,7 +190,7 @@
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
                                                                         style="width: 120px"
-                                                                        name="absent[{{ $key }}]"
+                                                                        name="absent[{{ $key }}]" value="{{ $sy->absent }}"
                                                                         placeholder="Enter the absent">
                                                                 </div>
                                                             </td>
@@ -197,7 +199,7 @@
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
                                                                         style="width: 120px"
-                                                                        name="electricity[{{ $key }}]"
+                                                                        name="electricity[{{ $key }}]" value="{{ $sy->electricity }}"
                                                                         placeholder="Enter the electricity">
                                                                 </div>
                                                             </td>
@@ -206,8 +208,26 @@
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
                                                                         style="width: 120px"
-                                                                        name="cooperative[{{ $key }}]"
+                                                                        name="cooperative[{{ $key }}]" value="{{ $sy->cooperative }}"
                                                                         placeholder="Enter the koperasi">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="input-group input-group-outline">
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm"
+                                                                        style="width: 120px"
+                                                                        name="pinjaman[{{ $key }}]" value="{{ $sy->pinjaman }}"
+                                                                        placeholder="Enter the pinjaman">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="input-group input-group-outline">
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm"
+                                                                        style="width: 120px"
+                                                                        name="other[{{ $key }}]" value="{{ $sy->other }}"
+                                                                        placeholder="Enter the other">
                                                                 </div>
                                                             </td>
                                                             {{-- <td>

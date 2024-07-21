@@ -60,6 +60,8 @@ class SalaryMonthImport implements ToModel, WithHeadingRow
         $absent = $row['absent'];
         $electricity = $row['electricity'];
         $cooperative = $row['cooperative'];
+        $pinjaman = $row['pinjaman'];
+        $other = $row['other'];
 
         // Hitung total gross salary
         $gross_sal = $rateSalary + $ability + $fungtional_alw + $family_alw + $transport_alw + $skill_alw + $telephone_alw +
@@ -72,7 +74,9 @@ class SalaryMonthImport implements ToModel, WithHeadingRow
         $total_ben_ded = $jamsostek;  // Diasumsikan total benefit deduction sama dengan jamsostek
 
         // Hitung total deduction
-        $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative;
+        $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative + $pinjaman + $other;
+
+        // dd($gross_sal, $bpjs, $jamsostek, $total_ben, $total_deduction, $total);
 
         // Hitung net salary
         $net_salary = ($gross_sal + $total_ben) - ($total_deduction + $total_ben_ded);
@@ -92,6 +96,8 @@ class SalaryMonthImport implements ToModel, WithHeadingRow
                 'absent'          => $absent,
                 'electricity'     => $electricity,
                 'cooperative'     => $cooperative,
+                'pinjaman'        => $pinjaman,
+                'other'           => $other,
                 'gross_salary'    => $gross_sal,
                 'total_deduction' => $total_deduction,
                 'net_salary'      => $net_salary,

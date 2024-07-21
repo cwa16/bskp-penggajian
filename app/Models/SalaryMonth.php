@@ -21,6 +21,8 @@ class SalaryMonth extends Model
         'absent',
         'electricity',
         'cooperative',
+        'pinjaman',
+        'other',
         'gross_salary',
         'total_deduction',
         'net_salary',
