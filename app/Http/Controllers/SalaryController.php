@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use App\Models\SalaryMonth;
-use App\Models\Status;
 use App\Models\SalaryYear;
-
+use App\Models\Salary;
+use App\Models\Status;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 use PDF;
 use Twilio\Rest\Client;
-use WaAPI\WaAPI;
+use Illuminate\Support\Str;
 
 class SalaryController extends Controller
 {
@@ -28,8 +29,9 @@ class SalaryController extends Controller
             ->join('depts', 'users.id_dept', '=', 'depts.id')
             ->join('jobs', 'users.id_job', '=', 'jobs.id')
             ->join('grades', 'users.id_grade', '=', 'grades.id')
-            ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*')
+            ->select('salary_months.id as id_month','salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*')
             ->get();
+
 
         $salary_months = SalaryMonth::all();
 
@@ -48,7 +50,7 @@ class SalaryController extends Controller
 
         $query = SalaryMonth::with('salary_year');
 
-        $selectedYear =  null;
+        $selectedYear = null;
         $selectedMonth = null;
         $selectedStatus = null;
 
@@ -106,72 +108,90 @@ class SalaryController extends Controller
         $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
 
         $pdf = PDF::loadView('salary.print', compact('sal', 'total'));
+
+        $customFileName = $sal->salary_year->user->nik;
+        // Define the file path and name
+        $filePath = storage_path('app/public') . '/' . $customFileName . '.pdf';
+
+        // Save the PDF file to the specified path
+        file_put_contents($filePath, $pdf->output());
         return $pdf->setPaper('a4', 'landscape')->stream('SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf');
     }
 
     public function send($id)
     {
-        // $sal = SalaryMonth::find($id);
+        $sal = SalaryMonth::find($id);
 
-        // // mengambeil date
-        // $date = date('My', strtotime($sal->date));
+        $date = date('My', strtotime($sal->date));
 
-        // if (!$sal) {
-        //     // Log or dd() the ID to see which ID is causing the issue.
-        //     dd("Salary with ID $id not found.");
-        // }
+        if (!$sal) {
+            dd("Salary with ID $id not found.");
+        }
 
-        // // hitungan utuk mendapatkan total gaji bersih
-        // $rate_salary = $sal->salary_year->salary_grade->rate_salary;
-        // $ability = $sal->salary_year->ability;
-        // $fungtional_alw = $sal->salary_year->fungtional_alw;
-        // $family_alw = $sal->salary_year->family_alw;
+        $rate_salary = $sal->salary_year->salary_grade->rate_salary;
+        $ability = $sal->salary_year->ability;
+        $fungtional_alw = $sal->salary_year->fungtional_alw;
+        $family_alw = $sal->salary_year->family_alw;
 
-        // $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
+        $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
 
-        // $pdf = PDF::loadView('salary.print', compact('sal', 'total'))->setPaper('a5', 'landscape');
+        // $pdf = PDF::loadView('salary.print', compact('sal', 'total'));
+        $days = Carbon::now()->subMonth(1)->format('mY');
+        $dayss = Carbon::now();
+        $day = ($dayss->hour < 12) ? "Pagi" : "Siang";
 
-        // $fileName = 'SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf';
+        $name = $sal->salary_year->user->name;
+        $month = Carbon::parse($sal->date)->format('F');
 
-        // $mediaUrl = asset('slip_gaji/SAL_Jun24_199-073_Sulastri.pdf');
+        $customFileNames = $sal->salary_year->user->nik . $days.$id;
+        $customFileName = Str::of($customFileNames)->toBase64();
+        // Define the file path and name
+        $filePath = storage_path('app/public') . '/' . $customFileName . '.pdf';
+        $pdf = PDF::loadView('salary.print', compact('sal', 'total'));
 
-        // // dd($mediaUrl);
+        // Save the PDF file to the specified path
+        file_put_contents($filePath, $pdf->output());
 
-        // $waAPI = new WaAPI\WaAPI();
-        // $waAPI->sendMediaFromUrl('6287878998251@c.us', 'file:///C:/laragon/www/bskp-penggajian/public/slip_gaji/SAL_Jun24_199-073_Sulastri.pdf', 'slip gaji', 'bskp-penggajian.pdf');
-        // // $waAPI->fetchMessages('6287878998251@c.us', '25', null, null, null );
+        $mediaUrl = $sal->salary_year->user->nik . $days.$id;
+        $urls = Str::of($mediaUrl)->toBase64();
 
-        // // return $pdf->setPaper('a5', 'landscape')->stream('SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf');
-        // $product = \App\Product::findOrFail($id);
-        // $user = User::find(1); // replace this with the authenticated user
+        $url = "https://bskp.blog:9000/pdf/" . $urls . ".pdf";
 
-        // $data = [
-        //     'product' => $product,
-        //     'user' => $user
-        // ];
-
-        $invoiceFile = "SAL_Jun24_199-073_Sulastri.pdf";
-        $invoicePath = public_path("slip_gaji/".$invoiceFile);
-
-        $phoneNumber = +6287878998251;
-
-        // $sid = env('TWILIO_AUTH_SID');
-        // $auth = env('TWILIO_AUTH_TOKEN');
-
-        // dd($sid, $auth);
-
-        // PDF::loadView('invoice', $data)->save($invoicePath);
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
 
         $twilio->messages->create(
-                "whatsapp:+6287878998251", [
-                "from" => "whatsapp:".env('TWILIO_WHATSAPP_FROM'),
-                "body" => "Here's your invoice!",
-                "mediaUrl" => [env("NGROK_URL")."slip_gaji/".$invoiceFile]
+            "whatsapp:+".$sal->salary_year->user->no_telpon,
+            // "whatsapp:+6283854428770",
+            [
+                "contentSid" => env('TWILIO_CONTENT_ID'),
+                "messagingServiceSid" => env('TWILIO_SERVICE_ID'),
+                "from" => "whatsapp:".env('TWILIO_PHONE_NUMBER'),
+                "contentVariables" => json_encode([
+                    "1" => $day,
+                    "2" => $name,
+                    "3" => $month,
+                    "4" => $url,
+                ]),
             ]
         );
 
+        // dd($twilio);
+
         return redirect()->back();
+    }
+
+    public function show($filename)
+    {
+        $path = 'public/' . $filename;
+
+        if (!Storage::exists($path)) {
+            abort(404);
+        }
+
+        $file = Storage::get($path);
+        $type = Storage::mimeType($path);
+
+        return response($file, 200)->header("Content-Type", $type);
     }
 
     public function download($id)
@@ -192,7 +212,7 @@ class SalaryController extends Controller
         $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
 
         $pdf = PDF::loadView('salary.print', compact('sal', 'total'));
-        return $pdf->setPaper('a5', 'landscape')->download('SAL_' . $date . '_'  . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf');
+        return $pdf->setPaper('a5', 'landscape')->download('SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf');
     }
 
     public function printall()
@@ -381,7 +401,7 @@ class SalaryController extends Controller
         $emp = User::orderBy('name', 'asc')->get();
         $years = SalaryYear::distinct('year')->pluck('year')->toArray();
 
-        return view ('salary.summary', compact('title', 'emp', 'years'));
+        return view('salary.summary', compact('title', 'emp', 'years'));
     }
 
     public function result()
@@ -402,7 +422,7 @@ class SalaryController extends Controller
             ->where('users.id', $empFilter)
             ->get();
 
-        $name = User::where('id', $empFilter)->select('nik','name')->first();
+        $name = User::where('id', $empFilter)->select('nik', 'name')->first();
 
         return view('salary.result', compact('title', 'empFilter', 'yearFilter', 'data', 'name'));
     }

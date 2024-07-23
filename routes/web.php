@@ -77,5 +77,6 @@ Route::get('/print-pdf/{id}', [SalaryController::class, 'print']);
 Route::get('/download-pdf/{id}', [SalaryController::class, 'download']);
 Route::get('/print-all', [SalaryController::class, 'printall']);
 Route::get('/print-allocation', [SalaryController::class, 'printallocation']);
+Route::get('/pdf/{filename}', [SalaryController::class, 'show']);
 
 Route::get('/send-whatsapp/{id}', [SalaryController::class, 'send'])->name('send-whatsapp');

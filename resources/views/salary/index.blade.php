@@ -278,16 +278,16 @@
                                             <td class="text-center m-0 p-0">
                                                 <button class="btn btn-primary btn-icon-only m-0 p-0 btn-sm"
                                                     type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#detailGaji{{ $sal->id }}">
+                                                    data-bs-target="#detailGaji{{ $sal->id_month }}">
                                                     <span class="btn-inner--icon"><i
                                                             class="material-icons">info</i></span>
                                                 </button>
-                                                <a href="{{ url('/print-pdf/' . $sal->id) }}"
+                                                <a href="{{ url('/print-pdf/' . $sal->id_month) }}"
                                                     class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" target="_blank">
                                                     <span class="btn-inner--icon"><i
                                                             class="material-icons">print</i></span>
                                                 </a>
-                                                <a href="{{ url('/send-whatsapp/' . $sal->id) }}"
+                                                <a href="{{ url('/send-whatsapp/' . $sal->id_month) }}"
                                                     class="btn btn-success btn-icon-only m-0 p-0 btn-sm" target="_blank">
                                                     <span class="btn-inner--icon"><i
                                                             class="material-icons">mail</i></span>
