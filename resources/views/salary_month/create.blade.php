@@ -181,8 +181,26 @@
                                                                     <input type="number"
                                                                         class="form-control form-control-sm"
                                                                         style="width: 120px"
+                                                                        name="pinjaman[{{ $key }}]" value="{{ $sy->pinjaman }}"
+                                                                        placeholder="Enter the pinjaman">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="input-group input-group-outline">
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm"
+                                                                        style="width: 120px"
                                                                         name="union[{{ $key }}]" value="{{ $sy->union }}"
                                                                         placeholder="Enter the union">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="input-group input-group-outline">
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm"
+                                                                        style="width: 120px"
+                                                                        name="other[{{ $key }}]" value="{{ $sy->other }}"
+                                                                        placeholder="Enter the other">
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -210,24 +228,6 @@
                                                                         style="width: 120px"
                                                                         name="cooperative[{{ $key }}]" value="{{ $sy->cooperative }}"
                                                                         placeholder="Enter the koperasi">
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="input-group input-group-outline">
-                                                                    <input type="number"
-                                                                        class="form-control form-control-sm"
-                                                                        style="width: 120px"
-                                                                        name="pinjaman[{{ $key }}]" value="{{ $sy->pinjaman }}"
-                                                                        placeholder="Enter the pinjaman">
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="input-group input-group-outline">
-                                                                    <input type="number"
-                                                                        class="form-control form-control-sm"
-                                                                        style="width: 120px"
-                                                                        name="other[{{ $key }}]" value="{{ $sy->other }}"
-                                                                        placeholder="Enter the other">
                                                                 </div>
                                                             </td>
                                                             {{-- <td>
@@ -292,8 +292,8 @@
 
                     // Fungsi untuk berpindah ke elemen berikutnya atau sebelumnya berdasarkan baris dan kolom
                     function moveFocus(currentIndex, direction) {
-                        const cols = 8; // Jumlah kolom yang memiliki input
-                        const rows = 28;
+                        const cols = 10; // Jumlah kolom yang memiliki input
+                        const rows = 30;
                         let newIndex;
 
                         if (direction === 'ArrowDown') {

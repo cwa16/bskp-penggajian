@@ -82,7 +82,7 @@
                                     <tr>
                                         <th colspan="6" class="text-center p-0">Employee Identity</th>
                                         <th colspan="5" class="text-center p-0">Salary Components</th>
-                                        <th colspan="5" class="text-center p-0">Deduction</th>
+                                        <th colspan="6" class="text-center p-0">Deduction</th>
                                         <th rowspan="2" class="text-center">Month / Year</th>
                                         <th rowspan="2" style="display: none;"><input type="checkbox" id="checkAll"></th>
                                     </tr>
@@ -95,14 +95,15 @@
                                         <th>Grade</th>
                                         <th>Hour Call</th>
                                         <th>Total Overtime</th>
-                                        <th>THR</th>
-                                        <th>Bonus</th>
                                         <th>Incentive</th>
+                                        <th>Bonus</th>
+                                        <th>THR</th>
+                                        <th>Pinjaman</th>
                                         <th>Union</th>
+                                        <th>Other</th>
                                         <th>Absent</th>
                                         <th>Electricity</th>
                                         <th>Cooperative</th>
-                                        <th>Pinjaman</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -125,16 +126,22 @@
                                                 {{ $sm->total_overtime != 0 ? number_format($sm->total_overtime, 0, ',', '.') : '-' }}
                                             </td>
                                             <td class="text-end">
-                                                {{ $sm->thr != 0 ? number_format($sm->thr, 0, ',', '.') : '-' }}
+                                                {{ $sm->incentive != 0 ? number_format($sm->incentive, 0, ',', '.') : '-' }}
                                             </td>
                                             <td class="text-end">
                                                 {{ $sm->bonus != 0 ? number_format($sm->bonus, 0, ',', '.') : '-' }}
                                             </td>
                                             <td class="text-end">
-                                                {{ $sm->incentive != 0 ? number_format($sm->incentive, 0, ',', '.') : '-' }}
+                                                {{ $sm->thr != 0 ? number_format($sm->thr, 0, ',', '.') : '-' }}
+                                            </td>
+                                            <td class="text-end">
+                                                {{ $sm->pinjaman != 0 ? number_format($sm->pinjaman, 0, ',', '.') : '-' }}
                                             </td>
                                             <td class="text-end">
                                                 {{ $sm->union != 0 ? number_format($sm->union, 0, ',', '.') : '-' }}
+                                            </td>
+                                            <td class="text-end">
+                                                {{ $sm->other != 0 ? number_format($sm->other, 0, ',', '.') : '-' }}
                                             </td>
                                             <td class="text-end">
                                                 {{ $sm->absent != 0 ? number_format($sm->absent, 0, ',', '.') : '-' }}
@@ -145,10 +152,7 @@
                                             <td class="text-end">
                                                 {{ $sm->cooperative != 0 ? number_format($sm->cooperative, 0, ',', '.') : '-' }}
                                             </td>
-                                            <td class="text-end">
-                                                {{ $sm->pinjaman != 0 ? number_format($sm->pinjaman, 0, ',', '.') : '-' }}
-                                            </td>
-                                            <td class="text-end">{{ date('M/Y', strtotime($sm->date)) }}</td>
+                                            <td class="text-end">{{ date('M/Y', strtotime($sm->salary_month_date)) }}</td>
                                             <td style="display: none;"><input type="checkbox" name="selected[]"
                                                     value="{{ $sm->id_salary_month }}"></td>
                                         </tr>
@@ -159,15 +163,15 @@
                                         <td colspan="6" style="background-color: #1A73E8;color: white;"></td>
                                         <td class="text-end">{{ number_format($totalHourCall, 0, ',', '.') }}</td>
                                         <td class="text-end">{{ number_format($totalTotalOT, 0, ',', '.') }}</td>
-                                        <td class="text-end">{{ number_format($totalThr, 0, ',', '.') }}</td>
-                                        <td class="text-end">{{ number_format($totalBonus, 0, ',', '.') }}</td>
                                         <td class="text-end">{{ number_format($totalIncentive, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalBonus, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalThr, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalPinjaman, 0, ',', '.') }}</td>
                                         <td class="text-end">{{ number_format($totalUnion, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalOther, 0, ',', '.') }}</td>
                                         <td class="text-end">{{ number_format($totalAbsent, 0, ',', '.') }}</td>
                                         <td class="text-end">{{ number_format($totalElectricity, 0, ',', '.') }}</td>
                                         <td class="text-end">{{ number_format($totalCooperative, 0, ',', '.') }}</td>
-                                        <td class="text-end">{{ number_format($totalPinjaman, 0, ',', '.') }}</td>
-                                        {{-- <td class="text-end">{{ number_format($totalJamsostek, 0, ',', '.') }}</td> --}}
                                         <td style="background-color: #1A73E8;color: white;"></td>
                                     </tr>
                                 </tfoot>

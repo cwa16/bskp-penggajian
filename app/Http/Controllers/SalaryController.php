@@ -45,46 +45,95 @@ class SalaryController extends Controller
         })->unique()->toArray();
 
         $statuses = Status::distinct('name_status')->pluck('name_status')->toArray();
+        $statuses_id = Status::all();
 
         $query = SalaryMonth::with('salary_year');
 
-        $selectedYear =  null;
-        $selectedMonth = null;
-        $selectedStatus = null;
+        $selectedYear = trim(request()->input('filter_year', ''));
+        $selectedMonth = trim(request()->input('filter_month', ''));
+        $selectedStatus = trim(request()->input('filter_status', ''));
 
-        if (request('filter_status') != null) {
-            if (request('filter_status') != 'all') {
-                $selectedStatus = request('filter_status');
-                $query->whereHas('salary_year.user.status', function ($subquery) use ($selectedStatus) {
-                    $subquery->where('name_status', $selectedStatus);
-                });
-            }
-        }
+        $selectedYear = (int) $selectedYear;
+        $selectedMonth = (int) $selectedMonth;
 
-        if (request('filter_year') != null) {
-            if (request('filter_year') != 'all') {
-                $selectedYear = request('filter_year');
-                $query->whereYear('date', $selectedYear);
-            }
+        // $selectedYear =  null;
+        // $selectedMonth = null;
+        // $selectedStatus = null;
+
+        if ($selectedYear == null && $selectedMonth == null && $selectedStatus == null) {
+            $data = DB::table('salary_months')
+                ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
+                ->join('users', 'users.id', '=', 'salary_years.id_user')
+                ->join('statuses', 'users.id_status', '=', 'statuses.id')
+                ->join('depts', 'users.id_dept', '=', 'depts.id')
+                ->join('jobs', 'users.id_job', '=', 'jobs.id')
+                ->join('grades', 'users.id_grade', '=', 'grades.id')
+                ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*')
+                ->get();
         } else {
-            $selectedYear = request('filter_year', Carbon::now()->year);
-            $query->whereYear('date', $selectedYear);
-        }
-
-        if (request('filter_month') != null) {
-            if (request('filter_month') != 'all') {
-                $selectedMonth = request('filter_month');
-                $query->wheremonth('date', $selectedMonth);
+            if ($selectedStatus == 'All Status') {
+                $data = DB::table('salary_months')
+                    ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                    ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
+                    ->join('users', 'users.id', '=', 'salary_years.id_user')
+                    ->join('statuses', 'users.id_status', '=', 'statuses.id')
+                    ->join('depts', 'users.id_dept', '=', 'depts.id')
+                    ->join('jobs', 'users.id_job', '=', 'jobs.id')
+                    ->join('grades', 'users.id_grade', '=', 'grades.id')
+                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*')
+                    ->whereYear('salary_months.date', $selectedYear)
+                    ->whereMonth('salary_months.date', $selectedMonth)
+                    ->get();
+            } else {
+                $data = DB::table('salary_months')
+                    ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                    ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
+                    ->join('users', 'users.id', '=', 'salary_years.id_user')
+                    ->join('statuses', 'users.id_status', '=', 'statuses.id')
+                    ->join('depts', 'users.id_dept', '=', 'depts.id')
+                    ->join('jobs', 'users.id_job', '=', 'jobs.id')
+                    ->join('grades', 'users.id_grade', '=', 'grades.id')
+                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*')
+                    ->where('users.id_status', $selectedStatus)
+                    ->whereYear('salary_months.date', $selectedYear)
+                    ->whereMonth('salary_months.date', $selectedMonth)
+                    ->get();
             }
-        } else {
-            $selectedMonth = request('filter_month', Carbon::now()->month);
-            $query->whereMonth('date', $selectedMonth);
         }
 
-        $salary_months = $query->get();
+        $totalAbility = $data->sum('ability');
+        $totalFungtionalAlw = $data->sum('fungtional_alw');
+        $totalFamilyAlw = $data->sum('family_alw');
+        $totalTransportAlw = $data->sum('transport_alw');
+        $totalTelephoneAlw = $data->sum('telephone_alw');
+        $totalSkillAlw = $data->sum('skill_alw');
+        $totalAdjustment = $data->sum('adjustment');
+        $totalBpjs = $data->sum('bpjs');
+        $totalJamsostek = $data->sum('jamsostek');
+
+        $totalHourCall = $data->sum('hour_call');
+        $totalTotalOT = $data->sum('total_overtime');
+        $totalThr = $data->sum('thr');
+        $totalBonus = $data->sum('bonus');
+        $totalIncentive = $data->sum('incentive');
+        $totalUnion = $data->sum('union');
+        $totalAbsent = $data->sum('absent');
+        $totalElectricity = $data->sum('electricity');
+        $totalCooperative = $data->sum('cooperative');
+        $totalPinjaman = $data->sum('pinjaman');
+        $totalOther = $data->sum('other');
+
+        $totalRateSalary = $data->sum(function ($data) {
+            return $data->rate_salary;
+        });
+        // dd($selectedYear, $selectedMonth, $selectedStatus, $data);
 
         return view('salary.index', compact(
-            'title', 'statuses', 'years', 'months', 'salary_months', 'selectedStatus', 'selectedYear', 'selectedMonth', 'data'
+            'title', 'statuses', 'years', 'months', 'salary_months', 'selectedStatus', 'selectedYear', 'selectedMonth', 'data', 'statuses_id',
+            'totalFamilyAlw', 'totalAbility', 'totalFungtionalAlw', 'totalTransportAlw', 'totalTelephoneAlw', 'totalSkillAlw', 'totalAdjustment',
+            'totalBpjs', 'totalJamsostek', 'totalRateSalary', 'totalHourCall', 'totalTotalOT', 'totalThr', 'totalBonus', 'totalIncentive',
+            'totalUnion', 'totalAbsent', 'totalElectricity', 'totalCooperative', 'totalPinjaman', 'totalOther',
         ));
     }
 

@@ -12,6 +12,7 @@ class SalaryYear extends Model
     protected $fillable = [
         'id_user',
         'id_salary_grade',
+        'date',
         'year',
         'ability',
         'fungtional_alw',
@@ -24,7 +25,8 @@ class SalaryYear extends Model
         'jamsostek',
         'total_ben',
         'total_ben_ded',
-        'allocation'
+        'allocation',
+        'used'
     ];
 
     // Relasi dengan tabel User
