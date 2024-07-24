@@ -60,7 +60,7 @@ class SalaryMonthController extends Controller
                 ->join('depts', 'users.id_dept', '=', 'depts.id')
                 ->join('jobs', 'users.id_job', '=', 'jobs.id')
                 ->join('grades', 'users.id_grade', '=', 'grades.id')
-                ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
+                ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month', 'salary_months.date as salary_month_date')
                 ->get();
         } else {
             if ($selectedStatus == 'All Status') {
@@ -72,7 +72,7 @@ class SalaryMonthController extends Controller
                     ->join('depts', 'users.id_dept', '=', 'depts.id')
                     ->join('jobs', 'users.id_job', '=', 'jobs.id')
                     ->join('grades', 'users.id_grade', '=', 'grades.id')
-                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
+                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month', 'salary_months.date as salary_month_date')
                     ->whereYear('salary_months.date', $selectedYear)
                     ->whereMonth('salary_months.date', $selectedMonth)
                     ->get();
@@ -85,13 +85,14 @@ class SalaryMonthController extends Controller
                     ->join('depts', 'users.id_dept', '=', 'depts.id')
                     ->join('jobs', 'users.id_job', '=', 'jobs.id')
                     ->join('grades', 'users.id_grade', '=', 'grades.id')
-                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
+                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month', 'salary_months.date as salary_month_date')
                     ->where('users.id_status', $selectedStatus)
                     ->whereYear('salary_months.date', $selectedYear)
                     ->whereMonth('salary_months.date', $selectedMonth)
                     ->get();
             }
         }
+
         $totalHourCall = $data->sum('hour_call');
         $totalTotalOT = $data->sum('total_overtime');
         $totalThr = $data->sum('thr');
@@ -145,7 +146,7 @@ class SalaryMonthController extends Controller
             ->where('users.id_status', $statusFilter)
             ->first();
 
-            // dd($checkYear, $checkMonth);
+            // dd($checkYear, $checkMonth, $checkStatus);
 
         if ($checkStatus != null) {
             if ($checkYear != null && $checkMonth != null) {
@@ -160,33 +161,37 @@ class SalaryMonthController extends Controller
                     ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
                     ->whereYear('salary_months.date', $yearFilter)
                     ->whereMonth('salary_months.date', $monthFilter)
-                    // ->where('salary_months.hour_call', 0)
                     ->get();
 
             } elseif ($checkYear != null && $checkMonth == null) {
-                // $data = DB::table('salary_months')
-                //     ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-                //     ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
-                //     ->join('users', 'users.id', '=', 'salary_years.id_user')
-                //     ->join('statuses', 'users.id_status', '=', 'statuses.id')
-                //     ->join('depts', 'users.id_dept', '=', 'depts.id')
-                //     ->join('jobs', 'users.id_job', '=', 'jobs.id')
-                //     ->join('grades', 'users.id_grade', '=', 'grades.id')
-                //     ->where('users.id_status', $statusFilter)
-                //     ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
-                //     ->get();
 
-                $data = DB::table('users')
+                $global = DB::table('salary_years')
+                    ->join('users', 'salary_years.id_user', '=', 'users.id')
+                    ->join('statuses', 'users.id_status', '=', 'statuses.id')
+                    ->select('salary_years.id as salary_years_id')
+                    ->where('salary_years.used', 1)
+                    ->where('users.id_status', $statusFilter)
+                    ->get();
+
+                foreach ($global as $g) {
+                    SalaryMonth::create([
+                        'id_salary_year' =>$g->salary_years_id,
+                        'date' => $yearFilter . '-' . $monthFilter . '-13'
+                    ]);
+                }
+
+                $data = DB::table('salary_months')
+                    ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                    ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
+                    ->join('users', 'users.id', '=', 'salary_years.id_user')
                     ->join('statuses', 'users.id_status', '=', 'statuses.id')
                     ->join('depts', 'users.id_dept', '=', 'depts.id')
                     ->join('jobs', 'users.id_job', '=', 'jobs.id')
                     ->join('grades', 'users.id_grade', '=', 'grades.id')
-                    ->join('salary_grades', 'grades.id', '=', 'salary_grades.id_grade')
-                    ->join('salary_years', 'salary_years.id_user', '=', 'users.id')
                     ->where('users.id_status', $statusFilter)
-                    ->select('users.*', 'salary_grades.*', 'grades.*', 'statuses.*', 'depts.*', 'jobs.*', 'salary_grades.id as id_salary_grade', 'users.id as id_user', 'salary_years.id as id_salary_year')
+                    ->whereMonth('salary_months.date', $monthFilter)
+                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
                     ->get();
-
             }
         } else {
             $data = DB::table('users')
@@ -201,7 +206,6 @@ class SalaryMonthController extends Controller
                 ->get();
         }
 
-        // dd($data);
 
         return view('salary_month.create', compact('title', 'statuses', 'years', 'statusFilter', 'yearFilter', 'monthFilter', 'data'));
     }

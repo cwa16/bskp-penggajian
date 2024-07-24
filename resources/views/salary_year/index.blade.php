@@ -19,6 +19,7 @@
                                     style="display: none;">Choose Data</button>
                                 <button type="button" class="btn btn-outline-secondary btn-sm" id="cancelButton"
                                     style="display: none;">Cancel</button>
+                                <a href="{{ url('/salary-year/filter-new') }}" class="btn btn-success btn-sm">Input Data</a>
                             </div>
                             <div class="col-5 justify-content-end">
                                 <form action="{{ url('/salary-year') }}" method="GET">
