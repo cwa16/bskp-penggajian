@@ -26,14 +26,10 @@
                                     <div class="row">
                                         <div class="col pe-0">
                                             <select class="form-select form-select-sm" name="filter_status">
-                                                <option value="" {{ $selectedStatus == 'all' ? 'selected' : '' }}>
-                                                    Show All Status
-                                                </option>
-                                                @foreach ($statuses as $status)
-                                                    <option value="{{ $status }}"
-                                                        {{ $selectedStatus == $status ? 'selected' : '' }}>
-                                                        {{ $status }}
-                                                    </option>
+                                                <option selected disabled>-- Pilih Status --</option>
+                                                    <option value="All Status">All Status</option>
+                                                @foreach ($statuses_id as $status)
+                                                    <option value="{{ $status->id }}">{{ $status->name_status }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -90,20 +86,20 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($salary_years as $key => $sy)
+                                    @foreach ($data as $key => $sy)
                                     {{-- @php
                                         $totalFamilyAlw = 0;
                                         $totalFamilyAlw += $sy->family_alw;
                                     @endphp --}}
                                         <tr>
-                                            <td class="text-nowrap text-end">{{ $sy->user->nik }}</td>
-                                            <td>{{ $sy->user->name }}</td>
-                                            <td>{{ $sy->user->status->name_status }}</td>
-                                            <td>{{ $sy->user->dept->name_dept }}</td>
-                                            <td>{{ $sy->user->job->name_job }}</td>
-                                            <td>{{ $sy->user->grade->name_grade }}</td>
+                                            <td class="text-nowrap text-end">{{ $sy->nik }}</td>
+                                            <td>{{ $sy->name }}</td>
+                                            <td>{{ $sy->name_status }}</td>
+                                            <td>{{ $sy->name_dept }}</td>
+                                            <td>{{ $sy->name_job }}</td>
+                                            <td>{{ $sy->name_grade }}</td>
                                             <td class="text-end">
-                                                {{ $sy->salary_grade->rate_salary != 0 ? number_format($sy->salary_grade->rate_salary, 0, ',', '.') : '-' }}
+                                                {{ $sy->rate_salary != 0 ? number_format($sy->rate_salary, 0, ',', '.') : '-' }}
                                             </td>
                                             <td class="text-end">
                                                 {{ $sy->ability != 0 ? number_format($sy->ability, 0, ',', '.') : '-' }}

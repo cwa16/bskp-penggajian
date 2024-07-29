@@ -69,7 +69,7 @@ class SalaryController extends Controller
                 ->join('depts', 'users.id_dept', '=', 'depts.id')
                 ->join('jobs', 'users.id_job', '=', 'jobs.id')
                 ->join('grades', 'users.id_grade', '=', 'grades.id')
-                ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*')
+                ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.date as salary_month_date')
                 ->get();
         } else {
             if ($selectedStatus == 'All Status') {
@@ -81,7 +81,7 @@ class SalaryController extends Controller
                     ->join('depts', 'users.id_dept', '=', 'depts.id')
                     ->join('jobs', 'users.id_job', '=', 'jobs.id')
                     ->join('grades', 'users.id_grade', '=', 'grades.id')
-                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*')
+                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.date as salary_month_date')
                     ->whereYear('salary_months.date', $selectedYear)
                     ->whereMonth('salary_months.date', $selectedMonth)
                     ->get();
@@ -94,7 +94,7 @@ class SalaryController extends Controller
                     ->join('depts', 'users.id_dept', '=', 'depts.id')
                     ->join('jobs', 'users.id_job', '=', 'jobs.id')
                     ->join('grades', 'users.id_grade', '=', 'grades.id')
-                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*')
+                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.date as salary_month_date')
                     ->where('users.id_status', $selectedStatus)
                     ->whereYear('salary_months.date', $selectedYear)
                     ->whereMonth('salary_months.date', $selectedMonth)
@@ -123,6 +123,8 @@ class SalaryController extends Controller
         $totalCooperative = $data->sum('cooperative');
         $totalPinjaman = $data->sum('pinjaman');
         $totalOther = $data->sum('other');
+        $totalTotalded = $data->sum('total_deduction');
+        $totalNetsalary = $data->sum('net_salary');
 
         $totalRateSalary = $data->sum(function ($data) {
             return $data->rate_salary;
@@ -133,7 +135,7 @@ class SalaryController extends Controller
             'title', 'statuses', 'years', 'months', 'salary_months', 'selectedStatus', 'selectedYear', 'selectedMonth', 'data', 'statuses_id',
             'totalFamilyAlw', 'totalAbility', 'totalFungtionalAlw', 'totalTransportAlw', 'totalTelephoneAlw', 'totalSkillAlw', 'totalAdjustment',
             'totalBpjs', 'totalJamsostek', 'totalRateSalary', 'totalHourCall', 'totalTotalOT', 'totalThr', 'totalBonus', 'totalIncentive',
-            'totalUnion', 'totalAbsent', 'totalElectricity', 'totalCooperative', 'totalPinjaman', 'totalOther',
+            'totalUnion', 'totalAbsent', 'totalElectricity', 'totalCooperative', 'totalPinjaman', 'totalOther', 'totalTotalded', 'totalNetsalary',
         ));
     }
 
@@ -257,21 +259,35 @@ class SalaryController extends Controller
         $year = request()->input('year');
         $month = request()->input('month');
 
-        $salaries = SalaryMonth::with(['salary_year.user.status'])
-            ->whereYear('date', $year)
-            ->whereMonth('date', $month)
-            ->get();
+        $salaries = DB::table('salary_months')
+                ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                ->join('salary_grades', 'salary_years.id_salary_grade', '=', 'salary_grades.id')
+                ->join('grades', 'salary_grades.id_grade', '=', 'grades.id')
+                ->join('users', 'users.id', '=', 'salary_years.id_user')
+                ->join('statuses', 'users.id_status', '=', 'statuses.id')
+                ->join('depts', 'users.id_dept', '=', 'depts.id')
+                ->join('jobs', 'users.id_job', '=', 'jobs.id')
+                ->select('users.nik', 'users.name', 'grades.name_grade', 'salary_months.*', 'salary_years.*', 'salary_months.date as salary_months_date')
+                ->whereYear('salary_months.date', $year)
+                ->whereMonth('salary_months.date', $month)
+                ->get();
 
-        $salByStatus = $salaries->groupBy('salary_year.user.status.name_status');
+        // $salaries = SalaryMonth::with(['salary_year.user.status'])
+        //     ->whereYear('date', $year)
+        //     ->whereMonth('date', $month)
+        //     ->get();
+
+        // $salByStatus = $salaries->groupBy('salary_year.user.status.name_status');
 
         $date = null;
         foreach ($salaries as $sal) {
-            $date = date('F Y', strtotime($sal->date));
+            $date = date('F Y', strtotime($sal->salary_months_date));
         }
 
         if ($date) {
-            $pdf = PDF::loadView('salary.printall', compact('salByStatus', 'date'));
+            $pdf = PDF::loadView('salary.printall', compact('salaries', 'date'));
             return $pdf->setPaper(array(0, 0, 609.4488, 935.433), 'landscape')->stream('PrintAll.pdf');
+            // return $pdf->setPaper('a3', 'landscape')->stream('PrintAll.pdf');
         } else {
             return redirect()->route('salary.index');
         }
@@ -441,12 +457,14 @@ class SalaryController extends Controller
 
         $data = DB::table('salary_months')
             ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-            ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
+            ->join('salary_grades', 'salary_years.id_salary_grade', '=', 'salary_grades.id')
+            ->join('grades', 'salary_grades.id_grade', '=', 'grades.id')
+            // ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
+            // ->join('grades', 'users.id_grade', '=', 'grades.id')
             ->join('users', 'users.id', '=', 'salary_years.id_user')
             ->join('statuses', 'users.id_status', '=', 'statuses.id')
             ->join('depts', 'users.id_dept', '=', 'depts.id')
             ->join('jobs', 'users.id_job', '=', 'jobs.id')
-            ->join('grades', 'users.id_grade', '=', 'grades.id')
             ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*')
             ->where('users.id', $empFilter)
             ->get();

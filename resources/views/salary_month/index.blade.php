@@ -114,7 +114,7 @@
                                             <td>{{ $sm->name_status }}</td>
                                             <td>{{ $sm->name_dept }}</td>
                                             <td>{{ $sm->name_job }}</td>
-                                            <td>{{ $sm->name_grade }}</td>
+                                            <td>{{ $sm->grades_name }}</td>
                                             <td class="text-end">
                                                 @if ($sm->hour_call == null || $sm->hour_call == 0)
                                                     -

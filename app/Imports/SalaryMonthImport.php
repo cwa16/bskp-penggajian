@@ -24,7 +24,8 @@ class SalaryMonthImport implements ToModel, WithHeadingRow
         ->join('salary_grades', 'salary_years.id_salary_grade', '=', 'salary_grades.id')
         ->select('salary_grades.rate_salary', 'salary_years.ability', 'salary_years.fungtional_alw', 'salary_years.family_alw',
                 'salary_years.transport_alw', 'salary_years.telephone_alw', 'salary_years.skill_alw', 'salary_years.adjustment')
-        ->where('salary_months.id', $row['id'])
+                ->where('salary_years.used', '1')
+                ->where('salary_months.id', $row['id'])
         ->first();
 
         $rateSalary = $getRateSalary->rate_salary;
