@@ -29,6 +29,7 @@
                                     <span class="btn-inner--icon"><i class="material-icons">print</i></span>
                                     <span class="btn-inner--text">Print Allocation</span>
                                 </button>
+                                <button class="btn btn-success btn-sm" id="btn-d">Download Excel</button>
                             </div>
                             <div class="col-5 justify-content-end">
                                 <form action="{{ url('/salary') }}" method="GET">
@@ -79,7 +80,7 @@
                         </div>
                         <div class="table-responsive p-0">
                             <table
-                                class="table table-sm table-striped table-hover dtTable100 align-items-center small-tbl compact">
+                                class="table table-sm table-striped table-hover dtTable100 align-items-center small-tbl compact" id="example">
                                 <thead class="bg-thead">
                                     <tr>
                                         <th colspan="7" class="text-center p-0">Employee Identity</th>
@@ -273,7 +274,7 @@
                                             @endphp</td>
 
                                             {{-- <td class="text-end"> {{ $sal->allocation }}</td> --}}
-                                            <td class="text-end">{{ date('d M Y', strtotime($sal->date)) }}</td>
+                                            <td class="text-end">{{ date('d M Y', strtotime($sal->salary_month_date)) }}</td>
                                             <td class="align-middle text-center text-sm"><span
                                                     class="badge badge-sm bg-gradient-success"> &#10004;</td>
                                             <td class="align-middle text-center text-sm"><span
@@ -331,8 +332,10 @@
                                         <td class="text-end">{{ number_format($totalAbsent, 0, ',', '.') }}</td>
                                         <td class="text-end">{{ number_format($totalElectricity, 0, ',', '.') }}</td>
                                         <td class="text-end">{{ number_format($totalCooperative, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalTotalded, 0, ',', '.') }}</td>
+                                        <td class="text-end">{{ number_format($totalNetsalary, 0, ',', '.') }}</td>
                                         <td class="text-end">0</td>
-                                        <td style="background-color: #1A73E8;color: white;"></td>
+                                        <td colspan="4" style="background-color: #1A73E8;color: white;"></td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -453,4 +456,13 @@
                 </div>
             </div>
         </div>
+        <script src="{{ asset('assets/libs/jquery/jquery.js') }}"></script>
+        <script src="{{ asset('assets/js/tableToExcel.js') }}"></script>
+        <script>
+            $("#btn-d").click(function() {
+                TableToExcel.convert(document.getElementById("example"), {
+                    name: "Data_Gaji_May-2024.xlsx",
+                });
+            });
+        </script>
     @endsection

@@ -29,7 +29,7 @@ class SalaryMonthExport implements FromCollection, WithHeadings, WithStyles
             ->join('users', 'users.id', '=', 'salary_years.id_user')
             ->join('grades', 'grades.id', '=', 'users.id_grade')
             ->select('salary_months.*', 'users.name', 'users.nik', 'users.id as id_users')
-            ->select('salary_months.id', 'users.nik', 'users.name', 'grades.name_grade', 'salary_months.hour_call', 'salary_months.thr', 'salary_months.bonus', 'salary_months.incentive', 'salary_months.union', 'salary_months.absent', 'salary_months.electricity', 'salary_months.cooperative', 'salary_months.date')
+            ->select('salary_months.id', 'users.nik', 'users.name', 'grades.name_grade', 'salary_months.hour_call', 'salary_months.thr', 'salary_months.bonus', 'salary_months.incentive', 'salary_months.union', 'salary_months.absent', 'salary_months.electricity', 'salary_months.cooperative', 'salary_months.pinjaman', 'salary_months.other', 'salary_months.date')
             ->whereDate('salary_months.date', $this->date)
             ->where('users.id_status', $this->status);
 
@@ -51,6 +51,8 @@ class SalaryMonthExport implements FromCollection, WithHeadings, WithStyles
             'absent',
             'electricity',
             'cooperative',
+            'pinjaman',
+            'other',
             'date'
         ];
     }

@@ -62,6 +62,7 @@
                                             <th><input type="checkbox" id="checkboxAll"></th>
                                             <th>NIK</th>
                                             <th>Name</th>
+                                            <th>Grade</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -70,9 +71,10 @@
                             $.each(data, function(index, item){
                                 content += `
                                     <tr>
-                                        <td><input type="checkbox" class="checkboxItem" value="${item.id}" name="id[]"></td>
+                                        <td><input type="checkbox" class="checkboxItem" value="${item.users_id}" name="id[]"></td>
                                         <td>${item.nik}</td>
                                         <td>${item.name}</td>
+                                        <td>${item.name_grade}</td>
                                     </tr>
                                 `;
                             });

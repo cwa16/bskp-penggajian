@@ -84,9 +84,9 @@
                                                                 value="{{ $sy->salary_years_id }}">
                                                             <input type="hidden" name="id_user[]"
                                                                 value="{{ $sy->user_id }}">
-                                                            {{-- <input type="hidden" name="id_salary_grade[]"
+                                                            <input type="hidden" name="id_salary_grade[]"
                                                                 value="{{ $sy->salary_grades_id }}">
-                                                            <input type="hidden" name="rate_salary[]"
+                                                            {{-- <input type="hidden" name="rate_salary[]"
                                                                 value="{{ $sy->rate_salary }}"> --}}
 
                                                             <div class="input-group input-group-outline">
@@ -207,10 +207,12 @@
     <script src="{{ asset('assets/libs/jquery/jquery.js') }}"></script>
     <script>
         $(document).ready(function() {
+            // Handle checkbox select all
             $('#data-container').on('change', '#checkboxAll', function() {
                 $('.checkboxItem').prop('checked', $(this).prop('checked'));
             });
 
+            // Handle select change event
             $('#select-data').change(function() {
                 var selectedValue = $(this).val();
                 $.ajax({
@@ -221,7 +223,7 @@
                     },
                     dataType: "json",
                     success: function(data) {
-                        var content = '<td>';
+                        var content = '';
 
                         function numberFormat(number) {
                             return new Intl.NumberFormat('id-ID', {
@@ -232,17 +234,24 @@
 
                         $.each(data, function(index, item) {
                             content += `
+                                <tr>
                                     <td>
                                         <input type="hidden" name="id_salary_grade[]" value="${item.id}">
-                                        <input type="hidden" name="rate_salary[]" value="${item.rate_salary}"> ${numberFormat(item.rate_salary)}
+                                        <input type="hidden" name="rate_salary[]" value="${item.rate_salary}">
+                                        ${numberFormat(item.rate_salary)}
                                     </td>
+                                </tr>
                             `;
                         });
-                        content += '</td>';
+
                         $('#data-container').html(content);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error: ', error);
                     }
                 });
             });
         });
     </script>
+
 @endsection

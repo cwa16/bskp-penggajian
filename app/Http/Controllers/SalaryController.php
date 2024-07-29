@@ -71,7 +71,7 @@ class SalaryController extends Controller
                 ->join('depts', 'users.id_dept', '=', 'depts.id')
                 ->join('jobs', 'users.id_job', '=', 'jobs.id')
                 ->join('grades', 'users.id_grade', '=', 'grades.id')
-                ->select('salary_months.id as id_month','salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*')
+                ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.date as salary_month_date')
                 ->get();
         } else {
             if ($selectedStatus == 'All Status') {
@@ -83,7 +83,7 @@ class SalaryController extends Controller
                     ->join('depts', 'users.id_dept', '=', 'depts.id')
                     ->join('jobs', 'users.id_job', '=', 'jobs.id')
                     ->join('grades', 'users.id_grade', '=', 'grades.id')
-                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*')
+                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.date as salary_month_date')
                     ->whereYear('salary_months.date', $selectedYear)
                     ->whereMonth('salary_months.date', $selectedMonth)
                     ->get();
@@ -96,7 +96,7 @@ class SalaryController extends Controller
                     ->join('depts', 'users.id_dept', '=', 'depts.id')
                     ->join('jobs', 'users.id_job', '=', 'jobs.id')
                     ->join('grades', 'users.id_grade', '=', 'grades.id')
-                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*')
+                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.date as salary_month_date')
                     ->where('users.id_status', $selectedStatus)
                     ->whereYear('salary_months.date', $selectedYear)
                     ->whereMonth('salary_months.date', $selectedMonth)
@@ -125,6 +125,8 @@ class SalaryController extends Controller
         $totalCooperative = $data->sum('cooperative');
         $totalPinjaman = $data->sum('pinjaman');
         $totalOther = $data->sum('other');
+        $totalTotalded = $data->sum('total_deduction');
+        $totalNetsalary = $data->sum('net_salary');
 
         $totalRateSalary = $data->sum(function ($data) {
             return $data->rate_salary;
@@ -135,7 +137,7 @@ class SalaryController extends Controller
             'title', 'statuses', 'years', 'months', 'salary_months', 'selectedStatus', 'selectedYear', 'selectedMonth', 'data', 'statuses_id',
             'totalFamilyAlw', 'totalAbility', 'totalFungtionalAlw', 'totalTransportAlw', 'totalTelephoneAlw', 'totalSkillAlw', 'totalAdjustment',
             'totalBpjs', 'totalJamsostek', 'totalRateSalary', 'totalHourCall', 'totalTotalOT', 'totalThr', 'totalBonus', 'totalIncentive',
-            'totalUnion', 'totalAbsent', 'totalElectricity', 'totalCooperative', 'totalPinjaman', 'totalOther',
+            'totalUnion', 'totalAbsent', 'totalElectricity', 'totalCooperative', 'totalPinjaman', 'totalOther', 'totalTotalded', 'totalNetsalary',
         ));
     }
 
@@ -319,78 +321,34 @@ class SalaryController extends Controller
         $month = request()->input('month');
 
         $salaries = DB::table('salary_months')
-            ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-            ->join('salary_grades', 'salary_years.id_salary_grade', '=', 'salary_grades.id')
-            ->join('grades', 'salary_grades.id_grade', '=', 'grades.id')
-            ->join('users', 'users.id', '=', 'salary_years.id_user')
-            ->join('statuses', 'users.id_status', '=', 'statuses.id')
-            ->join('depts', 'users.id_dept', '=', 'depts.id')
-            ->join('jobs', 'users.id_job', '=', 'jobs.id')
-            ->select('users.nik as Emp Code', 'users.name as Nama', 'grades.name_grade as Grade', 'salary_grades.rate_salary', 'salary_years.ability', 'salary_years.fungtional_alw',
-            'salary_years.family_alw', 'salary_years.transport_alw', 'salary_years.skill_alw', 'salary_years.telephone_alw', 'salary_years.bpjs',
-            'salary_years.jamsostek', 'salary_months.total_overtime', 'salary_months.thr', 'salary_months.bonus', 'salary_months.incentive', 'salary_months.union',
-            'salary_months.absent', 'salary_months.electricity', 'salary_months.cooperative', 'salary_months.pinjaman', 'salary_months.other',
-            'salary_months.date as salary_months_date', 'salary_months.total_deduction', 'salary_months.net_salary'
-            )
-            ->whereYear('salary_months.date', $year)
-            ->whereMonth('salary_months.date', $month)
-            ->orderBy('grades.name_grade', 'DESC')
-            ->orderBy('users.name')
-            ->get();
+                ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                ->join('salary_grades', 'salary_years.id_salary_grade', '=', 'salary_grades.id')
+                ->join('grades', 'salary_grades.id_grade', '=', 'grades.id')
+                ->join('users', 'users.id', '=', 'salary_years.id_user')
+                ->join('statuses', 'users.id_status', '=', 'statuses.id')
+                ->join('depts', 'users.id_dept', '=', 'depts.id')
+                ->join('jobs', 'users.id_job', '=', 'jobs.id')
+                ->select('users.nik', 'users.name', 'grades.name_grade', 'salary_months.*', 'salary_years.*', 'salary_months.date as salary_months_date')
+                ->whereYear('salary_months.date', $year)
+                ->whereMonth('salary_months.date', $month)
+                ->get();
 
-        $totalRateSalary = $salaries->sum('rate_salary');
-        $totalAbility = $salaries->sum('ability');
-        $totalFungtionalAlw = $salaries->sum('fungtional_alw');
-        $totalSkillAlw = $salaries->sum('skill_alw');
-        $totalFamilyAlw = $salaries->sum('family_alw');
-        $totalTelephoneAlw = $salaries->sum('telephone_alw');
-        $totalTransportAlw = $salaries->sum('transport_alw');
-        $totalTotalOT = $salaries->sum('total_overtime');
-        $totalIncentive = $salaries->sum('incentive');
-        $totalThr = $salaries->sum('thr');
-        $totalBonus = $salaries->sum('bonus');
-        $totalPinjaman = $salaries->sum('pinjaman');
-        $totalBpjs = $salaries->sum('bpjs');
-        $totalJamsostek = $salaries->sum('jamsostek');
-        $totalUnion = $salaries->sum('union');
-        $totalOther = $salaries->sum('other');
-        $totalAbsent = $salaries->sum('absent');
-        $totalElectricity = $salaries->sum('electricity');
-        $totalCooperative = $salaries->sum('cooperative');
-        $totalTotalDed = $salaries->sum('total_deduction');
-        $totalNetSalary = $salaries->sum('net_salary');
+        // $salaries = SalaryMonth::with(['salary_year.user.status'])
+        //     ->whereYear('date', $year)
+        //     ->whereMonth('date', $month)
+        //     ->get();
 
-        $columns = ['Emp Code', 'Nama', 'Grade', 'rate_salary', 'ability', 'fungtional_alw', 'skill_alw', 'family_alw', 'telephone_alw', 'transport_alw',
-        'total_overtime', 'incentive', 'thr', 'bonus', 'pinjaman', 'bpjs', 'jamsostek', 'union', 'other', 'absent', 'electricity', 'cooperative',
-        'total_deduction', 'net_salary'];
-
-        $displayColumns = [];
-        foreach ($columns as $column) {
-            if ($salaries->pluck($column)->filter()->isNotEmpty()) {
-                $displayColumns[] = $column;
-            }
-        }
-
-        $employeeIdentityColumns = ['Emp Code', 'Nama', 'Grade'];
-        $salaryComponentColumns = ['rate_salary', 'ability', 'fungtional_alw', 'skill_alw', 'family_alw', 'telephone_alw', 'transport_alw', 'total_overtime', 'incentive', 'thr', 'bonus'];
-        $deductionColumns = ['pinjaman', 'bpjs', 'jamsostek', 'union', 'other', 'absent', 'electricity', 'cooperative', 'total_deduction'];
-
-        $employeeIdentityCols = count(array_intersect($displayColumns, $employeeIdentityColumns));
-        $salaryComponentCols = count(array_intersect($displayColumns, $salaryComponentColumns));
-        $deductionCols = count(array_intersect($displayColumns, $deductionColumns));
+        // $salByStatus = $salaries->groupBy('salary_year.user.status.name_status');
 
         $date = null;
         foreach ($salaries as $sal) {
-            $date = date('F Y', strtotime($sal->date));
+            $date = date('F Y', strtotime($sal->salary_months_date));
         }
 
         if ($date) {
-            $pdf = PDF::loadView('salary.printall_new_nd', compact('salaries', 'date', 'displayColumns', 'employeeIdentityCols'
-                    , 'salaryComponentCols', 'deductionCols', 'totalRateSalary', 'totalAbility', 'totalFungtionalAlw', 'totalSkillAlw'
-                    , 'totalFamilyAlw', 'totalTelephoneAlw', 'totalTransportAlw', 'totalTotalOT', 'totalIncentive', 'totalThr'
-                    , 'totalBonus', 'totalPinjaman', 'totalBpjs', 'totalJamsostek', 'totalUnion', 'totalOther'
-                    , 'totalAbsent', 'totalElectricity', 'totalCooperative', 'totalTotalDed', 'totalNetSalary'));
+            $pdf = PDF::loadView('salary.printall', compact('salaries', 'date'));
             return $pdf->setPaper(array(0, 0, 609.4488, 935.433), 'landscape')->stream('PrintAll.pdf');
+            // return $pdf->setPaper('a3', 'landscape')->stream('PrintAll.pdf');
         } else {
             return redirect()->route('salary.index');
         }
@@ -646,12 +604,14 @@ class SalaryController extends Controller
 
         $data = DB::table('salary_months')
             ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-            ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
+            ->join('salary_grades', 'salary_years.id_salary_grade', '=', 'salary_grades.id')
+            ->join('grades', 'salary_grades.id_grade', '=', 'grades.id')
+            // ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
+            // ->join('grades', 'users.id_grade', '=', 'grades.id')
             ->join('users', 'users.id', '=', 'salary_years.id_user')
             ->join('statuses', 'users.id_status', '=', 'statuses.id')
             ->join('depts', 'users.id_dept', '=', 'depts.id')
             ->join('jobs', 'users.id_job', '=', 'jobs.id')
-            ->join('grades', 'users.id_grade', '=', 'grades.id')
             ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*')
             ->where('users.id', $empFilter)
             ->get();
