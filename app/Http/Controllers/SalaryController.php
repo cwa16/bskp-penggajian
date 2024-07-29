@@ -260,24 +260,19 @@ class SalaryController extends Controller
         $month = request()->input('month');
 
         $salaries = DB::table('salary_months')
-                ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-                ->join('salary_grades', 'salary_years.id_salary_grade', '=', 'salary_grades.id')
-                ->join('grades', 'salary_grades.id_grade', '=', 'grades.id')
-                ->join('users', 'users.id', '=', 'salary_years.id_user')
-                ->join('statuses', 'users.id_status', '=', 'statuses.id')
-                ->join('depts', 'users.id_dept', '=', 'depts.id')
-                ->join('jobs', 'users.id_job', '=', 'jobs.id')
-                ->select('users.nik', 'users.name', 'grades.name_grade', 'salary_months.*', 'salary_years.*', 'salary_months.date as salary_months_date')
-                ->whereYear('salary_months.date', $year)
-                ->whereMonth('salary_months.date', $month)
-                ->get();
-
-        // $salaries = SalaryMonth::with(['salary_year.user.status'])
-        //     ->whereYear('date', $year)
-        //     ->whereMonth('date', $month)
-        //     ->get();
-
-        // $salByStatus = $salaries->groupBy('salary_year.user.status.name_status');
+            ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+            ->join('salary_grades', 'salary_years.id_salary_grade', '=', 'salary_grades.id')
+            ->join('grades', 'salary_grades.id_grade', '=', 'grades.id')
+            ->join('users', 'users.id', '=', 'salary_years.id_user')
+            ->join('statuses', 'users.id_status', '=', 'statuses.id')
+            ->join('depts', 'users.id_dept', '=', 'depts.id')
+            ->join('jobs', 'users.id_job', '=', 'jobs.id')
+            ->select('users.nik', 'users.name', 'grades.name_grade', 'salary_grades.rate_salary', 'salary_months.*', 'salary_years.*', 'salary_months.date as salary_months_date')
+            ->whereYear('salary_months.date', $year)
+            ->whereMonth('salary_months.date', $month)
+            ->orderBy('grades.name_grade')
+            ->orderBy('users.name')
+            ->get();
 
         $date = null;
         foreach ($salaries as $sal) {
@@ -285,9 +280,8 @@ class SalaryController extends Controller
         }
 
         if ($date) {
-            $pdf = PDF::loadView('salary.printall', compact('salaries', 'date'));
+            $pdf = PDF::loadView('salary.printall_new', compact('salaries', 'date'));
             return $pdf->setPaper(array(0, 0, 609.4488, 935.433), 'landscape')->stream('PrintAll.pdf');
-            // return $pdf->setPaper('a3', 'landscape')->stream('PrintAll.pdf');
         } else {
             return redirect()->route('salary.index');
         }
