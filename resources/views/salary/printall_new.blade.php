@@ -38,9 +38,9 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <h2>Salary Report</h2>
-        <p>{{ $date }}</p>
+    <div class="header" style="text-align: center">
+        <h1>PT BRIDGESTONE KALIMANTAN PLANTATION</h1>
+        <h1>SALARY PAYMENT <span style="text-transform: uppercase">{{ $date }}</span></h1>
     </div>
     <table>
         <thead>
@@ -52,10 +52,10 @@
                 <th rowspan="2">Net<br>Salary</th>
             </tr>
             <tr>
-                <th width="35px">Emp<br>Code</th>
+                <th style="padding-bottom: 5px;" width="35px">Emp<br>Code</th>
                 <th width="90px">Name</th>
                 <th width="25px">Grade</th>
-                <th>Salary<br>Grade</th>
+                <th style="padding-bottom: 5px;">Salary<br>Grade</th>
                 <th>Ability</th>
                 <th>Fungtional<br>All</th>
                 <th>Family<br>All</th>
