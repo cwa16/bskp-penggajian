@@ -69,7 +69,7 @@ class SalaryController extends Controller
                 ->join('depts', 'users.id_dept', '=', 'depts.id')
                 ->join('jobs', 'users.id_job', '=', 'jobs.id')
                 ->join('grades', 'users.id_grade', '=', 'grades.id')
-                ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.date as salary_month_date')
+                ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
                 ->get();
         } else {
             if ($selectedStatus == 'All Status') {
@@ -81,7 +81,7 @@ class SalaryController extends Controller
                     ->join('depts', 'users.id_dept', '=', 'depts.id')
                     ->join('jobs', 'users.id_job', '=', 'jobs.id')
                     ->join('grades', 'users.id_grade', '=', 'grades.id')
-                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.date as salary_month_date')
+                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
                     ->whereYear('salary_months.date', $selectedYear)
                     ->whereMonth('salary_months.date', $selectedMonth)
                     ->get();
@@ -94,7 +94,7 @@ class SalaryController extends Controller
                     ->join('depts', 'users.id_dept', '=', 'depts.id')
                     ->join('jobs', 'users.id_job', '=', 'jobs.id')
                     ->join('grades', 'users.id_grade', '=', 'grades.id')
-                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.date as salary_month_date')
+                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
                     ->where('users.id_status', $selectedStatus)
                     ->whereYear('salary_months.date', $selectedYear)
                     ->whereMonth('salary_months.date', $selectedMonth)
