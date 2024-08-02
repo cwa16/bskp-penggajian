@@ -134,7 +134,7 @@
                                         <tr>
                                             <td class="text-nowrap text-end">{{ $sal->nik }}</td>
                                             <td><a data-bs-toggle="modal"
-                                                    href="#detailGaji{{ $sal->id_month }}">{{ $sal->name }}</a>
+                                                    href="#detailGaji{{ $sal->id }}">{{ $sal->name }}</a>
                                             </td>
                                             <td>{{ $sal->name_status }}</td>
                                             <td>{{ $sal->name_dept }}</td>
@@ -282,7 +282,7 @@
                                             <td class="text-center m-0 p-0">
                                                 <button class="btn btn-primary btn-icon-only m-0 p-0 btn-sm"
                                                     type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#detailGaji{{ $sal->id_month }}">
+                                                    data-bs-target="#detailGaji{{ $sal->id }}">
                                                     <span class="btn-inner--icon"><i
                                                             class="material-icons">info</i></span>
                                                 </button>
