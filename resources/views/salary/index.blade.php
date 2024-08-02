@@ -134,7 +134,7 @@
                                         <tr>
                                             <td class="text-nowrap text-end">{{ $sal->nik }}</td>
                                             <td><a data-bs-toggle="modal"
-                                                    href="#detailGaji{{ $sal->id }}">{{ $sal->name }}</a>
+                                                    href="#detailGaji{{ $sal->salary_month_id }}">{{ $sal->name }}</a>
                                             </td>
                                             <td>{{ $sal->name_status }}</td>
                                             <td>{{ $sal->name_dept }}</td>
