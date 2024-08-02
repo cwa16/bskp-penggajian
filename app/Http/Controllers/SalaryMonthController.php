@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Status;
-use App\Models\SalaryYear;
-use App\Models\SalaryMonth;
-use Carbon\Carbon;
-use DB;
 use App\Exports\SalaryMonthExport;
 use App\Imports\SalaryMonthImport;
-use Maatwebsite\Excel\Facades\Excel;
-
+use App\Models\SalaryMonth;
+use App\Models\SalaryYear;
+use App\Models\Status;
+use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SalaryMonthController extends Controller
 {
@@ -93,6 +91,7 @@ class SalaryMonthController extends Controller
             }
         }
 
+
         $totalHourCall = $data->sum('hour_call');
         $totalTotalOT = $data->sum('total_overtime');
         $totalThr = $data->sum('thr');
@@ -104,7 +103,6 @@ class SalaryMonthController extends Controller
         $totalCooperative = $data->sum('cooperative');
         $totalPinjaman = $data->sum('pinjaman');
         $totalOther = $data->sum('other');
-        // dd($totalUnion);
 
         return view('salary_month.index', compact(
             'title', 'selectedStatus', 'data', 'statuses', 'selectedYear', 'years', 'selectedMonth', 'months', 'statuses_id',
@@ -123,7 +121,7 @@ class SalaryMonthController extends Controller
         $yearFilter = request()->input('year', null);
         $monthFilter = request()->input('month', null);
 
-        return view('salary_month.filter', compact('title', 'statusFilter', 'yearFilter', 'statuses', 'monthFilter', 'years',));
+        return view('salary_month.filter', compact('title', 'statusFilter', 'yearFilter', 'statuses', 'monthFilter', 'years', ));
     }
 
     public function create()
@@ -146,7 +144,7 @@ class SalaryMonthController extends Controller
             ->where('users.id_status', $statusFilter)
             ->first();
 
-            // dd($checkYear, $checkMonth, $checkStatus);
+        // dd($checkYear, $checkMonth, $checkStatus);
 
         if ($checkStatus != null) {
             if ($checkYear != null && $checkMonth != null) {
@@ -175,8 +173,8 @@ class SalaryMonthController extends Controller
 
                 foreach ($global as $g) {
                     SalaryMonth::create([
-                        'id_salary_year' =>$g->salary_years_id,
-                        'date' => $yearFilter . '-' . $monthFilter . '-13'
+                        'id_salary_year' => $g->salary_years_id,
+                        'date' => $yearFilter . '-' . $monthFilter . '-13',
                     ]);
                 }
 
@@ -205,7 +203,6 @@ class SalaryMonthController extends Controller
                 ->select('users.*', 'salary_grades.*', 'grades.*', 'statuses.*', 'depts.*', 'jobs.*', 'salary_grades.id as id_salary_grade', 'users.id as id_user', 'salary_years.id as id_salary_year')
                 ->get();
         }
-
 
         return view('salary_month.create', compact('title', 'statuses', 'years', 'statusFilter', 'yearFilter', 'monthFilter', 'data'));
     }
@@ -289,66 +286,66 @@ class SalaryMonthController extends Controller
 
     public function store(Request $request)
     {
-    $idFilter = $request->input('id_salary_month');
-    $yearFilter = $request->input('year');
-    $monthFilter = $request->input('month');
+        $idFilter = $request->input('id_salary_month');
+        $yearFilter = $request->input('year');
+        $monthFilter = $request->input('month');
 
-    foreach ($request->input('id_user') as $key => $id_user) {
-        $date = $yearFilter . '-' . $monthFilter . '-13';
+        foreach ($request->input('id_user') as $key => $id_user) {
+            $date = $yearFilter . '-' . $monthFilter . '-13';
 
-        $rate_salary = $request->input('rate_salary')[$key] ?? 0;
-        $ability = $request->input('ability')[$key] ?? 0;
-        $fungtional_alw = $request->input('fungtional_alw')[$key] ?? 0;
-        $family_alw = $request->input('family_alw')[$key] ?? 0;
-        $transport_alw = $request->input('transport_alw')[$key] ?? 0;
-        $skill_alw = $request->input('skill_alw')[$key] ?? 0;
-        $telephone_alw = $request->input('telephone_alw')[$key] ?? 0;
-        $adjustment = $request->input('adjustment')[$key] ?? 0;
-        $total_overtime = $request->input('total_overtime')[$key] ?? 0;
-        $thr = $request->input('thr')[$key] ?? 0;
-        $bonus = $request->input('bonus')[$key] ?? 0;
-        $incentive = $request->input('incentive')[$key] ?? 0;
-        $total_ben = $request->input('total_ben')[$key] ?? 0;
+            $rate_salary = $request->input('rate_salary')[$key] ?? 0;
+            $ability = $request->input('ability')[$key] ?? 0;
+            $fungtional_alw = $request->input('fungtional_alw')[$key] ?? 0;
+            $family_alw = $request->input('family_alw')[$key] ?? 0;
+            $transport_alw = $request->input('transport_alw')[$key] ?? 0;
+            $skill_alw = $request->input('skill_alw')[$key] ?? 0;
+            $telephone_alw = $request->input('telephone_alw')[$key] ?? 0;
+            $adjustment = $request->input('adjustment')[$key] ?? 0;
+            $total_overtime = $request->input('total_overtime')[$key] ?? 0;
+            $thr = $request->input('thr')[$key] ?? 0;
+            $bonus = $request->input('bonus')[$key] ?? 0;
+            $incentive = $request->input('incentive')[$key] ?? 0;
+            $total_ben = $request->input('total_ben')[$key] ?? 0;
 
-        $bpjs = $request->input('bpjs')[$key] ?? 0;
-        $jamsostek = $request->input('jamsostek')[$key] ?? 0;
-        $union = $request->input('union')[$key] ?? 0;
-        $absent = $request->input('absent')[$key] ?? 0;
-        $electricity = $request->input('electricity')[$key] ?? 0;
-        $cooperative = $request->input('cooperative')[$key] ?? 0;
-        $pinjaman = $request->input('pinjaman')[$key] ?? 0;
-        $other = $request->input('other')[$key] ?? 0;
-        $total_ben_ded = $request->input('total_ben_ded')[$key] ?? 0;
+            $bpjs = $request->input('bpjs')[$key] ?? 0;
+            $jamsostek = $request->input('jamsostek')[$key] ?? 0;
+            $union = $request->input('union')[$key] ?? 0;
+            $absent = $request->input('absent')[$key] ?? 0;
+            $electricity = $request->input('electricity')[$key] ?? 0;
+            $cooperative = $request->input('cooperative')[$key] ?? 0;
+            $pinjaman = $request->input('pinjaman')[$key] ?? 0;
+            $other = $request->input('other')[$key] ?? 0;
+            $total_ben_ded = $request->input('total_ben_ded')[$key] ?? 0;
 
-        $gross_sal = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw + $skill_alw + $telephone_alw +
-            $adjustment + $total_overtime + $thr + $bonus + $incentive;
-        $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative + $pinjaman + $other;
-        $net_salary = ($gross_sal + $total_ben) - ($total_deduction + $total_ben_ded);
+            $gross_sal = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw + $skill_alw + $telephone_alw +
+                $adjustment + $total_overtime + $thr + $bonus + $incentive;
+            $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative + $pinjaman + $other;
+            $net_salary = ($gross_sal + $total_ben) - ($total_deduction + $total_ben_ded);
 
-        SalaryMonth::updateOrCreate(
-            [
-                'id' => $request->input('id_salary_month')[$key],
-                'date' => $request->input('date_input')[$key],
-            ],
-            [
-                'id_salary_year' => $request->input('id_salary_year')[$key],
-                'hour_call' => $request->input('hour_call')[$key] ?? 0,
-                'total_overtime' => $total_overtime,
-                'thr' => $thr,
-                'bonus' => $bonus,
-                'incentive' => $incentive,
-                'union' => $union,
-                'absent' => $absent,
-                'electricity' => $electricity,
-                'cooperative' => $cooperative,
-                'pinjaman' => $pinjaman,
-                'other' => $other,
-                'gross_salary' => $gross_sal,
-                'total_deduction' => $total_deduction,
-                'net_salary' => $net_salary,
-            ]
-        );
-    }
+            SalaryMonth::updateOrCreate(
+                [
+                    'id' => $request->input('id_salary_month')[$key],
+                    'date' => $request->input('date_input')[$key],
+                ],
+                [
+                    'id_salary_year' => $request->input('id_salary_year')[$key],
+                    'hour_call' => $request->input('hour_call')[$key] ?? 0,
+                    'total_overtime' => $total_overtime,
+                    'thr' => $thr,
+                    'bonus' => $bonus,
+                    'incentive' => $incentive,
+                    'union' => $union,
+                    'absent' => $absent,
+                    'electricity' => $electricity,
+                    'cooperative' => $cooperative,
+                    'pinjaman' => $pinjaman,
+                    'other' => $other,
+                    'gross_salary' => $gross_sal,
+                    'total_deduction' => $total_deduction,
+                    'net_salary' => $net_salary,
+                ]
+            );
+        }
 
         return redirect()->route('salary-month')->with('success', 'Salary data stored successfully');
     }
@@ -416,7 +413,7 @@ class SalaryMonthController extends Controller
 
             // Hitungan untuk mencari totalan
             $gross_sal = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw + $skill_alw + $telephone_alw +
-            $adjustment + $total_overtime + $thr + $bonus + $incentive;
+                $adjustment + $total_overtime + $thr + $bonus + $incentive;
 
             $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative;
 
@@ -461,12 +458,12 @@ class SalaryMonthController extends Controller
     {
         $date = $request->input('date');
         $status = $request->input('filter_status');
-        return (new SalaryMonthExport($date, $status))->download($date . '_salary_month_' . $status .'.xlsx');
+        return (new SalaryMonthExport($date, $status))->download($date . '_salary_month_' . $status . '.xlsx');
     }
 
     public function import()
     {
-        Excel::import(new SalaryMonthImport,request()->file('file'));
+        Excel::import(new SalaryMonthImport, request()->file('file'));
 
         return back();
     }
