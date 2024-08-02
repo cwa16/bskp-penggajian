@@ -133,7 +133,7 @@
                                         <tr>
                                             <td class="text-nowrap text-end">{{ $sal->nik }}</td>
                                             <td><a data-bs-toggle="modal"
-                                                    href="#detailGaji{{ $sal->id }}">{{ $sal->name }}</a>
+                                                    href="#detailGaji{{ $sal->id_month }}">{{ $sal->name }}</a>
                                             </td>
                                             <td>{{ $sal->name_status }}</td>
                                             <td>{{ $sal->name_dept }}</td>
@@ -285,12 +285,12 @@
                                                     <span class="btn-inner--icon"><i
                                                             class="material-icons">info</i></span>
                                                 </button>
-                                                <a href="{{ url('/print-pdf/' . $sal->id_month) }}"
+                                                <a href="{{ url('/print-pdf/' . $sal->id) }}"
                                                     class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" target="_blank">
                                                     <span class="btn-inner--icon"><i
                                                             class="material-icons">print</i></span>
                                                 </a>
-                                                <a href="{{ url('/send-whatsapp/' . $sal->id_month) }}"
+                                                <a href="{{ url('/send-whatsapp/' . $sal->id) }}"
                                                     class="btn btn-success btn-icon-only m-0 p-0 btn-sm" target="_blank">
                                                     <span class="btn-inner--icon"><i
                                                             class="material-icons">mail</i></span>
