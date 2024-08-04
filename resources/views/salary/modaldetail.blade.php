@@ -236,14 +236,14 @@
                                         <td>Salary Gross + <br>Total Benefit</td>
                                         <td>:</td>
                                         <td class="text-end">
-                                            {{ number_format($sal->gross_salary + $sal->salary_year->total_ben, 0, ',', '.') }}
+                                            {{ number_format($sal->gross_salary, 0, ',', '.') }}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Total Deduction</td>
                                         <td>:</td>
                                         <td class="text-end">
-                                            {{ number_format($sal->total_deduction + $sal->salary_year->total_ben_ded, 0, ',', '.') }}
+                                            {{ number_format($sal->total_deduction, 0, ',', '.') }}
                                         </td>
                                     </tr>
                                     <tr class="top-border">

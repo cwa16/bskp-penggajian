@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use PDF;
 use Twilio\Rest\Client;
 use WaAPI\WaAPI;
+use Illuminate\Support\Str;
 
 class SalaryController extends Controller
 {
@@ -55,10 +56,6 @@ class SalaryController extends Controller
 
         $selectedYear = (int) $selectedYear;
         $selectedMonth = (int) $selectedMonth;
-
-        // $selectedYear =  null;
-        // $selectedMonth = null;
-        // $selectedStatus = null;
 
         if ($selectedYear == null && $selectedMonth == null && $selectedStatus == null) {
             $data = DB::table('salary_months')
@@ -157,73 +154,206 @@ class SalaryController extends Controller
         $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
 
         $pdf = PDF::loadView('salary.print', compact('sal', 'total'));
-        return $pdf->setPaper('a4', 'landscape')->stream('SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf');
+        return $pdf->setPaper('a5', 'landscape')->stream('SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf');
     }
 
     public function send($id)
     {
-        // $sal = SalaryMonth::find($id);
+        $sal = SalaryMonth::find($id);
 
-        // // mengambeil date
-        // $date = date('My', strtotime($sal->date));
+        $date = date('My', strtotime($sal->date));
 
-        // if (!$sal) {
-        //     // Log or dd() the ID to see which ID is causing the issue.
-        //     dd("Salary with ID $id not found.");
-        // }
+        if (!$sal) {
+            dd("Salary with ID $id not found.");
+        }
 
-        // // hitungan utuk mendapatkan total gaji bersih
-        // $rate_salary = $sal->salary_year->salary_grade->rate_salary;
-        // $ability = $sal->salary_year->ability;
-        // $fungtional_alw = $sal->salary_year->fungtional_alw;
-        // $family_alw = $sal->salary_year->family_alw;
+        $rate_salary = $sal->salary_year->salary_grade->rate_salary;
+        $ability = $sal->salary_year->ability;
+        $fungtional_alw = $sal->salary_year->fungtional_alw;
+        $family_alw = $sal->salary_year->family_alw;
 
-        // $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
+        $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
 
-        // $pdf = PDF::loadView('salary.print', compact('sal', 'total'))->setPaper('a5', 'landscape');
+        // $pdf = PDF::loadView('salary.print', compact('sal', 'total'));
+        $days = Carbon::now()->subMonth(1)->format('mY');
+        $dayss = Carbon::now();
+        $day = ($dayss->hour < 12) ? "Pagi" : "Siang";
 
-        // $fileName = 'SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf';
+        $name = $sal->salary_year->user->name;
+        $month = Carbon::parse($sal->date)->format('F');
 
-        // $mediaUrl = asset('slip_gaji/SAL_Jun24_199-073_Sulastri.pdf');
+        $customFileNames = $sal->salary_year->user->nik . $days.$id;
+        $customFileName = Str::of($customFileNames)->toBase64();
+        // Define the file path and name
+        $filePath = storage_path('app/public') . '/' . $customFileName . '.pdf';
+        $pdf = PDF::loadView('salary.print', compact('sal', 'total'));
 
-        // // dd($mediaUrl);
+        // Save the PDF file to the specified path
+        file_put_contents($filePath, $pdf->output());
 
-        // $waAPI = new WaAPI\WaAPI();
-        // $waAPI->sendMediaFromUrl('6287878998251@c.us', 'file:///C:/laragon/www/bskp-penggajian/public/slip_gaji/SAL_Jun24_199-073_Sulastri.pdf', 'slip gaji', 'bskp-penggajian.pdf');
-        // // $waAPI->fetchMessages('6287878998251@c.us', '25', null, null, null );
+        $mediaUrl = $sal->salary_year->user->nik . $days.$id;
+        $urls = Str::of($mediaUrl)->toBase64();
 
-        // // return $pdf->setPaper('a5', 'landscape')->stream('SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf');
-        // $product = \App\Product::findOrFail($id);
-        // $user = User::find(1); // replace this with the authenticated user
+        $url = "https://bskp.blog:9000/pdf/" . $urls . ".pdf";
 
-        // $data = [
-        //     'product' => $product,
-        //     'user' => $user
-        // ];
-
-        $invoiceFile = "SAL_Jun24_199-073_Sulastri.pdf";
-        $invoicePath = public_path("slip_gaji/".$invoiceFile);
-
-        $phoneNumber = +6287878998251;
-
-        // $sid = env('TWILIO_AUTH_SID');
-        // $auth = env('TWILIO_AUTH_TOKEN');
-
-        // dd($sid, $auth);
-
-        // PDF::loadView('invoice', $data)->save($invoicePath);
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
 
         $twilio->messages->create(
-                "whatsapp:+6287878998251", [
-                "from" => "whatsapp:".env('TWILIO_WHATSAPP_FROM'),
-                "body" => "Here's your invoice!",
-                "mediaUrl" => [env("NGROK_URL")."slip_gaji/".$invoiceFile]
+            "whatsapp:+".$sal->salary_year->user->no_telpon,
+            // "whatsapp:+6283854428770",
+            [
+                "contentSid" => env('TWILIO_CONTENT_ID'),
+                "messagingServiceSid" => env('TWILIO_SERVICE_ID'),
+                "from" => "whatsapp:".env('TWILIO_PHONE_NUMBER'),
+                "contentVariables" => json_encode([
+                    "1" => $day,
+                    "2" => $name,
+                    "3" => $month,
+                    "4" => $url,
+                ]),
             ]
         );
 
+        // dd($twilio);
+
         return redirect()->back();
     }
+
+    public function send_batch(Request $request )
+    {
+        $date = $request->input('date');
+        $status = $request->input('filter_status');
+
+        $query = DB::table('salary_months')
+            ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+            ->join('salary_grades', 'salary_years.id_salary_grade', '=', 'salary_grades.id')
+            ->join('users', 'users.id', '=', 'salary_years.id_user')
+            ->join('grades', 'salary_grades.id_grade', '=', 'grades.id')
+            ->select('users.name as nama', 'users.nik', 'users.id as id_users', 'users.no_telpon', 'salary_months.id as salary_month_id', 'salary_months.date as salary_month_date')
+            ->whereDate('salary_months.date', $date)
+            ->where('users.id_status', $status)
+            ->whereIn('users.id', [1814, 1813])
+            ->get();
+
+            foreach($query as $data) {
+                $days = Carbon::now()->subMonth(1)->format('mY');
+                $dayss = Carbon::now();
+                $day = ($dayss->hour < 12) ? "Pagi" : "Siang";
+
+                $name = $data->nama;
+                $month = Carbon::parse($data->salary_month_date)->format('F');
+
+                $customFileNames = $data->nik . $days.$data->salary_month_id;
+                $customFileName = Str::of($customFileNames)->toBase64();
+                $filePath = storage_path('app/public') . '/' . $customFileName . '.pdf';
+
+                $id = $data->salary_month_id;
+                $sal = SalaryMonth::find($id);
+
+                if (!$sal) {
+                    dd("Salary with ID $id not found.");
+                }
+
+                $rate_salary = $sal->salary_year->salary_grade->rate_salary;
+                $ability = $sal->salary_year->ability;
+                $fungtional_alw = $sal->salary_year->fungtional_alw;
+                $family_alw = $sal->salary_year->family_alw;
+                $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
+                $pdf = PDF::loadView('salary.print', compact('sal', 'total'));
+
+                file_put_contents($filePath, $pdf->output());
+
+                $mediaUrl = $data->nik . $days.$data->salary_month_id;
+                $urls = Str::of($mediaUrl)->toBase64();
+
+                $url = "https://bskp.blog:9000/pdf/" . $urls . ".pdf";
+
+                $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
+
+                $twilio->messages->create(
+                    "whatsapp:+".$data->no_telpon,
+                    [
+                        "contentSid" => env('TWILIO_CONTENT_ID'),
+                        "messagingServiceSid" => env('TWILIO_SERVICE_ID'),
+                        "from" => "whatsapp:".env('TWILIO_PHONE_NUMBER'),
+                        "contentVariables" => json_encode([
+                            "1" => $day,
+                            "2" => $name,
+                            "3" => $month,
+                            "4" => $url,
+                        ]),
+                    ]
+                );
+            }
+
+            return redirect()->back();
+    }
+
+    // public function send($id)
+    // {
+    //     // $sal = SalaryMonth::find($id);
+
+    //     // // mengambeil date
+    //     // $date = date('My', strtotime($sal->date));
+
+    //     // if (!$sal) {
+    //     //     // Log or dd() the ID to see which ID is causing the issue.
+    //     //     dd("Salary with ID $id not found.");
+    //     // }
+
+    //     // // hitungan utuk mendapatkan total gaji bersih
+    //     // $rate_salary = $sal->salary_year->salary_grade->rate_salary;
+    //     // $ability = $sal->salary_year->ability;
+    //     // $fungtional_alw = $sal->salary_year->fungtional_alw;
+    //     // $family_alw = $sal->salary_year->family_alw;
+
+    //     // $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
+
+    //     // $pdf = PDF::loadView('salary.print', compact('sal', 'total'))->setPaper('a5', 'landscape');
+
+    //     // $fileName = 'SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf';
+
+    //     // $mediaUrl = asset('slip_gaji/SAL_Jun24_199-073_Sulastri.pdf');
+
+    //     // // dd($mediaUrl);
+
+    //     // $waAPI = new WaAPI\WaAPI();
+    //     // $waAPI->sendMediaFromUrl('6287878998251@c.us', 'file:///C:/laragon/www/bskp-penggajian/public/slip_gaji/SAL_Jun24_199-073_Sulastri.pdf', 'slip gaji', 'bskp-penggajian.pdf');
+    //     // // $waAPI->fetchMessages('6287878998251@c.us', '25', null, null, null );
+
+    //     // // return $pdf->setPaper('a5', 'landscape')->stream('SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf');
+    //     // $product = \App\Product::findOrFail($id);
+    //     // $user = User::find(1); // replace this with the authenticated user
+
+    //     // $data = [
+    //     //     'product' => $product,
+    //     //     'user' => $user
+    //     // ];
+
+    //     $invoiceFile = "SAL_Jun24_199-073_Sulastri.pdf";
+    //     $invoicePath = public_path("slip_gaji/".$invoiceFile);
+
+    //     $phoneNumber = +6287878998251;
+
+    //     // $sid = env('TWILIO_AUTH_SID');
+    //     // $auth = env('TWILIO_AUTH_TOKEN');
+
+    //     // dd($sid, $auth);
+
+    //     // PDF::loadView('invoice', $data)->save($invoicePath);
+    //     $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
+
+    //     $twilio->messages->create(
+    //             "whatsapp:+6287878998251", [
+    //             "from" => "whatsapp:".env('TWILIO_WHATSAPP_FROM'),
+    //             "body" => "Here's your invoice!",
+    //             "mediaUrl" => [env("NGROK_URL")."slip_gaji/".$invoiceFile]
+    //         ]
+    //     );
+
+    //     return redirect()->back();
+    // }
+
 
     public function download($id)
     {
@@ -286,6 +416,7 @@ class SalaryController extends Controller
     //         return redirect()->route('salary.index');
     //     }
     // }
+
 
     public function printall()
     {
@@ -464,6 +595,7 @@ class SalaryController extends Controller
     //     , 'totalAbsent', 'totalElectricity', 'totalCooperative', 'totalTotalDed', 'totalNetSalary'));
     // }
 
+
     public function printallocation()
     {
         // $monthOpts = SalaryMonth::select(DB::raw('MONTH(date) as month'))
@@ -636,12 +768,172 @@ class SalaryController extends Controller
             ->join('statuses', 'users.id_status', '=', 'statuses.id')
             ->join('depts', 'users.id_dept', '=', 'depts.id')
             ->join('jobs', 'users.id_job', '=', 'jobs.id')
-            ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*')
+            ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.date as salary_month_date')
             ->where('users.id', $empFilter)
             ->get();
 
         $name = User::where('id', $empFilter)->select('nik','name')->first();
 
         return view('salary.result', compact('title', 'empFilter', 'yearFilter', 'data', 'name'));
+    }
+
+    public function historical()
+    {
+        $title = 'Historical';
+
+        $currentYear = Carbon::now()->year;
+
+        $years = [
+            $currentYear - 2,
+            $currentYear - 1,
+            $currentYear,
+        ];
+
+            $rawData = DB::table('salary_years')
+            ->join('users', 'salary_years.id_user', '=', 'users.id')
+            ->join('salary_grades', 'salary_years.id_salary_grade', '=', 'salary_grades.id')
+            ->join('grades', 'salary_grades.id_grade', '=', 'grades.id')
+            ->join('depts', 'users.id_dept', '=', 'depts.id')
+            ->join('jobs', 'users.id_job', '=', 'jobs.id')
+            ->join('statuses', 'users.id_status', '=', 'statuses.id')
+            ->select(
+                'users.nik',
+                'users.name',
+                'depts.name_dept',
+                'jobs.name_job',
+                'statuses.name_status',
+                'grades.name_grade',
+                'salary_years.year'
+            )
+            ->whereIn('salary_years.year', $years)
+            ->get();
+
+        // $groupedData = [];
+        // foreach ($rawData as $row) {
+        //     $key = $row->nik . '-' . $row->name . '-' . $row->name_dept . '-' . $row->name_job . '-' . $row->name_status;
+        //     if (!isset($groupedData[$key])) {
+        //         $groupedData[$key] = [
+        //             'nik' => $row->nik,
+        //             'name' => $row->name,
+        //             'name_status' => $row->name_status,
+        //             'name_dept' => $row->name_dept,
+        //             'name_job' => $row->name_job,
+        //             'grade_2022' => [],
+        //             'grade_2023' => [],
+        //             'grade_2024' => []
+        //         ];
+        //     }
+
+        //     $gradeKey = 'grade_' . $row->year;
+        //     $groupedData[$key][$gradeKey][$row->name_grade] = true;
+        // }
+
+        // foreach ($groupedData as &$data) {
+        //     foreach (['grade_2022', 'grade_2023', 'grade_2024'] as $yearKey) {
+        //         $data[$yearKey] = implode(', ', array_keys($data[$yearKey]));
+        //     }
+        // }
+
+
+        $groupedData = [];
+        foreach ($rawData as $row) {
+            $key = $row->nik . '-' . $row->name . '-' . $row->name_dept . '-' . $row->name_job . '-' . $row->name_status;
+            if (!isset($groupedData[$key])) {
+                $groupedData[$key] = [
+                    'nik' => $row->nik,
+                    'name' => $row->name,
+                    'name_status' => $row->name_status,
+                    'name_dept' => $row->name_dept,
+                    'name_job' => $row->name_job,
+                ];
+                foreach ($years as $year) {
+                    $groupedData[$key]['grade_' . $year] = [];
+                }
+            }
+
+            $gradeKey = 'grade_' . $row->year;
+            $groupedData[$key][$gradeKey][$row->name_grade] = true;
+        }
+
+        foreach ($groupedData as &$data) {
+            foreach ($years as $year) {
+                $yearKey = 'grade_' . $year;
+                $data[$yearKey] = implode(' / ', array_keys($data[$yearKey]));
+            }
+        }
+
+        // return view('salary.historical', ['data' => $groupedData, 'title' => $title]);
+        return view('salary.historical', ['data' => $groupedData, 'title' => $title, 'years' => $years]);
+    }
+
+    public function historical_detail($id)
+    {
+        $title = 'Historical';
+
+        $years = SalaryYear::select('year')->distinct()->get()->pluck('year')->sort()->values();
+
+        $biodata = DB::table('salary_years')
+            ->join('users', 'salary_years.id_user', '=', 'users.id')
+            ->join('salary_grades', 'salary_years.id_salary_grade', '=', 'salary_grades.id')
+            ->join('grades', 'salary_grades.id_grade', '=', 'grades.id')
+            ->join('depts', 'users.id_dept', '=', 'depts.id')
+            ->join('jobs', 'users.id_job', '=', 'jobs.id')
+            ->join('statuses', 'users.id_status', '=', 'statuses.id')
+            ->select(
+                'users.nik',
+                'users.name',
+                'depts.name_dept',
+                'jobs.name_job',
+                'statuses.name_status',
+                'grades.name_grade',
+                'salary_years.year'
+            )
+            ->where('users.nik', $id)
+            ->whereIn('salary_years.year', $years)
+            ->first();
+
+        $rawData = DB::table('salary_years')
+            ->join('users', 'salary_years.id_user', '=', 'users.id')
+            ->join('salary_grades', 'salary_years.id_salary_grade', '=', 'salary_grades.id')
+            ->join('grades', 'salary_grades.id_grade', '=', 'grades.id')
+            ->join('depts', 'users.id_dept', '=', 'depts.id')
+            ->join('jobs', 'users.id_job', '=', 'jobs.id')
+            ->join('statuses', 'users.id_status', '=', 'statuses.id')
+            ->select(
+                'users.nik',
+                'users.name',
+                'depts.name_dept',
+                'jobs.name_job',
+                'statuses.name_status',
+                'grades.name_grade',
+                'salary_years.year'
+            )
+            ->where('users.nik', $id)
+            ->whereIn('salary_years.year', $years)
+            ->get();
+
+            $groupedData = [];
+            foreach ($rawData as $row) {
+                $key = $row->nik . '-' . $row->name . '-' . $row->name_dept . '-' . $row->name_job . '-' . $row->name_status;
+                if (!isset($groupedData[$key])) {
+                    $groupedData[$key] = [
+                        'nik' => $row->nik,
+                        'name' => $row->name,
+                        'name_status' => $row->name_status,
+                        'name_dept' => $row->name_dept,
+                        'name_job' => $row->name_job,
+                        'grades' => []
+                    ];
+                }
+                $groupedData[$key]['grades'][$row->year][] = $row->name_grade;
+            }
+
+            foreach ($groupedData as &$data) {
+                foreach ($years as $year) {
+                    $data['grades'][$year] = isset($data['grades'][$year]) ? implode(' / ', array_unique($data['grades'][$year])) : '-';
+                }
+            }
+
+        return view('salary.historical-detail', ['data' => $groupedData, 'title' => $title, 'years' => $years, 'biodata' => $biodata]);
     }
 }

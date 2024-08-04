@@ -74,6 +74,9 @@ Route::post('/salary-month/import', [SalaryMonthController::class, 'import'])->n
 Route::resource('salary', SalaryController::class);
 Route::get('/summary', [SalaryController::class, 'summary'])->name('summary');
 Route::get('/result', [SalaryController::class, 'result'])->name('result');
+Route::get('/historical', [SalaryController::class, 'historical'])->name('historical');
+Route::get('/historical/{id}', [SalaryController::class, 'historical_detail'])->name('historical-detail');
+
 Route::resource('status', StatusController::class);
 Route::resource('grade', GradeController::class);
 Route::resource('departement', DeptController::class);
@@ -84,4 +87,5 @@ Route::get('/download-pdf/{id}', [SalaryController::class, 'download']);
 Route::get('/print-all', [SalaryController::class, 'printall']);
 Route::get('/print-allocation', [SalaryController::class, 'printallocation']);
 
+Route::post('/send-whatsapp', [SalaryController::class, 'send_batch'])->name('send-whatsapp-batch');
 Route::get('/send-whatsapp/{id}', [SalaryController::class, 'send'])->name('send-whatsapp');

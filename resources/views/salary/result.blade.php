@@ -86,7 +86,7 @@
                                     @foreach ($data as $key => $sal)
                                         <tr>
                                             <td class="text-nowrap text-end">{{ $yearFilter }}</td>
-                                            <td class="text-nowrap text-end">{{ date('F', strtotime($sal->date)) }}</td>
+                                            <td class="text-nowrap text-end">{{ date('F', strtotime($sal->salary_month_date)) }}</td>
                                             <td>{{ $sal->name_status }}</td>
                                             <td>{{ $sal->name_dept }}</td>
                                             <td>{{ $sal->name_job }}</td>
@@ -164,7 +164,7 @@
                                                 {{ $sal->net_salary != 0 ? number_format($sal->net_salary, 0, ',', '.') : '-' }}
                                             </td>
 
-                                            <td class="text-end">{{ date('d M Y', strtotime($sal->date)) }}</td>
+                                            <td class="text-end">{{ date('d M Y', strtotime($sal->salary_month_date)) }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

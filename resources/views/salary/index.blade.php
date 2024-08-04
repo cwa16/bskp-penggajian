@@ -9,16 +9,9 @@
                             <h6 class="text-white text-capitalize ps-3">All Salary Data</h6>
                         </div>
                     </div>
-
                     <div class="card-body p-3 pb-2">
                         <div class="row">
                             <div class="col-7">
-                                {{-- Print all tanpa filter tahun dan bulan --}}
-                                {{-- <a href="{{ url('/print-all') }}" class="btn btn-icon btn-3 btn-warning btn-sm"
-                                    target="_blank">
-                                    <span class="btn-inner--icon"><i class="material-icons">print</i></span>
-                                    <span class="btn-inner--text">Print All</span>
-                                </a> --}}
                                 <button data-bs-toggle="modal" data-bs-target="#printAll"
                                     class="btn btn-icon btn-3 btn-warning btn-sm">
                                     <span class="btn-inner--icon"><i class="material-icons">print</i></span>
@@ -29,7 +22,16 @@
                                     <span class="btn-inner--icon"><i class="material-icons">print</i></span>
                                     <span class="btn-inner--text">Print Allocation</span>
                                 </button>
-                                <button class="btn btn-success btn-sm" id="btn-d">Download Excel</button>
+                                <button class="btn btn-icon btn-3 btn-success btn-sm" id="btn-d">
+                                    <span class="btn-inner--icon"><i class="material-icons">description</i></span>
+                                    <span class="btn-inner--text">Download Excel</span>
+                                </button>
+                                {{-- <button class="btn btn-success btn-sm" id="btn-d">Download Excel</button> --}}
+                                <button data-bs-toggle="modal" data-bs-target="#sendData"
+                                    class="btn btn-icon btn-3 btn-success btn-sm">
+                                    <span class="btn-inner--icon"><i class="material-icons">share</i></span>
+                                    <span class="btn-inner--text">Send Salary Slip</span>
+                                </button>
                             </div>
                             <div class="col-5 justify-content-end">
                                 <form action="{{ url('/salary') }}" method="GET">
@@ -37,7 +39,7 @@
                                         <div class="col pe-0">
                                             <select class="form-select form-select-sm" name="filter_status">
                                                 <option selected disabled>-- Pilih Status --</option>
-                                                    <option value="All Status">All Status</option>
+                                                <option value="All Status">All Status</option>
                                                 @foreach ($statuses_id as $status)
                                                     <option value="{{ $status->id }}">{{ $status->name_status }}</option>
                                                 @endforeach
@@ -80,7 +82,8 @@
                         </div>
                         <div class="table-responsive p-0">
                             <table
-                                class="table table-sm table-striped table-hover dtTable100 align-items-center small-tbl compact" id="example">
+                                class="table table-sm table-striped table-hover dtTable100 align-items-center small-tbl compact"
+                                id="example">
                                 <thead class="bg-thead">
                                     <tr>
                                         <th colspan="7" class="text-center p-0">Employee Identity</th>
@@ -103,7 +106,6 @@
                                         <th>Job</th>
                                         <th>Grade</th>
                                         <th>No Account</th>
-
                                         <th>Salary Grade</th>
                                         <th>Ability</th>
                                         <th>Fungtional All</th>
@@ -117,7 +119,6 @@
                                         <th>Incentive</th>
                                         <th>Adjustment</th>
                                         <th>Salary Gross</th>
-
                                         <th>Pinjaman</th>
                                         <th>BPJS Kesehatan</th>
                                         <th>Jamsostek</th>
@@ -126,7 +127,6 @@
                                         <th>Absent</th>
                                         <th>Electricity</th>
                                         <th>Cooperative</th>
-                                        {{-- <th>Sub Total Deduction</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -141,7 +141,6 @@
                                             <td>{{ $sal->name_job }}</td>
                                             <td>{{ $sal->name_grade }}</td>
                                             <td>-</td>
-
                                             <td class="text-end">
                                                 {{ $sal->rate_salary != 0 ? number_format($sal->rate_salary, 0, ',', '.') : '-' }}
                                             </td>
@@ -184,7 +183,6 @@
                                             <td class="text-end">
                                                 {{ $sal->gross_salary + $sal->total_ben != 0 ? number_format($sal->gross_salary + $sal->total_ben, 0, ',', '.') : '-' }}
                                             </td>
-
                                             <td class="text-end">
                                                 {{ $sal->pinjaman != 0 ? number_format($sal->pinjaman, 0, ',', '.') : '-' }}
                                             </td>
@@ -209,73 +207,24 @@
                                             <td class="text-end">
                                                 {{ $sal->cooperative != 0 ? number_format($sal->cooperative, 0, ',', '.') : '-' }}
                                             </td>
-
                                             <td class="text-end">
                                                 {{ $sal->total_deduction != 0 ? number_format($sal->total_deduction, 0, ',', '.') : '-' }}
                                             </td>
-                                            {{-- <td class="text-end">
-                                                {{ $sal->total_deduction + $sal->total_ben_ded != 0 ? number_format($sal->total_deduction + $sal->total_ben_ded, 0, ',', '.') : '-' }}
-                                            </td> --}}
                                             <td class="text-end">
                                                 {{ $sal->net_salary != 0 ? number_format($sal->net_salary, 0, ',', '.') : '-' }}
                                             </td>
-
-                                            {{-- <td class="text-end">{{ number_format($sal->ability, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->fungtional_alw, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->family_alw, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->transport_alw, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->skill_alw, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->telephone_alw, 0, ',', '.') }}</td>
-
-                                            <td class="text-end">{{ number_format($sal->total_overtime, 0, ',', '.') }}
+                                            <td>
+                                                @php
+                                                    $allocations = json_decode($sal->allocation);
+                                                    if (is_array($allocations)) {
+                                                        echo implode(', ', $allocations);
+                                                    } else {
+                                                        echo $allocations;
+                                                    }
+                                                @endphp
                                             </td>
-                                            <td class="text-end">{{ number_format($sal->thr, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($sal->bonus, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($sal->incentive, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($sal->adjustment, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->gross_salary, 0, ',', '.') }}
+                                            <td class="text-end">{{ date('d M Y', strtotime($sal->salary_month_date)) }}
                                             </td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->gross_salary + $sal->total_ben, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-end">{{ number_format($sal->bpjs, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->jamsostek, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->union, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->absent, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->electricity, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->cooperative, 0, ',', '.') }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->total_deduction, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-end">
-                                                {{ number_format($sal->total_deduction + $sal->total_ben_ded, 0, ',', '.') }}
-                                            </td>
-                                            <td class="bg-light text-dark text-end">
-                                                {{ number_format($sal->net_salary, 0, ',', '.') }}
-                                            </td> --}}
-                                            <td>@php
-                                                $allocations = json_decode($sal->allocation);
-                                                if (is_array($allocations)) {
-                                                    echo implode(', ', $allocations);
-                                                } else {
-                                                    echo $allocations;
-                                                }
-                                            @endphp</td>
-
-                                            {{-- <td class="text-end"> {{ $sal->allocation }}</td> --}}
-                                            <td class="text-end">{{ date('d M Y', strtotime($sal->salary_month_date)) }}</td>
                                             <td class="align-middle text-center text-sm"><span
                                                     class="badge badge-sm bg-gradient-success"> &#10004;</td>
                                             <td class="align-middle text-center text-sm"><span
@@ -283,27 +232,20 @@
                                             <td class="text-center m-0 p-0">
                                                 <button class="btn btn-primary btn-icon-only m-0 p-0 btn-sm"
                                                     type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#detailGaji{{ $sal->id }}">
+                                                    data-bs-target="#detailGaji{{ $sal->salary_month_id }}">
                                                     <span class="btn-inner--icon"><i
                                                             class="material-icons">info</i></span>
                                                 </button>
-                                                <a href="{{ url('/print-pdf/' . $sal->id) }}"
+                                                <a href="{{ url('/print-pdf/' . $sal->salary_month_id) }}"
                                                     class="btn btn-warning btn-icon-only m-0 p-0 btn-sm" target="_blank">
                                                     <span class="btn-inner--icon"><i
                                                             class="material-icons">print</i></span>
                                                 </a>
-                                                <a href="{{ url('/send-whatsapp/' . $sal->id) }}"
+                                                <a href="{{ url('/send-whatsapp/' . $sal->salary_month_id) }}"
                                                     class="btn btn-success btn-icon-only m-0 p-0 btn-sm" target="_blank">
                                                     <span class="btn-inner--icon"><i
                                                             class="material-icons">mail</i></span>
                                                 </a>
-                                                {{-- <form action="{{ route('send-whatsapp') }}" method="POST">
-                                                    @csrf
-                                                    <input type="hidden" name="message" id="message" value="Test">
-                                                    <input type="hidden" name="number_phone" id="number_phone" value="{{ $sal->salary_year->user->no_telpon }}">
-                                                    <button type="submit" class="btn btn-success btn-icon-only m-0 p-0 btn-sm"><span class="btn-inner--icon"><i
-                                                        class="material-icons">mail</i></span></button>
-                                                </form> --}}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -347,7 +289,7 @@
         </div>
 
         @include('salary/modaldetail')
-        {{-- Modal Print All Select Year Month --}}
+
         <div class="modal fade" id="printAll" tabindex="-1" role="dialog" aria-labelledby="modal-form"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -402,7 +344,7 @@
                 </div>
             </div>
         </div>
-        {{-- Modal Print Allocation Select Year Month --}}
+
         <div class="modal fade" id="printAllocation" tabindex="-1" role="dialog" aria-labelledby="modal-form"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -457,6 +399,37 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="sendData" tabindex="-1" role="dialog" aria-labelledby="modal-form"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body p-0">
+                        <div class="card card-plain">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Choose Date</h5>
+                            </div>
+                            <div class="card-body py-2">
+                                <form action="{{ route('send-whatsapp-batch') }}" method="POST">
+                                    @csrf
+                                    <select class="form-select form-select-sm" name="filter_status">
+                                        <option selected disabled>-- Pilih Status --</option>
+                                        @foreach ($statuses_id as $status)
+                                            <option value="{{ $status->id }}">{{ $status->name_status }}</option>
+                                        @endforeach
+                                    </select>
+                                    <hr>
+                                    <input type="date" name="date" class="form-control">
+                                    <br>
+                                    <button class="btn btn-success">Send Salary Slip</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script src="{{ asset('assets/libs/jquery/jquery.js') }}"></script>
         <script src="{{ asset('assets/js/tableToExcel.js') }}"></script>
         <script>

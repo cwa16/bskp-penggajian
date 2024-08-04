@@ -138,6 +138,16 @@
             </li>
 
             <li class="nav-item">
+                <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'historical') ? 'active bg-gradient-primary' : '' }}"
+                    href="{{ url('/historical') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons">grade</i>
+                    </div>
+                    <span class="nav-link-text ms-1">Historical</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a class="nav-link text-danger" href="./sign-in.html">
 
                     <div class="text-danger text-center me-2 d-flex align-items-center justify-content-center">
