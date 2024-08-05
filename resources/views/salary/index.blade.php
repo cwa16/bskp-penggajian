@@ -225,10 +225,12 @@
                                             </td>
                                             <td class="text-end">{{ date('d M Y', strtotime($sal->salary_month_date)) }}
                                             </td>
-                                            <td class="align-middle text-center text-sm"><span
-                                                    class="badge badge-sm bg-gradient-success"> &#10004;</td>
-                                            <td class="align-middle text-center text-sm"><span
-                                                    class="badge badge-sm bg-gradient-secondary">&#9744;</td>
+                                            <td class="align-middle text-center text-sm">
+                                               <input type="checkbox" name="checkSal" id="checkSal" style="width: 20px; height: 20px;">
+                                            </td>
+                                            <td class="align-middle text-center text-sm">
+                                                <input type="checkbox" name="apprSal" id="apprSal" style="width: 20px; height: 20px;">
+                                            </td>
                                             <td class="text-center m-0 p-0">
                                                 <button class="btn btn-primary btn-icon-only m-0 p-0 btn-sm"
                                                     type="button" data-bs-toggle="modal"
