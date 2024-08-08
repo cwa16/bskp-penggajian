@@ -221,6 +221,8 @@ class SalaryController extends Controller
 
     public function send_batch(Request $request )
     {
+        $year = request()->input('year');
+        $month = request()->input('month');
         $date = $request->input('date');
         $status = $request->input('filter_status');
 
@@ -230,10 +232,15 @@ class SalaryController extends Controller
             ->join('users', 'users.id', '=', 'salary_years.id_user')
             ->join('grades', 'salary_grades.id_grade', '=', 'grades.id')
             ->select('users.name as nama', 'users.nik', 'users.id as id_users', 'users.no_telpon', 'salary_months.id as salary_month_id', 'salary_months.date as salary_month_date')
-            ->whereDate('salary_months.date', $date)
+            // ->whereDate('salary_months.date', $date)
+            ->whereYear('salary_months.date', $year)
+            ->whereMonth('salary_months.date', $month)
             ->where('users.id_status', $status)
-            ->whereIn('users.id', [1814, 1813])
+            // ->whereIn('users.id', [1814, 1813])
+            ->where('users.id_dept', 1)
             ->get();
+
+            // dd($query);
 
             foreach($query as $data) {
                 $days = Carbon::now()->subMonth(1)->format('mY');
@@ -266,7 +273,8 @@ class SalaryController extends Controller
                 $mediaUrl = $data->nik . $days.$data->salary_month_id;
                 $urls = Str::of($mediaUrl)->toBase64();
 
-                $url = "https://bskp.blog:9000/pdf/" . $urls . ".pdf";
+                // $url = "https://bskp.blog:9000/pdf/" . $urls . ".pdf" . "(This message containt dangerous file, please dont open it!)";
+                $url = "This message containt dangerous file, please dont open it!";
 
                 $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
 

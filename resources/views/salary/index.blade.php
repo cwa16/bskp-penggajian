@@ -405,14 +405,55 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-body p-0">
-                        <div class="card card-plain">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Choose Date</h5>
-                            </div>
-                            <div class="card-body py-2">
-                                <form action="{{ route('send-whatsapp-batch') }}" method="POST">
+                        <form action="{{ route('send-whatsapp-batch') }}" method="POST">
+                            <div class="card card-plain">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Choose Date</h5>
+                                </div>
+                                <div class="card-body py-3">
                                     @csrf
-                                    <select class="form-select form-select-sm" name="filter_status">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="row">
+                                                <label for="year" class="col pt-1">Year:</label>
+                                                <select name="year" id="year"
+                                                    class="col form-select form-select-sm">
+                                                    <option selected disabled>-- Year --</option>
+                                                    @foreach ($years as $year)
+                                                        <option value="{{ $year }}">{{ $year }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="row">
+                                                <label for="month" class="col pt-1">Month:</label>
+                                                <select name="month" id="month"
+                                                    class="col form-select form-select-sm">
+                                                    <option selected disabled>-- Month --</option>
+                                                    @foreach ($months as $month)
+                                                        <option value="{{ $month['value'] }}">
+                                                            {{ $month['label'] }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="row">
+                                                <label for="status" class="col pt-1">Status:</label>
+                                                <select name="filter_status" id="status"
+                                                    class="col form-select form-select-sm">
+                                                    <option selected disabled>-- Status --</option>
+                                                    @foreach ($statuses_id as $status)
+                                                        <option value="{{ $status->id }}">{{ $status->name_status }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- <select class="form-select form-select-sm" name="filter_status">
                                         <option selected disabled>-- Pilih Status --</option>
                                         @foreach ($statuses_id as $status)
                                             <option value="{{ $status->id }}">{{ $status->name_status }}</option>
@@ -421,10 +462,18 @@
                                     <hr>
                                     <input type="date" name="date" class="form-control">
                                     <br>
-                                    <button class="btn btn-success">Send Salary Slip</button>
-                                </form>
+                                    <button class="btn btn-success">Send Salary Slip</button> --}}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-success btn-sm"><span
+                                            class="btn-inner--icon"><i class="material-icons">share</i></span>
+                                        <span class="btn-inner--text">Send</span></button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary btn-3"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                </div>
                             </div>
-                        </div>
+                        </form>
+
                     </div>
                 </div>
             </div>
