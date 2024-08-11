@@ -198,7 +198,7 @@ class SalaryController extends Controller
 
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
 
-        $twilio->messages->create(
+        $is_send = $twilio->messages->create(
             "whatsapp:+".$sal->salary_year->user->no_telpon,
             // "whatsapp:+6283854428770",
             [
@@ -213,6 +213,10 @@ class SalaryController extends Controller
                 ]),
             ]
         );
+
+        if ($is_send) {
+            SalaryMonth::where('id', $id)->update(['is_send' => '1']);
+        }
 
         // dd($twilio);
 
@@ -278,7 +282,7 @@ class SalaryController extends Controller
 
                 $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
 
-                $twilio->messages->create(
+                $is_send = $twilio->messages->create(
                     "whatsapp:+".$data->no_telpon,
                     [
                         "contentSid" => env('TWILIO_CONTENT_ID'),
@@ -292,6 +296,10 @@ class SalaryController extends Controller
                         ]),
                     ]
                 );
+            }
+
+            if ($is_send) {
+                SalaryMonth::where('id', $id)->update(['is_send' => '1']);
             }
 
             return redirect()->back();
@@ -787,7 +795,7 @@ class SalaryController extends Controller
 
     public function historical()
     {
-        $title = 'Historical';
+        $title = 'Summary Historical Grade';
 
         $currentYear = Carbon::now()->year;
 
@@ -876,7 +884,7 @@ class SalaryController extends Controller
 
     public function historical_detail($id)
     {
-        $title = 'Historical';
+        $title = 'Individual - Historical Grade';
 
         $years = SalaryYear::select('year')->distinct()->get()->pluck('year')->sort()->values();
 
@@ -930,6 +938,9 @@ class SalaryController extends Controller
                         'name_status' => $row->name_status,
                         'name_dept' => $row->name_dept,
                         'name_job' => $row->name_job,
+                        // 'name_status' => [],
+                        // 'name_dept' => [],
+                        // 'name_job' => [],
                         'grades' => []
                     ];
                 }
@@ -938,6 +949,9 @@ class SalaryController extends Controller
 
             foreach ($groupedData as &$data) {
                 foreach ($years as $year) {
+                    // $data['name_status'][$year] = isset($data['name_status'][$year]) ? implode(' / ', array_unique($data['name_status'][$year])) : '-';
+                    // $data['name_dept'][$year] = isset($data['name_dept'][$year]) ? implode(' / ', array_unique($data['name_dept'][$year])) : '-';
+                    // $data['name_job'][$year] = isset($data['name_job'][$year]) ? implode(' / ', array_unique($data['name_job'][$year])) : '-';
                     $data['grades'][$year] = isset($data['grades'][$year]) ? implode(' / ', array_unique($data['grades'][$year])) : '-';
                 }
             }

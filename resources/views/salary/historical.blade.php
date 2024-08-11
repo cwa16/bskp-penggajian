@@ -6,7 +6,7 @@
                 <div class="card my-4">
                     <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                         <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                            <h6 class="text-white text-capitalize ps-3">{{ $title }}</h6>
+                            <h3 class="text-white text-capitalize ps-3">{{ $title }}</h3>
                         </div>
                     </div>
 
@@ -54,7 +54,8 @@
                                             <td>{{ $history['name_job'] }}</td>
                                             @foreach ($years as $year)
                                                 {{-- <td>{{ $history['grade_' . $year] }}</td> --}}
-                                                <td>{{ !empty($history['grade_' . $year]) ? $history['grade_' . $year] : '-' }}</td>
+                                                <td>{{ !empty($history['grade_' . $year]) ? $history['grade_' . $year] : '-' }}
+                                                </td>
                                             @endforeach
                                             <td class="text-center">
                                                 <a href="{{ url('/historical/' . $history['nik']) }}"

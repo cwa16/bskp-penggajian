@@ -28,6 +28,7 @@ class SalaryMonth extends Model
         'net_salary',
         'is_checked',
         'is_approved',
+        'is_send'
     ];
 
     // Relasi dengan tabel User

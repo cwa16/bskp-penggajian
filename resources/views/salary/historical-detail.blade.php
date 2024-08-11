@@ -33,7 +33,7 @@
                                                     <th> : </th>
                                                     <th>{{ $biodata->name }}</th>
                                                 </tr>
-                                                <tr>
+                                                {{-- <tr>
                                                     <th>Status</th>
                                                     <th> : </th>
                                                     <th>{{ $biodata->name_status }}</th>
@@ -52,7 +52,7 @@
                                                     <th>Last Grade</th>
                                                     <th> : </th>
                                                     <th>{{ $biodata->name_grade }}</th>
-                                                </tr>
+                                                </tr> --}}
                                             </thead>
                                         </table>
                                     </div>
@@ -60,11 +60,15 @@
                             </div>
                         </div>
                         <div class="table-responsive p-0">
-                            <table class="table table-sm table-striped table-hover dtTable100 align-items-center small-tbl compact"
-                            id="example">
+                            <table
+                                class="table table-sm table-striped table-hover dtTable100 align-items-center small-tbl compact"
+                                id="example">
                                 <thead>
                                     <tr>
                                         <th class="text-center">Year</th>
+                                        <th class="text-center">Dept</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="text-center">Jabatan</th>
                                         <th class="text-center">Grade</th>
                                     </tr>
                                 </thead>
@@ -73,6 +77,9 @@
                                         @foreach ($years as $year)
                                             <tr>
                                                 <td class="text-center">{{ $year }}</td>
+                                                <td class="text-center">{{ $biodata->name_status }}</td>
+                                                <td class="text-center">{{ $biodata->name_dept }}</td>
+                                                <td class="text-center">{{ $biodata->name_job }}</td>
                                                 <td class="text-center">{{ $history['grades'][$year] }}</td>
                                             </tr>
                                         @endforeach
