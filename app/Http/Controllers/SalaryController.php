@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use PDF;
 use Twilio\Rest\Client;
+use Twilio\Http\CURLOPT_URL;
 use WaAPI\WaAPI;
 use Illuminate\Support\Str;
 
@@ -198,7 +199,7 @@ class SalaryController extends Controller
 
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
 
-        $is_send = $twilio->messages->create(
+        $twilio->messages->create(
             "whatsapp:+".$sal->salary_year->user->no_telpon,
             // "whatsapp:+6283854428770",
             [
@@ -214,9 +215,9 @@ class SalaryController extends Controller
             ]
         );
 
-        if ($is_send) {
-            SalaryMonth::where('id', $id)->update(['is_send' => '1']);
-        }
+        // if ($is_send) {
+        SalaryMonth::where('id', $id)->update(['is_send' => '1']);
+        // }
 
         // dd($twilio);
 
@@ -303,6 +304,41 @@ class SalaryController extends Controller
             }
 
             return redirect()->back();
+    }
+
+    public function send_report()
+    {
+    $title = 'Send Historical Slip';
+
+    $currentYear = Carbon::now()->year;
+
+    $rawData = DB::table('salary_months')
+        ->join('salary_years', 'salary_months.id_salary_year', 'salary_years.id')
+        ->join('users', 'salary_years.id_user', '=', 'users.id')
+        ->join('salary_grades', 'salary_years.id_salary_grade', '=', 'salary_grades.id')
+        ->join('grades', 'salary_grades.id_grade', '=', 'grades.id')
+        ->join('depts', 'users.id_dept', '=', 'depts.id')
+        ->join('jobs', 'users.id_job', '=', 'jobs.id')
+        ->join('statuses', 'users.id_status', '=', 'statuses.id')
+        ->select(
+            'users.nik',
+            'users.name',
+            'depts.name_dept',
+            'jobs.name_job',
+            'statuses.name_status',
+            'salary_years.year',
+            'salary_months.is_send',
+            'salary_months.date',
+            DB::raw('MONTH(salary_months.date) as month') // Add this line
+        )
+        ->whereYear('salary_months.date', $currentYear)
+        ->get();
+
+    $months = $rawData->pluck('month')->unique()->sort()->values()->toArray();
+
+    $groupedData = $rawData->groupBy('nik');
+
+    return view('salary.send-history', ['months' => $months, 'title' => $title, 'data' => $groupedData]);
     }
 
     // public function send($id)
@@ -824,33 +860,6 @@ class SalaryController extends Controller
             ->whereIn('salary_years.year', $years)
             ->get();
 
-        // $groupedData = [];
-        // foreach ($rawData as $row) {
-        //     $key = $row->nik . '-' . $row->name . '-' . $row->name_dept . '-' . $row->name_job . '-' . $row->name_status;
-        //     if (!isset($groupedData[$key])) {
-        //         $groupedData[$key] = [
-        //             'nik' => $row->nik,
-        //             'name' => $row->name,
-        //             'name_status' => $row->name_status,
-        //             'name_dept' => $row->name_dept,
-        //             'name_job' => $row->name_job,
-        //             'grade_2022' => [],
-        //             'grade_2023' => [],
-        //             'grade_2024' => []
-        //         ];
-        //     }
-
-        //     $gradeKey = 'grade_' . $row->year;
-        //     $groupedData[$key][$gradeKey][$row->name_grade] = true;
-        // }
-
-        // foreach ($groupedData as &$data) {
-        //     foreach (['grade_2022', 'grade_2023', 'grade_2024'] as $yearKey) {
-        //         $data[$yearKey] = implode(', ', array_keys($data[$yearKey]));
-        //     }
-        // }
-
-
         $groupedData = [];
         foreach ($rawData as $row) {
             $key = $row->nik . '-' . $row->name . '-' . $row->name_dept . '-' . $row->name_job . '-' . $row->name_status;
@@ -878,7 +887,6 @@ class SalaryController extends Controller
             }
         }
 
-        // return view('salary.historical', ['data' => $groupedData, 'title' => $title]);
         return view('salary.historical', ['data' => $groupedData, 'title' => $title, 'years' => $years]);
     }
 
@@ -957,5 +965,69 @@ class SalaryController extends Controller
             }
 
         return view('salary.historical-detail', ['data' => $groupedData, 'title' => $title, 'years' => $years, 'biodata' => $biodata]);
+    }
+
+    public function salary_monitoring_index()
+    {
+        $title = 'Salary Monitoring';
+        $currentYear = Carbon::now()->year;
+
+        $data = DB::table('salary_months')
+            ->join('salary_years', 'salary_months.id_salary_year', '=', 'salary_years.id')
+            ->join('users', 'salary_years.id_user', '=', 'users.id')
+            ->join('statuses', 'users.id_status', '=', 'statuses.id')
+            ->join('salary_grades', 'salary_years.id_salary_grade', '=', 'salary_grades.id')
+            ->where('salary_years.year', $currentYear)
+            ->select(
+                'statuses.name_status',
+                'salary_years.year',
+                'salary_months.date',
+                'salary_grades.rate_salary',
+                'salary_years.fungtional_alw',
+                'salary_years.family_alw',
+                'salary_years.transport_alw',
+                'salary_years.telephone_alw',
+                'salary_years.skill_alw',
+                'salary_months.total_overtime',
+                'salary_months.incentive',
+                'salary_months.net_salary'
+            )
+            ->get();
+
+            $groupedData = $data->groupBy(function ($item) {
+                return Carbon::parse($item->date)->format('M-y'); // Mengelompokkan berdasarkan bulan dengan format 'May-24'
+            })->map(function ($monthData) {
+                return $monthData->groupBy('name_status');
+            });
+
+            $counts = $groupedData->map(function ($monthData) {
+                return $monthData->map(function ($group) {
+                    $totalFungtional = $group->sum('fungtional_alw');
+                    $totalFamily = $group->sum('family_alw');
+                    $totalTransport = $group->sum('transport_alw');
+                    $totalTelephone = $group->sum('telephone_alw');
+                    $totalSkill = $group->sum('skill_alw');
+                    $totalOvertime = $group->sum('total_overtime');
+                    $totalIncentive = $group->sum('incentive');
+                    $employeeCount = $group->count();
+                    $totalNetSalary = $group->sum('net_salary');
+
+                    return [
+                        'employee_count' => $employeeCount,
+                        'total_salary' => $totalNetSalary,
+                        'total_allowance' => $totalFungtional + $totalFamily + $totalTransport + $totalTelephone + $totalSkill,
+                        'total_overtime_incentive' => $totalOvertime + $totalIncentive,
+                        'average_salary' => $employeeCount > 0 ? ($totalNetSalary / $employeeCount) : 0,
+                    ];
+                });
+            });
+
+            // dd($data, $groupedData, $counts);
+
+        return view('salary.salary-monitoring', [
+            'title' => $title,
+            'currentYear' => $currentYear,
+            'counts' => $counts,
+        ]);
     }
 }

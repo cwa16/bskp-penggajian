@@ -128,6 +128,26 @@
             </li>
 
             <li class="nav-item">
+                <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'historical') ? 'active bg-gradient-primary' : '' }}"
+                    href="{{ url('/historical') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons">grade</i>
+                    </div>
+                    <span class="nav-link-text ms-1">Historical</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'list-is-send') ? 'active bg-gradient-primary' : '' }}"
+                    href="{{ url('/list-is-send') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons">mail</i>
+                    </div>
+                    <span class="nav-link-text ms-1">Send History</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'summary') ? 'active bg-gradient-primary' : '' }}"
                     href="{{ url('/summary') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -138,12 +158,12 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'historical') ? 'active bg-gradient-primary' : '' }}"
-                    href="{{ url('/historical') }}">
+                <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'salary-monitoring') ? 'active bg-gradient-primary' : '' }}"
+                    href="{{ url('/salary-monitoring') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons">grade</i>
+                        <i class="material-icons">monitor</i>
                     </div>
-                    <span class="nav-link-text ms-1">Historical</span>
+                    <span class="nav-link-text ms-1">Salary Monitoring</span>
                 </a>
             </li>
 

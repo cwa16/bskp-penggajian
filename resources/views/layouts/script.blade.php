@@ -33,6 +33,21 @@
         });
     })
     $(document).ready(function() {
+        $('.dtTable1').DataTable({
+            "lengthChange": true,
+            "autoWidth": false,
+            "initComplete": function(settings, json) {
+                $(".dtTable1").wrap(
+                    "<div style='overflow:auto; width:75%;'></div>");
+            },
+            "lengthMenu": [
+                [10, 50, 100, 200, -1],
+                [10, 50, 100, 200, "All"]
+            ], // Customize the entries per page
+            "pageLength": 25
+        });
+    })
+    $(document).ready(function() {
         $('.dtTable100').DataTable({
             "lengthChange": true,
             "autoWidth": true,
