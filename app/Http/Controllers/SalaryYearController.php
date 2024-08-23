@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Grade;
 use App\Models\SalaryGrade;
+use App\Models\SalaryMonth;
+use App\Models\SalaryYear;
 use App\Models\Status;
 use App\Models\User;
-use App\Models\SalaryYear;
-use App\Models\SalaryMonth;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
+use Illuminate\Http\Request;
 
 class SalaryYearController extends Controller
 {
@@ -19,19 +19,15 @@ class SalaryYearController extends Controller
         $title = 'Salary Per Year';
 
         $data = DB::table('salary_years')
-        ->join('users', 'salary_years.id_user', '=', 'users.id')
-        ->join('salary_grades', 'salary_years.id_salary_grade', '=', 'salary_grades.id')
-        ->join('grades', 'salary_grades.id_grade', '=', 'grades.id')
-        ->join('statuses', 'users.id_status', '=', 'statuses.id')
-        ->join('depts', 'users.id_dept', '=', 'depts.id')
-        ->join('jobs', 'users.id_job', '=', 'jobs.id')
-        ->select('users.nik', 'users.name', 'statuses.name_status', 'depts.name_dept', 'jobs.name_job', 'grades.name_grade',
-                'salary_grades.rate_salary', 'salary_years.*', 'salary_years.id as salary_year_id')
-        ->get();
+            ->join('users', 'salary_years.id_user', '=', 'users.id')
+            ->join('grade', 'users.grade', '=', 'grade.grade')
+            ->select('users.nik', 'users.name', 'users.status', 'users.dept', 'users.jabatan', 'grade.grade',
+                'grade.rate_salary', 'salary_years.*', 'salary_years.id as salary_year_id')
+            ->get();
 
         $years = SalaryYear::distinct('year')->pluck('year')->toArray();
-        $statuses = Status::distinct('name_status')->pluck('name_status')->toArray();
-        $statuses_id = Status::all();
+        $statuses = DB::table('users')->distinct('status')->pluck('status')->toArray();
+        $statuses_id = DB::table('users')->select('users.id','users.status')->groupBy('status')->get();
 
         $selectedYearInput = request()->input('filter_year', '');
         $selectedStatus = request()->input('filter_status', '');
@@ -41,38 +37,26 @@ class SalaryYearController extends Controller
         if ($selectedYear == null && $selectedStatus == null) {
             $data = DB::table('salary_years')
                 ->join('users', 'salary_years.id_user', '=', 'users.id')
-                ->join('salary_grades', 'salary_years.id_salary_grade', '=', 'salary_grades.id')
-                ->join('grades', 'salary_grades.id_grade', '=', 'grades.id')
-                ->join('statuses', 'users.id_status', '=', 'statuses.id')
-                ->join('depts', 'users.id_dept', '=', 'depts.id')
-                ->join('jobs', 'users.id_job', '=', 'jobs.id')
-                ->select('users.nik', 'users.name', 'statuses.name_status', 'depts.name_dept', 'jobs.name_job', 'grades.name_grade',
-                        'salary_grades.rate_salary', 'salary_years.*', 'salary_years.id as salary_year_id')
+                ->join('grade', 'users.grade', '=', 'grade.grade')
+                ->select('users.nik', 'users.name', 'users.status', 'users.dept', 'users.jabatan', 'grade.grade',
+                    'grade.rate_salary', 'salary_years.*', 'salary_years.id as salary_year_id')
                 ->get();
         } else {
             if ($selectedStatus == 'All Status') {
                 $data = DB::table('salary_years')
                     ->join('users', 'salary_years.id_user', '=', 'users.id')
-                    ->join('salary_grades', 'salary_years.id_salary_grade', '=', 'salary_grades.id')
-                    ->join('grades', 'salary_grades.id_grade', '=', 'grades.id')
-                    ->join('statuses', 'users.id_status', '=', 'statuses.id')
-                    ->join('depts', 'users.id_dept', '=', 'depts.id')
-                    ->join('jobs', 'users.id_job', '=', 'jobs.id')
-                    ->select('users.nik', 'users.name', 'statuses.name_status', 'depts.name_dept', 'jobs.name_job', 'grades.name_grade',
-                            'salary_grades.rate_salary', 'salary_years.*', 'salary_years.id as salary_year_id')
+                    ->join('grade', 'users.grade', '=', 'grade.grade')
+                    ->select('users.nik', 'users.name', 'users.status', 'users.dept', 'users.jabatan', 'grade.grade',
+                        'grade.rate_salary', 'salary_years.*', 'salary_years.id as salary_year_id')
                     ->whereYear('salary_years.year', $selectedYear)
                     ->get();
             } else {
                 $data = DB::table('salary_years')
                     ->join('users', 'salary_years.id_user', '=', 'users.id')
-                    ->join('salary_grades', 'salary_years.id_salary_grade', '=', 'salary_grades.id')
-                    ->join('grades', 'salary_grades.id_grade', '=', 'grades.id')
-                    ->join('statuses', 'users.id_status', '=', 'statuses.id')
-                    ->join('depts', 'users.id_dept', '=', 'depts.id')
-                    ->join('jobs', 'users.id_job', '=', 'jobs.id')
-                    ->select('users.nik', 'users.name', 'statuses.name_status', 'depts.name_dept', 'jobs.name_job', 'grades.name_grade',
-                            'salary_grades.rate_salary', 'salary_years.*', 'salary_years.id as salary_year_id')
-                    ->where('users.id_status', $selectedStatus)
+                    ->join('grade', 'users.grade', '=', 'grade.grade')
+                    ->select('users.nik', 'users.name', 'users.status', 'users.dept', 'users.jabatan', 'grade.grade',
+                        'grade.rate_salary', 'salary_years.*', 'salary_years.id as salary_year_id')
+                    ->where('users.status', $selectedStatus)
                     ->whereYear('salary_years.year', $selectedYear)
                     ->get();
             }
@@ -96,9 +80,10 @@ class SalaryYearController extends Controller
         ));
     }
 
-    public function filter(){
+    public function filter()
+    {
         $title = 'Salary Per Year';
-        $statuses = Status::all();
+        $statuses = DB::table('users')->select('users.id','users.status')->groupBy('status')->get();
         $currentYear = date('Y');
         // $currentYear = '2025';
 
@@ -106,13 +91,14 @@ class SalaryYearController extends Controller
         $selectedStatus = request()->input('id_status');
 
         $selectedStatusIds = $selectedStatus
-            ? Status::whereIn('name_status', $allowedStatusNames)->where('id', $selectedStatus)->pluck('id')
-            : Status::whereIn('name_status', $allowedStatusNames)->pluck('id');
+        ? DB::table('users')->select('users.id','users.status')->whereIn('status', $allowedStatusNames)->where('id', $selectedStatus)->groupBy('status')->pluck('id')
+        : DB::table('users')->select('users.id','users.status')->whereIn('status', $allowedStatusNames)->groupBy('status')->pluck('id');
 
         return view('salary_year.filter', compact('title', 'statuses', 'selectedStatus'));
     }
 
-    public function filter_new() {
+    public function filter_new()
+    {
         $title = 'Salary Per Year';
         $statuses = Status::all();
         $currentYear = date('Y');
@@ -122,8 +108,8 @@ class SalaryYearController extends Controller
         $selectedStatus = request()->input('id_status');
 
         $selectedStatusIds = $selectedStatus
-            ? Status::whereIn('name_status', $allowedStatusNames)->where('id', $selectedStatus)->pluck('id')
-            : Status::whereIn('name_status', $allowedStatusNames)->pluck('id');
+        ? Status::whereIn('name_status', $allowedStatusNames)->where('id', $selectedStatus)->pluck('id')
+        : Status::whereIn('name_status', $allowedStatusNames)->pluck('id');
 
         return view('salary_year.filter_new', compact('title', 'statuses', 'selectedStatus'));
     }
@@ -131,7 +117,7 @@ class SalaryYearController extends Controller
     public function create()
     {
         $title = 'Salary Per Year';
-        $statuses = Status::all();
+        $statuses = DB::table('users')->select('users.id','users.status')->groupBy('status')->get();
         $currentDate = Carbon::now()->format('Y-m-d');
         $currentYear = date('Y');
 
@@ -141,8 +127,7 @@ class SalaryYearController extends Controller
 
         $checkStatus = DB::table('salary_years')
             ->join('users', 'users.id', '=', 'salary_years.id_user')
-            ->join('statuses', 'users.id_status', '=', 'statuses.id')
-            ->where('users.id_status', $selectedStatus)
+            ->where('users.status', $selectedStatus)
             ->first();
 
         if ($checkStatus != null) {
@@ -162,15 +147,15 @@ class SalaryYearController extends Controller
                     ->where('users.id_status', $selectedStatus)
                     ->get();
 
-                    foreach ($remainingUsers as $g) {
-                        SalaryYear::create([
-                            'id_user' => $g->user_id,
-                            'id_salary_grade' => $g->salary_grade_id,
-                            'date' => $currentDate,
-                            'year' => $currentYear,
-                            'used' => '1'
-                        ]);
-                    }
+                foreach ($remainingUsers as $g) {
+                    SalaryYear::create([
+                        'id_user' => $g->user_id,
+                        'id_salary_grade' => $g->salary_grade_id,
+                        'date' => $currentDate,
+                        'year' => $currentYear,
+                        'used' => '1',
+                    ]);
+                }
 
                 $users = DB::table('users')
                     ->join('statuses', 'users.id_status', '=', 'statuses.id')
@@ -208,13 +193,10 @@ class SalaryYearController extends Controller
             }
         } else {
             $users = DB::table('users')
-                ->join('statuses', 'users.id_status', '=', 'statuses.id')
-                ->join('depts', 'users.id_dept', '=', 'depts.id')
-                ->join('jobs', 'users.id_job', '=', 'jobs.id')
-                ->join('grades', 'users.id_grade', '=', 'grades.id')
-                ->join('salary_grades', 'grades.id', '=', 'salary_grades.id_grade')
-                ->where('users.id_status', $selectedStatus)
-                ->select('users.*', 'salary_grades.*', 'grades.*', 'statuses.*', 'depts.*', 'jobs.*', 'salary_grades.id as id_salary_grade', 'users.id as id_user')
+                ->join('grade', 'users.grade', '=', 'grade.grade')
+                ->where('users.status', $selectedStatus)
+                ->select('users.*', 'grade.*','users.id as id_user', 'grade.id as id_salary_grade')
+                ->orderBy('users.name', 'ASC')
                 ->get();
         }
 
@@ -228,7 +210,7 @@ class SalaryYearController extends Controller
             $input = $request->only([
                 'id_user', 'id_salary_grade', 'rate_salary',
                 'ability', 'fungtional_alw', 'family_alw',
-                'transport_alw', 'telephone_alw', 'skill_alw', 'adjustment'
+                'transport_alw', 'telephone_alw', 'skill_alw', 'adjustment',
             ]);
 
             $rate_salary = isset($input['rate_salary'][$key]) ? (int) str_replace(',', '', $input['rate_salary'][$key]) : 0;
@@ -254,7 +236,7 @@ class SalaryYearController extends Controller
             $jamsostek_tht = $total * 0.037;
             $total_jamsostek = $jamsostek_jkk + $jamsostek_tk + $jamsostek_tht;
 
-            $allocations = $request->input('allocation')[$key] ?? NULL;
+            $allocations = $request->input('allocation')[$key] ?? null;
             if ($allocations) {
                 $allocationJson = json_encode($allocations);
             } else {
@@ -314,13 +296,13 @@ class SalaryYearController extends Controller
     {
         foreach ($request->input('ids') as $key => $value) {
             $rate_salary = $request->input('rate_salary')[$key];
-            $ability =  $request->input('ability')[$key];
-            $fungtional_alw =  $request->input('fungtional_alw')[$key];
-            $family_alw =  $request->input('family_alw')[$key];
-            $transport_alw =  $request->input('transport_alw')[$key];
-            $telephone_alw =  $request->input('telephone_alw')[$key];
-            $skill_alw =  $request->input('skill_alw')[$key];
-            $adjustment =  $request->input('adjustment')[$key];
+            $ability = $request->input('ability')[$key];
+            $fungtional_alw = $request->input('fungtional_alw')[$key];
+            $family_alw = $request->input('family_alw')[$key];
+            $transport_alw = $request->input('transport_alw')[$key];
+            $telephone_alw = $request->input('telephone_alw')[$key];
+            $skill_alw = $request->input('skill_alw')[$key];
+            $adjustment = $request->input('adjustment')[$key];
 
             $total = $rate_salary + $ability + $family_alw;
 
@@ -339,7 +321,6 @@ class SalaryYearController extends Controller
 
             // dd($total, $total2, $bpjs, $bpjs2);
 
-
             $jamsostek = $total * 0.02;
 
             $jamsostek_jkk = $total * 0.0054;
@@ -347,7 +328,7 @@ class SalaryYearController extends Controller
             $jamsostek_tht = $total * 0.037;
             $total_jamsostek = $jamsostek_jkk + $jamsostek_tk + $jamsostek_tht;
 
-            $allocations = $request->input('allocations')[$key] ?? NULL;
+            $allocations = $request->input('allocations')[$key] ?? null;
             if ($allocations) {
                 $allocationJson = json_encode($allocations);
             } else {
@@ -386,7 +367,7 @@ class SalaryYearController extends Controller
                 // dd($hour_call, $total_overtime);
 
                 $gross_sal = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw + $telephone_alw + $skill_alw +
-                $adjustment + $total_overtime + $thr + $bonus + $incentive;
+                    $adjustment + $total_overtime + $thr + $bonus + $incentive;
                 $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative;
                 // $net_salary = ($gross_sal + $total_jamsostek) - ($total_deduction + $total_jamsostek);
                 $net_salary = $gross_sal - $total_deduction;
@@ -443,14 +424,14 @@ class SalaryYearController extends Controller
                 ->join('jobs', 'users.id_job', '=', 'jobs.id')
                 ->join('depts', 'users.id_dept', '=', 'depts.id')
                 ->select('salary_years.*', 'salary_grades.*', 'grades.*', 'users.*', 'statuses.*', 'jobs.*', 'depts.*',
-                        'users.id as user_id', 'salary_years.id as salary_years_id', 'salary_grades.id as salary_grades_id', 'grades.id as grades_id')
+                    'users.id as user_id', 'salary_years.id as salary_years_id', 'salary_grades.id as salary_grades_id', 'grades.id as grades_id')
                 ->whereIn('salary_years.id_user', $ids)
                 ->get();
 
             return view('salary_year.create_new', [
                 'title' => $title,
                 'salary_years' => $salary_years,
-                'grade' => $grade
+                'grade' => $grade,
             ]);
 
         } else {
@@ -466,7 +447,7 @@ class SalaryYearController extends Controller
                 'id_user', 'id_salary_grade', 'rate_salary',
                 'ability', 'fungtional_alw', 'family_alw',
                 'transport_alw', 'telephone_alw', 'skill_alw',
-                'adjustment', 'date', 'id_grade'
+                'adjustment', 'date', 'id_grade',
             ]);
 
             // $rate_salary = isset($input['rate_salary'][$key]) ? (int) str_replace(',', '', $input['rate_salary'][$key]) : 0;
@@ -494,7 +475,7 @@ class SalaryYearController extends Controller
             $jamsostek_tht = $total * 0.037;
             $total_jamsostek = $jamsostek_jkk + $jamsostek_tk + $jamsostek_tht;
 
-            $allocations = $request->input('allocation')[$key] ?? NULL;
+            $allocations = $request->input('allocation')[$key] ?? null;
             if ($allocations) {
                 $allocationJson = json_encode($allocations);
             } else {
@@ -502,14 +483,14 @@ class SalaryYearController extends Controller
             }
 
             $addNew = SalaryYear::where('id', $request->input('ids')[$key])
-                    ->update([
-                        'used' => '0'
-                    ]);
+                ->update([
+                    'used' => '0',
+                ]);
 
             $addNews = User::where('id', $request->input('id_user')[$key])
-                    ->update([
-                        'id_grade' => $id_grade
-                    ]);
+                ->update([
+                    'id_grade' => $id_grade,
+                ]);
 
             if ($addNew && $addNews) {
                 SalaryYear::create([
@@ -529,7 +510,7 @@ class SalaryYearController extends Controller
                     'total_ben' => $total_jamsostek,
                     'total_ben_ded' => $total_jamsostek,
                     'allocation' => $allocationJson,
-                    'used' => '1'
+                    'used' => '1',
                 ]);
             }
 

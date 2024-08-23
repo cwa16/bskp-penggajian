@@ -18,8 +18,8 @@
                                     <select name="id_status" class="form-select form-select-sm">
                                         <option value="">- Pilih Status -</option>
                                         @foreach ($statuses as $status)
-                                            <option value="{{ $status->id }}"
-                                                @if ($status->id == $selectedStatus) selected @endif>{{ $status->name_status }}
+                                            <option value="{{ $status->status }}"
+                                                @if ($status->status == $selectedStatus) selected @endif>{{ $status->status }}
                                             </option>
                                         @endforeach
                                     </select>

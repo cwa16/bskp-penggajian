@@ -66,12 +66,12 @@
                                                         <td>{{ $key + 1 }}</td>
                                                         <td class="text-nowrap text-end">{{ $user->nik }}</td>
                                                         <td>{{ $user->name }}</td>
-                                                        <td>{{ $user->name_status }}</td>
-                                                        <td>{{ $user->name_dept }}</td>
-                                                        <td>{{ $user->name_job }}</td>
-                                                        <td>{{ $user->name_grade ?? '-' }}</td>
+                                                        <td>{{ $user->status }}</td>
+                                                        <td>{{ $user->dept }}</td>
+                                                        <td>{{ $user->jabatan }}</td>
+                                                        <td>{{ $user->grade ?? '-' }}</td>
                                                         <td class="text-end">
-                                                            @if ($user->id_grade)
+                                                            @if ($user->grade)
                                                                 {{ number_format($user->rate_salary, 0, ',', '.') }}
                                                             @else
                                                                 -

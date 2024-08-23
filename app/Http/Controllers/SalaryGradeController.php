@@ -8,6 +8,7 @@ use App\Models\SalaryYear;
 use App\Models\SalaryMonth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use DB;
 
 class SalaryGradeController extends Controller
 {
@@ -18,7 +19,7 @@ class SalaryGradeController extends Controller
     {
         $title = 'Salary Per Grade';
         // $salary_grades = SalaryGrade::all();
-        $query = SalaryGrade::with('grade');
+        // $query = SalaryGrade::with('grade');
 
         // Check if the "Show All" option is selected
         if (request('filter_year') === 'all') {
@@ -26,11 +27,12 @@ class SalaryGradeController extends Controller
         } else {
             // Filter by the selected year
             $filterYear = request('filter_year', Carbon::now()->year);
-            $query->where('year', $filterYear);
+            // $query->where('year', $filterYear);
         }
         $selectedYear = $filterYear ?? null;
-        $salary_grades = $query->get();
-        $years = SalaryGrade::distinct('year')->pluck('year')->toArray();
+        // $salary_grades = $query->get();
+        $salary_grades = DB::table('grade')->where('year', $filterYear)->get();
+        $years = DB::table('grade')->distinct('year')->pluck('year')->toArray();
         return view('salary_grade.index', compact('title', 'salary_grades', 'years', 'selectedYear'));
     }
 

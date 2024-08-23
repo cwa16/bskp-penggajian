@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Status;
-use App\Models\SalaryYear;
-use App\Models\SalaryMonth;
-use Carbon\Carbon;
-use DB;
 use App\Exports\SalaryMonthExport;
 use App\Imports\SalaryMonthImport;
-use Maatwebsite\Excel\Facades\Excel;
-
+use App\Models\SalaryMonth;
+use App\Models\SalaryYear;
+use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SalaryMonthController extends Controller
 {
@@ -22,18 +19,12 @@ class SalaryMonthController extends Controller
 
         $data = DB::table('salary_months')
             ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-            ->join('salary_grades', 'salary_years.id_salary_grade', '=', 'salary_grades.id')
-            ->join('grades', 'salary_grades.id_grade', '=', 'grades.id')
-            // ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
-            // ->join('grades', 'users.id_grade', '=', 'grades.id')
             ->join('users', 'users.id', '=', 'salary_years.id_user')
-            ->join('statuses', 'users.id_status', '=', 'statuses.id')
-            ->join('depts', 'users.id_dept', '=', 'depts.id')
-            ->join('jobs', 'users.id_job', '=', 'jobs.id')
-            ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.name_grade as grades_name', 'salary_months.id as id_salary_month')
+            ->join('grade', 'users.grade', '=', 'grade.grade')
+            ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.grade as grades_name', 'salary_months.id as id_salary_month')
             ->get();
 
-            // dd($data);
+
 
         $years = SalaryMonth::distinct('date')->pluck('date')->map(function ($date) {
             return Carbon::parse($date)->format('Y');
@@ -45,8 +36,8 @@ class SalaryMonthController extends Controller
                 'label' => $carbonDate->format('F'),
             ];
         })->unique()->toArray();
-        $statuses = Status::distinct('name_status')->pluck('name_status')->toArray();
-        $statuses_id = Status::all();
+        $statuses = DB::table('users')->select('users.id', 'users.status')->groupBy('status')->get();
+        $statuses_id = DB::table('users')->select('users.id', 'users.status')->groupBy('status')->get();
 
         $selectedYear = trim(request()->input('filter_year', ''));
         $selectedMonth = trim(request()->input('filter_month', ''));
@@ -58,15 +49,9 @@ class SalaryMonthController extends Controller
         if ($selectedYear == null && $selectedMonth == null && $selectedStatus == null) {
             $data = DB::table('salary_months')
                 ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-                ->join('salary_grades', 'salary_years.id_salary_grade', '=', 'salary_grades.id')
-                ->join('grades', 'salary_grades.id_grade', '=', 'grades.id')
-                // ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
-                // ->join('grades', 'users.id_grade', '=', 'grades.id')
                 ->join('users', 'users.id', '=', 'salary_years.id_user')
-                ->join('statuses', 'users.id_status', '=', 'statuses.id')
-                ->join('depts', 'users.id_dept', '=', 'depts.id')
-                ->join('jobs', 'users.id_job', '=', 'jobs.id')
-                ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month', 'salary_months.date as salary_month_date', 'grades.name_grade as grades_name',)
+                ->join('grade', 'users.grade', '=', 'grade.grade')
+                ->select('salary_months.*', 'salary_months.date as salary_month_date', 'salary_years.*', 'users.*', 'grade.grade as grades_name', 'salary_months.id as id_salary_month')
                 ->get();
         } else {
             if ($selectedStatus == 'All Status') {
@@ -122,21 +107,21 @@ class SalaryMonthController extends Controller
     {
         $title = 'Filter Salary Per Month';
 
-        $statuses = Status::all();
+        $statuses = DB::table('users')->select('users.id', 'users.status')->groupBy('status')->get();
         $years = SalaryYear::distinct('year')->pluck('year')->toArray();
 
         $statusFilter = request()->input('id_status', null);
         $yearFilter = request()->input('year', null);
         $monthFilter = request()->input('month', null);
 
-        return view('salary_month.filter', compact('title', 'statusFilter', 'yearFilter', 'statuses', 'monthFilter', 'years',));
+        return view('salary_month.filter', compact('title', 'statusFilter', 'yearFilter', 'statuses', 'monthFilter', 'years', ));
     }
 
     public function create()
     {
         $title = 'Input Salary Per Month';
 
-        $statuses = Status::all();
+        $statuses = DB::table('users')->select('users.id', 'users.status')->groupBy('status')->get();
         $years = SalaryYear::distinct('year')->pluck('year')->toArray();
 
         $statusFilter = request()->input('id_status');
@@ -148,11 +133,8 @@ class SalaryMonthController extends Controller
         $checkStatus = DB::table('salary_months')
             ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
             ->join('users', 'users.id', '=', 'salary_years.id_user')
-            ->join('statuses', 'users.id_status', '=', 'statuses.id')
-            ->where('users.id_status', $statusFilter)
+            ->where('users.status', $statusFilter)
             ->first();
-
-            // dd($checkYear, $checkMonth, $checkStatus);
 
         if ($checkStatus != null) {
             if ($checkYear != null && $checkMonth != null) {
@@ -212,16 +194,11 @@ class SalaryMonthController extends Controller
                 //                ]);
                 // }
 
-
                 $data = DB::table('salary_months')
                     ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-                    ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
                     ->join('users', 'users.id', '=', 'salary_years.id_user')
-                    ->join('statuses', 'users.id_status', '=', 'statuses.id')
-                    ->join('depts', 'users.id_dept', '=', 'depts.id')
-                    ->join('jobs', 'users.id_job', '=', 'jobs.id')
-                    ->join('grades', 'users.id_grade', '=', 'grades.id')
-                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
+                    ->join('grade', 'users.grade', '=', 'grade.grade')
+                    ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.id as id_salary_month')
                     ->whereYear('salary_months.date', $yearFilter)
                     ->whereMonth('salary_months.date', $monthFilter)
                     ->get();
@@ -230,7 +207,6 @@ class SalaryMonthController extends Controller
 
                 $global = DB::table('salary_years')
                     ->join('users', 'salary_years.id_user', '=', 'users.id')
-                    ->join('statuses', 'users.id_status', '=', 'statuses.id')
                     ->select('salary_years.id as salary_years_id')
                     ->where('salary_years.used', 1)
                     ->where('users.id_status', $statusFilter)
@@ -238,37 +214,28 @@ class SalaryMonthController extends Controller
 
                 foreach ($global as $g) {
                     SalaryMonth::create([
-                        'id_salary_year' =>$g->salary_years_id,
+                        'id_salary_year' => $g->salary_years_id,
                         'date' => $yearFilter . '-' . $monthFilter . '-13',
                     ]);
                 }
 
                 $data = DB::table('salary_months')
                     ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-                    ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
                     ->join('users', 'users.id', '=', 'salary_years.id_user')
-                    ->join('statuses', 'users.id_status', '=', 'statuses.id')
-                    ->join('depts', 'users.id_dept', '=', 'depts.id')
-                    ->join('jobs', 'users.id_job', '=', 'jobs.id')
-                    ->join('grades', 'users.id_grade', '=', 'grades.id')
-                    ->where('users.id_status', $statusFilter)
+                    ->join('grade', 'users.grade', '=', 'grade.grade')
+                    ->where('users.status', $statusFilter)
                     ->whereMonth('salary_months.date', $monthFilter)
-                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
+                    ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.id as id_salary_month')
                     ->get();
             }
         } else {
             $data = DB::table('users')
-                ->join('statuses', 'users.id_status', '=', 'statuses.id')
-                ->join('depts', 'users.id_dept', '=', 'depts.id')
-                ->join('jobs', 'users.id_job', '=', 'jobs.id')
-                ->join('grades', 'users.id_grade', '=', 'grades.id')
-                ->join('salary_grades', 'grades.id', '=', 'salary_grades.id_grade')
+                ->join('grade', 'users.grade', '=', 'grade.grade')
                 ->join('salary_years', 'salary_years.id_user', '=', 'users.id')
-                ->where('users.id_status', $statusFilter)
-                ->select('users.*', 'salary_grades.*', 'grades.*', 'statuses.*', 'depts.*', 'jobs.*', 'salary_grades.id as id_salary_grade', 'users.id as id_user', 'salary_years.id as id_salary_year')
+                ->where('users.status', $statusFilter)
+                ->select('users.*', 'grade.*', 'users.id as id_user', 'salary_years.id as id_salary_year')
                 ->get();
         }
-
 
         return view('salary_month.create', compact('title', 'statuses', 'years', 'statusFilter', 'yearFilter', 'monthFilter', 'data'));
     }
@@ -352,66 +319,67 @@ class SalaryMonthController extends Controller
 
     public function store(Request $request)
     {
-    $idFilter = $request->input('id_salary_month');
-    $yearFilter = $request->input('year');
-    $monthFilter = $request->input('month');
+        $idFilter = $request->input('id_salary_month');
+        $yearFilter = $request->input('year');
+        $monthFilter = $request->input('month');
 
-    foreach ($request->input('id_user') as $key => $id_user) {
-        $date = $yearFilter . '-' . $monthFilter . '-13';
+        foreach ($request->input('id_user') as $key => $id_user) {
+            $date = $yearFilter . '-' . $monthFilter . '-13';
 
-        $rate_salary = $request->input('rate_salary')[$key] ?? 0;
-        $ability = $request->input('ability')[$key] ?? 0;
-        $fungtional_alw = $request->input('fungtional_alw')[$key] ?? 0;
-        $family_alw = $request->input('family_alw')[$key] ?? 0;
-        $transport_alw = $request->input('transport_alw')[$key] ?? 0;
-        $skill_alw = $request->input('skill_alw')[$key] ?? 0;
-        $telephone_alw = $request->input('telephone_alw')[$key] ?? 0;
-        $adjustment = $request->input('adjustment')[$key] ?? 0;
-        $total_overtime = $request->input('total_overtime')[$key] ?? 0;
-        $thr = $request->input('thr')[$key] ?? 0;
-        $bonus = $request->input('bonus')[$key] ?? 0;
-        $incentive = $request->input('incentive')[$key] ?? 0;
-        $total_ben = $request->input('total_ben')[$key] ?? 0;
+            $rate_salary = $request->input('rate_salary')[$key] ?? 0;
+            $ability = $request->input('ability')[$key] ?? 0;
+            $fungtional_alw = $request->input('fungtional_alw')[$key] ?? 0;
+            $family_alw = $request->input('family_alw')[$key] ?? 0;
+            $transport_alw = $request->input('transport_alw')[$key] ?? 0;
+            $skill_alw = $request->input('skill_alw')[$key] ?? 0;
+            $telephone_alw = $request->input('telephone_alw')[$key] ?? 0;
+            $adjustment = $request->input('adjustment')[$key] ?? 0;
+            $total_overtime = $request->input('total_overtime')[$key] ?? 0;
+            $thr = $request->input('thr')[$key] ?? 0;
+            $bonus = $request->input('bonus')[$key] ?? 0;
+            $incentive = $request->input('incentive')[$key] ?? 0;
+            $total_ben = $request->input('total_ben')[$key] ?? 0;
 
-        $bpjs = $request->input('bpjs')[$key] ?? 0;
-        $jamsostek = $request->input('jamsostek')[$key] ?? 0;
-        $union = $request->input('union')[$key] ?? 0;
-        $absent = $request->input('absent')[$key] ?? 0;
-        $electricity = $request->input('electricity')[$key] ?? 0;
-        $cooperative = $request->input('cooperative')[$key] ?? 0;
-        $pinjaman = $request->input('pinjaman')[$key] ?? 0;
-        $other = $request->input('other')[$key] ?? 0;
-        $total_ben_ded = $request->input('total_ben_ded')[$key] ?? 0;
+            $bpjs = $request->input('bpjs')[$key] ?? 0;
+            $jamsostek = $request->input('jamsostek')[$key] ?? 0;
+            $union = $request->input('union')[$key] ?? 0;
+            $absent = $request->input('absent')[$key] ?? 0;
+            $electricity = $request->input('electricity')[$key] ?? 0;
+            $cooperative = $request->input('cooperative')[$key] ?? 0;
+            $pinjaman = $request->input('pinjaman')[$key] ?? 0;
+            // dd($pinjaman);
+            $other = $request->input('other')[$key] ?? 0;
+            $total_ben_ded = $request->input('total_ben_ded')[$key] ?? 0;
 
-        $gross_sal = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw + $skill_alw + $telephone_alw +
-            $adjustment + $total_overtime + $thr + $bonus + $incentive;
-        $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative + $pinjaman + $other;
-        $net_salary = ($gross_sal + $total_ben) - ($total_deduction + $total_ben_ded);
+            $gross_sal = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw + $skill_alw + $telephone_alw +
+                $adjustment + $total_overtime + $thr + $bonus + $incentive;
+            $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative + $pinjaman + $other;
+            $net_salary = ($gross_sal + $total_ben) - ($total_deduction + $total_ben_ded);
 
-        SalaryMonth::updateOrCreate(
-            [
-                'id' => $request->input('id_salary_month')[$key],
-                'date' => $request->input('date_input')[$key],
-            ],
-            [
-                'id_salary_year' => $request->input('id_salary_year')[$key],
-                'hour_call' => $request->input('hour_call')[$key] ?? 0,
-                'total_overtime' => $total_overtime,
-                'thr' => $thr,
-                'bonus' => $bonus,
-                'incentive' => $incentive,
-                'union' => $union,
-                'absent' => $absent,
-                'electricity' => $electricity,
-                'cooperative' => $cooperative,
-                'pinjaman' => $pinjaman,
-                'other' => $other,
-                'gross_salary' => $gross_sal,
-                'total_deduction' => $total_deduction,
-                'net_salary' => $net_salary,
-            ]
-        );
-    }
+            SalaryMonth::updateOrCreate(
+                [
+                    'id' => $request->input('id_salary_month')[$key],
+                    'date' => $request->input('date_input')[$key],
+                ],
+                [
+                    'id_salary_year' => $request->input('id_salary_year')[$key],
+                    'hour_call' => $request->input('hour_call')[$key] ?? 0,
+                    'total_overtime' => $total_overtime,
+                    'thr' => $thr,
+                    'bonus' => $bonus,
+                    'incentive' => $incentive,
+                    'union' => $union,
+                    'absent' => $absent,
+                    'electricity' => $electricity,
+                    'cooperative' => $cooperative,
+                    'pinjaman' => $pinjaman,
+                    'other' => $other,
+                    'gross_salary' => $gross_sal,
+                    'total_deduction' => $total_deduction,
+                    'net_salary' => $net_salary,
+                ]
+            );
+        }
 
         return redirect()->route('salary-month')->with('success', 'Salary data stored successfully');
     }
@@ -479,7 +447,7 @@ class SalaryMonthController extends Controller
 
             // Hitungan untuk mencari totalan
             $gross_sal = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw + $skill_alw + $telephone_alw +
-            $adjustment + $total_overtime + $thr + $bonus + $incentive;
+                $adjustment + $total_overtime + $thr + $bonus + $incentive;
 
             $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative;
 
@@ -524,12 +492,12 @@ class SalaryMonthController extends Controller
     {
         $date = $request->input('date');
         $status = $request->input('filter_status');
-        return (new SalaryMonthExport($date, $status))->download($date . '_salary_month_' . $status .'.xlsx');
+        return (new SalaryMonthExport($date, $status))->download($date . '_salary_month_' . $status . '.xlsx');
     }
 
     public function import()
     {
-        Excel::import(new SalaryMonthImport,request()->file('file'));
+        Excel::import(new SalaryMonthImport, request()->file('file'));
 
         return back();
     }

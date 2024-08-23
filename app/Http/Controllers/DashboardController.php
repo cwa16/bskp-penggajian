@@ -14,21 +14,13 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $managerCount = User::whereHas('status', function ($query) {
-            $query->where('name_status', 'manager');
-        })->count();
+        $managerCount = User::where('status', 'Manager')->count();
 
-        $staffCount = User::whereHas('status', function ($query) {
-            $query->where('name_status', 'staff');
-        })->count();
+        $staffCount = User::where('status', 'Staff')->count();
 
-        $assistantTraineeCount = User::whereHas('status', function ($query) {
-            $query->where('name_status', 'assistant trainee');
-        })->count();
+        $assistantTraineeCount = 0;
 
-        $monthlyCount = User::whereHas('status', function ($query) {
-            $query->where('name_status', 'monthly');
-        })->count();
+        $monthlyCount = User::where('status', 'Monthly')->count();
 
         return view('dashboard.index', [
             'title' => 'Dashboard',

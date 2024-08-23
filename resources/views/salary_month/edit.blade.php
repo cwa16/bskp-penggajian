@@ -62,10 +62,10 @@
                                                         <td class="text-nowrap text-end">{{ $sm->salary_year->user->nik }}
                                                         </td>
                                                         <td>{{ $sm->salary_year->user->name }}</td>
-                                                        <td>{{ $sm->salary_year->user->status->name_status }}</td>
-                                                        <td>{{ $sm->salary_year->user->dept->name_dept }}</td>
-                                                        <td>{{ $sm->salary_year->user->job->name_job }}</td>
-                                                        <td>{{ $sm->salary_year->user->grade->name_grade ?? '-' }}</td>
+                                                        <td>{{ $sm->salary_year->user->status }}</td>
+                                                        <td>{{ $sm->salary_year->user->dept }}</td>
+                                                        <td>{{ $sm->salary_year->user->jabatan }}</td>
+                                                        <td>{{ $sm->salary_year->user->grade ?? '-' }}</td>
                                                         <td>
                                                             {{-- INPUTAN HIDDEN --}}
                                                             <input type="hidden" name="ids[]"
@@ -80,7 +80,7 @@
 
                                                             <input type="hidden"
                                                                 name="rate_salary[{{ $sm->id }}]"
-                                                                value="{{ $sm->salary_year->salary_grade->rate_salary ?? '' }}">
+                                                                value="{{ $sm->salary_year->grade->rate_salary ?? '' }}">
 
                                                             <input type="hidden" name="ability[{{ $sm->id }}]"
                                                                 value="{{ $sm->salary_year->ability ?? '' }}">

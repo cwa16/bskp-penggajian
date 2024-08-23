@@ -19,9 +19,9 @@
                                         <option value="" {{ $statusFilter == null ? 'selected' : '' }}>
                                             - Choose Status -</option>
                                         @foreach ($statuses as $status)
-                                            <option value="{{ $status->id }}"
-                                                {{ $statusFilter == $status->id ? 'selected' : '' }}>
-                                                {{ $status->name_status }}
+                                            <option value="{{ $status->status }}"
+                                                {{ $statusFilter == $status->status ? 'selected' : '' }}>
+                                                {{ $status->status }}
                                             </option>
                                         @endforeach
                                     </select>

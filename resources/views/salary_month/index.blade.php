@@ -38,7 +38,7 @@
                                                 <option selected disabled>-- Pilih Status --</option>
                                                     <option value="All Status">All Status</option>
                                                 @foreach ($statuses_id as $status)
-                                                    <option value="{{ $status->id }}">{{ $status->name_status }}</option>
+                                                    <option value="{{ $status->status }}">{{ $status->status }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -111,10 +111,10 @@
                                         <tr>
                                             <td class="text-nowrap text-end">{{ $sm->nik }}</td>
                                             <td>{{ $sm->name }}</td>
-                                            <td>{{ $sm->name_status }}</td>
-                                            <td>{{ $sm->name_dept }}</td>
-                                            <td>{{ $sm->name_job }}</td>
-                                            <td>{{ $sm->grades_name }}</td>
+                                            <td>{{ $sm->status }}</td>
+                                            <td>{{ $sm->dept }}</td>
+                                            <td>{{ $sm->jabatan }}</td>
+                                            <td>{{ $sm->grade }}</td>
                                             <td class="text-end">
                                                 @if ($sm->hour_call == null || $sm->hour_call == 0)
                                                     -
@@ -220,7 +220,7 @@
                                     <select class="form-select form-select-sm" name="filter_status">
                                         <option selected disabled>-- Pilih Status --</option>
                                         @foreach ($statuses_id as $status)
-                                            <option value="{{ $status->id }}">{{ $status->name_status }}</option>
+                                            <option value="{{ $status->status }}">{{ $status->status }}</option>
                                         @endforeach
                                     </select>
                                     <hr>

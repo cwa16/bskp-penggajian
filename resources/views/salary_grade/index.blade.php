@@ -61,7 +61,7 @@
                                             <td style="display: none;"><input type="checkbox" name="selected[]"
                                                     value="{{ $sg->id }}"></td>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $sg->grade->name_grade }}</td>
+                                            <td>{{ $sg->grade }}</td>
                                             <td class="text-end">{{ number_format($sg->rate_salary, 0, ',', '.') }}</td>
                                             <td class="text-end">{{ $sg->year }}</td>
                                         </tr>

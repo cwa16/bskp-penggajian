@@ -29,7 +29,7 @@
                                                 <option selected disabled>-- Pilih Status --</option>
                                                     <option value="All Status">All Status</option>
                                                 @foreach ($statuses_id as $status)
-                                                    <option value="{{ $status->id }}">{{ $status->name_status }}</option>
+                                                    <option value="{{ $status->status }}">{{ $status->status }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -94,10 +94,10 @@
                                         <tr>
                                             <td class="text-nowrap text-end">{{ $sy->nik }}</td>
                                             <td>{{ $sy->name }}</td>
-                                            <td>{{ $sy->name_status }}</td>
-                                            <td>{{ $sy->name_dept }}</td>
-                                            <td>{{ $sy->name_job }}</td>
-                                            <td>{{ $sy->name_grade }}</td>
+                                            <td>{{ $sy->status }}</td>
+                                            <td>{{ $sy->dept }}</td>
+                                            <td>{{ $sy->jabatan }}</td>
+                                            <td>{{ $sy->grade }}</td>
                                             <td class="text-end">
                                                 {{ $sy->rate_salary != 0 ? number_format($sy->rate_salary, 0, ',', '.') : '-' }}
                                             </td>

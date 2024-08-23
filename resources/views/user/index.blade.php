@@ -60,10 +60,10 @@
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $user->nik }}</td>
                                         <td>{{ $user->name }}</td>
-                                        <td>{{ $user->status->name_status }}</td>
-                                        <td>{{ $user->grade->name_grade ?? '-' }}</td>
-                                        <td>{{ $user->dept->name_dept }}</td>
-                                        <td>{{ $user->job->name_job }}</td>
+                                        <td>{{ $user->status }}</td>
+                                        <td>{{ $user->grade ?? '-' }}</td>
+                                        <td>{{ $user->dept }}</td>
+                                        <td>{{ $user->jabatan }}</td>
                                         <td>{{ $user->sex }}</td>
                                         <td>{{ $user->ttl }}</td>
                                         <td>{{ $user->start }}</td>
