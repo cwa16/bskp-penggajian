@@ -322,6 +322,7 @@ class SalaryController extends Controller
         ->join('statuses', 'users.id_status', '=', 'statuses.id')
         ->select(
             'users.nik',
+            'users.no_telpon',
             'users.name',
             'depts.name_dept',
             'jobs.name_job',

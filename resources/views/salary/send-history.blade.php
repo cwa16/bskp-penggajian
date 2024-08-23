@@ -32,6 +32,7 @@
                                         </th>
                                         <th style="background-color: #1A73E8; color: white;" class="text-center">Job</th>
                                         <th style="background-color: #1A73E8; color: white;" class="text-center">Status</th>
+                                        <th style="background-color: #1A73E8; color: white;" class="text-center">No HP</th>
                                         <th style="background-color: #1A73E8; color: white;" class="text-center">Year</th>
                                         @foreach ($months as $month)
                                             <th style="background-color: #1A73E8; color: white;" class="text-center">
@@ -50,6 +51,7 @@
                                             <td>{{ $user->name_dept }}</td>
                                             <td>{{ $user->name_job }}</td>
                                             <td>{{ $user->name_status }}</td>
+                                            <td>{{ $user->no_telpon }}</td>
                                             <td>{{ $user->year }}</td>
                                             @foreach ($months as $month)
                                                 @php

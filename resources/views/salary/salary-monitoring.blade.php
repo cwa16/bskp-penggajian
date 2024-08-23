@@ -17,54 +17,72 @@
                                 id="example">
                                 <thead class="bg-thead">
                                     <tr>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center"
-                                            rowspan="2">Year</th>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center"
-                                            rowspan="2">Month</th>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center"
-                                            colspan="6">Manager
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center" rowspan="2">Year</th>
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center" rowspan="2">Month</th>
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center" colspan="6">Manager
                                         </th>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center"
-                                            colspan="6">Assistant
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center" colspan="6">Assistant
                                             Manager
                                         </th>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center"
-                                            colspan="6">Monthly
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center" colspan="6">Monthly
                                         </th>
                                     </tr>
                                     <tr>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center">No of
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center">No of
                                             employee</th>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center">Salary</th>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center">Allowance
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center">Salary</th>
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center">Allowance
                                         </th>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center">Insentive &
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center">Insentive &
                                             Overtime</th>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center">Total
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center">Total
                                             Salary</th>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center">Avarage per
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center">Avarage per
                                             person</th>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center">No of
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center">No of
                                             employee</th>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center">Salary</th>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center">Allowance
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center">Salary</th>
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center">Allowance
                                         </th>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center">Insentive &
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center">Insentive &
                                             Overtime</th>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center">Total
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center">Total
                                             Salary</th>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center">Avarage per
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center">Avarage per
                                             person</th>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center">No of
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center">No of
                                             employee</th>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center">Salary</th>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center">Allowance
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center">Salary</th>
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center">Allowance
                                         </th>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center">Insentive &
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center">Insentive &
                                             Overtime</th>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center">Total
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center">Total
                                             Salary</th>
-                                        <th style="background-color: #1A73E8; color: white;" class="text-center">Avarage per
+                                        <th style="background-color: #1A73E8; color: white; font-size: 12px;"
+                                            class="text-center">Avarage per
                                             person</th>
                                     </tr>
                                 </thead>

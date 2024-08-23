@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OvertimeController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\DeptController;
@@ -109,4 +110,14 @@ Route::get('/send-whatsapp/{id}', [SalaryController::class, 'send'])->name('send
 Route::get('/list-is-send', [SalaryController::class, 'send_report'])->name('list-is-send');
 
 Route::get('/salary-monitoring', [SalaryController::class, 'salary_monitoring_index'])->name('salary-monitoring');
+// -------------------------------------------------------------------
+
+// OvertimeController
+// -------------------------------------------------------------------
+Route::get('/overtime-approval-index', [OvertimeController::class, 'index'])->name('overtime-approval-index');
+// -------------------------------------------------------------------
+
+// UserController
+// -------------------------------------------------------------------
+Route::get('/api-user', [UserController::class, 'getApiUser'])->name('api-user');
 // -------------------------------------------------------------------
