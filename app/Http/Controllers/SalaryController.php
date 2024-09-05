@@ -867,9 +867,17 @@ class SalaryController extends Controller
                 $filePath = storage_path('app/public') . '/' . $customFileName . '.pdf';
 
                 $id = $data->salary_month_id;
-                $sal = SalaryMonth::find($id);
+                $sal = DB::table('salary_months')
+                    ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                    ->join('users', 'users.nik', '=', 'salary_years.nik')
+                    ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
+                    ->select('salary_months.date as salary_month_date', 'salary_years.*', 'users.*', 'grade.*')
+                    ->where('salary_months.id', $id)
+                    ->first();
+                    // dd($sal->name);
+                // $sal = SalaryMonth::find($id);
 
-                dd($sal, $sal->salary_year->salary_grade->name_grade);
+                // dd($sal, $sal->salary_year->nik);
 
                 if (!$sal) {
                     dd("Salary with ID $id not found.");

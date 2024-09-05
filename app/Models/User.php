@@ -104,7 +104,7 @@ class User extends Authenticatable
     // Relasi dengan tabel Salary
     public function salary_years()
     {
-        return $this->hasMany(SalaryYear::class, 'id_user');
+        return $this->belongsTo(User::class, 'nik');
     }
 
     // method mengecek apakah data user sudah berelasi dengan salary_years tahun ini
