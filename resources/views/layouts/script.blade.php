@@ -38,7 +38,22 @@
             "autoWidth": false,
             "initComplete": function(settings, json) {
                 $(".dtTable1").wrap(
-                    "<div style='overflow:auto; width:75%;'></div>");
+                    "<div style='overflow:auto; width:80%;'></div>");
+            },
+            "lengthMenu": [
+                [10, 50, 100, 200, -1],
+                [10, 50, 100, 200, "All"]
+            ], // Customize the entries per page
+            "pageLength": 25
+        });
+    })
+    $(document).ready(function() {
+        $('.dtTable2').DataTable({
+            "lengthChange": true,
+            "autoWidth": true,
+            "initComplete": function(settings, json) {
+                $(".dtTable2").wrap(
+                    "<div style='overflow:auto; width:100%;'></div>");
             },
             "lengthMenu": [
                 [10, 50, 100, 200, -1],

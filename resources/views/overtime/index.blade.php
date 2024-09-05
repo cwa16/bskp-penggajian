@@ -1,5 +1,14 @@
 @extends('layouts.main')
 @section('content')
+    <style>
+        .sent {
+            color: green;
+        }
+
+        .not-sent {
+            color: red;
+        }
+    </style>
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-12">
@@ -11,99 +20,124 @@
                     </div>
 
                     <div>
-                        <div>
-                            <div class="card-body p-3 pb-2">
-                                <table class="table table-bordered" style="width: 50px;height: 10px;">
-                                    <thead>
-                                        <tr>
-                                            <th>Group</th>
-                                            <th> : </th>
-                                            <th></th>
-                                        </tr>
-                                        <tr>
-                                            <th>Date</th>
-                                            <th> : </th>
-                                            <th>{{ \Carbon\Carbon::parse($tanggalHariIni)->format('d-m-Y') }}</th>
-                                        </tr>
-                                        <tr>
-                                            <th>Dept</th>
-                                            <th> : </th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                </table>
+                        <div class="card-body p-3 pb-2">
+                            <div class="row">
+                                <div class="col-7">
+                                    <table class="table table-bordered" style="width: 50px; height: 10px;">
+                                        <thead>
+                                            <tr>
+                                                <th>Group</th>
+                                                <th> : </th>
+                                                <th></th>
+                                            </tr>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th> : </th>
+                                                <th>{{ \Carbon\Carbon::parse($dateYesterday)->format('d-m-Y') }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Dept</th>
+                                                <th> : </th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="col-5 justify-content-end">
+                                    <form action="{{ url('/overtime-approval-index') }}" method="GET">
+                                        @csrf
+                                        <div class="row">
+                                            <div class="col pe-0">
+                                                <input type="date" name="date" id=""
+                                                    class="form-select form-select-sm">
+                                            </div>
+                                            <div class="col-auto">
+                                                <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
+
                         </div>
                     </div>
 
-                    <form method="POST" action="">
+                    <form method="POST" action="{{ route('overtime-approval-store') }}">
                         @csrf
+                        <input type="hidden" id="inputDate" name="tanggal" class="form-control"
+                            value="{{ \Carbon\Carbon::parse($dateYesterday)->format('Y-m-d') }}">
                         <div class="card-body p-3 pb-2">
+                            <button type="submit" class="btn btn-primary mt-3">Submit Approval</button>
                             @if (isset($dataGabunganGrouped) && $dataGabunganGrouped->isNotEmpty())
-                                <table
-                                    class="table table-sm table-striped table-hover align-items-center compact small-tbl">
-                                    <thead class="bg-thead">
-                                        <tr>
-                                            <th rowspan="2" class="text-center">No</th>
-                                            <th rowspan="2" class="text-center">NIK</th>
-                                            <th rowspan="2" class="text-center">Name</th>
-                                            <th rowspan="2" class="text-center">Dept</th>
-                                            <th rowspan="2" class="text-center">Status</th>
-                                            <th rowspan="2" class="text-center">Jabatan</th>
-                                            <th colspan="2" class="text-center">Overtime</th>
-                                            <th rowspan="2" class="text-center">Approval</th>
-                                        </tr>
-                                        <tr>
-                                            <th class="text-center">Jam</th>
-                                            <th class="text-center">Kalkulasi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($dataGabunganGrouped as $status => $items)
-                                            <tr>
-                                                <td colspan="9" class="bg-info text-white"><strong>Status:
-                                                        {{ $status }}</strong></td>
-                                            </tr>
-                                            @foreach ($items as $item)
-                                                @php
-                                                    $rate_salary = $item['user_data']['rate_salary'] ?? 0;
-                                                    $ability = $item['user_data']['ability'] ?? 0;
-                                                    $overtime_hour = $item['overtime_hour'] ?? 0;
-                                                    $totalOvertime = (($rate_salary + $ability) / 173) * $overtime_hour;
-                                                @endphp
+                                @foreach ($dataGabunganGrouped as $status => $items)
+                                    <div class="my-4">
+                                        <h4 class="bg-info text-white p-2 rounded">Status: {{ $status }}</h4>
+                                        <table
+                                            class="table table-sm table-striped table-hover align-items-center compact small-tbl dtTable1">
+                                            <thead class="bg-thead">
                                                 <tr>
-                                                    <td class="text-center">{{ $loop->iteration }}</td>
-                                                    <td class="text-center">{{ $item['user_id'] }}</td>
-                                                    <td>{{ $item['user_data']['name'] ?? 'Nama tidak ditemukan' }}</td>
-                                                    <td>{{ $item['user_data']['name_dept'] ?? 'Nama tidak ditemukan' }}</td>
-                                                    <td>{{ $item['user_data']['name_status'] ?? 'Nama tidak ditemukan' }}
-                                                    </td>
-                                                    <td>{{ $item['user_data']['name_job'] ?? 'Nama tidak ditemukan' }}</td>
-                                                    <td class="text-center">
-                                                        {{ $overtime_hour }}
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <input type="hidden" name="rate_salary[{{ $loop->index }}]"
-                                                            value="{{ $rate_salary }}">
-                                                        <input type="hidden" name="ability[{{ $loop->index }}]"
-                                                            value="{{ $ability }}">
-                                                        {{ number_format($totalOvertime) }}
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <input type="checkbox" name="approval[{{ $item['user_id'] }}]"
-                                                            value="1">
-                                                    </td>
+                                                    <th rowspan="2" class="text-center"
+                                                        style="background-color: #1A73E8;color: white;">
+                                                        <input type="checkbox" id="selectAll"
+                                                            onclick="toggleSelectAll(this)">
+                                                    </th>
+                                                    <th rowspan="2" class="text-center">No</th>
+                                                    <th rowspan="2" class="text-center">NIK</th>
+                                                    <th rowspan="2" class="text-center">Name</th>
+                                                    <th rowspan="2" class="text-center">Dept</th>
+                                                    <th rowspan="2" class="text-center">Status</th>
+                                                    <th rowspan="2" class="text-center">Jabatan</th>
+                                                    <th colspan="2" class="text-center">Overtime</th>
+                                                    <th rowspan="2" class="text-center">Approve</th>
                                                 </tr>
-                                            @endforeach
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                                <button type="submit" class="btn btn-primary mt-3">Submit Approval</button>
+                                                <tr>
+                                                    <th class="text-center">Jam</th>
+                                                    <th class="text-center">Kalkulasi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($items as $index => $item)
+                                                    @php
+                                                        $rate_salary = $item['rate_salary'] ?? 0;
+                                                        $ability = $item['ability'] ?? 0;
+                                                        $overtime_hour = $item['overtime_hour'] ?? 0;
+                                                        $totalOvertime =
+                                                            (($rate_salary + $ability) / 173) * $overtime_hour;
+                                                        $id_salary_year = $item['id_salary_year'] ?? '';
+                                                        $isApproved = $item['is_approved'] == 1 ? 'Yes' : 'No';
+                                                    @endphp
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            <input type="checkbox" name="select_item[]"
+                                                                value="{{ $item['user_id'] }}" class="selectItem"
+                                                                onclick="toggleRow(this, {{ $index }})"
+                                                                {{ $item['is_approved'] == 1 ? 'disabled' : '' }}>
+                                                        </td>
+                                                        <td class="text-center">{{ $index + 1 }}</td>
+                                                        <td class="text-center">{{ $item['user_id'] }}</td>
+                                                        <td>{{ $item['name'] ?? 'Nama tidak ditemukan' }}</td>
+                                                        <td>{{ $item['dept'] ?? 'Dept tidak ditemukan' }}</td>
+                                                        <td>{{ $item['status'] ?? 'Status tidak ditemukan' }}</td>
+                                                        <td>{{ $item['jabatan'] ?? 'Jabatan tidak ditemukan' }}</td>
+                                                        <td class="text-center">{{ $overtime_hour }}</td>
+                                                        <td class="text-center">{{ number_format($totalOvertime) }}</td>
+                                                        <td class="text-center">
+                                                            @if ($isApproved == 'Yes')
+                                                                <span class="sent">✓</span>
+                                                            @else
+                                                                <span class="not-sent">✗</span>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                @endforeach
                             @else
                                 <p>Tidak ada data yang cocok untuk tanggal ini.</p>
                             @endif
                         </div>
-
                     </form>
                 </div>
             </div>
@@ -118,6 +152,63 @@
                 });
             });
         </script>
+
+        <script>
+            function toggleSelectAll(source) {
+                const checkboxes = document.querySelectorAll('.selectItem');
+                checkboxes.forEach((checkbox, index) => {
+                    if (!checkbox.disabled) {
+                        checkbox.checked = source.checked;
+                        toggleRow(checkbox, index);
+                    }
+                });
+            }
+
+            function toggleRow(checkbox, index) {
+                const form = checkbox.closest('form');
+                if (checkbox.checked) {
+                    addInputFields(form, index);
+                } else {
+                    removeInputFields(form, index);
+                }
+            }
+
+            function addInputFields(form, index) {
+                const userId = form.querySelectorAll('.selectItem')[index].value;
+                const overtimeHour = document.querySelectorAll('tbody tr')[index].children[7].textContent.trim();
+                const totalOvertime = document.querySelectorAll('tbody tr')[index].children[8].textContent.trim().replace(',',
+                    '');
+
+                addHiddenInput(form, 'user_id[]', userId);
+                addHiddenInput(form, 'overtime_hour[]', overtimeHour);
+                addHiddenInput(form, 'totalOvertime[]', totalOvertime);
+            }
+
+            function addHiddenInput(form, name, value) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = name;
+                input.value = value;
+                form.appendChild(input);
+            }
+
+            function removeInputFields(form, index) {
+                const userId = form.querySelectorAll('.selectItem')[index].value;
+                removeHiddenInput(form, 'user_id[]', userId);
+                removeHiddenInput(form, 'overtime_hour[]', userId);
+                removeHiddenInput(form, 'totalOvertime[]', userId);
+            }
+
+            function removeHiddenInput(form, name, value) {
+                const inputs = form.querySelectorAll(`input[name="${name}"]`);
+                inputs.forEach(input => {
+                    if (input.value == value) {
+                        form.removeChild(input);
+                    }
+                });
+            }
+        </script>
+
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 const hourCallInputs = document.querySelectorAll('[name^="overtime_hour["]');

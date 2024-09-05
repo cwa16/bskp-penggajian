@@ -126,6 +126,10 @@ Route::get('/salary-monitoring', [SalaryController::class, 'salary_monitoring_in
 // OvertimeController
 // -------------------------------------------------------------------
 Route::get('/overtime-approval-index', [OvertimeController::class, 'index'])->name('overtime-approval-index');
+Route::post('/overtime-approval-store', [OvertimeController::class, 'store'])->name('overtime-approval-store');
+
+Route::get('/overtime-summary-index', [OvertimeController::class, 'index_summary'])->name('overtime-summary-index');
+Route::post('/overtime-summary-store', [OvertimeController::class, 'store_summary'])->name('overtime-summary-store');
 // -------------------------------------------------------------------
 
 // UserController
