@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use PDF;
 use Twilio\Rest\Client;
-use Twilio\Http\CURLOPT_URL;
 use WaAPI\WaAPI;
 use Illuminate\Support\Str;
 
@@ -780,6 +779,7 @@ class SalaryController extends Controller
     $years = SalaryMonth::distinct('date')->pluck('date')->map(function ($date) {
         return Carbon::parse($date)->format('Y');
     })->unique()->toArray();
+
     $months_filter = SalaryMonth::select('date')->distinct()->pluck('date')->map(function ($date) {
         $carbonDate = Carbon::parse($date);
         return [
@@ -868,6 +868,8 @@ class SalaryController extends Controller
 
                 $id = $data->salary_month_id;
                 $sal = SalaryMonth::find($id);
+
+                dd($sal, $sal->salary_year->salary_grade->name_grade);
 
                 if (!$sal) {
                     dd("Salary with ID $id not found.");

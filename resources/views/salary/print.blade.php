@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        SAL_{{ date('My', strtotime($sal->salary_months_date)) }}_{{ $sal->Emp_Code }}_{{ $sal->Nama }}
+        SAL_{{ date('My', strtotime($sal->date)) }}_{{ $sal->salary_year->nik }}_{{ $sal->salary_year->users->name }}
     </title>
 
 
@@ -85,7 +85,7 @@
             </tr>
             <tr>
                 <td>Bentok Darat, Bati-Bati, Kab.Tanah Laut</td>
-                <td align="right" class="uppercase">SALARY PAYMENT {{ date('F Y', strtotime($sal->salary_months_date)) }}
+                <td align="right" class="uppercase">SALARY PAYMENT {{ date('F Y', strtotime($sal->date)) }}
                 </td>
             </tr>
             <tr>
@@ -105,19 +105,19 @@
                     <table class="tb-detail">
                         <tr>
                             <td>Employe Code </td>
-                            <td> : {{ $sal->Emp_Code }}</td>
+                            <td> : {{ $sal->salary_year->nik }}</td>
                         </tr>
                         <tr>
                             <td>Employe Name</td>
-                            <td>: {{ $sal->Nama }}</td>
+                            <td>: {{ $sal->salary_year->users->name }}</td>
                         </tr>
                         <tr>
                             <td>Grade</td>
-                            <td>: {{ $sal->Grade }}</td>
+                            <td>: {{ $sal->salary_year->salary_grade->name_grade }}</td>
                         </tr>
                         <tr>
                             <td>Status</td>
-                            <td>: {{ $sal->Status }}</td>
+                            <td>: {{ $sal->salary_year->users->status }}</td>
                         </tr>
                     </table>
                 </td>
@@ -126,15 +126,15 @@
                     <table class="tb-detail">
                         <tr>
                             <td>Departement</td>
-                            <td>: {{ $sal->Dept }}</td>
+                            <td>: {{ $sal->salary_year->users->dept }}</td>
                         </tr>
                         <tr>
                             <td>Job</td>
-                            <td>: {{ $sal->Jabatan }}</td>
+                            <td>: {{ $sal->salary_year->users->jabatan }}</td>
                         </tr>
                         <tr>
                             <td>Start working</td>
-                            <td>: {{ date('H:i', strtotime($sal->start_work_user)) }}</td>
+                            <td>: {{ date('H:i', strtotime($sal->salary_year->users->start_work_user)) }}</td>
                         </tr>
                         <tr>
                             <td>Tax Number</td>
@@ -162,23 +162,23 @@
                             <td>Grade</td>
                             <td>:</td>
                             <td class="text-end">
-                                {{ number_format($sal->rate_salary, 0, ',', '.') }}</td>
+                                {{ number_format($sal->salary_year->salary_grade->rate_salary, 0, ',', '.') }}</td>
                         </tr>
                         <tr>
                             <td>Ability</td>
                             <td>:</td>
-                            <td class="text-end">{{ number_format($sal->ability, 0, ',', '.') }}</td>
+                            <td class="text-end">{{ number_format($sal->salary_year->ability, 0, ',', '.') }}</td>
                         </tr>
                         <tr>
                             <td>Fungtional All</td>
                             <td>:</td>
                             <td class="text-end">
-                                {{ number_format($sal->fungtional_alw, 0, ',', '.') }}</td>
+                                {{ number_format($sal->salary_year->fungtional_alw, 0, ',', '.') }}</td>
                         </tr>
                         <tr>
                             <td>Family All</td>
                             <td>:</td>
-                            <td class="text-end">{{ number_format($sal->family_alw, 0, ',', '.') }}
+                            <td class="text-end">{{ number_format($sal->salary_year->family_alw, 0, ',', '.') }}
                             </td>
                         </tr>
 
@@ -186,21 +186,21 @@
                             <td>Transport All</td>
                             <td>:</td>
                             <td class="text-end">
-                                {{ number_format($sal->transport_alw, 0, ',', '.') }}
+                                {{ number_format($sal->salary_year->transport_alw, 0, ',', '.') }}
                             </td>
                         </tr>
                         <tr>
                             <td>Skill All</td>
                             <td>:</td>
                             <td class="text-end">
-                                {{ number_format($sal->skill_alw, 0, ',', '.') }}
+                                {{ number_format($sal->salary_year->skill_alw, 0, ',', '.') }}
                             </td>
                         </tr>
                         <tr>
                             <td>Telephone All</td>
                             <td>:</td>
                             <td class="text-end">
-                                {{ number_format($sal->telephone_alw, 0, ',', '.') }}
+                                {{ number_format($sal->salary_year->telephone_alw, 0, ',', '.') }}
                             </td>
                         </tr>
                         <tr>
@@ -402,7 +402,7 @@
                     <td>
                         Receive by
                         <br><br><br>
-                        {{ $sal->Nama }}
+                        {{ $sal->salary_year->users->name }}
                     </td>
                     <td style="vertical-align: top">generate by system - no signature is required</td>
                 </tr>
