@@ -169,11 +169,9 @@ class SalaryMonthController extends Controller
             } elseif ($checkYear != null && $checkMonth == null) {
 
                 $global = DB::table('salary_years')
-                    ->join('users', 'salary_years.id_user', '=', 'users.id')
-                    ->join('statuses', 'users.id_status', '=', 'statuses.id')
+                    ->join('users', 'salary_years.nik', '=', 'users.nik')
                     ->select('salary_years.id as salary_years_id')
-                    ->where('salary_years.used', 1)
-                    ->where('users.id_status', $statusFilter)
+                    ->where('users.status', $statusFilter)
                     ->get();
 
                 foreach ($global as $g) {
@@ -183,17 +181,14 @@ class SalaryMonthController extends Controller
                     ]);
                 }
 
-                $data = DB::table('salary_months')
-                    ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-                    ->join('salary_grades', 'salary_grades.id', '=', 'salary_years.id_salary_grade')
-                    ->join('users', 'users.id', '=', 'salary_years.id_user')
-                    ->join('statuses', 'users.id_status', '=', 'statuses.id')
-                    ->join('depts', 'users.id_dept', '=', 'depts.id')
-                    ->join('jobs', 'users.id_job', '=', 'jobs.id')
-                    ->join('grades', 'users.id_grade', '=', 'grades.id')
-                    ->where('users.id_status', $statusFilter)
+                $data = DB::table('users')
+                    ->join('grade', 'users.grade', '=', 'grade.name_grade')
+                    ->join('salary_years', 'salary_years.nik', '=', 'users.nik')
+                    ->join('salary_months', 'salary_months.id_salary_year', '=', 'salary_years.id')
+                    ->where('users.active', 'yes')
+                    ->where('users.status', $statusFilter)
                     ->whereMonth('salary_months.date', $monthFilter)
-                    ->select('salary_months.*', 'salary_years.*', 'salary_grades.*', 'users.*', 'statuses.*', 'depts.*', 'jobs.*', 'grades.*', 'salary_months.id as id_salary_month')
+                    ->select('users.*', 'grade.*', 'users.nik as id_user', 'salary_years.id as id_salary_year', 'grade.id as id_grade', 'salary_years.*')
                     ->get();
             }
         } else {
@@ -312,7 +307,44 @@ class SalaryMonthController extends Controller
         //     ->whereIn('salary_months.id', $selectedIds)
         //     ->get();
 
-        $salary_months = SalaryMonth::whereIn('id', $selectedIds)->get();
+        // $salary_months = SalaryMonth::whereIn('id', $selectedIds)->get();
+
+        $salary_months = DB::table('salary_months')
+            ->join('salary_years', 'salary_months.id_salary_year', '=', 'salary_years.id')
+            ->join('users', 'salary_years.nik', '=', 'users.nik')
+            ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
+            ->select(
+                'users.nik',
+                'users.name',
+                'users.status',
+                'users.dept',
+                'users.jabatan',
+                'users.grade',
+                'grade.rate_salary',
+                'salary_years.id_salary_grade',
+                'salary_years.ability',
+                'salary_years.fungtional_alw',
+                'salary_years.family_alw',
+                'salary_years.transport_alw',
+                'salary_years.telephone_alw',
+                'salary_years.skill_alw',
+                'salary_years.adjustment',
+                'salary_years.year',
+                'salary_years.allocation',
+                'salary_years.id as salary_years_id',
+                'salary_months.id as salary_months_id',
+                'salary_months.hour_call',
+                'salary_months.thr',
+                'salary_months.bonus',
+                'salary_months.incentive',
+                'salary_months.union',
+                'salary_months.absent',
+                'salary_months.electricity',
+                'salary_months.cooperative',
+                'salary_months.date',
+            )
+            ->whereIn('salary_months.id', $selectedIds)
+            ->get();
 
         // dd($salary_months);
 
@@ -323,30 +355,40 @@ class SalaryMonthController extends Controller
     {
         foreach ($request->input('ids') as $id) {
 
-            $rate_salary = $request->input('rate_salary.' . $id);
-            $ability = $request->input('ability.' . $id);
-            $fungtional_alw = $request->input('fungtional_alw.' . $id);
-            $family_alw = $request->input('family_alw.' . $id);
-            $transport_alw = $request->input('transport_alw.' . $id);
-            $skill_alw = $request->input('skill_alw.' . $id);
-            $telephone_alw = $request->input('telephone_alw.' . $id);
-            $adjustment = $request->input('adjustment.' . $id);
-            $total_overtime = $request->input('total_overtime.' . $id);
-            $thr = $request->input('thr.' . $id);
-            $bonus = $request->input('bonus.' . $id);
-            $incentive = $request->input('incentive.' . $id);
-            $total_ben = $request->input('total_ben.' . $id);
+            $input = $request->only([
+                'rate_salary', 'ability', 'fungtional_alw', 'family_alw',
+                'transport_alw', 'telephone_alw', 'skill_alw', 'adjustment',
+                'total_overtime', 'thr', 'bonus', 'incentive', 'total_ben',
+                'bpjs', 'jamsostek', 'union', 'absent', 'electricity',
+                'cooperative', 'total_ben_ded',
+            ]);
 
-            $bpjs = $request->input('bpjs.' . $id);
-            $jamsostek = $request->input('jamsostek.' . $id);
-            $union = $request->input('union.' . $id);
-            $absent = $request->input('absent.' . $id);
-            $electricity = $request->input('electricity.' . $id);
-            $cooperative = $request->input('cooperative.' . $id);
-            $total_ben_ded = $request->input('total_ben_ded.' . $id);
+            $rate_salary = $request->has('rate_salary.' . $id) ? (int) str_replace(',', '', $request->input('rate_salary.' . $id)) : 0;
+            $ability = $request->has('ability.' . $id) ? (int) str_replace(',', '', $request->input('ability.' . $id)) : 0;
+            $fungtional_alw = $request->has('fungtional_alw.' . $id) ? (int) str_replace(',', '', $request->input('fungtional_alw.' . $id)) : 0;
+            $family_alw = $request->has('family_alw.' . $id) ? (int) str_replace(',', '', $request->input('family_alw.' . $id)) : 0;
+            $transport_alw = $request->has('transport_alw.' . $id) ? (int) str_replace(',', '', $request->input('transport_alw.' . $id)) : 0;
+            $telephone_alw = $request->has('telephone_alw.' . $id) ? (int) str_replace(',', '', $request->input('telephone_alw.' . $id)) : 0;
+            $skill_alw = $request->has('skill_alw.' . $id) ? (int) str_replace(',', '', $request->input('skill_alw.' . $id)) : 0;
+            $adjustment = $request->has('adjustment.' . $id) ? (int) str_replace(',', '', $request->input('adjustment.' . $id)) : 0;
+
+            $total_overtime = $request->has('total_overtime.' . $id) ? (int) str_replace(',', '', $request->input('total_overtime.' . $id)) : 0;
+            $thr = $request->has('thr.' . $id) ? (int) str_replace(',', '', $request->input('thr.' . $id)) : 0;
+            $bonus = $request->has('bonus.' . $id) ? (int) str_replace(',', '', $request->input('bonus.' . $id)) : 0;
+            $incentive = $request->has('incentive.' . $id) ? (int) str_replace(',', '', $request->input('incentive.' . $id)) : 0;
+            $total_ben = $request->has('total_ben.' . $id) ? (int) str_replace(',', '', $request->input('total_ben.' . $id)) : 0;
+
+            $bpjs = $request->has('bpjs.' . $id) ? (int) str_replace(',', '', $request->input('bpjs.' . $id)) : 0;
+            $jamsostek = $request->has('jamsostek.' . $id) ? (int) str_replace(',', '', $request->input('jamsostek.' . $id)) : 0;
+            $union = $request->has('union.' . $id) ? (int) str_replace(',', '', $request->input('union.' . $id)) : 0;
+            $absent = $request->has('absent.' . $id) ? (int) str_replace(',', '', $request->input('absent.' . $id)) : 0;
+            $electricity = $request->has('electricity.' . $id) ? (int) str_replace(',', '', $request->input('electricity.' . $id)) : 0;
+            $cooperative = $request->has('cooperative.' . $id) ? (int) str_replace(',', '', $request->input('cooperative.' . $id)) : 0;
+            $total_ben_ded = $request->has('total_ben_ded.' . $id) ? (int) str_replace(',', '', $request->input('total_ben_ded.' . $id)) : 0;
 
             // Hitungan untuk mencari totalan
             $gross_sal = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw + $skill_alw + $telephone_alw +
+
             $adjustment + $total_overtime + $thr + $bonus + $incentive;
 
             $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative;

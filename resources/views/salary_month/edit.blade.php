@@ -25,7 +25,7 @@
                                 <div class="col">
                                     <div class="table-responsive p-0">
                                         <table
-                                            class="table table-sm align-items-center mb-0 dtTable small-tbl compact stripe">
+                                            class="table table-sm align-items-center mb-0 dtTable100 small-tbl compact stripe">
                                             <thead class="bg-thead">
                                                 <tr>
                                                     <th rowspan="2" class="text-center"
@@ -59,128 +59,146 @@
                                                 @foreach ($salary_months as $key => $sm)
                                                     <tr>
                                                         <td class="text-end">{{ $key + 1 }}</td>
-                                                        <td class="text-nowrap text-end">{{ $sm->salary_year->user->nik }}
+                                                        <td class="text-nowrap text-end">{{ $sm->nik }}
                                                         </td>
-                                                        <td>{{ $sm->salary_year->user->name }}</td>
-                                                        <td>{{ $sm->salary_year->user->status->name_status }}</td>
-                                                        <td>{{ $sm->salary_year->user->dept->name_dept }}</td>
-                                                        <td>{{ $sm->salary_year->user->job->name_job }}</td>
-                                                        <td>{{ $sm->salary_year->user->grade->name_grade ?? '-' }}</td>
+                                                        <td>{{ $sm->name }}</td>
+                                                        <td>{{ $sm->status }}</td>
+                                                        <td>{{ $sm->dept }}</td>
+                                                        <td>{{ $sm->jabatan }}</td>
+                                                        <td>{{ $sm->grade ?? '-' }}</td>
                                                         <td>
                                                             {{-- INPUTAN HIDDEN --}}
                                                             <input type="hidden" name="ids[]"
-                                                                value="{{ $sm->id }}">
+                                                                value="{{ $sm->salary_months_id }}">
 
                                                             <input type="hidden" name="id_user[]"
-                                                                value="{{ $sm->id_user }}">
+                                                                value="{{ $sm->nik }}">
 
                                                             <input type="hidden"
-                                                                name="id_salary_year[{{ $sm->id }}]"
+                                                                name="id_salary_year[{{ $sm->salary_months_id }}]"
                                                                 value="{{ $sm->id_salary_year ?? '' }}">
 
                                                             <input type="hidden"
-                                                                name="rate_salary[{{ $sm->id }}]"
-                                                                value="{{ $sm->salary_year->salary_grade->rate_salary ?? '' }}">
-
-                                                            <input type="hidden" name="ability[{{ $sm->id }}]"
-                                                                value="{{ $sm->salary_year->ability ?? '' }}">
+                                                                name="rate_salary[{{ $sm->salary_months_id }}]"
+                                                                value="{{ $sm->rate_salary ?? '' }}">
 
                                                             <input type="hidden"
-                                                                name="fungtional_alw[{{ $sm->id }}]"
+                                                                name="ability[{{ $sm->salary_months_id }}]"
+                                                                value="{{ $sm->ability ?? '' }}">
+
+                                                            <input type="hidden"
+                                                                name="fungtional_alw[{{ $sm->salary_months_id }}]"
                                                                 value="{{ $sm->fungtional_alw ?? '' }}">
-                                                            <input type="hidden" name="family_alw[{{ $sm->id }}]"
+                                                            <input type="hidden"
+                                                                name="family_alw[{{ $sm->salary_months_id }}]"
                                                                 value="{{ $sm->family_alw ?? '' }}">
-                                                            <input type="hidden" name="transport_alw[{{ $sm->id }}]"
+                                                            <input type="hidden"
+                                                                name="transport_alw[{{ $sm->salary_months_id }}]"
                                                                 value="{{ $sm->transport_alw ?? '' }}">
-                                                            <input type="hidden" name="skill_alw[{{ $sm->id }}]"
+                                                            <input type="hidden"
+                                                                name="skill_alw[{{ $sm->salary_months_id }}]"
                                                                 value="{{ $sm->skill_alw ?? '' }}">
-                                                            <input type="hidden" name="telephone_alw[{{ $sm->id }}]"
+                                                            <input type="hidden"
+                                                                name="telephone_alw[{{ $sm->salary_months_id }}]"
                                                                 value="{{ $sm->telephone_alw ?? '' }}">
-                                                            <input type="hidden" name="adjustment[{{ $sm->id }}]"
+                                                            <input type="hidden"
+                                                                name="adjustment[{{ $sm->salary_months_id }}]"
                                                                 value="{{ $sm->adjustment ?? '' }}">
-                                                            <input type="hidden" name="bpjs[{{ $sm->id }}]"
+                                                            <input type="hidden" name="bpjs[{{ $sm->salary_months_id }}]"
                                                                 value="{{ $sm->bpjs ?? '' }}">
-                                                            <input type="hidden" name="jamsostek[{{ $sm->id }}]"
+                                                            <input type="hidden"
+                                                                name="jamsostek[{{ $sm->salary_months_id }}]"
                                                                 value="{{ $sm->jamsostek ?? '' }}">
-                                                            <input type="hidden" name="total_ben[{{ $sm->id }}]"
+                                                            <input type="hidden"
+                                                                name="total_ben[{{ $sm->salary_months_id }}]"
                                                                 value="{{ $sm->total_ben ?? '' }}">
-                                                            <input type="hidden" name="total_ben_ded[{{ $sm->id }}]"
+                                                            <input type="hidden"
+                                                                name="total_ben_ded[{{ $sm->salary_months_id }}]"
                                                                 value="{{ $sm->total_ben_ded ?? '' }}">
 
                                                             <div class="input-group input-group-outline">
                                                                 <input type="number" class="form-control form-control-sm"
                                                                     style="width: 90px"
-                                                                    name="hour_call[{{ $sm->id }}]"
+                                                                    name="hour_call[{{ $sm->salary_months_id }}]"
                                                                     placeholder="Enter the overtime hour call"
                                                                     value="{{ $sm->hour_call != 0 ? $sm->hour_call : '' }}"
-                                                                    oninput="calculateTotalOvertime({{ $sm->id }})">
+                                                                    oninput="calculateTotalOvertime({{ $sm->salary_months_id }})">
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div class="input-group input-group-outline">
                                                                 <input type="number" class="form-control form-control-sm"
                                                                     style="width: 120px"
-                                                                    name="total_overtime[{{ $sm->id }}]" readonly>
+                                                                    name="total_overtime[{{ $sm->salary_months_id }}]"
+                                                                    readonly>
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div class="input-group input-group-outline">
-                                                                <input type="number" class="form-control form-control-sm"
-                                                                    style="width: 120px" name="thr[{{ $sm->id }}]"
+                                                                <input type="text" class="form-control form-control-sm"
+                                                                    style="width: 120px"
+                                                                    name="thr[{{ $sm->salary_months_id }}]"
+                                                                    oninput="formatCurrency(this)"
                                                                     placeholder="Enter the THR"
                                                                     value="{{ $sm->thr != 0 ? $sm->thr : '' }}">
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div class="input-group input-group-outline">
-                                                                <input type="number" class="form-control form-control-sm"
+                                                                <input type="text" class="form-control form-control-sm"
                                                                     style="width: 120px"
-                                                                    name="bonus[{{ $sm->id }}]"
+                                                                    name="bonus[{{ $sm->salary_months_id }}]"
+                                                                    oninput="formatCurrency(this)"
                                                                     placeholder="Enter the bonus"
                                                                     value="{{ $sm->bonus != 0 ? $sm->bonus : '' }}">
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div class="input-group input-group-outline">
-                                                                <input type="number" class="form-control form-control-sm"
+                                                                <input type="text" class="form-control form-control-sm"
                                                                     style="width: 120px"
-                                                                    name="incentive[{{ $sm->id }}]"
+                                                                    name="incentive[{{ $sm->salary_months_id }}]"
+                                                                    oninput="formatCurrency(this)"
                                                                     placeholder="Enter the incentive"
                                                                     value="{{ $sm->incentive != 0 ? $sm->incentive : '' }}">
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div class="input-group input-group-outline">
-                                                                <input type="number" class="form-control form-control-sm"
+                                                                <input type="text" class="form-control form-control-sm"
                                                                     style="width: 120px"
-                                                                    name="union[{{ $sm->id }}]"
+                                                                    name="union[{{ $sm->salary_months_id }}]"
+                                                                    oninput="formatCurrency(this)"
                                                                     placeholder="Enter the union"
                                                                     value="{{ $sm->union != 0 ? $sm->union : '' }}">
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div class="input-group input-group-outline">
-                                                                <input type="number" class="form-control form-control-sm"
+                                                                <input type="text" class="form-control form-control-sm"
                                                                     style="width: 120px"
-                                                                    name="absent[{{ $sm->id }}]"
+                                                                    name="absent[{{ $sm->salary_months_id }}]"
+                                                                    oninput="formatCurrency(this)"
                                                                     placeholder="Enter the absent"
                                                                     value="{{ $sm->absent != 0 ? $sm->absent : '' }}">
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div class="input-group input-group-outline">
-                                                                <input type="number" class="form-control form-control-sm"
+                                                                <input type="text" class="form-control form-control-sm"
                                                                     style="width: 120px"
-                                                                    name="electricity[{{ $sm->id }}]"
+                                                                    name="electricity[{{ $sm->salary_months_id }}]"
+                                                                    oninput="formatCurrency(this)"
                                                                     placeholder="Enter the electricity"
                                                                     value="{{ $sm->electricity != 0 ? $sm->electricity : '' }}">
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div class="input-group input-group-outline">
-                                                                <input type="number" class="form-control form-control-sm"
+                                                                <input type="text" class="form-control form-control-sm"
                                                                     style="width: 120px"
-                                                                    name="cooperative[{{ $sm->id }}]"
+                                                                    name="cooperative[{{ $sm->salary_months_id }}]"
+                                                                    oninput="formatCurrency(this)"
                                                                     placeholder="Enter the koperasi"
                                                                     value="{{ $sm->cooperative != 0 ? $sm->cooperative : '' }}">
                                                             </div>
@@ -239,6 +257,24 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function formatCurrency(input) {
+            // Menghapus semua karakter kecuali angka
+            let value = input.value.replace(/[^0-9.]/g, '');
+
+            // Mengonversi nilai menjadi float untuk menghindari kesalahan pemformatan
+            let floatValue = parseFloat(value);
+
+            // Jika ada nilai, format menjadi mata uang
+            if (!isNaN(floatValue)) {
+                input.value = floatValue.toLocaleString('en-US', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2
+                });
+            }
+        }
+    </script>
 
     {{-- SCRIPT untuk perhitungan Total Overtime otomatis berdasarkan jam --}}
     <script>

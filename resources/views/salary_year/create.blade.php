@@ -78,6 +78,7 @@
                                                                 <input type="text"
                                                                     class="form-control form-control-sm number-format"
                                                                     style="width: 120px" name="ability[]"
+                                                                    oninput="formatCurrency(this)"
                                                                     value="{{ $user->ability ?? '' }}"
                                                                     placeholder="Enter the ability">
                                                             </div>
@@ -87,6 +88,7 @@
                                                                 <input type="text"
                                                                     class="form-control form-control-sm number-format"
                                                                     style="width: 120px" name="fungtional_alw[]"
+                                                                    oninput="formatCurrency(this)"
                                                                     value="{{ $user->fungtional_alw ?? '' }}"
                                                                     placeholder="Enter the fungtional allowance">
                                                             </div>
@@ -96,6 +98,7 @@
                                                                 <input type="text"
                                                                     class="form-control form-control-sm number-format"
                                                                     style="width: 120px" name="family_alw[]"
+                                                                    oninput="formatCurrency(this)"
                                                                     value="{{ $user->family_alw ?? '' }}"
                                                                     placeholder="Enter the family allowance">
                                                             </div>
@@ -105,6 +108,7 @@
                                                                 <input type="text"
                                                                     class="form-control form-control-sm number-format"
                                                                     style="width: 120px" name="transport_alw[]"
+                                                                    oninput="formatCurrency(this)"
                                                                     value="{{ $user->transport_alw ?? '' }}"
                                                                     placeholder="Enter the transport allowance">
                                                             </div>
@@ -114,6 +118,7 @@
                                                                 <input type="text"
                                                                     class="form-control form-control-sm number-format"
                                                                     style="width: 120px" name="telephone_alw[]"
+                                                                    oninput="formatCurrency(this)"
                                                                     value="{{ $user->telephone_alw ?? '' }}"
                                                                     placeholder="Enter the telephone allowance">
                                                             </div>
@@ -123,6 +128,7 @@
                                                                 <input type="text"
                                                                     class="form-control form-control-sm number-format"
                                                                     style="width: 120px" name="skill_alw[]"
+                                                                    oninput="formatCurrency(this)"
                                                                     value="{{ $user->skill_alw ?? '' }}"
                                                                     placeholder="Enter the skill allowance">
                                                             </div>
@@ -132,6 +138,7 @@
                                                                 <input type="text"
                                                                     class="form-control form-control-sm number-format"
                                                                     style="width: 120px" name="adjustment[]"
+                                                                    oninput="formatCurrency(this)"
                                                                     value="{{ $user->adjustment ?? '' }}"
                                                                     placeholder="Enter the adjustment">
                                                             </div>
@@ -170,16 +177,23 @@
             </div>
         </div>
     </div>
-
     <script>
         function formatCurrency(input) {
-            // Remove any non-digit characters
+            // Menghapus semua karakter kecuali angka
             let value = input.value.replace(/[^0-9.]/g, '');
-            // Format the number with commas
-            input.value = new Intl.NumberFormat().format(value);
+
+            // Mengonversi nilai menjadi float untuk menghindari kesalahan pemformatan
+            let floatValue = parseFloat(value);
+
+            // Jika ada nilai, format menjadi mata uang
+            if (!isNaN(floatValue)) {
+                input.value = floatValue.toLocaleString('en-US', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2
+                });
+            }
         }
     </script>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Ambil semua elemen input dan select dalam form

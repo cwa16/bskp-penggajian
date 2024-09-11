@@ -92,6 +92,7 @@
                                         $totalFamilyAlw += $sy->family_alw;
                                     @endphp --}}
                                         <tr>
+                                            {{-- <td class="text-nowrap text-end">{{ $sy->salary_year_id }}</td> --}}
                                             <td class="text-nowrap text-end">{{ $sy->nik }}</td>
                                             <td>{{ $sy->name }}</td>
                                             <td>{{ $sy->status }}</td>
@@ -138,7 +139,7 @@
                                             @endphp</td>
                                             <td class="text-end">{{ $sy->year }}</td>
                                             <td style="display: none;"><input type="checkbox" name="selected[]"
-                                                    value="{{ $sy->id }}"></td>
+                                                    value="{{ $sy->salary_year_id }}"></td>
                                         </tr>
                                     @endforeach
                                 </tbody>

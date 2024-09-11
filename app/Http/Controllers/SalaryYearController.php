@@ -40,6 +40,7 @@ class SalaryYearController extends Controller
                 ->select('users.nik', 'users.name', 'users.status', 'users.dept', 'users.jabatan', 'grade.name_grade',
                         'grade.rate_salary', 'salary_years.*', 'salary_years.id as salary_year_id')
                 ->get();
+
         } else {
             if ($selectedStatus == 'All Status') {
                 $data = DB::table('salary_years')
@@ -118,31 +119,32 @@ class SalaryYearController extends Controller
             ->where('users.status', $selectedStatus)
             ->first();
 
+        // dd($checkStatus != null, !$checkYear);
+
         if ($checkStatus != null) {
             if ($checkYear) {
 
-                $global = DB::table('users')
-                    ->join('salary_years', 'salary_years.nik', '=', 'users.nik')
-                    // ->join('grade', 'salary_years.id_salary_grade', 'grade.id')
-                    ->where('users.status', $selectedStatus)
-                    ->pluck('users.nik');
+                // $global = DB::table('users')
+                //     ->join('salary_years', 'salary_years.nik', '=', 'users.nik')
+                //     ->where('users.status', $selectedStatus)
+                //     ->pluck('users.nik');
 
-                $remainingUsers = DB::table('users')
-                    ->join('grade', 'users.grade', 'grade.name_grade')
-                    ->select('users.nik as user_id', 'grade.name_grade as salary_grade_id')
-                    ->whereNotIn('users.nik', $global)
-                    ->where('users.status', $selectedStatus)
-                    ->get();
+                // $remainingUsers = DB::table('users')
+                //     ->join('grade', 'users.grade', 'grade.name_grade')
+                //     ->select('users.nik as user_id', 'grade.name_grade as salary_grade_id')
+                //     ->whereNotIn('users.nik', $global)
+                //     ->where('users.status', $selectedStatus)
+                //     ->get();
 
-                    foreach ($remainingUsers as $g) {
-                        SalaryYear::create([
-                            'nik' => $g->user_id,
-                            'id_salary_grade' => $g->salary_grade_id,
-                            'date' => $currentDate,
-                            'year' => $currentYear,
-                            'used' => '1'
-                        ]);
-                    }
+                //     foreach ($remainingUsers as $g) {
+                //         SalaryYear::create([
+                //             'nik' => $g->user_id,
+                //             'id_salary_grade' => $g->salary_grade_id,
+                //             'date' => $currentDate,
+                //             'year' => $currentYear,
+                //             'used' => '1'
+                //         ]);
+                //     }
 
                 $users = DB::table('users')
                     ->join('grade', 'users.grade', '=', 'grade.name_grade')
@@ -250,7 +252,6 @@ class SalaryYearController extends Controller
 
     public function edit(Request $request)
     {
-        // $selectedIds = $request->input('ids', []);
         $selectedIds = $request->input('ids', '');
 
         if (is_string($selectedIds)) {
@@ -261,10 +262,34 @@ class SalaryYearController extends Controller
             return redirect()->route('salary-year')->with('error', 'No data selected for editing.');
         }
 
-        // dd($selectedIds);
-
         $title = 'Salary Per Grade';
-        $salary_years = SalaryYear::whereIn('id', $selectedIds)->get();
+
+        $salary_years = DB::table('salary_years')
+            ->join('users', 'salary_years.nik', '=', 'users.nik')
+            ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
+            ->select(
+                'users.nik',
+                'users.name',
+                'users.status',
+                'users.dept',
+                'users.jabatan',
+                'users.grade',
+                'grade.rate_salary',
+                'salary_years.id_salary_grade',
+                'salary_years.ability',
+                'salary_years.fungtional_alw',
+                'salary_years.family_alw',
+                'salary_years.transport_alw',
+                'salary_years.telephone_alw',
+                'salary_years.skill_alw',
+                'salary_years.adjustment',
+                'salary_years.year',
+                'salary_years.allocation',
+                'salary_years.id as salary_years_id',
+            )
+            ->whereIn('salary_years.id', $selectedIds)
+            ->get();
+
         $currentYear = date('Y');
 
         return view('salary_year.edit', compact('title', 'salary_years'));
@@ -273,14 +298,29 @@ class SalaryYearController extends Controller
     public function update(Request $request)
     {
         foreach ($request->input('ids') as $key => $value) {
-            $rate_salary = $request->input('rate_salary')[$key];
-            $ability =  $request->input('ability')[$key];
-            $fungtional_alw =  $request->input('fungtional_alw')[$key];
-            $family_alw =  $request->input('family_alw')[$key];
-            $transport_alw =  $request->input('transport_alw')[$key];
-            $telephone_alw =  $request->input('telephone_alw')[$key];
-            $skill_alw =  $request->input('skill_alw')[$key];
-            $adjustment =  $request->input('adjustment')[$key];
+
+            $input = $request->only([
+                'rate_salary', 'ability', 'fungtional_alw', 'family_alw',
+                'transport_alw', 'telephone_alw', 'skill_alw', 'adjustment'
+            ]);
+
+            $rate_salary = isset($input['rate_salary'][$key]) ? (int) str_replace(',', '', $input['rate_salary'][$key]) : 0;
+            $ability = isset($input['ability'][$key]) ? (int) str_replace(',', '', $input['ability'][$key]) : 0;
+            $fungtional_alw = isset($input['fungtional_alw'][$key]) ? (int) str_replace(',', '', $input['fungtional_alw'][$key]) : 0;
+            $family_alw = isset($input['family_alw'][$key]) ? (int) str_replace(',', '', $input['family_alw'][$key]) : 0;
+            $transport_alw = isset($input['transport_alw'][$key]) ? (int) str_replace(',', '', $input['transport_alw'][$key]) : 0;
+            $telephone_alw = isset($input['telephone_alw'][$key]) ? (int) str_replace(',', '', $input['telephone_alw'][$key]) : 0;
+            $skill_alw = isset($input['skill_alw'][$key]) ? (int) str_replace(',', '', $input['skill_alw'][$key]) : 0;
+            $adjustment = isset($input['adjustment'][$key]) ? (int) str_replace(',', '', $input['adjustment'][$key]) : 0;
+
+            // $rate_salary = $request->input('rate_salary')[$key];
+            // $ability =  $request->input('ability')[$key];
+            // $fungtional_alw =  $request->input('fungtional_alw')[$key];
+            // $family_alw =  $request->input('family_alw')[$key];
+            // $transport_alw =  $request->input('transport_alw')[$key];
+            // $telephone_alw =  $request->input('telephone_alw')[$key];
+            // $skill_alw =  $request->input('skill_alw')[$key];
+            // $adjustment =  $request->input('adjustment')[$key];
 
             $total = $rate_salary + $ability + $family_alw;
 
@@ -329,36 +369,32 @@ class SalaryYearController extends Controller
                 'allocation' => $allocationJson,
             ]);
 
-            $salary_months = SalaryMonth::where('id_salary_year', $request->input('ids'))->get();
-            foreach ($salary_months as $salary_month) {
-                $thr = $salary_month->thr;
-                $bonus = $salary_month->bonus;
-                $incentive = $salary_month->incentive;
+            // $salary_months = SalaryMonth::where('id_salary_year', $request->input('ids'))->get();
+            //     foreach ($salary_months as $salary_month) {
+            //         $thr = $salary_month->thr;
+            //         $bonus = $salary_month->bonus;
+            //         $incentive = $salary_month->incentive;
 
-                $union = $salary_month->union;
-                $absent = $salary_month->absent;
-                $electricity = $salary_month->electricity;
-                $cooperative = $salary_month->cooperative;
+            //         $union = $salary_month->union;
+            //         $absent = $salary_month->absent;
+            //         $electricity = $salary_month->electricity;
+            //         $cooperative = $salary_month->cooperative;
 
-                $hour_call = $salary_month->hour_call;
-                $total_overtime = (($rate_salary + $ability) / 173) * $hour_call;
+            //         $hour_call = $salary_month->hour_call;
+            //         $total_overtime = (($rate_salary + $ability) / 173) * $hour_call;
 
-                // dd($hour_call, $total_overtime);
+            //         $gross_sal = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw + $telephone_alw + $skill_alw +
+            //         $adjustment + $total_overtime + $thr + $bonus + $incentive;
+            //         $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative;
+            //         $net_salary = $gross_sal - $total_deduction;
 
-                $gross_sal = $rate_salary + $ability + $fungtional_alw + $family_alw + $transport_alw + $telephone_alw + $skill_alw +
-                $adjustment + $total_overtime + $thr + $bonus + $incentive;
-                $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative;
-                // $net_salary = ($gross_sal + $total_jamsostek) - ($total_deduction + $total_jamsostek);
-                $net_salary = $gross_sal - $total_deduction;
-                // dd($gross_sal, $total_deduction, $net_salary);
-
-                SalaryMonth::where('id_salary_year', $request->input('ids'))->update([
-                    'total_overtime' => $total_overtime,
-                    'gross_salary' => $gross_sal,
-                    'total_deduction' => $total_deduction,
-                    'net_salary' => $net_salary,
-                ]);
-            }
+            //         SalaryMonth::where('id_salary_year', $request->input('ids'))->update([
+            //             'total_overtime' => $total_overtime,
+            //             'gross_salary' => $gross_sal,
+            //             'total_deduction' => $total_deduction,
+            //             'net_salary' => $net_salary,
+            //         ]);
+            //     }
         }
 
         return redirect()->route('salary-year')->with('success', 'Data gaji berhasil diperbarui.');

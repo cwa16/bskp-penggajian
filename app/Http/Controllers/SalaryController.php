@@ -871,10 +871,11 @@ class SalaryController extends Controller
                     ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
                     ->join('users', 'users.nik', '=', 'salary_years.nik')
                     ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
-                    ->select('salary_months.date as salary_month_date', 'salary_years.*', 'users.*', 'grade.*')
+                    ->select('salary_months.date as salary_month_date', 'salary_months.*', 'salary_years.*', 'users.*', 'grade.*')
                     ->where('salary_months.id', $id)
                     ->first();
-                    // dd($sal->name);
+
+                // dd($sal);
                 // $sal = SalaryMonth::find($id);
 
                 // dd($sal, $sal->salary_year->nik);
@@ -883,10 +884,16 @@ class SalaryController extends Controller
                     dd("Salary with ID $id not found.");
                 }
 
-                $rate_salary = $sal->salary_year->salary_grade->rate_salary;
-                $ability = $sal->salary_year->ability;
-                $fungtional_alw = $sal->salary_year->fungtional_alw;
-                $family_alw = $sal->salary_year->family_alw;
+                // $rate_salary = $sal->salary_year->salary_grade->rate_salary;
+                // $ability = $sal->salary_year->ability;
+                // $fungtional_alw = $sal->salary_year->fungtional_alw;
+                // $family_alw = $sal->salary_year->family_alw;
+                // $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
+
+                $rate_salary = $sal->rate_salary;
+                $ability = $sal->ability;
+                $fungtional_alw = $sal->fungtional_alw;
+                $family_alw = $sal->family_alw;
                 $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
                 $pdf = PDF::loadView('salary.print', compact('sal', 'total'));
 
