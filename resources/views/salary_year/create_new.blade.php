@@ -75,7 +75,6 @@
 
                                                         <td class="text-end">
                                                             <div id="data-container"></div>
-                                                            {{-- {{ number_format($sy->rate_salary, 0, ',', '.') }} --}}
                                                         </td>
 
                                                         <td>
@@ -253,5 +252,4 @@
             });
         });
     </script>
-
 @endsection

@@ -35,7 +35,7 @@
                         </div>
                         <div class="table-responsive p-0">
                             <table
-                                class="table table-sm table-striped table-hover dtTable100 align-items-center small-tbl compact"
+                                class="table table-sm table-striped table-hover dtTableFix2 align-items-center small-tbl compact"
                                 id="example">
                                 <thead class="bg-thead">
                                     <tr>
@@ -84,11 +84,11 @@
                                         <tr>
                                             <td class="text-nowrap text-end">{{ $yearFilter }}</td>
                                             <td class="text-nowrap text-end">
-                                                {{ date('F', strtotime($sal->salary_month_date)) }}</td>
+                                                {{ date('F', strtotime($sal->date)) }}</td>
                                             <td>{{ $sal->status }}</td>
                                             <td>{{ $sal->dept }}</td>
                                             <td>{{ $sal->jabatan }}</td>
-                                            <td>{{ $sal->name_grade }}</td>
+                                            <td>{{ $sal->salary_grade }}</td>
                                             <td class="text-end">
                                                 {{ $sal->rate_salary != 0 ? number_format($sal->rate_salary, 0, ',', '.') : '-' }}
                                             </td>
@@ -162,7 +162,7 @@
                                                 {{ $sal->net_salary != 0 ? number_format($sal->net_salary, 0, ',', '.') : '-' }}
                                             </td>
 
-                                            <td class="text-end">{{ date('d M Y', strtotime($sal->salary_month_date)) }}
+                                            <td class="text-end">{{ date('d M Y', strtotime($sal->date)) }}
                                             </td>
                                         </tr>
                                     @endforeach

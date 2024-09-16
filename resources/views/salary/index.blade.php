@@ -75,7 +75,7 @@
                                     <span class="btn-inner--text">Approved Selected</span>
                                 </button>
                                 <table
-                                    class="table table-sm table-striped table-hover dtTable100 align-items-center small-tbl compact"
+                                    class="table table-sm table-striped table-hover dtTable200 align-items-center small-tbl compact"
                                     id="example">
                                     <thead class="bg-thead">
                                         <tr>
@@ -149,6 +149,8 @@
                                                 </td>
                                                 <td>-</td>
                                                 <td class="text-end">
+                                                    <input type="hidden" name="rate_salary[]"
+                                                        value="{{ $sal->rate_salary }}">
                                                     {{ $sal->rate_salary != 0 ? number_format($sal->rate_salary, 0, ',', '.') : '-' }}
                                                 </td>
                                                 <td class="text-end">

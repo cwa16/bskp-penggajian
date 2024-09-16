@@ -18,7 +18,7 @@
                                     <select name="id_user" class="form-select form-select-sm">
                                         <option value="">- Choose Employee -</option>
                                         @foreach ($emp as $user)
-                                            <option value="{{ $user->id }}">
+                                            <option value="{{ $user->nik }}">
                                                 {{ $user->name }}
                                             </option>
                                         @endforeach

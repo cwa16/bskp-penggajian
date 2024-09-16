@@ -61,24 +61,45 @@
                                                         <td>{{ $sy->status }}</td>
                                                         <td>{{ $sy->dept }}</td>
                                                         <td>{{ $sy->jabatan }}</td>
-                                                        <td>{{ $sy->grade ?? '-' }}</td>
+
+                                                        {{-- <td>{{ $sy->grade ?? '-' }}</td>
                                                         <td class="text-end">
                                                             {{ number_format($sy->rate_salary, 0, ',', '.') }}
+                                                        </td> --}}
+
+                                                        <td>
+                                                            <select name="id_grade[{{ $sy->salary_years_id }}]"
+                                                                id="select-data" class="form-select form-select-sm">
+                                                                @foreach ($grade as $g)
+                                                                    <option value="{{ $g->id }}"
+                                                                        {{ $g->name_grade == $sy->name_grade ? 'selected' : '' }}>
+                                                                        {{ $g->name_grade }}</option>
+                                                                @endforeach
+                                                            </select>
                                                         </td>
+
+                                                        <td class="text-end">
+                                                            <div id="data-container"></div>
+                                                        </td>
+
                                                         <td>
                                                             {{-- INPUTAN HIDDEN --}}
-                                                            <input type="hidden" name="ids[]"
+                                                            <input type="hidden" name="ids[{{ $sy->salary_years_id }}]"
                                                                 value="{{ $sy->salary_years_id }}">
-                                                            <input type="hidden" name="id_user[]"
+                                                            <input type="hidden"
+                                                                name="id_user[{{ $sy->salary_years_id }}]"
                                                                 value="{{ $sy->nik }}">
-                                                            <input type="hidden" name="id_salary_grade[]"
+                                                            <input type="hidden"
+                                                                name="id_salary_grade[{{ $sy->salary_years_id }}]"
                                                                 value="{{ $sy->id_salary_grade }}">
-                                                            <input type="hidden" name="rate_salary[]"
+                                                            <input type="hidden"
+                                                                name="rate_salary[{{ $sy->salary_years_id }}]"
                                                                 value="{{ $sy->rate_salary }}">
 
                                                             <div class="input-group input-group-outline">
                                                                 <input type="text" class="form-control form-control-sm"
-                                                                    style="width: 120px" name="ability[]"
+                                                                    style="width: 120px"
+                                                                    name="ability[{{ $sy->salary_years_id }}]"
                                                                     oninput="formatCurrency(this)"
                                                                     placeholder="Enter the ability"
                                                                     value="{{ $sy->ability != 0 ? $sy->ability : '' }}">
@@ -87,7 +108,8 @@
                                                         <td>
                                                             <div class="input-group input-group-outline">
                                                                 <input type="text" class="form-control form-control-sm"
-                                                                    style="width: 120px" name="fungtional_alw[]"
+                                                                    style="width: 120px"
+                                                                    name="fungtional_alw[{{ $sy->salary_years_id }}]"
                                                                     oninput="formatCurrency(this)"
                                                                     placeholder="Enter the fungtional allowance"
                                                                     value="{{ $sy->fungtional_alw != 0 ? $sy->fungtional_alw : '' }}">
@@ -96,7 +118,8 @@
                                                         <td>
                                                             <div class="input-group input-group-outline">
                                                                 <input type="text" class="form-control form-control-sm"
-                                                                    style="width: 120px" name="family_alw[]"
+                                                                    style="width: 120px"
+                                                                    name="family_alw[{{ $sy->salary_years_id }}]"
                                                                     oninput="formatCurrency(this)"
                                                                     placeholder="Enter the family allowance"
                                                                     value="{{ $sy->family_alw != 0 ? $sy->family_alw : '' }}">
@@ -105,7 +128,8 @@
                                                         <td>
                                                             <div class="input-group input-group-outline">
                                                                 <input type="text" class="form-control form-control-sm"
-                                                                    style="width: 120px" name="transport_alw[]"
+                                                                    style="width: 120px"
+                                                                    name="transport_alw[{{ $sy->salary_years_id }}]"
                                                                     oninput="formatCurrency(this)"
                                                                     placeholder="Enter the transport allowance"
                                                                     value="{{ $sy->transport_alw != 0 ? $sy->transport_alw : '' }}">
@@ -114,7 +138,8 @@
                                                         <td>
                                                             <div class="input-group input-group-outline">
                                                                 <input type="text" class="form-control form-control-sm"
-                                                                    style="width: 120px" name="skill_alw[]"
+                                                                    style="width: 120px"
+                                                                    name="skill_alw[{{ $sy->salary_years_id }}]"
                                                                     oninput="formatCurrency(this)"
                                                                     placeholder="Enter the skill allowance"
                                                                     value="{{ $sy->skill_alw != 0 ? $sy->skill_alw : '' }}">
@@ -123,7 +148,8 @@
                                                         <td>
                                                             <div class="input-group input-group-outline">
                                                                 <input type="text" class="form-control form-control-sm"
-                                                                    style="width: 120px" name="telephone_alw[]"
+                                                                    style="width: 120px"
+                                                                    name="telephone_alw[{{ $sy->salary_years_id }}]"
                                                                     oninput="formatCurrency(this)"
                                                                     placeholder="Enter the telephone allowance"
                                                                     value="{{ $sy->telephone_alw != 0 ? $sy->telephone_alw : '' }}">
@@ -132,7 +158,8 @@
                                                         <td>
                                                             <div class="input-group input-group-outline">
                                                                 <input type="text" class="form-control form-control-sm"
-                                                                    style="width: 120px" name="adjustment[]"
+                                                                    style="width: 120px"
+                                                                    name="adjustment[{{ $sy->salary_years_id }}]"
                                                                     oninput="formatCurrency(this)"
                                                                     placeholder="Enter the adjustment"
                                                                     value="{{ $sy->adjustment != 0 ? $sy->adjustment : '' }}">
@@ -193,6 +220,55 @@
             </div>
         </div>
     </div>
+    <script src="{{ asset('assets/libs/jquery/jquery.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            // Handle checkbox select all
+            $('#data-container').on('change', '#checkboxAll', function() {
+                $('.checkboxItem').prop('checked', $(this).prop('checked'));
+            });
+
+            // Handle select change event
+            $('#select-data').change(function() {
+                var selectedValue = $(this).val();
+                $.ajax({
+                    url: "{{ route('salary-year.get-rate-salary') }}",
+                    type: "GET",
+                    data: {
+                        id_grade: selectedValue
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        var content = '';
+
+                        function numberFormat(number) {
+                            return new Intl.NumberFormat('id-ID', {
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 0
+                            }).format(number);
+                        }
+
+                        $.each(data, function(index, item) {
+                            content += `
+                                <tr>
+                                    <td>
+                                        <input type="hidden" name="id_salary_grade[]" value="${item.id}">
+                                        <input type="hidden" name="rate_salary[]" value="${item.rate_salary}">
+                                        ${numberFormat(item.rate_salary)}
+                                    </td>
+                                </tr>
+                            `;
+                        });
+
+                        $('#data-container').html(content);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error: ', error);
+                    }
+                });
+            });
+        });
+    </script>
     <script>
         function formatCurrency(input) {
             // Menghapus semua karakter kecuali angka

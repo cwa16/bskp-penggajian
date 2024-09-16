@@ -13,7 +13,9 @@ class Salary extends Model
     protected $fillable = [
         'nik',
         'salary_grade',
+        'rate_salary',
         'date',
+        'year',
         'ability',
         'fungtional_alw',
         'family_alw',
@@ -23,6 +25,8 @@ class Salary extends Model
         'adjustment',
         'bpjs',
         'jamsostek',
+        'total_ben',
+        'total_ben_ded',
         'total_overtime',
         'thr',
         'bonus',

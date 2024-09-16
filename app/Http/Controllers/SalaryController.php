@@ -21,12 +21,12 @@ class SalaryController extends Controller
     {
         $title = 'Salary';
 
-        $data = DB::table('salary_months')
-                ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-                ->join('users', 'users.nik', '=', 'salary_years.nik')
-                ->join('grade', 'users.grade', '=', 'grade.name_grade')
-                ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
-                ->get();
+        // $data = DB::table('salary_months')
+        //         ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+        //         ->join('users', 'users.nik', '=', 'salary_years.nik')
+        //         ->join('grade', 'users.grade', '=', 'grade.name_grade')
+        //         ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
+        //         ->get();
 
         $salary_months = SalaryMonth::all();
 
@@ -54,12 +54,13 @@ class SalaryController extends Controller
 
         if ($selectedYear == null && $selectedMonth == null && $selectedStatus == null) {
             $data = DB::table('salary_months')
-                ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                ->join('salary_years', 'salary_months.id_salary_year', '=', 'salary_years.id')
                 ->join('users', 'users.nik', '=', 'salary_years.nik')
                 ->join('grade', 'users.grade', '=', 'grade.name_grade')
                 ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
-                ->whereIn('users.status', ['Manager', 'Staff', 'Monthly'])
+                ->whereIn('users.status', ['Manager', 'Staff', 'Monthly', 'Contract BSKP'])
                 ->where('users.active', 'yes')
+                // ->where('salary_years.nik', '200-151')
                 ->get();
         } else {
             if ($selectedStatus == 'All Status') {
@@ -70,6 +71,7 @@ class SalaryController extends Controller
                     ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
                     ->whereYear('salary_months.date', $selectedYear)
                     ->whereMonth('salary_months.date', $selectedMonth)
+                    ->where('users.active', 'yes')
                     ->get();
             } else {
                 $data = DB::table('salary_months')
@@ -80,6 +82,7 @@ class SalaryController extends Controller
                     ->where('users.status', $selectedStatus)
                     ->whereYear('salary_months.date', $selectedYear)
                     ->whereMonth('salary_months.date', $selectedMonth)
+                    ->where('users.active', 'yes')
                     ->get();
             }
         }
@@ -146,7 +149,24 @@ class SalaryController extends Controller
         $data = DB::table('salary_months')
                 ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
                 ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
-                ->select('salary_months.*', 'grade.name_grade', 'salary_years.nik', 'salary_years.ability', 'salary_years.fungtional_alw', 'salary_years.family_alw', 'salary_years.transport_alw', 'salary_years.skill_alw', 'salary_years.telephone_alw', 'salary_years.adjustment', 'salary_years.bpjs', 'salary_years.jamsostek')
+                ->select(
+                    'salary_months.*',
+                    'grade.name_grade',
+                    'grade.rate_salary',
+                    'salary_years.nik',
+                    'salary_years.year',
+                    'salary_years.ability',
+                    'salary_years.fungtional_alw',
+                    'salary_years.family_alw',
+                    'salary_years.transport_alw',
+                    'salary_years.skill_alw',
+                    'salary_years.telephone_alw',
+                    'salary_years.adjustment',
+                    'salary_years.bpjs',
+                    'salary_years.jamsostek',
+                    'salary_years.total_ben',
+                    'salary_years.total_ben_ded'
+                )
                 ->whereIn('salary_months.id', $selectedIds)
                 ->get();
 
@@ -165,7 +185,9 @@ class SalaryController extends Controller
                     DB::table('all_salary_data')->insert([
                         'nik' => $emp->nik,
                         'salary_grade' => $emp->name_grade,
+                        'rate_salary' => $emp->rate_salary,
                         'date' => $emp->date,
+                        'year' => $emp->year,
                         'ability' => $emp->ability,
                         'fungtional_alw' => $emp->fungtional_alw,
                         'family_alw' => $emp->family_alw,
@@ -175,6 +197,8 @@ class SalaryController extends Controller
                         'adjustment' => $emp->adjustment,
                         'bpjs' => $emp->bpjs,
                         'jamsostek' => $emp->jamsostek,
+                        'total_ben' => $emp->total_ben,
+                        'total_ben_ded' => $emp->total_ben_ded,
                         'total_overtime' => $emp->total_overtime,
                         'thr' => $emp->thr,
                         'bonus' => $emp->bonus,
@@ -945,15 +969,55 @@ class SalaryController extends Controller
         $empFilter = request()->input('id_user', null);
         $yearFilter = request()->input('year', null);
 
-        $data = DB::table('salary_months')
-            ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-            ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
-            ->join('users', 'users.nik', '=', 'salary_years.nik')
-            ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date')
-            ->where('users.id', $empFilter)
+        // $data = DB::table('salary_months')
+        //     ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+        //     ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
+        //     ->join('users', 'users.nik', '=', 'salary_years.nik')
+        //     ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date')
+        //     ->where('users.id', $empFilter)
+        //     ->get();
+
+        $data = DB::table('all_salary_data')
+            ->join('users', 'users.nik', '=', 'all_salary_data.nik')
+            ->select(
+                'users.nik',
+                'users.name',
+                'users.dept',
+                'users.status',
+                'users.jabatan',
+                'all_salary_data.year',
+                'all_salary_data.date',
+                'all_salary_data.salary_grade',
+                'all_salary_data.rate_salary',
+                'all_salary_data.ability',
+                'all_salary_data.fungtional_alw',
+                'all_salary_data.family_alw',
+                'all_salary_data.transport_alw',
+                'all_salary_data.skill_alw',
+                'all_salary_data.telephone_alw',
+                'all_salary_data.adjustment',
+                'all_salary_data.bpjs',
+                'all_salary_data.jamsostek',
+                'all_salary_data.total_ben',
+                'all_salary_data.total_ben_ded',
+                'all_salary_data.total_overtime',
+                'all_salary_data.thr',
+                'all_salary_data.bonus',
+                'all_salary_data.incentive',
+                'all_salary_data.union',
+                'all_salary_data.absent',
+                'all_salary_data.electricity',
+                'all_salary_data.cooperative',
+                'all_salary_data.pinjaman',
+                'all_salary_data.other',
+                'all_salary_data.gross_salary',
+                'all_salary_data.total_deduction',
+                'all_salary_data.net_salary',
+            )
+            ->where('users.nik', $empFilter)
             ->get();
 
-        $name = User::where('id', $empFilter)->select('nik','name')->first();
+        $name = User::where('nik', $empFilter)->select('nik','name')->first();
 
         return view('salary.result', compact('title', 'empFilter', 'yearFilter', 'data', 'name'));
     }
@@ -970,19 +1034,35 @@ class SalaryController extends Controller
             $currentYear,
         ];
 
-            $rawData = DB::table('salary_years')
-                ->join('users', 'salary_years.nik', '=', 'users.nik')
-                ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
+            // $rawData = DB::table('salary_years')
+            //     ->join('users', 'salary_years.nik', '=', 'users.nik')
+            //     ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
+            //     ->select(
+            //         'users.nik',
+            //         'users.name',
+            //         'users.dept',
+            //         'users.jabatan',
+            //         'users.status',
+            //         'grade.name_grade',
+            //         'salary_years.year'
+            //     )
+            //     ->whereIn('salary_years.year', $years)
+            //     ->get();
+
+
+            $rawData = DB::table('all_salary_data')
+                ->join('users', 'all_salary_data.nik', '=', 'users.nik')
                 ->select(
-                    'users.nik',
                     'users.name',
                     'users.dept',
                     'users.jabatan',
                     'users.status',
-                    'grade.name_grade',
-                    'salary_years.year'
+                    'all_salary_data.nik',
+                    'all_salary_data.salary_grade',
+                    'all_salary_data.date',
+                    'all_salary_data.year'
                 )
-                ->whereIn('salary_years.year', $years)
+                ->whereIn('all_salary_data.year', $years)
                 ->get();
 
         $groupedData = [];
@@ -1002,7 +1082,7 @@ class SalaryController extends Controller
             }
 
             $gradeKey = 'grade_' . $row->year;
-            $groupedData[$key][$gradeKey][$row->name_grade] = true;
+            $groupedData[$key][$gradeKey][$row->salary_grade] = true;
         }
 
         foreach ($groupedData as &$data) {
@@ -1021,36 +1101,66 @@ class SalaryController extends Controller
 
         $years = SalaryYear::select('year')->distinct()->get()->pluck('year')->sort()->values();
 
-        $biodata = DB::table('salary_years')
-            ->join('users', 'salary_years.nik', '=', 'users.nik')
-            ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
+        // $biodata = DB::table('salary_years')
+        //     ->join('users', 'salary_years.nik', '=', 'users.nik')
+        //     ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
+        //     ->select(
+        //         'users.nik',
+        //         'users.name',
+        //         'users.dept',
+        //         'users.jabatan',
+        //         'users.status',
+        //         'grade.name_grade',
+        //         'salary_years.year'
+        //     )
+        //     ->where('users.nik', $id)
+        //     ->whereIn('salary_years.year', $years)
+        //     ->first();
+
+        $biodata = DB::table('all_salary_data')
+            ->join('users', 'all_salary_data.nik', '=', 'users.nik')
             ->select(
                 'users.nik',
                 'users.name',
                 'users.dept',
                 'users.jabatan',
                 'users.status',
-                'grade.name_grade',
-                'salary_years.year'
+                'all_salary_data.salary_grade',
+                'all_salary_data.year'
             )
             ->where('users.nik', $id)
-            ->whereIn('salary_years.year', $years)
+            ->whereIn('all_salary_data.year', $years)
             ->first();
 
-        $rawData = DB::table('salary_years')
-            ->join('users', 'salary_years.nik', '=', 'users.nik')
-            ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
+        // $rawData = DB::table('salary_years')
+        //     ->join('users', 'salary_years.nik', '=', 'users.nik')
+        //     ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
+        //     ->select(
+        //         'users.nik',
+        //         'users.name',
+        //         'users.dept',
+        //         'users.jabatan',
+        //         'users.status',
+        //         'grade.name_grade',
+        //         'salary_years.year'
+        //     )
+        //     ->where('users.nik', $id)
+        //     ->whereIn('salary_years.year', $years)
+        //     ->get();
+
+        $rawData = DB::table('all_salary_data')
+            ->join('users', 'all_salary_data.nik', '=', 'users.nik')
             ->select(
                 'users.nik',
                 'users.name',
                 'users.dept',
                 'users.jabatan',
                 'users.status',
-                'grade.name_grade',
-                'salary_years.year'
+                'all_salary_data.salary_grade',
+                'all_salary_data.year'
             )
             ->where('users.nik', $id)
-            ->whereIn('salary_years.year', $years)
+            ->whereIn('all_salary_data.year', $years)
             ->get();
 
             $groupedData = [];
@@ -1063,13 +1173,10 @@ class SalaryController extends Controller
                         'status' => $row->status,
                         'dept' => $row->dept,
                         'jabatan' => $row->jabatan,
-                        // 'name_status' => [],
-                        // 'name_dept' => [],
-                        // 'name_job' => [],
                         'grade' => []
                     ];
                 }
-                $groupedData[$key]['grade'][$row->year][] = $row->name_grade;
+                $groupedData[$key]['grade'][$row->year][] = $row->salary_grade;
             }
 
             foreach ($groupedData as &$data) {

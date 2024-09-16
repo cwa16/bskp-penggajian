@@ -33,7 +33,7 @@
                                                     <th colspan="6" class="text-center p-0">Employee
                                                         Identity</th>
                                                     <th colspan="5" class="text-center p-0">Salary Components</th>
-                                                    <th colspan="4" class="text-center p-0">Deduction</th>
+                                                    <th colspan="6" class="text-center p-0">Deduction</th>
                                                     {{-- <th rowspan="2" class="text-center">Allocation</th> --}}
                                                     <th rowspan="2" class="text-center">Month / Year</th>
                                                 </tr>
@@ -53,6 +53,8 @@
                                                     <th>Absent</th>
                                                     <th>Electricity</th>
                                                     <th>Cooperative</th>
+                                                    <th>Pinjaman</th>
+                                                    <th>Other</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -65,7 +67,7 @@
                                                         <td>{{ $sm->status }}</td>
                                                         <td>{{ $sm->dept }}</td>
                                                         <td>{{ $sm->jabatan }}</td>
-                                                        <td>{{ $sm->grade ?? '-' }}</td>
+                                                        <td>{{ $sm->name_grade ?? '-' }}</td>
                                                         <td>
                                                             {{-- INPUTAN HIDDEN --}}
                                                             <input type="hidden" name="ids[]"
@@ -201,6 +203,26 @@
                                                                     oninput="formatCurrency(this)"
                                                                     placeholder="Enter the koperasi"
                                                                     value="{{ $sm->cooperative != 0 ? $sm->cooperative : '' }}">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="input-group input-group-outline">
+                                                                <input type="text" class="form-control form-control-sm"
+                                                                    style="width: 120px"
+                                                                    name="pinjaman[{{ $sm->salary_months_id }}]"
+                                                                    oninput="formatCurrency(this)"
+                                                                    placeholder="Enter the koperasi"
+                                                                    value="{{ $sm->pinjaman != 0 ? $sm->pinjaman : '' }}">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="input-group input-group-outline">
+                                                                <input type="text" class="form-control form-control-sm"
+                                                                    style="width: 120px"
+                                                                    name="other[{{ $sm->salary_months_id }}]"
+                                                                    oninput="formatCurrency(this)"
+                                                                    placeholder="Enter the other"
+                                                                    value="{{ $sm->other != 0 ? $sm->other : '' }}">
                                                             </div>
                                                         </td>
                                                         {{-- <td>

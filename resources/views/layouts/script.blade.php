@@ -80,6 +80,24 @@
             "pageLength": 25
         });
     })
+    $(document).ready(function() {
+        $('.dtTable200').DataTable({
+            "lengthChange": true,
+            "autoWidth": true,
+            "initComplete": function(settings, json) {
+                $(".dtTable100").wrap(
+                    "<div style='overflow:auto; width:100%;position:relative;'></div>");
+            },
+            "fixedColumns": {
+                leftColumns: 3,
+            },
+            "lengthMenu": [
+                [10, 25, 50, 100, 200, -1],
+                [10, 25, 50, 100, 200, "All"]
+            ], // Customize the entries per page
+            "pageLength": 25
+        });
+    })
 </script>
 <script>
     $(document).ready(function() {
