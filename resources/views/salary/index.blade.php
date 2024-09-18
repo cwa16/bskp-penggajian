@@ -51,6 +51,13 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        <div class="col pe-0">
+                                            <select class="form-select form-select-sm" name="filter_approval">
+                                                <option selected disabled>Select Approval</option>
+                                                <option value="1">Approved</option>
+                                                <option value="0">Not Approved</option>
+                                            </select>
+                                        </div>
                                         <div class="col-auto">
                                             <button type="submit" class="btn btn-primary btn-sm">Filter</button>
                                         </div>
@@ -384,7 +391,8 @@
                                                 <select name="year" id="year"
                                                     class="col form-select form-select-sm">
                                                     @foreach ($years as $year)
-                                                        <option value="{{ $year }}">{{ $year }}</option>
+                                                        <option value="{{ $year }}">{{ $year }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                             </div>

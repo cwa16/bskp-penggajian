@@ -73,7 +73,7 @@
                                     <div class="my-4">
                                         <h4 class="bg-info text-white p-2 rounded">Status: {{ $status }}</h4>
                                         <table
-                                            class="table table-sm table-striped table-hover align-items-center compact small-tbl dtTable1">
+                                            class="table table-sm table-striped table-hover align-items-center compact small-tbl dtTable3">
                                             <thead class="bg-thead">
                                                 <tr>
                                                     <th rowspan="2" class="text-center"
@@ -87,11 +87,13 @@
                                                     <th rowspan="2" class="text-center">Dept</th>
                                                     <th rowspan="2" class="text-center">Status</th>
                                                     <th rowspan="2" class="text-center">Jabatan</th>
-                                                    <th colspan="2" class="text-center">Overtime</th>
+                                                    <th colspan="4" class="text-center">Overtime</th>
                                                     <th rowspan="2" class="text-center">Approve</th>
                                                 </tr>
                                                 <tr>
                                                     <th class="text-center">Jam</th>
+                                                    <th class="text-center">Menit</th>
+                                                    <th class="text-center">OT (Cal)</th>
                                                     <th class="text-center">Kalkulasi</th>
                                                 </tr>
                                             </thead>
@@ -101,8 +103,12 @@
                                                         $rate_salary = $item['rate_salary'] ?? 0;
                                                         $ability = $item['ability'] ?? 0;
                                                         $overtime_hour = $item['overtime_hour'] ?? 0;
+                                                        $overtime_minute = $item['overtime_minute'] ?? 0;
+                                                        $overtime_hour_after_cal =
+                                                            $item['overtime_hour_after_cal'] ?? 0;
                                                         $totalOvertime =
-                                                            (($rate_salary + $ability) / 173) * $overtime_hour;
+                                                            (($rate_salary + $ability) / 173) *
+                                                            $overtime_hour_after_cal;
                                                         $id_salary_year = $item['id_salary_year'] ?? '';
                                                         $isApproved = $item['is_approved'] == 1 ? 'Yes' : 'No';
                                                     @endphp
@@ -120,6 +126,8 @@
                                                         <td>{{ $item['status'] ?? 'Status tidak ditemukan' }}</td>
                                                         <td>{{ $item['jabatan'] ?? 'Jabatan tidak ditemukan' }}</td>
                                                         <td class="text-center">{{ $overtime_hour }}</td>
+                                                        <td class="text-center">{{ $overtime_minute }}</td>
+                                                        <td class="text-center">{{ $overtime_hour_after_cal }}</td>
                                                         <td class="text-center">{{ number_format($totalOvertime) }}</td>
                                                         <td class="text-center">
                                                             @if ($isApproved == 'Yes')
@@ -175,12 +183,12 @@
 
             function addInputFields(form, index) {
                 const userId = form.querySelectorAll('.selectItem')[index].value;
-                const overtimeHour = document.querySelectorAll('tbody tr')[index].children[7].textContent.trim();
-                const totalOvertime = document.querySelectorAll('tbody tr')[index].children[8].textContent.trim().replace(',',
+                const overtimeHour = document.querySelectorAll('tbody tr')[index].children[9].textContent.trim();
+                const totalOvertime = document.querySelectorAll('tbody tr')[index].children[10].textContent.trim().replace(',',
                     '');
 
                 addHiddenInput(form, 'user_id[]', userId);
-                addHiddenInput(form, 'overtime_hour[]', overtimeHour);
+                addHiddenInput(form, 'overtime_hour_after_cal[]', overtimeHour);
                 addHiddenInput(form, 'totalOvertime[]', totalOvertime);
             }
 
@@ -195,7 +203,7 @@
             function removeInputFields(form, index) {
                 const userId = form.querySelectorAll('.selectItem')[index].value;
                 removeHiddenInput(form, 'user_id[]', userId);
-                removeHiddenInput(form, 'overtime_hour[]', userId);
+                removeHiddenInput(form, 'overtime_hour_after_cal[]', userId);
                 removeHiddenInput(form, 'totalOvertime[]', userId);
             }
 
@@ -211,7 +219,7 @@
 
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                const hourCallInputs = document.querySelectorAll('[name^="overtime_hour["]');
+                const hourCallInputs = document.querySelectorAll('[name^="overtime_hour_after_cal["]');
 
                 hourCallInputs.forEach(input => {
                     input.addEventListener('input', function() {

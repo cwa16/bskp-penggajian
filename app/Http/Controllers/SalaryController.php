@@ -48,11 +48,14 @@ class SalaryController extends Controller
         $selectedYear = trim(request()->input('filter_year', ''));
         $selectedMonth = trim(request()->input('filter_month', ''));
         $selectedStatus = trim(request()->input('filter_status', ''));
+        $selectedApprove = trim(request()->input('filter_approval', ''));
+
+        // dd($selectedYear, $selectedMonth, $selectedStatus, $selectedApprove);
 
         $selectedYear = (int) $selectedYear;
         $selectedMonth = (int) $selectedMonth;
 
-        if ($selectedYear == null && $selectedMonth == null && $selectedStatus == null) {
+        if ($selectedYear == null && $selectedMonth == null && $selectedStatus == null && $selectedApprove == null) {
             $data = DB::table('salary_months')
                 ->join('salary_years', 'salary_months.id_salary_year', '=', 'salary_years.id')
                 ->join('users', 'users.nik', '=', 'salary_years.nik')
@@ -64,26 +67,56 @@ class SalaryController extends Controller
                 ->get();
         } else {
             if ($selectedStatus == 'All Status') {
-                $data = DB::table('salary_months')
-                    ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-                    ->join('grade', 'grade.id', '=', 'salary_years.id_salary_grade')
-                    ->join('users', 'users.nik', '=', 'salary_years.nik')
-                    ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
-                    ->whereYear('salary_months.date', $selectedYear)
-                    ->whereMonth('salary_months.date', $selectedMonth)
-                    ->where('users.active', 'yes')
-                    ->get();
+                if ($selectedApprove == 1) {
+                    $data = DB::table('salary_months')
+                        ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                        ->join('grade', 'grade.id', '=', 'salary_years.id_salary_grade')
+                        ->join('users', 'users.nik', '=', 'salary_years.nik')
+                        ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
+                        ->whereYear('salary_months.date', $selectedYear)
+                        ->whereMonth('salary_months.date', $selectedMonth)
+                        ->where('salary_months.is_approved', 1)
+                        ->where('users.active', 'yes')
+                        ->get();
+                } else {
+                    $data = DB::table('salary_months')
+                        ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                        ->join('grade', 'grade.id', '=', 'salary_years.id_salary_grade')
+                        ->join('users', 'users.nik', '=', 'salary_years.nik')
+                        ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
+                        ->whereYear('salary_months.date', $selectedYear)
+                        ->whereMonth('salary_months.date', $selectedMonth)
+                        // ->where('salary_months.is_approved', 0)
+                        ->where('users.active', 'yes')
+                        ->get();
+                }
+
             } else {
-                $data = DB::table('salary_months')
-                    ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-                    ->join('grade', 'grade.id', '=', 'salary_years.id_salary_grade')
-                    ->join('users', 'users.nik', '=', 'salary_years.nik')
-                    ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
-                    ->where('users.status', $selectedStatus)
-                    ->whereYear('salary_months.date', $selectedYear)
-                    ->whereMonth('salary_months.date', $selectedMonth)
-                    ->where('users.active', 'yes')
-                    ->get();
+                if ($selectedApprove == 1) {
+                    $data = DB::table('salary_months')
+                        ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                        ->join('grade', 'grade.id', '=', 'salary_years.id_salary_grade')
+                        ->join('users', 'users.nik', '=', 'salary_years.nik')
+                        ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
+                        ->where('users.status', $selectedStatus)
+                        ->whereYear('salary_months.date', $selectedYear)
+                        ->whereMonth('salary_months.date', $selectedMonth)
+                        ->where('salary_months.is_approved', 1)
+                        ->where('users.active', 'yes')
+                        ->get();
+                } else {
+                    $data = DB::table('salary_months')
+                        ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                        ->join('grade', 'grade.id', '=', 'salary_years.id_salary_grade')
+                        ->join('users', 'users.nik', '=', 'salary_years.nik')
+                        ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
+                        ->where('users.status', $selectedStatus)
+                        ->whereYear('salary_months.date', $selectedYear)
+                        ->whereMonth('salary_months.date', $selectedMonth)
+                        ->where('salary_months.is_approved', 0)
+                        ->where('users.active', 'yes')
+                        ->get();
+                }
             }
         }
 
@@ -120,6 +153,7 @@ class SalaryController extends Controller
             'totalFamilyAlw', 'totalAbility', 'totalFungtionalAlw', 'totalTransportAlw', 'totalTelephoneAlw', 'totalSkillAlw', 'totalAdjustment',
             'totalBpjs', 'totalJamsostek', 'totalRateSalary', 'totalHourCall', 'totalTotalOT', 'totalThr', 'totalBonus', 'totalIncentive',
             'totalUnion', 'totalAbsent', 'totalElectricity', 'totalCooperative', 'totalPinjaman', 'totalOther', 'totalTotalded', 'totalNetsalary',
+            'selectedApprove'
         ));
     }
 
@@ -1201,6 +1235,7 @@ class SalaryController extends Controller
             ->join('users', 'salary_years.nik', '=', 'users.nik')
             ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
             ->where('salary_years.year', $currentYear)
+            ->where('salary_months.is_approved', 1)
             ->select(
                 'users.status',
                 'salary_years.year',
@@ -1234,9 +1269,11 @@ class SalaryController extends Controller
                     $totalIncentive = $group->sum('incentive');
                     $employeeCount = $group->count();
                     $totalNetSalary = $group->sum('net_salary');
+                    $totalRateSalary = $group->sum('rate_salary');
 
                     return [
                         'employee_count' => $employeeCount,
+                        'total_rate_salary' => $totalRateSalary,
                         'total_salary' => $totalNetSalary,
                         'total_allowance' => $totalFungtional + $totalFamily + $totalTransport + $totalTelephone + $totalSkill,
                         'total_overtime_incentive' => $totalOvertime + $totalIncentive,

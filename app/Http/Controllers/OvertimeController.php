@@ -120,9 +120,10 @@ class OvertimeController extends Controller
                     DB::raw('IF(overtime_approveds.id IS NOT NULL, 1, 0) as is_approved')
                 )
                 ->whereNotNull('test_absen_regs.overtime_minute')
-                ->where('test_absen_regs.overtime_hour', '!=', 0)
+                // ->where('test_absen_regs.overtime_hour', '!=', 0)
                 ->where('test_absen_regs.overtime_minute', '!=', 0)
                 ->where('test_absen_regs.date', $dateYesterday)
+                // ->where('users.nik', '217-002')
                 ->get();
         } else {
             $dateYesterday = request()->input('date', '');
@@ -151,23 +152,54 @@ class OvertimeController extends Controller
                     DB::raw('IF(overtime_approveds.id IS NOT NULL, 1, 0) as is_approved')
                 )
                 ->whereNotNull('test_absen_regs.overtime_minute')
-                ->where('test_absen_regs.overtime_hour', '!=', 0)
+                // ->where('test_absen_regs.overtime_hour', '!=', 0)
                 ->where('test_absen_regs.overtime_minute', '!=', 0)
                 ->where('test_absen_regs.date', $dateYesterday)
+                // ->where('users.nik', '217-002')
                 ->get();
         }
 
         $dataGabungan = $users->map(function ($item) {
             $item = (array) $item;
 
-            if (isset($item['desc']) && in_array($item['desc'], ['MX'])) {
-                $item['overtime_hour'] = $item['overtime_hour'] * 2;
+            $totalMinutes = ($item['overtime_hour'] * 60) + $item['overtime_minute'];
+
+            if ($totalMinutes <= 30) {
+                $overtimeHourInDecimal = 0;
+            } elseif ($totalMinutes <= 60 && $totalMinutes >= 30) {
+                $overtimeHourInDecimal = 1;
+            } elseif ($totalMinutes <= 90) {
+                $overtimeHourInDecimal = 1.5;
+            } elseif ($totalMinutes <= 120) {
+                $overtimeHourInDecimal = 2;
             } else {
-                $item['overtime_hour'] = ($item['overtime_hour'] * 2) - 0.5;
+                $overtimeHourInDecimal = floor($totalMinutes / 60) + ($totalMinutes % 60 > 30 ? 0.5 : 0);
+            }
+
+            // dd($overtimeHourInDecimal);
+
+            if ($overtimeHourInDecimal == 0) {
+                return null;  // Item ini tidak akan ditampilkan
+            }
+
+            // if (isset($item['desc']) && in_array($item['desc'], ['MX'])) {
+            //     $item['overtime_hour_after_cal'] = $item['overtime_hour'] * 2;
+            // } else {
+            //     $item['overtime_hour_after_cal'] = ($item['overtime_hour'] * 2) - 0.5;
+            // }
+
+            if (isset($item['desc']) && in_array($item['desc'], ['MX'])) {
+                $item['overtime_hour_after_cal'] = $overtimeHourInDecimal * 2;
+            } else {
+                $item['overtime_hour_after_cal'] = ($overtimeHourInDecimal * 2) - 0.5;
+            }
+
+            if ($item['overtime_hour_after_cal'] <= 0) {
+                unset($item['overtime_hour_after_cal']);
             }
 
             return $item;
-        });
+        })->filter();
 
         $dataGabunganGrouped = $dataGabungan->groupBy('status');
 
@@ -242,7 +274,7 @@ class OvertimeController extends Controller
     {
         if ($request->has('user_id')) {
             $userIds = $request->input('user_id');
-            $overtimeHours = $request->input('overtime_hour');
+            $overtimeHours = $request->input('overtime_hour_after_cal');
             $totalOvertimes = $request->input('totalOvertime');
             $dates = $request->input('tanggal');
 
