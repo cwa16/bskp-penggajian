@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendCheckedSalaryJob;
 use App\Models\SalaryMonth;
-use App\Models\Status;
 use App\Models\SalaryYear;
-
+use App\Models\Status;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
+use Illuminate\Support\Str;
 use PDF;
 use Twilio\Rest\Client;
-use WaAPI\WaAPI;
-use Illuminate\Support\Str;
 
 class SalaryController extends Controller
 {
@@ -60,10 +59,10 @@ class SalaryController extends Controller
                 ->join('salary_years', 'salary_months.id_salary_year', '=', 'salary_years.id')
                 ->join('users', 'users.nik', '=', 'salary_years.nik')
                 ->join('grade', 'users.grade', '=', 'grade.name_grade')
-                ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
+                ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date', 'salary_months.id as salary_month_id')
                 ->whereIn('users.status', ['Manager', 'Staff', 'Monthly', 'Contract BSKP'])
                 ->where('users.active', 'yes')
-                // ->where('salary_years.nik', '200-151')
+            // ->where('salary_years.nik', '200-151')
                 ->get();
         } else {
             if ($selectedStatus == 'All Status') {
@@ -72,7 +71,7 @@ class SalaryController extends Controller
                         ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
                         ->join('grade', 'grade.id', '=', 'salary_years.id_salary_grade')
                         ->join('users', 'users.nik', '=', 'salary_years.nik')
-                        ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
+                        ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date', 'salary_months.id as salary_month_id')
                         ->whereYear('salary_months.date', $selectedYear)
                         ->whereMonth('salary_months.date', $selectedMonth)
                         ->where('salary_months.is_approved', 1)
@@ -83,10 +82,10 @@ class SalaryController extends Controller
                         ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
                         ->join('grade', 'grade.id', '=', 'salary_years.id_salary_grade')
                         ->join('users', 'users.nik', '=', 'salary_years.nik')
-                        ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
+                        ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date', 'salary_months.id as salary_month_id')
                         ->whereYear('salary_months.date', $selectedYear)
                         ->whereMonth('salary_months.date', $selectedMonth)
-                        // ->where('salary_months.is_approved', 0)
+                    // ->where('salary_months.is_approved', 0)
                         ->where('users.active', 'yes')
                         ->get();
                 }
@@ -97,7 +96,7 @@ class SalaryController extends Controller
                         ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
                         ->join('grade', 'grade.id', '=', 'salary_years.id_salary_grade')
                         ->join('users', 'users.nik', '=', 'salary_years.nik')
-                        ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
+                        ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date', 'salary_months.id as salary_month_id')
                         ->where('users.status', $selectedStatus)
                         ->whereYear('salary_months.date', $selectedYear)
                         ->whereMonth('salary_months.date', $selectedMonth)
@@ -109,7 +108,7 @@ class SalaryController extends Controller
                         ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
                         ->join('grade', 'grade.id', '=', 'salary_years.id_salary_grade')
                         ->join('users', 'users.nik', '=', 'salary_years.nik')
-                        ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
+                        ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date', 'salary_months.id as salary_month_id')
                         ->where('users.status', $selectedStatus)
                         ->whereYear('salary_months.date', $selectedYear)
                         ->whereMonth('salary_months.date', $selectedMonth)
@@ -181,74 +180,74 @@ class SalaryController extends Controller
         $selectedIds = $request->input('salary_ids');
 
         $data = DB::table('salary_months')
-                ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-                ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
-                ->select(
-                    'salary_months.*',
-                    'grade.name_grade',
-                    'grade.rate_salary',
-                    'salary_years.nik',
-                    'salary_years.year',
-                    'salary_years.ability',
-                    'salary_years.fungtional_alw',
-                    'salary_years.family_alw',
-                    'salary_years.transport_alw',
-                    'salary_years.skill_alw',
-                    'salary_years.telephone_alw',
-                    'salary_years.adjustment',
-                    'salary_years.bpjs',
-                    'salary_years.jamsostek',
-                    'salary_years.total_ben',
-                    'salary_years.total_ben_ded'
-                )
-                ->whereIn('salary_months.id', $selectedIds)
-                ->get();
+            ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+            ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
+            ->select(
+                'salary_months.*',
+                'grade.name_grade',
+                'grade.rate_salary',
+                'salary_years.nik',
+                'salary_years.year',
+                'salary_years.ability',
+                'salary_years.fungtional_alw',
+                'salary_years.family_alw',
+                'salary_years.transport_alw',
+                'salary_years.skill_alw',
+                'salary_years.telephone_alw',
+                'salary_years.adjustment',
+                'salary_years.bpjs',
+                'salary_years.jamsostek',
+                'salary_years.total_ben',
+                'salary_years.total_ben_ded'
+            )
+            ->whereIn('salary_months.id', $selectedIds)
+            ->get();
 
-        if($data != null) {
+        if ($data != null) {
             $approve = DB::table('salary_months')
                 ->whereIn('id', $selectedIds)
                 ->update([
                     'is_checked' => 1,
-                    'is_approved' => 1
+                    'is_approved' => 1,
                 ]);
         }
 
         if ($approve) {
             $created_at = Carbon::now();
             foreach ($data as $emp) {
-                    DB::table('all_salary_data')->insert([
-                        'nik' => $emp->nik,
-                        'salary_grade' => $emp->name_grade,
-                        'rate_salary' => $emp->rate_salary,
-                        'date' => $emp->date,
-                        'year' => $emp->year,
-                        'ability' => $emp->ability,
-                        'fungtional_alw' => $emp->fungtional_alw,
-                        'family_alw' => $emp->family_alw,
-                        'transport_alw' => $emp->transport_alw,
-                        'skill_alw' => $emp->skill_alw,
-                        'telephone_alw' => $emp->telephone_alw,
-                        'adjustment' => $emp->adjustment,
-                        'bpjs' => $emp->bpjs,
-                        'jamsostek' => $emp->jamsostek,
-                        'total_ben' => $emp->total_ben,
-                        'total_ben_ded' => $emp->total_ben_ded,
-                        'total_overtime' => $emp->total_overtime,
-                        'thr' => $emp->thr,
-                        'bonus' => $emp->bonus,
-                        'incentive' => $emp->incentive,
-                        'union' => $emp->union,
-                        'absent' => $emp->absent,
-                        'electricity' => $emp->electricity,
-                        'cooperative' => $emp->cooperative,
-                        'pinjaman' => $emp->pinjaman,
-                        'other' => $emp->other,
-                        'gross_salary' => $emp->gross_salary,
-                        'total_deduction' => $emp->total_deduction,
-                        'net_salary' => $emp->net_salary,
-                        'created_at' => $created_at,
-                    ]);
-                }
+                DB::table('all_salary_data')->insert([
+                    'nik' => $emp->nik,
+                    'salary_grade' => $emp->name_grade,
+                    'rate_salary' => $emp->rate_salary,
+                    'date' => $emp->date,
+                    'year' => $emp->year,
+                    'ability' => $emp->ability,
+                    'fungtional_alw' => $emp->fungtional_alw,
+                    'family_alw' => $emp->family_alw,
+                    'transport_alw' => $emp->transport_alw,
+                    'skill_alw' => $emp->skill_alw,
+                    'telephone_alw' => $emp->telephone_alw,
+                    'adjustment' => $emp->adjustment,
+                    'bpjs' => $emp->bpjs,
+                    'jamsostek' => $emp->jamsostek,
+                    'total_ben' => $emp->total_ben,
+                    'total_ben_ded' => $emp->total_ben_ded,
+                    'total_overtime' => $emp->total_overtime,
+                    'thr' => $emp->thr,
+                    'bonus' => $emp->bonus,
+                    'incentive' => $emp->incentive,
+                    'union' => $emp->union,
+                    'absent' => $emp->absent,
+                    'electricity' => $emp->electricity,
+                    'cooperative' => $emp->cooperative,
+                    'pinjaman' => $emp->pinjaman,
+                    'other' => $emp->other,
+                    'gross_salary' => $emp->gross_salary,
+                    'total_deduction' => $emp->total_deduction,
+                    'net_salary' => $emp->net_salary,
+                    'created_at' => $created_at,
+                ]);
+            }
             return redirect()->back()->with('success', 'Data berhasil disimpan ke database.');
         } else {
             return redirect()->back()->with('error', 'Data tidak berhasil disimpan ke database.');
@@ -260,11 +259,11 @@ class SalaryController extends Controller
         $title = 'Salary';
 
         $data = DB::table('salary_months')
-                ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-                ->join('users', 'users.nik', '=', 'salary_years.nik')
-                ->join('grade', 'users.grade', '=', 'grade.name_grade')
-                ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
-                ->get();
+            ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+            ->join('users', 'users.nik', '=', 'salary_years.nik')
+            ->join('grade', 'users.grade', '=', 'grade.name_grade')
+            ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date', 'salary_months.id as salary_month_id')
+            ->get();
 
         $salary_months = SalaryMonth::all();
 
@@ -295,7 +294,7 @@ class SalaryController extends Controller
                 ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
                 ->join('users', 'users.nik', '=', 'salary_years.nik')
                 ->join('grade', 'users.grade', '=', 'grade.name_grade')
-                ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
+                ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date', 'salary_months.id as salary_month_id')
                 ->whereIn('users.status', ['Manager', 'Staff', 'Monthly'])
                 ->where('users.active', 'yes')
                 ->get();
@@ -305,7 +304,7 @@ class SalaryController extends Controller
                     ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
                     ->join('grade', 'grade.id', '=', 'salary_years.id_salary_grade')
                     ->join('users', 'users.nik', '=', 'salary_years.nik')
-                    ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
+                    ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date', 'salary_months.id as salary_month_id')
                     ->whereYear('salary_months.date', $selectedYear)
                     ->whereMonth('salary_months.date', $selectedMonth)
                     ->get();
@@ -314,7 +313,7 @@ class SalaryController extends Controller
                     ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
                     ->join('grade', 'grade.id', '=', 'salary_years.id_salary_grade')
                     ->join('users', 'users.nik', '=', 'salary_years.nik')
-                    ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
+                    ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date', 'salary_months.id as salary_month_id')
                     ->where('users.status', $selectedStatus)
                     ->whereYear('salary_months.date', $selectedYear)
                     ->whereMonth('salary_months.date', $selectedMonth)
@@ -364,9 +363,9 @@ class SalaryController extends Controller
             ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
             ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
             ->join('users', 'users.nik', '=', 'salary_years.nik')
-            ->select('users.nik as Emp_Code', 'users.name as Nama', 'users.status as Status', 'users.dept as Dept','users.jabatan as Jabatan', 'users.start_work_user','grade.name_grade as Grade', 'grade.rate_salary', 'salary_years.*', 'salary_months.*',
-            'salary_months.absent', 'salary_months.electricity', 'salary_months.cooperative', 'salary_months.pinjaman', 'salary_months.other',
-            'salary_months.date as salary_months_date', 'salary_months.total_deduction', 'salary_months.net_salary'
+            ->select('users.nik as Emp_Code', 'users.name as Nama', 'users.status as Status', 'users.dept as Dept', 'users.jabatan as Jabatan', 'users.start_work_user', 'grade.name_grade as Grade', 'grade.rate_salary', 'salary_years.*', 'salary_months.*',
+                'salary_months.absent', 'salary_months.electricity', 'salary_months.cooperative', 'salary_months.pinjaman', 'salary_months.other',
+                'salary_months.date as salary_months_date', 'salary_months.total_deduction', 'salary_months.net_salary'
             )
             ->where('salary_months.id', $id)
             ->first();
@@ -411,7 +410,7 @@ class SalaryController extends Controller
 
             $pdfData[] = [
                 'sal' => $sal,
-                'total' => $total
+                'total' => $total,
             ];
         }
 
@@ -437,7 +436,7 @@ class SalaryController extends Controller
         $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
 
         $pdf = PDF::loadView('salary.print', compact('sal', 'total'));
-        return $pdf->setPaper('a5', 'landscape')->download('SAL_' . $date . '_'  . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf');
+        return $pdf->setPaper('a5', 'landscape')->download('SAL_' . $date . '_' . $sal->salary_year->user->nik . '_' . $sal->salary_year->user->name . '.pdf');
     }
 
     public function printall()
@@ -458,10 +457,10 @@ class SalaryController extends Controller
             ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
             ->join('users', 'users.nik', '=', 'salary_years.nik')
             ->select('users.nik as Emp Code', 'users.name as Nama', 'grade.name_grade as Grade', 'grade.rate_salary', 'salary_years.ability', 'salary_years.fungtional_alw',
-            'salary_years.family_alw', 'salary_years.transport_alw', 'salary_years.skill_alw', 'salary_years.telephone_alw', 'salary_years.bpjs',
-            'salary_years.jamsostek', 'salary_months.total_overtime', 'salary_months.thr', 'salary_months.bonus', 'salary_months.incentive', 'salary_months.union',
-            'salary_months.absent', 'salary_months.electricity', 'salary_months.cooperative', 'salary_months.pinjaman', 'salary_months.other',
-            'salary_months.date as salary_months_date', 'salary_months.total_deduction', 'salary_months.net_salary'
+                'salary_years.family_alw', 'salary_years.transport_alw', 'salary_years.skill_alw', 'salary_years.telephone_alw', 'salary_years.bpjs',
+                'salary_years.jamsostek', 'salary_months.total_overtime', 'salary_months.thr', 'salary_months.bonus', 'salary_months.incentive', 'salary_months.union',
+                'salary_months.absent', 'salary_months.electricity', 'salary_months.cooperative', 'salary_months.pinjaman', 'salary_months.other',
+                'salary_months.date as salary_months_date', 'salary_months.total_deduction', 'salary_months.net_salary'
             )
             ->whereYear('salary_months.date', $year)
             ->whereMonth('salary_months.date', $month)
@@ -492,8 +491,8 @@ class SalaryController extends Controller
         $totalNetSalary = $salaries->sum('net_salary');
 
         $columns = ['Emp Code', 'Nama', 'Grade', 'rate_salary', 'ability', 'fungtional_alw', 'skill_alw', 'family_alw', 'telephone_alw', 'transport_alw',
-        'total_overtime', 'incentive', 'thr', 'bonus', 'pinjaman', 'bpjs', 'jamsostek', 'union', 'other', 'absent', 'electricity', 'cooperative',
-        'total_deduction', 'net_salary'];
+            'total_overtime', 'incentive', 'thr', 'bonus', 'pinjaman', 'bpjs', 'jamsostek', 'union', 'other', 'absent', 'electricity', 'cooperative',
+            'total_deduction', 'net_salary'];
 
         $displayColumns = [];
         foreach ($columns as $column) {
@@ -517,10 +516,10 @@ class SalaryController extends Controller
 
         if ($date) {
             $pdf = PDF::loadView('salary.printall_new_nd', compact('salaries', 'date', 'displayColumns', 'employeeIdentityCols'
-                    , 'salaryComponentCols', 'deductionCols', 'totalRateSalary', 'totalAbility', 'totalFungtionalAlw', 'totalSkillAlw'
-                    , 'totalFamilyAlw', 'totalTelephoneAlw', 'totalTransportAlw', 'totalTotalOT', 'totalIncentive', 'totalThr'
-                    , 'totalBonus', 'totalPinjaman', 'totalBpjs', 'totalJamsostek', 'totalUnion', 'totalOther'
-                    , 'totalAbsent', 'totalElectricity', 'totalCooperative', 'totalTotalDed', 'totalNetSalary'));
+                , 'salaryComponentCols', 'deductionCols', 'totalRateSalary', 'totalAbility', 'totalFungtionalAlw', 'totalSkillAlw'
+                , 'totalFamilyAlw', 'totalTelephoneAlw', 'totalTransportAlw', 'totalTotalOT', 'totalIncentive', 'totalThr'
+                , 'totalBonus', 'totalPinjaman', 'totalBpjs', 'totalJamsostek', 'totalUnion', 'totalOther'
+                , 'totalAbsent', 'totalElectricity', 'totalCooperative', 'totalTotalDed', 'totalNetSalary'));
             return $pdf->setPaper(array(0, 0, 609.4488, 935.433), 'landscape')->stream('PrintAll.pdf');
         } else {
             return redirect()->route('salary.index');
@@ -699,7 +698,7 @@ class SalaryController extends Controller
         $name = $sal->salary_year->user->name;
         $month = Carbon::parse($sal->date)->format('F');
 
-        $customFileNames = $sal->salary_year->user->nik . $days.$id;
+        $customFileNames = $sal->salary_year->user->nik . $days . $id;
         $customFileName = Str::of($customFileNames)->toBase64();
         // Define the file path and name
         $filePath = storage_path('app/public') . '/' . $customFileName . '.pdf';
@@ -708,7 +707,7 @@ class SalaryController extends Controller
         // Save the PDF file to the specified path
         file_put_contents($filePath, $pdf->output());
 
-        $mediaUrl = $sal->salary_year->user->nik . $days.$id;
+        $mediaUrl = $sal->salary_year->user->nik . $days . $id;
         $urls = Str::of($mediaUrl)->toBase64();
 
         $url = "https://bskp.blog:9000/pdf/" . $urls . ".pdf";
@@ -716,12 +715,12 @@ class SalaryController extends Controller
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
 
         $twilio->messages->create(
-            "whatsapp:+".$sal->salary_year->user->no_telpon,
+            "whatsapp:+" . $sal->salary_year->user->no_telpon,
             // "whatsapp:+6283854428770",
             [
                 "contentSid" => env('TWILIO_CONTENT_ID'),
                 "messagingServiceSid" => env('TWILIO_SERVICE_ID'),
-                "from" => "whatsapp:".env('TWILIO_PHONE_NUMBER'),
+                "from" => "whatsapp:" . env('TWILIO_PHONE_NUMBER'),
                 "contentVariables" => json_encode([
                     "1" => $day,
                     "2" => $name,
@@ -740,7 +739,7 @@ class SalaryController extends Controller
         return redirect()->back();
     }
 
-    public function send_batch(Request $request )
+    public function send_batch(Request $request)
     {
         $year = request()->input('year');
         $month = request()->input('month');
@@ -769,223 +768,150 @@ class SalaryController extends Controller
         //     ->where('users.id_dept', 1)
         //     ->get();
 
-            // dd($query);
+        // dd($query);
 
-            foreach($query as $data) {
-                $days = Carbon::now()->subMonth(1)->format('mY');
-                $dayss = Carbon::now();
-                $day = ($dayss->hour < 12) ? "Pagi" : "Siang";
+        foreach ($query as $data) {
+            $days = Carbon::now()->subMonth(1)->format('mY');
+            $dayss = Carbon::now();
+            $day = ($dayss->hour < 12) ? "Pagi" : "Siang";
 
-                $name = $data->nama;
-                $month = Carbon::parse($data->salary_month_date)->format('F');
+            $name = $data->nama;
+            $month = Carbon::parse($data->salary_month_date)->format('F');
 
-                $customFileNames = $data->nik . $days.$data->salary_month_id;
-                $customFileName = Str::of($customFileNames)->toBase64();
-                $filePath = storage_path('app/public') . '/' . $customFileName . '.pdf';
+            $customFileNames = $data->nik . $days . $data->salary_month_id;
+            $customFileName = Str::of($customFileNames)->toBase64();
+            $filePath = storage_path('app/public') . '/' . $customFileName . '.pdf';
 
-                $id = $data->salary_month_id;
-                $sal = SalaryMonth::find($id);
+            $id = $data->salary_month_id;
+            $sal = SalaryMonth::find($id);
 
-                if (!$sal) {
-                    dd("Salary with ID $id not found.");
-                }
-
-                $rate_salary = $sal->salary_year->salary_grade->rate_salary;
-                $ability = $sal->salary_year->ability;
-                $fungtional_alw = $sal->salary_year->fungtional_alw;
-                $family_alw = $sal->salary_year->family_alw;
-                $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
-                $pdf = PDF::loadView('salary.print', compact('sal', 'total'));
-
-                file_put_contents($filePath, $pdf->output());
-
-                $mediaUrl = $data->nik . $days.$data->salary_month_id;
-                $urls = Str::of($mediaUrl)->toBase64();
-
-                // $url = "https://bskp.blog:9000/pdf/" . $urls . ".pdf" . "(This message containt dangerous file, please dont open it!)";
-                $url = "This message containt dangerous file, please dont open it!";
-
-                $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
-
-                $is_send = $twilio->messages->create(
-                    "whatsapp:+".$data->no_telpon,
-                    [
-                        "contentSid" => env('TWILIO_CONTENT_ID'),
-                        "messagingServiceSid" => env('TWILIO_SERVICE_ID'),
-                        "from" => "whatsapp:".env('TWILIO_PHONE_NUMBER'),
-                        "contentVariables" => json_encode([
-                            "1" => $day,
-                            "2" => $name,
-                            "3" => $month,
-                            "4" => $url,
-                        ]),
-                    ]
-                );
+            if (!$sal) {
+                dd("Salary with ID $id not found.");
             }
 
-            if ($is_send) {
-                SalaryMonth::where('id', $id)->update(['is_send' => '1']);
-            }
+            $rate_salary = $sal->salary_year->salary_grade->rate_salary;
+            $ability = $sal->salary_year->ability;
+            $fungtional_alw = $sal->salary_year->fungtional_alw;
+            $family_alw = $sal->salary_year->family_alw;
+            $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
+            $pdf = PDF::loadView('salary.print', compact('sal', 'total'));
 
-            return redirect()->back();
+            file_put_contents($filePath, $pdf->output());
+
+            $mediaUrl = $data->nik . $days . $data->salary_month_id;
+            $urls = Str::of($mediaUrl)->toBase64();
+
+            // $url = "https://bskp.blog:9000/pdf/" . $urls . ".pdf" . "(This message containt dangerous file, please dont open it!)";
+            $url = "This message containt dangerous file, please dont open it!";
+
+            $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
+
+            $is_send = $twilio->messages->create(
+                "whatsapp:+" . $data->no_telpon,
+                [
+                    "contentSid" => env('TWILIO_CONTENT_ID'),
+                    "messagingServiceSid" => env('TWILIO_SERVICE_ID'),
+                    "from" => "whatsapp:" . env('TWILIO_PHONE_NUMBER'),
+                    "contentVariables" => json_encode([
+                        "1" => $day,
+                        "2" => $name,
+                        "3" => $month,
+                        "4" => $url,
+                    ]),
+                ]
+            );
+        }
+
+        if ($is_send) {
+            SalaryMonth::where('id', $id)->update(['is_send' => '1']);
+        }
+
+        return redirect()->back();
     }
 
     public function send_report()
     {
-    $title = 'Send Historical Slip';
+        $title = 'Send Historical Slip';
 
-    $years = SalaryMonth::distinct('date')->pluck('date')->map(function ($date) {
-        return Carbon::parse($date)->format('Y');
-    })->unique()->toArray();
+        $years = SalaryMonth::distinct('date')->pluck('date')->map(function ($date) {
+            return Carbon::parse($date)->format('Y');
+        })->unique()->toArray();
 
-    $months_filter = SalaryMonth::select('date')->distinct()->pluck('date')->map(function ($date) {
-        $carbonDate = Carbon::parse($date);
-        return [
-            'value' => $carbonDate->format('m'),
-            'label' => $carbonDate->format('F'),
-        ];
-    })->unique()->toArray();
+        $months_filter = SalaryMonth::select('date')->distinct()->pluck('date')->map(function ($date) {
+            $carbonDate = Carbon::parse($date);
+            return [
+                'value' => $carbonDate->format('m'),
+                'label' => $carbonDate->format('F'),
+            ];
+        })->unique()->toArray();
 
-    $statuses = User::distinct('status')->pluck('status')->toArray();
+        $statuses = User::distinct('status')->pluck('status')->toArray();
 
-    $currentYear = Carbon::now()->year;
+        $currentYear = Carbon::now()->year;
 
-    $rawData = DB::table('salary_months')
-        ->join('salary_years', 'salary_months.id_salary_year', 'salary_years.id')
-        ->join('users', 'salary_years.nik', '=', 'users.nik')
-        ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
-        ->select(
-            'users.nik',
-            'users.no_telpon',
-            'users.name',
-            'users.dept',
-            'users.jabatan',
-            'users.status',
-            'salary_years.year',
-            'salary_months.id as salary_month_id',
-            'salary_months.is_send',
-            'salary_months.date',
-            DB::raw('MONTH(salary_months.date) as month')
-        )
-        ->whereYear('salary_months.date', $currentYear)
-        ->get();
+        $selectedMonth = trim(request()->input('filter_month', ''));
 
-    $rawData->transform(function ($item) {
-        $phone = preg_replace('/[^0-9]/', '', $item->no_telpon);
+        $rawData = DB::table('salary_months')
+            ->join('salary_years', 'salary_months.id_salary_year', 'salary_years.id')
+            ->join('users', 'salary_years.nik', '=', 'users.nik')
+            ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
+            ->select(
+                'users.nik',
+                'users.no_telpon',
+                'users.name',
+                'users.dept',
+                'users.jabatan',
+                'salary_years.id as salary_year_id',
+                'users.status',
+                'salary_years.year',
+                'salary_months.id as salary_month_id',
+                'salary_months.is_send',
+                'salary_months.date',
+                DB::raw('MONTH(salary_months.date) as month')
+            )
+            ->whereYear('salary_months.date', $currentYear)
+            ->get();
 
-        if (substr($phone, 0, 1) == '0') {
-            $phone = '+62' . substr($phone, 1);
-        } elseif (substr($phone, 0, 2) != '62') {
-            $phone = '+62' . $phone;
-        } else {
-            $phone = '+' . $phone;
-        }
+        $rawData->transform(function ($item) {
+            $phone = preg_replace('/[^0-9]/', '', $item->no_telpon);
 
-        $item->no_telpon = preg_replace('/(\+62)(\d{3})(\d{4})(\d{4})/', '$1 $2-$3-$4', $phone);
+            if (substr($phone, 0, 1) == '0') {
+                $phone = '+62' . substr($phone, 1);
+            } elseif (substr($phone, 0, 2) != '62') {
+                $phone = '+62' . $phone;
+            } else {
+                $phone = '+' . $phone;
+            }
 
-        return $item;
-    });
+            $item->no_telpon = preg_replace('/(\+62)(\d{3})(\d{4})(\d{4})/', '$1 $2-$3-$4', $phone);
 
-    $months = $rawData->pluck('month')->unique()->sort()->values()->toArray();
+            return $item;
+        });
 
-    $groupedData = $rawData->groupBy('nik');
+        $months = $rawData->pluck('month')->unique()->sort()->values()->toArray();
 
-    return view('salary.send-history', [
-        'years' => $years,
-        'months_filter' => $months_filter,
-        'months' => $months,
-        'statuses' => $statuses,
-        'title' => $title,
-        'data' => $groupedData
-    ]);
+        $groupedData = $rawData->groupBy('nik');
+
+        return view('salary.send-history', [
+            'years' => $years,
+            'months_filter' => $months_filter,
+            'months' => $months,
+            'statuses' => $statuses,
+            'title' => $title,
+            'data' => $groupedData,
+            'selectedMonth' => $selectedMonth,
+        ]);
     }
 
     public function send_checked(Request $request)
     {
         $selectedIds = $request->input('salary_ids');
+        $months = $request->input('filter_month');
 
-        $query = DB::table('salary_months')
-            ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-            ->join('users', 'users.nik', '=', 'salary_years.nik')
-            ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
-            ->select('users.name as nama', 'users.nik', 'users.id as id_users', 'users.no_telpon', 'salary_months.id as salary_month_id', 'salary_months.date as salary_month_date')
-            ->whereIn('salary_months.id', $selectedIds)
-            ->get();
+        // // Dispatch the job to process in the background
+        SendCheckedSalaryJob::dispatch($selectedIds, $months);
 
-            foreach($query as $data) {
-                $days = Carbon::now()->subMonth(1)->format('mY');
-                $dayss = Carbon::now();
-                $day = ($dayss->hour < 12) ? "Pagi" : "Siang";
-
-                $name = $data->nama;
-                $month = Carbon::parse($data->salary_month_date)->format('F');
-
-                $customFileNames = $data->nik . $days.$data->salary_month_id;
-                $customFileName = Str::of($customFileNames)->toBase64();
-                $filePath = storage_path('app/public') . '/' . $customFileName . '.pdf';
-
-                $id = $data->salary_month_id;
-                $sal = DB::table('salary_months')
-                    ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-                    ->join('users', 'users.nik', '=', 'salary_years.nik')
-                    ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
-                    ->select('salary_months.date as salary_month_date', 'salary_months.*', 'salary_years.*', 'users.*', 'grade.*')
-                    ->where('salary_months.id', $id)
-                    ->first();
-
-                // dd($sal);
-                // $sal = SalaryMonth::find($id);
-
-                // dd($sal, $sal->salary_year->nik);
-
-                if (!$sal) {
-                    dd("Salary with ID $id not found.");
-                }
-
-                // $rate_salary = $sal->salary_year->salary_grade->rate_salary;
-                // $ability = $sal->salary_year->ability;
-                // $fungtional_alw = $sal->salary_year->fungtional_alw;
-                // $family_alw = $sal->salary_year->family_alw;
-                // $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
-
-                $rate_salary = $sal->rate_salary;
-                $ability = $sal->ability;
-                $fungtional_alw = $sal->fungtional_alw;
-                $family_alw = $sal->family_alw;
-                $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
-                $pdf = PDF::loadView('salary.print', compact('sal', 'total'));
-
-                file_put_contents($filePath, $pdf->output());
-
-                $mediaUrl = $data->nik . $days.$data->salary_month_id;
-                $urls = Str::of($mediaUrl)->toBase64();
-
-                // $url = "https://bskp.blog:9000/pdf/" . $urls . ".pdf" . "(This message containt dangerous file, please dont open it!)";
-                $url = "This message containt dangerous file, please dont open it!";
-
-                $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
-
-                $is_send = $twilio->messages->create(
-                    "whatsapp:+".$data->no_telpon,
-                    [
-                        "contentSid" => env('TWILIO_CONTENT_ID'),
-                        "messagingServiceSid" => env('TWILIO_SERVICE_ID'),
-                        "from" => "whatsapp:".env('TWILIO_PHONE_NUMBER'),
-                        "contentVariables" => json_encode([
-                            "1" => $day,
-                            "2" => $name,
-                            "3" => $month,
-                            "4" => $url,
-                        ]),
-                    ]
-                );
-            }
-
-            if ($is_send) {
-                SalaryMonth::where('id', $id)->update(['is_send' => '1']);
-            }
-
-            return redirect()->back();
+        return redirect()->back();
     }
 
     public function summary()
@@ -994,7 +920,7 @@ class SalaryController extends Controller
         $emp = User::orderBy('name', 'asc')->whereIn('status', ['Manager', 'Staff', 'Monthly'])->where('active', 'yes')->get();
         $years = SalaryYear::distinct('year')->pluck('year')->toArray();
 
-        return view ('salary.summary', compact('title', 'emp', 'years'));
+        return view('salary.summary', compact('title', 'emp', 'years'));
     }
 
     public function result()
@@ -1051,7 +977,7 @@ class SalaryController extends Controller
             ->where('users.nik', $empFilter)
             ->get();
 
-        $name = User::where('nik', $empFilter)->select('nik','name')->first();
+        $name = User::where('nik', $empFilter)->select('nik', 'name')->first();
 
         return view('salary.result', compact('title', 'empFilter', 'yearFilter', 'data', 'name'));
     }
@@ -1068,36 +994,35 @@ class SalaryController extends Controller
             $currentYear,
         ];
 
-            // $rawData = DB::table('salary_years')
-            //     ->join('users', 'salary_years.nik', '=', 'users.nik')
-            //     ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
-            //     ->select(
-            //         'users.nik',
-            //         'users.name',
-            //         'users.dept',
-            //         'users.jabatan',
-            //         'users.status',
-            //         'grade.name_grade',
-            //         'salary_years.year'
-            //     )
-            //     ->whereIn('salary_years.year', $years)
-            //     ->get();
+        // $rawData = DB::table('salary_years')
+        //     ->join('users', 'salary_years.nik', '=', 'users.nik')
+        //     ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
+        //     ->select(
+        //         'users.nik',
+        //         'users.name',
+        //         'users.dept',
+        //         'users.jabatan',
+        //         'users.status',
+        //         'grade.name_grade',
+        //         'salary_years.year'
+        //     )
+        //     ->whereIn('salary_years.year', $years)
+        //     ->get();
 
-
-            $rawData = DB::table('all_salary_data')
-                ->join('users', 'all_salary_data.nik', '=', 'users.nik')
-                ->select(
-                    'users.name',
-                    'users.dept',
-                    'users.jabatan',
-                    'users.status',
-                    'all_salary_data.nik',
-                    'all_salary_data.salary_grade',
-                    'all_salary_data.date',
-                    'all_salary_data.year'
-                )
-                ->whereIn('all_salary_data.year', $years)
-                ->get();
+        $rawData = DB::table('all_salary_data')
+            ->join('users', 'all_salary_data.nik', '=', 'users.nik')
+            ->select(
+                'users.name',
+                'users.dept',
+                'users.jabatan',
+                'users.status',
+                'all_salary_data.nik',
+                'all_salary_data.salary_grade',
+                'all_salary_data.date',
+                'all_salary_data.year'
+            )
+            ->whereIn('all_salary_data.year', $years)
+            ->get();
 
         $groupedData = [];
         foreach ($rawData as $row) {
@@ -1197,30 +1122,30 @@ class SalaryController extends Controller
             ->whereIn('all_salary_data.year', $years)
             ->get();
 
-            $groupedData = [];
-            foreach ($rawData as $row) {
-                $key = $row->nik . '-' . $row->name . '-' . $row->dept . '-' . $row->jabatan . '-' . $row->status;
-                if (!isset($groupedData[$key])) {
-                    $groupedData[$key] = [
-                        'nik' => $row->nik,
-                        'name' => $row->name,
-                        'status' => $row->status,
-                        'dept' => $row->dept,
-                        'jabatan' => $row->jabatan,
-                        'grade' => []
-                    ];
-                }
-                $groupedData[$key]['grade'][$row->year][] = $row->salary_grade;
+        $groupedData = [];
+        foreach ($rawData as $row) {
+            $key = $row->nik . '-' . $row->name . '-' . $row->dept . '-' . $row->jabatan . '-' . $row->status;
+            if (!isset($groupedData[$key])) {
+                $groupedData[$key] = [
+                    'nik' => $row->nik,
+                    'name' => $row->name,
+                    'status' => $row->status,
+                    'dept' => $row->dept,
+                    'jabatan' => $row->jabatan,
+                    'grade' => [],
+                ];
             }
+            $groupedData[$key]['grade'][$row->year][] = $row->salary_grade;
+        }
 
-            foreach ($groupedData as &$data) {
-                foreach ($years as $year) {
-                    // $data['name_status'][$year] = isset($data['name_status'][$year]) ? implode(' / ', array_unique($data['name_status'][$year])) : '-';
-                    // $data['name_dept'][$year] = isset($data['name_dept'][$year]) ? implode(' / ', array_unique($data['name_dept'][$year])) : '-';
-                    // $data['name_job'][$year] = isset($data['name_job'][$year]) ? implode(' / ', array_unique($data['name_job'][$year])) : '-';
-                    $data['grade'][$year] = isset($data['grade'][$year]) ? implode(' / ', array_unique($data['grade'][$year])) : '-';
-                }
+        foreach ($groupedData as &$data) {
+            foreach ($years as $year) {
+                // $data['name_status'][$year] = isset($data['name_status'][$year]) ? implode(' / ', array_unique($data['name_status'][$year])) : '-';
+                // $data['name_dept'][$year] = isset($data['name_dept'][$year]) ? implode(' / ', array_unique($data['name_dept'][$year])) : '-';
+                // $data['name_job'][$year] = isset($data['name_job'][$year]) ? implode(' / ', array_unique($data['name_job'][$year])) : '-';
+                $data['grade'][$year] = isset($data['grade'][$year]) ? implode(' / ', array_unique($data['grade'][$year])) : '-';
             }
+        }
 
         return view('salary.historical-detail', ['data' => $groupedData, 'title' => $title, 'years' => $years, 'biodata' => $biodata]);
     }
@@ -1252,35 +1177,35 @@ class SalaryController extends Controller
             )
             ->get();
 
-            $groupedData = $data->groupBy(function ($item) {
-                return Carbon::parse($item->date)->format('M-y'); // Mengelompokkan berdasarkan bulan dengan format 'May-24'
-            })->map(function ($monthData) {
-                return $monthData->groupBy('status');
-            });
+        $groupedData = $data->groupBy(function ($item) {
+            return Carbon::parse($item->date)->format('M-y'); // Mengelompokkan berdasarkan bulan dengan format 'May-24'
+        })->map(function ($monthData) {
+            return $monthData->groupBy('status');
+        });
 
-            $counts = $groupedData->map(function ($monthData) {
-                return $monthData->map(function ($group) {
-                    $totalFungtional = $group->sum('fungtional_alw');
-                    $totalFamily = $group->sum('family_alw');
-                    $totalTransport = $group->sum('transport_alw');
-                    $totalTelephone = $group->sum('telephone_alw');
-                    $totalSkill = $group->sum('skill_alw');
-                    $totalOvertime = $group->sum('total_overtime');
-                    $totalIncentive = $group->sum('incentive');
-                    $employeeCount = $group->count();
-                    $totalNetSalary = $group->sum('net_salary');
-                    $totalRateSalary = $group->sum('rate_salary');
+        $counts = $groupedData->map(function ($monthData) {
+            return $monthData->map(function ($group) {
+                $totalFungtional = $group->sum('fungtional_alw');
+                $totalFamily = $group->sum('family_alw');
+                $totalTransport = $group->sum('transport_alw');
+                $totalTelephone = $group->sum('telephone_alw');
+                $totalSkill = $group->sum('skill_alw');
+                $totalOvertime = $group->sum('total_overtime');
+                $totalIncentive = $group->sum('incentive');
+                $employeeCount = $group->count();
+                $totalNetSalary = $group->sum('net_salary');
+                $totalRateSalary = $group->sum('rate_salary');
 
-                    return [
-                        'employee_count' => $employeeCount,
-                        'total_rate_salary' => $totalRateSalary,
-                        'total_salary' => $totalNetSalary,
-                        'total_allowance' => $totalFungtional + $totalFamily + $totalTransport + $totalTelephone + $totalSkill,
-                        'total_overtime_incentive' => $totalOvertime + $totalIncentive,
-                        'average_salary' => $employeeCount > 0 ? ($totalNetSalary / $employeeCount) : 0,
-                    ];
-                });
+                return [
+                    'employee_count' => $employeeCount,
+                    'total_rate_salary' => $totalRateSalary,
+                    'total_salary' => $totalNetSalary,
+                    'total_allowance' => $totalFungtional + $totalFamily + $totalTransport + $totalTelephone + $totalSkill,
+                    'total_overtime_incentive' => $totalOvertime + $totalIncentive,
+                    'average_salary' => $employeeCount > 0 ? ($totalNetSalary / $employeeCount) : 0,
+                ];
             });
+        });
 
         return view('salary.salary-monitoring', [
             'title' => $title,

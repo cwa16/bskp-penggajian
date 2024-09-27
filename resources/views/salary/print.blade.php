@@ -134,7 +134,7 @@
                         </tr>
                         <tr>
                             <td>Start working</td>
-                            <td>: {{ date('H:i', strtotime($sal->start_work_user)) }}</td>
+                            <td>: {{ $sal->start ?? '-' }}</td>
                         </tr>
                         <tr>
                             <td>Tax Number</td>
