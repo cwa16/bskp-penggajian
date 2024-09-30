@@ -908,7 +908,7 @@ class SalaryController extends Controller
         $selectedIds = $request->input('salary_ids');
         $months = $request->input('filter_month');
 
-        // // Dispatch the job to process in the background
+        //send to job
         SendCheckedSalaryJob::dispatch($selectedIds, $months);
 
         return redirect()->back();

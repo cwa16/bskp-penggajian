@@ -55,7 +55,7 @@ class SendCheckedSalaryJob implements ShouldQueue
             $day = ($dayss->hour < 12) ? "Pagi" : "Siang";
 
             $name = $data->nama;
-            $month = Carbon::parse($data->salary_month_date)->format('F');
+            $month = Carbon::parse($data->salary_month_date)->isoFormat('MMMM Y');
 
             $customFileNames = $data->nik . $days . $data->salary_month_id;
             $customFileName = Str::of($customFileNames)->toBase64();
@@ -108,7 +108,8 @@ class SendCheckedSalaryJob implements ShouldQueue
                 dd("Error uploading PDF");
             }
 
-            $url = "https://bskp.blog:9000/storage/pdf/" . $customFileName . '.pdf';
+            // $url = "https://bskp.blog:9000/storage/pdf/" . $customFileName . '.pdf';
+            $url = $customFileName . '.pdf';
 
             $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
 
@@ -120,8 +121,8 @@ class SendCheckedSalaryJob implements ShouldQueue
                     "from" => "whatsapp:" . env('TWILIO_PHONE_NUMBER'),
                     "contentVariables" => json_encode([
                         "1" => $day,
-                        "2" => $name,
-                        "3" => $month,
+                        "2" => $month,
+                        "3" => $name,
                         "4" => $url,
                     ]),
                 ]
