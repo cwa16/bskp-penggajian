@@ -2,16 +2,18 @@
 
 namespace App\Jobs;
 
-use App\Models\SalaryMonth;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+
+use App\Models\SalaryMonth;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+
 use PDF;
 use Twilio\Rest\Client;
 
@@ -24,8 +26,6 @@ class SendCheckedSalaryJob implements ShouldQueue
 
     /**
      * Create a new job instance.
-     *
-     * @return void
      */
     public function __construct($selectedIds, $months)
     {
@@ -35,8 +35,6 @@ class SendCheckedSalaryJob implements ShouldQueue
 
     /**
      * Execute the job.
-     *
-     * @return void
      */
     public function handle()
     {
@@ -62,11 +60,39 @@ class SendCheckedSalaryJob implements ShouldQueue
             $filePath = storage_path('app/public') . '/' . $customFileName . '.pdf';
 
             $id = $data->salary_month_id;
+
+            // $sal = DB::table('salary_months')
+            //     ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+            //     ->join('users', 'users.nik', '=', 'salary_years.nik')
+            //     ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
+            //     ->select('salary_months.*', 'salary_months.date as salary_month_date', 'salary_years.*', 'users.*', 'grade.*')
+            //     ->where('salary_months.id', $id)
+            //     ->first();
+
             $sal = DB::table('salary_months')
                 ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-                ->join('users', 'users.nik', '=', 'salary_years.nik')
                 ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
-                ->select('salary_months.*', 'salary_months.date as salary_month_date', 'salary_years.*', 'users.*', 'grade.*')
+                ->join('users', 'users.nik', '=', 'salary_years.nik')
+                ->select(
+                    'users.nik as Emp_Code',
+                    'users.name as Nama',
+                    'users.status as Status',
+                    'users.dept as Dept',
+                    'users.jabatan as Jabatan',
+                    'users.start_work_user',
+                    'grade.name_grade as Grade',
+                    'grade.rate_salary',
+                    'salary_years.*',
+                    'salary_months.*',
+                    'salary_months.absent',
+                    'salary_months.electricity',
+                    'salary_months.cooperative',
+                    'salary_months.pinjaman',
+                    'salary_months.other',
+                    'salary_months.date as salary_months_date',
+                    'salary_months.total_deduction',
+                    'salary_months.net_salary'
+                )
                 ->where('salary_months.id', $id)
                 ->first();
 
@@ -79,7 +105,7 @@ class SendCheckedSalaryJob implements ShouldQueue
             $fungtional_alw = $sal->fungtional_alw;
             $family_alw = $sal->family_alw;
             $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
-            $pdf = PDF::loadView('salary.print', compact('sal', 'total'));
+            $pdf = PDF::loadView('salary.print', compact('sal', 'total'))->setPaper('a5', 'landscape');
 
             file_put_contents($filePath, $pdf->output());
 

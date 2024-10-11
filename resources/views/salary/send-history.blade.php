@@ -23,6 +23,11 @@
                         @csrf
                         <div class="card-body p-3 pb-2">
                             <div class="row">
+                                {{-- <button data-bs-toggle="modal" data-bs-target="#sendData"
+                                        class="btn btn-icon btn-3 btn-success btn-sm">
+                                        <span class="btn-inner--icon"><i class="material-icons">share</i></span>
+                                        <span class="btn-inner--text">Send Salary Slip</span>
+                                    </button> --}}
                                 <div class="col-2">
                                     <select class="form-select form-select-sm" name="filter_month">
                                         <option selected disabled>Select Month</option>
