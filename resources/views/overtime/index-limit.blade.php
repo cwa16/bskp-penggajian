@@ -44,7 +44,7 @@
                                         <tr>
                                             <th rowspan="2">No</th>
                                             <th colspan="6" class="text-center p-0">Employee Identity</th>
-                                            <th rowspan="2" class="text-center">Approve</th>
+                                            <th rowspan="2" class="text-center">Overtime Limit</th>
                                         </tr>
                                         <tr>
                                             <th style="background-color: #1A73E8;color: white;">Emp Code</th>

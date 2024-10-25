@@ -23,39 +23,39 @@
                         <div class="card-body p-3 pb-2">
                             <div class="row">
                                 <div class="col-7">
-                                    <table style="border: 3px solid black; border-collapse: collapse;">
-                                        <thead style="border: 3px solid black; border-collapse: collapse;">
-                                            <tr style="border: 3px solid black; border-collapse: collapse;">
+                                    <table style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse;">
+                                        <thead style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse;">
+                                            <tr style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse;">
                                                 <th
-                                                    style="border: 3px solid black; border-collapse: collapse; padding: 5px;">
+                                                    style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse; padding: 5px;">
                                                     Group</th>
                                                 <th
-                                                    style="border: 3px solid black; border-collapse: collapse;  padding: 5px;">
+                                                    style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse;  padding: 5px;">
                                                     : </th>
                                                 <th
-                                                    style="border: 3px solid black; border-collapse: collapse; padding: 5px;">
+                                                    style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse; padding: 5px;">
                                                 </th>
                                             </tr>
                                             <tr>
                                                 <th
-                                                    style="border: 3px solid black; border-collapse: collapse; padding: 5px;">
+                                                    style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse; padding: 5px;">
                                                     Date</th>
                                                 <th
-                                                    style="border: 3px solid black; border-collapse: collapse;  padding: 5px;">
+                                                    style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse;  padding: 5px;">
                                                     : </th>
                                                 <th
-                                                    style="border: 3px solid black; border-collapse: collapse; padding: 5px;">
+                                                    style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse; padding: 5px;">
                                                     {{ \Carbon\Carbon::parse($dateYesterday)->format('l, d-m-Y') }}</th>
                                             </tr>
                                             <tr>
                                                 <th
-                                                    style="border: 3px solid black; border-collapse: collapse; padding: 5px;">
+                                                    style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse; padding: 5px;">
                                                     Dept</th>
                                                 <th
-                                                    style="border: 3px solid black; border-collapse: collapse; padding: 5px;">
+                                                    style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse; padding: 5px;">
                                                     : </th>
                                                 <th
-                                                    style="border: 3px solid black; border-collapse: collapse; padding: 5px;">
+                                                    style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse; padding: 5px;">
                                                 </th>
                                             </tr>
                                         </thead>
@@ -105,13 +105,12 @@
                                                     <th rowspan="2" class="text-center">Dept</th>
                                                     <th rowspan="2" class="text-center">Status</th>
                                                     <th rowspan="2" class="text-center">Jabatan</th>
-                                                    <th colspan="3" class="text-center">Overtime</th>
-                                                    {{-- <th rowspan="2" class="text-center">Approve</th> --}}
+                                                    <th colspan="4" class="text-center">Overtime</th>
+                                                    <th rowspan="2" class="text-center">Approve</th>
                                                 </tr>
                                                 <tr>
-                                                    <th class="text-center">OG</th>
-                                                    {{-- <th class="text-center">Jam</th> --}}
-                                                    {{-- <th class="text-center">Menit</th> --}}
+                                                    <th class="text-center">Overtime<br>(Ori)</th>
+                                                    <th class="text-center">Overtime<br>(Adj)</th>
                                                     <th class="text-center">OT (Cal)</th>
                                                     <th class="text-center">Kalkulasi</th>
                                                 </tr>
@@ -121,15 +120,14 @@
                                                     @php
                                                         $rate_salary = $item['rate_salary'] ?? 0;
                                                         $ability = $item['ability'] ?? 0;
-                                                        $overtime_hour = $item['overtime_hour'] ?? 0;
-                                                        $overtime_minute = $item['overtime_minute'] ?? 0;
-                                                        $overtime_hour_after_cal =
-                                                            $item['overtime_hour_after_cal'] ?? 0;
+                                                        $overtime_ori = number_format(
+                                                            $item['total_minutes_in_decimal'],
+                                                            2,
+                                                        );
+                                                        $overtime_adj = $item['overtime_adj'] ?? $overtime_ori; // Overtime adj jika tidak ada gunakan ori
+                                                        $overtime_cal = $item['overtime_hour_after_cal'] ?? 0;
                                                         $totalOvertime =
-                                                            (($rate_salary + $ability) / 173) *
-                                                            $overtime_hour_after_cal;
-                                                        $id_salary_year = $item['id_salary_year'] ?? '';
-                                                        $isApproved = $item['is_approved'] == 1 ? 'Yes' : 'No';
+                                                            (($rate_salary + $ability) / 173) * $overtime_cal;
                                                     @endphp
                                                     <tr>
                                                         <td class="text-center">
@@ -144,42 +142,57 @@
                                                         <td>{{ $item['dept'] ?? 'Dept tidak ditemukan' }}</td>
                                                         <td>{{ $item['status'] ?? 'Status tidak ditemukan' }}</td>
                                                         <td>{{ $item['jabatan'] ?? 'Jabatan tidak ditemukan' }}</td>
+
+                                                        <!-- Overtime (Ori) -->
                                                         <td class="text-center">
-                                                            {{ number_format($item['total_minutes_in_decimal'], 2) }}
+                                                            {{ $overtime_ori }}
+                                                            <input type="hidden"
+                                                                name="original_overtime[{{ $item['user_id'] }}]"
+                                                                value="{{ $overtime_ori }}">
                                                         </td>
-                                                        {{-- <td class="text-center">{{ $overtime_hour }}</td> --}}
-                                                        {{-- <td class="text-center">{{ $overtime_minute }}</td> --}}
-                                                        {{-- <td class="text-center">{{ $overtime_hour_after_cal }}</td> --}}
-                                                        {{-- <td class="text-center">{{ number_format($totalOvertime) }}</td> --}}
-                                                        <input type="hidden"
-                                                            name="original_overtime[{{ $item['user_id'] }}]"
-                                                            value="{{ number_format($item['total_minutes_in_decimal'], 2) }}">
+
+                                                        <!-- Overtime (Adj) -->
                                                         <td class="text-center">
                                                             <input type="number"
                                                                 name="adjust_ot_call[{{ $item['user_id'] }}]"
-                                                                value="{{ $overtime_hour_after_cal }}" min="0"
-                                                                step="0.01" style="width: 50px;"
-                                                                data-rate-salary="{{ $rate_salary }}"
+                                                                value="{{ $overtime_adj }}" min="0" step="0.01"
+                                                                style="width: 50px;" data-rate-salary="{{ $rate_salary }}"
                                                                 data-ability="{{ $ability }}"
                                                                 oninput="updateTotalOvertime('{{ $item['user_id'] }}', this.value)">
                                                         </td>
-                                                        <!-- Kolom Kalkulasi dengan ID unik -->
+
+                                                        <!-- Overtime (Cal) -->
+                                                        <td class="text-center">
+                                                            <input type="text"
+                                                                name="overtime_cal[{{ $item['user_id'] }}]"
+                                                                id="overtime_cal_{{ $item['user_id'] }}"
+                                                                value="{{ $overtime_cal }}" readonly style="width: 50px;">
+                                                        </td>
+
+                                                        <!-- Kalkulasi (rupiah) -->
                                                         <td class="text-center">
                                                             <input type="text"
                                                                 id="total_overtime_{{ $item['user_id'] }}"
                                                                 value="{{ number_format($totalOvertime, 2) }}" readonly
                                                                 style="width: 70px;">
                                                         </td>
-                                                        {{-- <td class="text-center">
-                                                            @if ($isApproved == 'Yes')
+
+                                                        <!-- Desc hidden field -->
+                                                        <input type="hidden" name="desc[{{ $item['user_id'] }}]"
+                                                            value="{{ $item['desc'] }}">
+
+                                                        <td class="text-center">
+                                                            @if ($item['is_approved'] == 1)
                                                                 <span class="sent">✓</span>
                                                             @else
                                                                 <span class="not-sent">✗</span>
                                                             @endif
-                                                        </td> --}}
+                                                        </td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>
+
+
                                         </table>
                                     </div>
                                 @endforeach
@@ -202,33 +215,54 @@
             });
         </script>
 
-        <script>
-            /**
-             * Menghitung ulang nilai Kalkulasi berdasarkan OT Call yang diubah.
-             *
-             * @param {string} userId - ID unik pengguna.
-             * @param {number} hourCall - Nilai OT Call yang diinputkan.
-             */
+        {{-- <script>
             function updateTotalOvertime(userId, hourCall) {
-                // Cari elemen input yang mengandung data-rate-salary dan data-ability
+
                 const adjustInput = document.querySelector(`input[name="adjust_ot_call[${userId}]"]`);
                 if (!adjustInput) return;
 
-                // Ambil data-rate-salary dan data-ability
                 const rateSalary = parseFloat(adjustInput.getAttribute('data-rate-salary')) || 0;
                 const ability = parseFloat(adjustInput.getAttribute('data-ability')) || 0;
 
-                // Parsing nilai OT Call
                 const parsedHourCall = parseFloat(hourCall) || 0;
 
-                // Hitung total overtime berdasarkan formula
                 const totalOvertime = ((rateSalary + ability) / 173) * parsedHourCall;
 
-                // Cari elemen Kalkulasi berdasarkan ID unik
                 const kalkulasiInput = document.getElementById(`total_overtime_${userId}`);
                 if (kalkulasiInput) {
                     kalkulasiInput.value = totalOvertime.toFixed(2); // Pembulatan 2 desimal
                 }
+            }
+        </script> --}}
+
+        <script>
+            function updateTotalOvertime(userId, adjustedOvertime) {
+                const rateSalary = parseFloat(document.querySelector(`input[name="adjust_ot_call[${userId}]"]`).getAttribute(
+                    'data-rate-salary')) || 0;
+                const ability = parseFloat(document.querySelector(`input[name="adjust_ot_call[${userId}]"]`).getAttribute(
+                    'data-ability')) || 0;
+
+                // Pastikan nilai adjustedOvertime adalah angka
+                const adjOvertime = parseFloat(adjustedOvertime) || 0;
+
+                // Tentukan desc untuk menentukan aturan overtime hour after cal
+                const desc = document.querySelector(`input[name="desc[${userId}]"]`) ? document.querySelector(
+                    `input[name="desc[${userId}]"]`).value : '';
+
+                // Hitung Overtime (Cal) berdasarkan aturan desc
+                let overtimeCal;
+                if (desc === 'MX') {
+                    overtimeCal = adjOvertime * 2; // Jika MX, overtime dikalikan 2
+                } else {
+                    overtimeCal = (adjOvertime * 2) - 0.5; // Jika bukan MX, kalikan 2 dan kurangi 0.5
+                }
+
+                // Set nilai Overtime (Cal)
+                document.getElementById(`overtime_cal_${userId}`).value = overtimeCal.toFixed(2);
+
+                // Kalkulasi total overtime dalam bentuk rupiah
+                const totalOvertime = ((rateSalary + ability) / 173) * overtimeCal;
+                document.getElementById(`total_overtime_${userId}`).value = totalOvertime.toFixed(2);
             }
         </script>
 

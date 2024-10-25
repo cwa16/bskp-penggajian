@@ -80,8 +80,6 @@
                                             <th>Dept</th>
                                             <th>Status</th>
                                             <th>Jabatan</th>
-                                            <th>Batas Lembur (Og)</th>
-                                            <th>Jam Lembur (Og)</th>
                                             {{-- <th>Batas Lembur (Cal)</th> --}}
                                             @foreach ($dates as $dateInfo)
                                                 <th class="{{ $dateInfo['isHoliday'] ? 'holiday-header' : '' }}">
@@ -100,9 +98,9 @@
                                                     </div>
                                                 </th>
                                             @endforeach
-                                            <th>Total Lembur (Before)</th>
-                                            <th>Adjust</th>
-                                            <th>Total Lembur (After)</th>
+                                            <th>Batas Lembur (Ori)</th>
+                                            <th>Jam Lembur (Ori)</th>
+                                            <th>Jam Lembur (Cal)</th>
                                             <th>Nominal</th>
                                             <th>
                                                 <input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)">
@@ -132,21 +130,16 @@
                                                 <td>{{ $firstRecord->dept }}</td>
                                                 <td>{{ $firstRecord->status }}</td>
                                                 <td>{{ $firstRecord->jabatan }}</td>
-                                                <td>{{ $firstRecord->overtime_limit ?? '0' }} Jam</td>
                                                 {{-- <td>{{ $otlimit * 2 }} Jam</td> --}}
                                                 {{-- <td>{{ $firstRecord->hour_og }}</td> --}}
-                                                <td>10</td>
                                                 @foreach ($dates as $dateInfo)
                                                     <td class="text-center p-0">
                                                         {{ $records->firstWhere('overtime_date', $dateInfo['date'])?->hour_call ?? 0 }}
                                                     </td>
                                                 @endforeach
+
+                                                <td class="text-center p-0">10</td>
                                                 <td class="text-center p-0">{{ $totalOvertime }}</td>
-                                                <td class="text-center p-0">
-                                                    <input type="number" name="adjust_{{ $nik }}" min="0"
-                                                        value="0" style="width: 50px;"
-                                                        oninput="calculateAdjust('{{ $nik }}', {{ $totalOvertime }}, {{ $rateSalary }}, {{ $ability }})">
-                                                </td>
                                                 <td id="adjusted_overtime_{{ $nik }}" class="text-center p-0">
                                                     {{ $totalOvertime }}</td>
                                                 <td id="nominal_uang_{{ $nik }}" class="text-end">

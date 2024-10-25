@@ -15,13 +15,14 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $roles = $request->get('roles');
-        // dd($roles);
-        if ($request->query('token')) {
-            $token = $request->query('token');
-            $request->session()->put('jwt_token', $token);
-        }
 
-        $token = $request->query('token');
+        // dd($roles);
+
+        $roleNames = array_map(function($role) {
+            return $role['role'];
+        }, $roles);
+
+        $request->session()->put('roles', $roleNames);
         // $statuses = User::select('status')->where('status', 'Manager')->groupBy('status')->pluck('status')->count();
         $managerCount = User::where('status', 'Manager')->count();
         $staffCount = User::where('status', 'Staff')->count();
@@ -38,7 +39,7 @@ class DashboardController extends Controller
             'regularCount' => $regularCount,
             'contractBskpCount' => $contractBskpCount,
             'contractFlCount' => $contractFlCount,
-            'roles' => $roles
+            'roles' => $roleNames
         ]);
     }
 

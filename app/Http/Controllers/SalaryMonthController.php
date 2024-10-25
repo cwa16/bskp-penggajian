@@ -129,13 +129,22 @@ class SalaryMonthController extends Controller
 
         $checkYear = SalaryMonth::whereYear('date', $yearFilter)->first();
         $checkMonth = SalaryMonth::whereMonth('date', $monthFilter)->first();
+
+        // $checkStatus = DB::table('salary_months')
+        //     ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+        //     ->join('users', 'users.nik', '=', 'salary_years.nik')
+        //     ->where('users.status', $statusFilter)
+        //     ->first();
+
         $checkStatus = DB::table('salary_months')
             ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
             ->join('users', 'users.nik', '=', 'salary_years.nik')
             ->where('users.status', $statusFilter)
+            ->where('salary_years.year', $yearFilter)
+            ->whereMonth('salary_months.date', $monthFilter)
             ->first();
 
-        // dd($checkYear, $checkMonth, $checkStatus, $statusFilter);
+        // dd($checkStatus);
 
         // $global = DB::table('salary_years')
         //     ->join('users', 'salary_years.nik', '=', 'users.nik')

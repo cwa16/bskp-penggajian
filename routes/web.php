@@ -35,12 +35,13 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/historical', [SalaryController::class, 'historical'])->name('historical');
+    Route::resource('user', UserController::class);
+
 });
 
 // DashboardController
 // -------------------------------------------------------------------
 // Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
-Route::resource('user', UserController::class);
 // -------------------------------------------------------------------
 
 // route edit tanpa parameter id, karena id nya menggunakan request

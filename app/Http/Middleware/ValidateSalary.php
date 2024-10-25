@@ -22,11 +22,13 @@ class ValidateSalary
             $token = $request->query('token');
 
             if (!$token || !JWTAuth::setToken($token)->check()) {
-                return response()->json(['error' => 'Unauthorized'], 401);
+                // return response()->json(['error' => 'Unauthorized'], 401);
+                return response()->view('errors.unauthorized', [], 401);
             }
 
             $payload = JWTAuth::setToken($token)->getPayload();
             $request->merge(['roles' => $payload['roles']]);
+            session(['roles' => $payload['roles']]);
 
         } catch (JWTException $e) {
             return response()->json(['error' => 'Token invalid'], 401);

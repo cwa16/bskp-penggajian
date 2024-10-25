@@ -16,7 +16,7 @@
                         <div class="table-responsive p-0">
                             <form action="{{ route('salary-monitoring-approve') }}" method="POST">
                                 @csrf
-                                <h6 class="text-center">Manager</h6>
+                                <h6 class="text-left">Position: Manager</h6>
                                 <table>
                                     <thead>
                                         <tr>
@@ -42,14 +42,14 @@
                                                 class="text-center" rowspan="2">Approval</th>
                                         </tr>
                                         <tr>
-                                            <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 32px; padding-right: 32px;"
-                                                class="text-center">HR</th>
                                             <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 12px; padding-right: 12px;"
-                                                class="text-center">HR GA <br> Manager</th>
+                                                class="text-center">HR Asst</th>
                                             <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 12px; padding-right: 12px;"
-                                                class="text-center">ACC FIN</th>
+                                                class="text-center">ACC FIN <br> Asst</th>
                                             <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 12px; padding-right: 12px;"
-                                                class="text-center">ACC FIN <br> Manager</th>
+                                                class="text-center">HR GA <br> Mng</th>
+                                            <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 12px; padding-right: 12px;"
+                                                class="text-center">ACC FIN <br> Mng</th>
                                             <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 12px; padding-right: 12px;"
                                                 class="text-center">Director</th>
                                         </tr>
@@ -112,7 +112,7 @@
 
                             <form action="{{ route('salary-monitoring-approve') }}" method="POST">
                                 @csrf
-                                <h6 class="text-center">Staff</h6>
+                                <h6 class="text-left">Position: Staff</h6>
                                 <table>
                                     <thead>
                                         <tr>
@@ -138,14 +138,14 @@
                                                 class="text-center" rowspan="2">Approval</th>
                                         </tr>
                                         <tr>
-                                            <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 32px; padding-right: 32px;"
-                                                class="text-center">HR</th>
                                             <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 12px; padding-right: 12px;"
-                                                class="text-center">HR GA <br> Manager</th>
+                                                class="text-center">HR Asst</th>
                                             <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 12px; padding-right: 12px;"
-                                                class="text-center">ACC FIN</th>
+                                                class="text-center">ACC FIN <br> Asst</th>
                                             <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 12px; padding-right: 12px;"
-                                                class="text-center">ACC FIN <br> Manager</th>
+                                                class="text-center">HR GA <br> Mng</th>
+                                            <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 12px; padding-right: 12px;"
+                                                class="text-center">ACC FIN <br> Mng</th>
                                             <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 12px; padding-right: 12px;"
                                                 class="text-center">Director</th>
                                         </tr>
@@ -208,7 +208,7 @@
 
                             <form action="{{ route('salary-monitoring-approve') }}" method="POST">
                                 @csrf
-                                <h6 class="text-center">Monthly</h6>
+                                <h6 class="text-left">Position: Monthly</h6>
                                 <table>
                                     <thead>
                                         <tr>
@@ -234,14 +234,14 @@
                                                 class="text-center" rowspan="2">Approval</th>
                                         </tr>
                                         <tr>
-                                            <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 32px; padding-right: 32px;"
-                                                class="text-center">HR</th>
                                             <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 12px; padding-right: 12px;"
-                                                class="text-center">HR GA <br> Manager</th>
+                                                class="text-center">HR Asst</th>
                                             <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 12px; padding-right: 12px;"
-                                                class="text-center">ACC FIN</th>
+                                                class="text-center">ACC FIN <br> Asst</th>
                                             <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 12px; padding-right: 12px;"
-                                                class="text-center">ACC FIN <br> Manager</th>
+                                                class="text-center">HR GA <br> Mng</th>
+                                            <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 12px; padding-right: 12px;"
+                                                class="text-center">ACC FIN <br> Mng</th>
                                             <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 12px; padding-right: 12px;"
                                                 class="text-center">Director</th>
                                         </tr>
@@ -300,6 +300,113 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                            </form>
+
+                            <form action="{{ route('salary-monitoring-approve') }}" method="POST">
+                                @csrf
+                                <h6 class="text-left">Position: Contract BSKP</h6>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th style="background-color: #1A73E8; color: white; font-size: 12.5px; padding: 5px; border: 1px solid white;"
+                                                class="text-center" rowspan="2" width="5px">Year</th>
+                                            <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white;"
+                                                class="text-center" rowspan="2">Month</th>
+                                            <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 10px; padding-right: 10px;"
+                                                class="text-center" rowspan="2">No of<br>employee</th>
+                                            <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 30px; padding-right: 30px;"
+                                                class="text-center" rowspan="2">Salary</th>
+                                            <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 20px; padding-right: 20px;"
+                                                class="text-center" rowspan="2">Allowance</th>
+                                            <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-top: 10px; padding-bottom: 10px; padding-left: 25px; padding-right: 25px;"
+                                                class="text-center" rowspan="2">Insentive<br>&<br>Overtime</th>
+                                            <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 33px; padding-right: 33px;"
+                                                class="text-center" rowspan="2">Total<br>Salary</th>
+                                            <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 23px; padding-right: 23px;"
+                                                class="text-center" rowspan="2">Average<br>per person</th>
+                                            <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white;"
+                                                class="text-center" colspan="5">Check</th>
+                                            <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 23px; padding-right: 23px;"
+                                                class="text-center" rowspan="2">Approval</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 12px; padding-right: 12px;"
+                                                class="text-center">HR Asst</th>
+                                            <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 12px; padding-right: 12px;"
+                                                class="text-center">ACC FIN <br> Asst</th>
+                                            <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 12px; padding-right: 12px;"
+                                                class="text-center">HR GA <br> Mng</th>
+                                            <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 12px; padding-right: 12px;"
+                                                class="text-center">ACC FIN <br> Mng</th>
+                                            <th style="background-color: #1A73E8; color: white; font-size: 12.5px; border: 1px solid white; padding-left: 12px; padding-right: 12px;"
+                                                class="text-center">Director</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($counts as $month => $statuses)
+                                            <tr>
+                                                <td class="text-center"
+                                                    style="padding-left: 7px; padding-right: 7px; font-size: 12.5px;">
+                                                    {{ $currentYear }}</td>
+                                                <td class="text-center"
+                                                    style="padding-left: 7px; padding-right: 7px; font-size: 12.5px;">
+                                                    {{ $month }}</td>
+                                                <td class="text-center">
+                                                    {{ $statuses['Contract BSKP']['employee_count'] ?? 0 }}
+                                                </td>
+                                                <td class="text-end" style="padding: 5px; font-size: 12.5px;">
+                                                    {{ number_format($statuses['Contract BSKP']['total_rate_salary'] ?? 0, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-end" style="padding: 5px; font-size: 12.5px;">
+                                                    {{ number_format($statuses['Contract BSKP']['total_allowance'] ?? 0, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-end" style="padding: 5px; font-size: 12.5px;">
+                                                    {{ number_format($statuses['Contract BSKP']['total_overtime_incentive'] ?? 0, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-end" style="padding: 5px; font-size: 12.5px;">
+                                                    {{ number_format($statuses['Contract BSKP']['total_salary'] ?? 0, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-end" style="padding: 5px; font-size: 12.5px;">
+                                                    {{ number_format($statuses['Contract BSKP']['average_salary'] ?? 0, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">
+                                                    <input type="checkbox" name="approval_1" class="approval-check"
+                                                        id="approval1-{{ $month }}">
+                                                </td>
+                                                <td class="text-center">
+                                                    <input type="checkbox" name="approval_2" class="approval-check"
+                                                        id="approval2-{{ $month }}" disabled>
+                                                </td>
+                                                <td class="text-center">
+                                                    <input type="checkbox" name="approval_3" class="approval-check"
+                                                        id="approval3-{{ $month }}" disabled>
+                                                </td>
+                                                <td class="text-center">
+                                                    <input type="checkbox" name="approval_4" class="approval-check"
+                                                        id="approval4-{{ $month }}" disabled>
+                                                </td>
+                                                <td class="text-center">
+                                                    <input type="checkbox" name="approval_5" class="approval-check"
+                                                        id="approval5-{{ $month }}" disabled>
+                                                </td>
+                                                <td class="text-center">
+                                                    <input type="checkbox" name="approval_6" class="approval-check"
+                                                        id="approval6-{{ $month }}" disabled>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </form>
+
+                            <form action="">
+                                <div class="form-group input-group input-group-outline">
+                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                                        placeholder="Tambahkan catatan tambahan"></textarea>
+                                </div>
+                                <div class="pt-2">
+                                    <button class="btn btn-primary btn-sm">Submit</button>
+                                </div>
                             </form>
 
                         </div>

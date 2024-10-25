@@ -156,10 +156,10 @@
                 </h6>
             </li>
 
-            @if (in_array('Inputer', $roles))
+            @if (session('roles') && in_array('Admin', session('roles')))
                 <li class="nav-item">
                     <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'historical') ? 'active bg-gradient-primary' : '' }}"
-                        href="{{ url('/historical') }}?token={{ session('jwt_token') }}">
+                        href="{{ url('/historical') }}">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="material-icons">grade</i>
                         </div>

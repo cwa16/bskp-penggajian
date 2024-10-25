@@ -226,7 +226,7 @@ class OvertimeController extends Controller
                 'users.jabatan',
                 'users.overtime_limit',
                 'overtime_approveds.overtime_date',
-                'overtime_approveds.hour_og',
+                'overtime_approveds.overtime_ori',
                 'overtime_approveds.hour_call',
                 'salary_years.ability',
                 'grade.rate_salary',
@@ -270,32 +270,76 @@ class OvertimeController extends Controller
     }
 
 
+    // public function store(Request $request)
+    // {
+    //     // dd($request->all());
+    //     if ($request->has('user_id')) {
+    //         $userIds = $request->input('user_id');
+    //         $originalOvertime = $request->input('original_overtime');
+    //         $adjustOtCall = $request->input('adjust_ot_call');
+    //         $overtimeHours = $request->input('overtime_cal');
+    //         $totalOvertimes = $request->input('totalOvertime');
+    //         $dates = $request->input('tanggal');
+
+    //         dd($userIds, $overtimeHours, $originalOvertime, $adjustOtCall);
+
+
+    //         foreach ($userIds as $index => $userId) {
+    //             $overtimeHour = $overtimeHours[$index];
+
+    //             OvertimeApproved::updateOrCreate(
+    //                 [
+    //                     'nik' => $userId,
+    //                     'overtime_date' => $dates,
+    //                 ],
+    //                 [
+    //                     'overtime_ori' => $originalOvertime,
+    //                     'overtime_adj' => $adjustOtCall,
+    //                     'hour_call' => $overtimeHour,
+    //                 ]
+    //             );
+    //         }
+
+    //         return redirect()->route('overtime-approval-index')->with('success', 'Data berhasil disimpan.');
+    //     } else {
+    //         return redirect()->route('overtime-approval-index')->with('error', 'Tidak ada data yang dipilih.');
+    //     }
+    // }
+
     public function store(Request $request)
     {
         // dd($request->all());
-        if ($request->has('user_id')) {
-            $userIds = $request->input('user_id');
-            $overtimeHours = $request->input('overtime_hour_after_cal');
-            $totalOvertimes = $request->input('totalOvertime');
-            $dates = $request->input('tanggal');
-            $adjustOtCall = $request->input('adjust_ot_call');
+        if ($request->has('select_item')) {
+            $userIds = $request->input('select_item');
             $originalOvertime = $request->input('original_overtime');
+            $adjustOtCall = $request->input('adjust_ot_call');
+            $overtimeHours = $request->input('overtime_cal');
+            // $totalOvertimes = $request->input('totalOvertime');
+            $dates = $request->input('tanggal');
 
-            foreach ($userIds as $index => $userId) {
-                $overtimeHour = $overtimeHours[$index];
-                $totalOvertime = $totalOvertimes[$index];
+            foreach ($userIds as $userId) {
+                $overtimeHour = $overtimeHours[$userId] ?? null;
+                // $totalOvertime = $totalOvertimes[$userId] ?? null;
+                $originalOvertimeValue = $originalOvertime[$userId] ?? null;
+                $adjustOtCallValue = $adjustOtCall[$userId] ?? null;
 
-                OvertimeApproved::updateOrCreate(
-                    [
-                        'nik' => $userId,
-                        'overtime_date' => $dates,
-                    ],
-                    [
-                        'hour_og' => $originalOvertime,
-                        'hour_call' => $overtimeHour,
-                        'overtime_call' => $totalOvertime,
-                    ]
-                );
+                // dd($userIds);
+
+                // Pastikan nilai tidak null
+                if ($overtimeHour !== null && $originalOvertimeValue !== null && $adjustOtCallValue !== null) {
+                    OvertimeApproved::updateOrCreate(
+                        [
+                            'nik' => $userId,
+                            'overtime_date' => $dates,
+                        ],
+                        [
+                            'overtime_ori' => $originalOvertimeValue,
+                            'overtime_adj' => $adjustOtCallValue,
+                            'hour_call' => $overtimeHour,
+                            // 'total_overtime' => $totalOvertime
+                        ]
+                    );
+                }
             }
 
             return redirect()->route('overtime-approval-index')->with('success', 'Data berhasil disimpan.');
@@ -303,6 +347,7 @@ class OvertimeController extends Controller
             return redirect()->route('overtime-approval-index')->with('error', 'Tidak ada data yang dipilih.');
         }
     }
+
 
     public function store_summary(Request $request)
     {

@@ -24,7 +24,6 @@ class SalaryMonthImport implements ToModel, WithHeadingRow
             ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
             ->select('grade.rate_salary', 'salary_years.ability', 'salary_years.fungtional_alw', 'salary_years.family_alw',
                     'salary_years.transport_alw', 'salary_years.telephone_alw', 'salary_years.skill_alw', 'salary_years.adjustment')
-                    // ->where('salary_years.used', '1')
                     ->where('salary_months.id', $row['id'])
             ->first();
 
@@ -50,8 +49,7 @@ class SalaryMonthImport implements ToModel, WithHeadingRow
         $pinjaman = $row['pinjaman'];
         $other = $row['other'];
 
-        $gross_sal = $rateSalary + $ability + $fungtional_alw + $family_alw + $transport_alw + $skill_alw + $telephone_alw +
-                    $adjustment + $total_overtime + $thr + $bonus + $incentive;
+        $gross_sal = $rateSalary + $ability + $fungtional_alw + $family_alw + $transport_alw + $skill_alw + $telephone_alw + $adjustment + $total_overtime + $thr + $bonus + $incentive;
 
         $total = $rateSalary + $ability + $family_alw;
 
@@ -66,11 +64,6 @@ class SalaryMonthImport implements ToModel, WithHeadingRow
         $gaji_bersih = $gross_sal - ($bpjs + $jamsostek + $union + $absent + $electricity + $pinjaman + $other);
 
         $net_salary = $gaji_bersih - $cooperative;
-
-        // dd($gross_sal, $bpjs, $jamsostek, $total_ben, $total_deduction, $total);
-
-        // Hitung net salary
-        // $net_salary = $gross_sal - $total_deduction;
 
         return SalaryMonth::updateOrCreate(
             [
