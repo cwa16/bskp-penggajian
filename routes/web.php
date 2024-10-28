@@ -122,6 +122,9 @@ Route::get('/print-all', [SalaryController::class, 'printall']);
 Route::get('/print-allocation', [SalaryController::class, 'printallocation']);
 Route::post('/salary/print-multiple', [SalaryController::class, 'printMultiple'])->name('salary.printMultiple');
 
+// Print Overtime Individual Data
+Route::get('/print-overtime-index', [SalaryController::class, 'overtime_print'])->name('print-overtime-index');
+
 // Send Salary Data
 Route::post('/send-whatsapp-checked', [SalaryController::class, 'send_checked'])->name('send-whatsapp-checked');
 Route::post('/send-whatsapp', [SalaryController::class, 'send_batch'])->name('send-whatsapp-batch');

@@ -105,14 +105,14 @@
                                                     <th rowspan="2" class="text-center">Dept</th>
                                                     <th rowspan="2" class="text-center">Status</th>
                                                     <th rowspan="2" class="text-center">Jabatan</th>
-                                                    <th colspan="4" class="text-center">Overtime</th>
+                                                    <th colspan="3" class="text-center">Overtime</th>
                                                     <th rowspan="2" class="text-center">Approve</th>
                                                 </tr>
                                                 <tr>
-                                                    <th class="text-center">Overtime<br>(Ori)</th>
-                                                    <th class="text-center">Overtime<br>(Adj)</th>
-                                                    <th class="text-center">OT (Cal)</th>
-                                                    <th class="text-center">Kalkulasi</th>
+                                                    <th class="text-center">Overtime<br>(Original)</th>
+                                                    <th class="text-center">Overtime<br>(Judgement)</th>
+                                                    <th class="text-center">OT (After<br>Judgement)</th>
+                                                    {{-- <th class="text-center">Kalkulasi</th> --}}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -170,12 +170,15 @@
                                                         </td>
 
                                                         <!-- Kalkulasi (rupiah) -->
-                                                        <td class="text-center">
+                                                        {{-- <td class="text-center">
                                                             <input type="text"
                                                                 id="total_overtime_{{ $item['user_id'] }}"
                                                                 value="{{ number_format($totalOvertime, 2) }}" readonly
                                                                 style="width: 70px;">
-                                                        </td>
+                                                        </td> --}}
+
+                                                        <input type="hidden" id="total_overtime_{{ $item['user_id'] }}"
+                                                            value="{{ number_format($totalOvertime, 2) }}">
 
                                                         <!-- Desc hidden field -->
                                                         <input type="hidden" name="desc[{{ $item['user_id'] }}]"

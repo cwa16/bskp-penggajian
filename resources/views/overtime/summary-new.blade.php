@@ -104,7 +104,7 @@
                                             <th>Nominal</th>
                                             <th>
                                                 <input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)">
-                                                <label for="selectAll" class="small">Select All</label>
+                                                {{-- <label for="selectAll" class="small">Select All</label> --}}
                                             </th>
                                         </tr>
                                     </thead>
@@ -113,6 +113,7 @@
                                             @php
                                                 $firstRecord = $records->first();
                                                 $totalOvertime = $records->sum('hour_call');
+                                                $totalOvertimeOri = $records->sum('overtime_adj');
                                                 $rateSalary = $firstRecord->rate_salary;
                                                 $ability = $firstRecord->ability;
                                                 $otlimit = $firstRecord->overtime_limit;
@@ -139,9 +140,12 @@
                                                 @endforeach
 
                                                 <td class="text-center p-0">10</td>
-                                                <td class="text-center p-0">{{ $totalOvertime }}</td>
+
+                                                <td class="text-center p-0">{{ $totalOvertimeOri }}</td>
+
                                                 <td id="adjusted_overtime_{{ $nik }}" class="text-center p-0">
                                                     {{ $totalOvertime }}</td>
+
                                                 <td id="nominal_uang_{{ $nik }}" class="text-end">
                                                     {{ number_format((($rateSalary + $ability) / $STANDARD_HOURS) * $totalOvertime, 2) }}
                                                 </td>
@@ -156,7 +160,7 @@
                                                         value="{{ number_format($nominalUang, 2) }}">
                                                     <input type="checkbox" id="checkbox_{{ $nik }}"
                                                         name="selected_items[]" value="{{ $nik }}">
-                                                    <label for="checkbox_{{ $nik }}">Select</label>
+                                                    <label for="checkbox_{{ $nik }}"></label>
                                                 </td>
                                             </tr>
                                         @endforeach

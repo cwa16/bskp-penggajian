@@ -244,6 +244,16 @@
             </li>
 
             <li class="nav-item">
+                <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'print-overtime-index') ? 'active bg-gradient-primary' : '' }}"
+                    href="{{ url('/print-ovewrtime-index') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons">print</i>
+                    </div>
+                    <span class="nav-link-text ms-1">Overtime Print</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a class="nav-link text-danger" href="./sign-in.html">
 
                     <div class="text-danger text-center me-2 d-flex align-items-center justify-content-center">

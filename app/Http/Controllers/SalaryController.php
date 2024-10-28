@@ -1619,4 +1619,169 @@ class SalaryController extends Controller
         }
 
     }
+
+    public function overtime_print()
+    {
+        $title = 'Overtime Individual';
+
+        // $data = DB::table('salary_months')
+        //     ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+        //     ->join('users', 'users.nik', '=', 'salary_years.nik')
+        //     ->join('grade', 'users.grade', '=', 'grade.name_grade')
+        //     ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date', 'salary_months.id as salary_month_id')
+        //     ->get();
+
+            $month = Carbon::now()->month;
+            $year = Carbon::now()->year;
+
+        $data = DB::table('overtime_approveds')
+            ->join('users', 'users.nik', '=', 'overtime_approveds.nik')
+            ->join('salary_years', 'salary_years.nik', '=', 'overtime_approveds.nik')
+            ->join('grade', 'grade.id', '=', 'salary_years.id_salary_grade')
+            ->select(
+                'users.nik',
+                'users.name',
+                'users.dept',
+                'users.status',
+                'users.jabatan',
+                'users.overtime_limit',
+                'overtime_approveds.overtime_date',
+                'overtime_approveds.overtime_ori',
+                'overtime_approveds.hour_call',
+                'salary_years.ability',
+                'grade.rate_salary',
+                'salary_years.id as salary_years_id'
+            )
+            ->whereMonth('overtime_approveds.overtime_date', $month)
+            ->whereYear('overtime_approveds.overtime_date', $year)
+            ->get();
+
+            // dd($month, $year, $data);
+
+        $salary_months = SalaryMonth::all();
+
+        $years = SalaryMonth::distinct('date')->pluck('date')->map(function ($date) {
+            return Carbon::parse($date)->format('Y');
+        })->unique()->toArray();
+        $months = SalaryMonth::distinct('date')->pluck('date')->map(function ($date) {
+            $carbonDate = Carbon::parse($date);
+            return [
+                'value' => $carbonDate->format('m'),
+                'label' => $carbonDate->format('F'),
+            ];
+        })->unique()->toArray();
+
+        $statuses = User::distinct('status')->pluck('status')->toArray();
+
+        $query = SalaryMonth::with('salary_year');
+
+        $selectedYear = trim(request()->input('filter_year', ''));
+        $selectedMonth = trim(request()->input('filter_month', ''));
+        $selectedStatus = trim(request()->input('filter_status', ''));
+
+        $selectedYear = (int) $selectedYear;
+        $selectedMonth = (int) $selectedMonth;
+
+        $subMonth = Carbon::now()->subMonth()->format('m');
+        $subMonthNd = Carbon::now()->subMonth(2)->format('m');
+
+        if ($selectedYear == null && $selectedMonth == null && $selectedStatus == null) {
+            $data = DB::table('salary_months')
+                ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                ->join('users', 'users.nik', '=', 'salary_years.nik')
+                ->join('grade', 'users.grade', '=', 'grade.name_grade')
+                ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date', 'salary_months.id as salary_month_id')
+                ->whereIn('users.status', ['Manager', 'Staff', 'Monthly', 'Contract BSKP'])
+                ->where('users.active', 'yes')
+                ->where(function($query) use ($subMonth, $subMonthNd) {
+                    $query->whereMonth('salary_months.date', $subMonth)
+                    ->orWhereMonth('salary_months.date', $subMonthNd);
+                })
+                ->get();
+        } else {
+            if ($selectedStatus == 'All Status') {
+                $data = DB::table('salary_months')
+                    ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                    ->join('grade', 'grade.id', '=', 'salary_years.id_salary_grade')
+                    ->join('users', 'users.nik', '=', 'salary_years.nik')
+                    ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date', 'salary_months.id as salary_month_id')
+                    ->whereYear('salary_months.date', $selectedYear)
+                    ->whereMonth('salary_months.date', $selectedMonth)
+                    ->get();
+            } else {
+                $data = DB::table('salary_months')
+                    ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                    ->join('grade', 'grade.id', '=', 'salary_years.id_salary_grade')
+                    ->join('users', 'users.nik', '=', 'salary_years.nik')
+                    ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date', 'salary_months.id as salary_month_id')
+                    ->where('users.status', $selectedStatus)
+                    ->whereYear('salary_months.date', $selectedYear)
+                    ->whereMonth('salary_months.date', $selectedMonth)
+                    ->get();
+            }
+        }
+
+        $totalAbility = $data->sum('ability');
+        $totalFungtionalAlw = $data->sum('fungtional_alw');
+        $totalFamilyAlw = $data->sum('family_alw');
+        $totalTransportAlw = $data->sum('transport_alw');
+        $totalTelephoneAlw = $data->sum('telephone_alw');
+        $totalSkillAlw = $data->sum('skill_alw');
+        $totalAdjustment = $data->sum('adjustment');
+        $totalBpjs = $data->sum('bpjs');
+        $totalJamsostek = $data->sum('jamsostek');
+
+        $totalHourCall = $data->sum('hour_call');
+        $totalTotalOT = $data->sum('total_overtime');
+        $totalThr = $data->sum('thr');
+        $totalBonus = $data->sum('bonus');
+        $totalIncentive = $data->sum('incentive');
+        $totalUnion = $data->sum('union');
+        $totalAbsent = $data->sum('absent');
+        $totalElectricity = $data->sum('electricity');
+        $totalCooperative = $data->sum('cooperative');
+        $totalPinjaman = $data->sum('pinjaman');
+        $totalOther = $data->sum('other');
+        $totalTotalded = $data->sum('total_deduction');
+        $totalNetsalary = $data->sum('net_salary');
+
+        $totalRateSalary = $data->sum(function ($data) {
+            return $data->rate_salary;
+        });
+
+        return view('overtime.print-index', compact(
+            'title',
+            'statuses',
+            'years',
+            'months',
+            'salary_months',
+            'selectedStatus',
+            'selectedYear',
+            'selectedMonth',
+            'data',
+            'totalFamilyAlw',
+            'totalAbility',
+            'totalFungtionalAlw',
+            'totalTransportAlw',
+            'totalTelephoneAlw',
+            'totalSkillAlw',
+            'totalAdjustment',
+            'totalBpjs',
+            'totalJamsostek',
+            'totalRateSalary',
+            'totalHourCall',
+            'totalTotalOT',
+            'totalThr',
+            'totalBonus',
+            'totalIncentive',
+            'totalUnion',
+            'totalAbsent',
+            'totalElectricity',
+            'totalCooperative',
+            'totalPinjaman',
+            'totalOther',
+            'totalTotalded',
+            'totalNetsalary',
+        ));
+    }
 }

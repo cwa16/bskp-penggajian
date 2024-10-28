@@ -226,7 +226,7 @@ class OvertimeController extends Controller
                 'users.jabatan',
                 'users.overtime_limit',
                 'overtime_approveds.overtime_date',
-                'overtime_approveds.overtime_ori',
+                'overtime_approveds.overtime_adj',
                 'overtime_approveds.hour_call',
                 'salary_years.ability',
                 'grade.rate_salary',
