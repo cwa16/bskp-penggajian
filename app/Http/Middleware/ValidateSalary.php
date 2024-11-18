@@ -27,8 +27,14 @@ class ValidateSalary
             }
 
             $payload = JWTAuth::setToken($token)->getPayload();
-            $request->merge(['roles' => $payload['roles']]);
-            session(['roles' => $payload['roles']]);
+
+            $roles = collect($payload['roles'])->pluck('role')->toArray();
+
+            $request->merge(['roles' => $roles]);
+            session(['roles' => $roles]);
+
+            // $request->merge(['roles' => $payload['roles']]);
+            // session(['roles' => $payload['roles']]);
 
         } catch (JWTException $e) {
             return response()->json(['error' => 'Token invalid'], 401);

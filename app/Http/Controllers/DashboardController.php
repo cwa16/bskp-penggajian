@@ -18,11 +18,26 @@ class DashboardController extends Controller
 
         // dd($roles);
 
-        $roleNames = array_map(function($role) {
-            return $role['role'];
-        }, $roles);
+        // $roleNames = array_map(function($role) {
+        //     return $role['role'];
+        // }, $roles);
 
-        $request->session()->put('roles', $roleNames);
+        // Cek apakah $roles adalah array
+        //     if (is_array($roles)) {
+        //         $roleNames = array_map(function($role) {
+        //             return is_array($role) && isset($role['role']) ? $role['role'] : null;
+        //         }, $roles);
+
+        //         $roleNames = array_filter($roleNames);
+        //     } else {
+        //         $roleNames = [];
+        // }
+
+        $request->session()->put('roles', $roles);
+        // dd(session('roles'));
+        // $request->session()->put('roles', $roleNames);
+
+        // dd($roleNames, session('roles'));
         // $statuses = User::select('status')->where('status', 'Manager')->groupBy('status')->pluck('status')->count();
         $managerCount = User::where('status', 'Manager')->count();
         $staffCount = User::where('status', 'Staff')->count();
@@ -39,7 +54,7 @@ class DashboardController extends Controller
             'regularCount' => $regularCount,
             'contractBskpCount' => $contractBskpCount,
             'contractFlCount' => $contractFlCount,
-            'roles' => $roleNames
+            'roles' => $roles
         ]);
     }
 

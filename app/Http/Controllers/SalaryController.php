@@ -602,7 +602,8 @@ class SalaryController extends Controller
             )
             ->whereYear('salary_months.date', $year)
             ->whereMonth('salary_months.date', $month)
-            ->orderBy('grade.name_grade', 'DESC')
+            ->where('users.status', 'Monthly')
+            ->orderBy('users.name', 'ASC')
             ->orderBy('users.name')
             ->get();
 
