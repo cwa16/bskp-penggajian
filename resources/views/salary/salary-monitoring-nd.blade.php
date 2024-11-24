@@ -81,6 +81,15 @@
                                                     {{ number_format($statuses['Manager']['average_salary'] ?? 0, 0, ',', '.') }}
                                                 </td>
                                                 <td class="text-center">
+                                                    <input type="hidden" name="month" value="{{ $month }}">
+                                                    <input type="hidden" name="status" value="Manager">
+                                                    {{-- <input type="hidden" name="is_checked_1" value="0"> --}}
+                                                    <!-- Default value -->
+                                                    {{-- <input type="checkbox" name="is_checked_1" value="1"
+                                                        onchange="this.form.submit()"> --}}
+                                                    {{-- <input type="checkbox" name="approval_1[{{ $month }}]"
+                                                        class="approval-check" id="approval1-{{ $month }}"
+                                                        onchange="this.form.submit()"> --}}
                                                     <input type="checkbox" name="approval_1" class="approval-check"
                                                         id="approval1-{{ $month }}">
                                                 </td>

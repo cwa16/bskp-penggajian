@@ -124,6 +124,7 @@ Route::post('/salary/print-multiple', [SalaryController::class, 'printMultiple']
 
 // Print Overtime Individual Data
 Route::get('/print-overtime-index', [SalaryController::class, 'overtime_print'])->name('print-overtime-index');
+Route::get('/print-overtime-pdf/{id}', [SalaryController::class, 'overtime_pdf'])->name('print-overtime-pdf');
 
 // Send Salary Data
 Route::post('/send-whatsapp-checked', [SalaryController::class, 'send_checked'])->name('send-whatsapp-checked');

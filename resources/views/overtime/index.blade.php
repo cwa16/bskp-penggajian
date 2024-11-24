@@ -23,39 +23,39 @@
                         <div class="card-body p-3 pb-2">
                             <div class="row">
                                 <div class="col-7">
-                                    <table style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse;">
-                                        <thead style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse;">
-                                            <tr style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse;">
+                                    <table style="border: 1px solid rgb(254, 254, 254); border-collapse: collapse;">
+                                        <thead style="border: 1px solid rgb(254, 254, 254); border-collapse: collapse;">
+                                            <tr style="border: 1px solid rgb(254, 254, 254); border-collapse: collapse;">
                                                 <th
-                                                    style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse; padding: 5px;">
+                                                    style="border: 1px solid rgb(254, 254, 254); border-collapse: collapse; padding: 3px;">
                                                     Group</th>
                                                 <th
-                                                    style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse;  padding: 5px;">
+                                                    style="border: 1px solid rgb(254, 254, 254); border-collapse: collapse;  padding: 3px;">
                                                     : </th>
                                                 <th
-                                                    style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse; padding: 5px;">
+                                                    style="border: 1px solid rgb(254, 254, 254); border-collapse: collapse; padding: 3px;">
                                                 </th>
                                             </tr>
                                             <tr>
                                                 <th
-                                                    style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse; padding: 5px;">
+                                                    style="border: 1px solid rgb(254, 254, 254); border-collapse: collapse; padding: 3px;">
                                                     Date</th>
                                                 <th
-                                                    style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse;  padding: 5px;">
+                                                    style="border: 1px solid rgb(254, 254, 254); border-collapse: collapse;  padding: 3px;">
                                                     : </th>
                                                 <th
-                                                    style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse; padding: 5px;">
+                                                    style="border: 1px solid rgb(254, 254, 254); border-collapse: collapse; padding: 3px;">
                                                     {{ \Carbon\Carbon::parse($dateYesterday)->format('l, d-m-Y') }}</th>
                                             </tr>
                                             <tr>
                                                 <th
-                                                    style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse; padding: 5px;">
+                                                    style="border: 1px solid rgb(254, 254, 254); border-collapse: collapse; padding: 3px;">
                                                     Dept</th>
                                                 <th
-                                                    style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse; padding: 5px;">
+                                                    style="border: 1px solid rgb(254, 254, 254); border-collapse: collapse; padding: 3px;">
                                                     : </th>
                                                 <th
-                                                    style="border: 1px solid rgb(136, 130, 130); border-collapse: collapse; padding: 5px;">
+                                                    style="border: 1px solid rgb(254, 254, 254); border-collapse: collapse; padding: 3px;">
                                                 </th>
                                             </tr>
                                         </thead>
