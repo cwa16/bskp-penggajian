@@ -1626,15 +1626,8 @@ class SalaryController extends Controller
     {
         $title = 'Overtime Individual';
 
-        // $data = DB::table('salary_months')
-        //     ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-        //     ->join('users', 'users.nik', '=', 'salary_years.nik')
-        //     ->join('grade', 'users.grade', '=', 'grade.name_grade')
-        //     ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date', 'salary_months.id as salary_month_id')
-        //     ->get();
-
-            $month = 10;
-            $year = 2024;
+            $month = Carbon::now()->month;
+            $year = Carbon::now()->year;
 
             $data = DB::table('overtime_approveds')
             ->join('users', 'users.nik', '=', 'overtime_approveds.nik')
@@ -1670,10 +1663,6 @@ class SalaryController extends Controller
             )
             ->get();
 
-            // dd($data);
-
-            // dd($month, $year, $data);
-
         $salary_months = SalaryMonth::all();
 
         $years = SalaryMonth::distinct('date')->pluck('date')->map(function ($date) {
@@ -1701,7 +1690,9 @@ class SalaryController extends Controller
         $subMonth = Carbon::now()->subMonth()->format('m');
         $subMonthNd = Carbon::now()->subMonth(2)->format('m');
 
-        if ($selectedYear == null && $selectedMonth == null && $selectedStatus == null) {
+        // dd($selectedYear, $selectedMonth);
+
+        if ($selectedStatus == null) {
             $data = DB::table('overtime_approveds')
             ->join('users', 'users.nik', '=', 'overtime_approveds.nik')
             ->join('salary_years', 'salary_years.nik', '=', 'overtime_approveds.nik')
@@ -1720,8 +1711,8 @@ class SalaryController extends Controller
                 'grade.rate_salary',
                 'salary_years.id as salary_years_id'
             )
-            ->whereMonth('overtime_approveds.overtime_date', $month)
-            ->whereYear('overtime_approveds.overtime_date', $year)
+            ->whereMonth('overtime_approveds.overtime_date', $selectedMonth)
+            ->whereYear('overtime_approveds.overtime_date', $selectedYear)
             ->groupBy(
                 'users.nik',
                 'users.name',
@@ -1817,12 +1808,6 @@ class SalaryController extends Controller
 
     public function overtime_pdf($id)
     {
-        // dd($id);
-        // $title = 'Overtime Individual';
-        // return view('overtime.print-pdf', [
-        //     'title' => $title
-        // ]);
-
         $sal = DB::table('overtime_approveds')
             ->join('users', 'users.nik', '=', 'overtime_approveds.nik')
             ->join('salary_years', 'salary_years.nik', '=', 'overtime_approveds.nik')
@@ -1844,48 +1829,42 @@ class SalaryController extends Controller
                 'grade.rate_salary',
                 'salary_years.id as salary_years_id'
             )
-            // ->whereMonth('overtime_approveds.overtime_date', $month)
-            // ->whereYear('overtime_approveds.overtime_date', $year)
             ->where('overtime_approveds.nik', $id)
             ->first();
 
-        // $sal = DB::table('salary_months')
-        //     ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-        //     ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
-        //     ->join('users', 'users.nik', '=', 'salary_years.nik')
-        //     ->select(
-        //         'users.nik as Emp_Code',
-        //         'users.name as Nama',
-        //         'users.status as Status',
-        //         'users.dept as Dept',
-        //         'users.jabatan as Jabatan',
-        //         'users.start_work_user',
-        //         'grade.name_grade as Grade',
-        //         'grade.rate_salary',
-        //         'salary_years.*',
-        //         'salary_months.*',
-        //         'salary_months.absent',
-        //         'salary_months.electricity',
-        //         'salary_months.cooperative',
-        //         'salary_months.pinjaman',
-        //         'salary_months.other',
-        //         'salary_months.date as salary_months_date',
-        //         'salary_months.total_deduction',
-        //         'salary_months.net_salary'
-        //     )
-        //     ->where('salary_months.id', $id)
-        //     ->first();
+            $data = DB::table('overtime_approveds')
+            ->join('users', 'users.nik', '=', 'overtime_approveds.nik')
+            ->join('salary_years', 'salary_years.nik', '=', 'overtime_approveds.nik')
+            ->join('grade', 'grade.id', '=', 'salary_years.id_salary_grade')
+            ->select(
+                'users.nik',
+                'users.name',
+                'users.dept',
+                'users.status',
+                'users.jabatan',
+                'users.grade',
+                'users.overtime_limit',
+                'overtime_approveds.id as overtime_approveds_id',
+                'overtime_approveds.overtime_date',
+                'overtime_approveds.overtime_ori',
+                'overtime_approveds.overtime_adj',
+                'overtime_approveds.hour_call',
+                'salary_years.ability',
+                'grade.rate_salary',
+                'salary_years.id as salary_years_id'
+            )
+            ->where('overtime_approveds.nik', $id)
+            ->get();
 
+            // dd($sal->overtime_date);
 
             $date = date('My', strtotime($sal->overtime_date));
-
-            // dd(vars: $sal->salary_month_date);
 
         if (!$sal) {
             dd("Salary with ID $id not found.");
         }
 
-        $pdf = PDF::loadView('overtime.print-pdf', compact('sal'));
+        $pdf = PDF::loadView('overtime.print-pdf', compact('sal', 'data'));
         return $pdf->setPaper('a4', 'landscape')->stream('SAL_' . $date . '_' . $sal->nik . '_' . $sal->name . '.pdf');
     }
 }

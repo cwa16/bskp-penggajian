@@ -101,12 +101,14 @@
             <th>Overtime (Original)</th>
             <th>Overtime (Adjustment)</th>
         </tr>
-        <tr>
-            <td>1</td>
-            <td>{{ date('d-m-Y', strtotime($sal->overtime_date)) }}</td>
-            <td>{{ $sal->overtime_ori }} h</td>
-            <td>{{ $sal->overtime_adj }} h</td>
-        </tr>
+        @foreach ($data as $index => $ot)
+            <tr>
+                <td>{{ $index + 1 }}</td>
+                <td>{{ date('d-m-Y', strtotime($ot->overtime_date)) }}</td>
+                <td>{{ $ot->overtime_ori }} h</td>
+                <td>{{ $ot->overtime_adj }} h</td>
+            </tr>
+        @endforeach
     </table>
 </body>
 
