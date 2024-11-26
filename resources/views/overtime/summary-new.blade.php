@@ -122,7 +122,7 @@
                                             @php
                                                 $firstRecord = $records->first();
                                                 $totalOvertime = $records->sum('hour_call');
-                                                $totalOvertimeOri = $records->sum('overtime_adj');
+                                                $totalOvertimeOri = $records->sum('overtime_ori');
                                                 $rateSalary = $firstRecord->rate_salary;
                                                 $ability = $firstRecord->ability;
                                                 $otlimit = $firstRecord->overtime_limit;
@@ -148,7 +148,7 @@
                                                     </td>
                                                 @endforeach
 
-                                                <td class="text-center p-0">10</td>
+                                                <td class="text-center p-0">{{ $firstRecord->overtime_limit }}</td>
 
                                                 <td class="text-center p-0">{{ $totalOvertimeOri }}</td>
 

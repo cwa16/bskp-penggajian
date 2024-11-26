@@ -63,15 +63,16 @@
                         <div class="table-responsive p-0">
                             <form id="printForm" action="{{ route('salary.printMultiple') }}" method="POST">
                                 @csrf
-                                <button class="btn btn-icon btn-3 btn-primary btn-sm">
+                                {{-- <button class="btn btn-icon btn-3 btn-primary btn-sm">
                                     <span class="btn-inner--icon"><i class="material-icons">print</i></span>
                                     <span class="btn-inner--text">Print Selected</span>
-                                </button>
+                                </button> --}}
                                 <table
-                                    class="table table-sm table-striped table-hover dtTable300 align-items-center small-tbl compact"
+                                    class="table table-sm table-striped table-hover dtTable2 align-items-center small-tbl compact"
                                     id="example">
                                     <thead class="bg-thead">
                                         <tr>
+                                            <th rowspan="2">No</th>
                                             <th colspan="6" class="text-center p-0">Employee Identity</th>
                                             <th colspan="2" class="text-center p-0">Overtime Components</th>
                                             <th rowspan="2" class="text-center">Action</th>
@@ -90,7 +91,8 @@
                                     <tbody>
                                         @foreach ($data as $key => $sal)
                                             <tr>
-                                                <td class="text-nowrap text-end">{{ $sal->nik }}</td>
+                                                <td class="text-center">{{ $key + 1 }}</td>
+                                                <td class="text-nowrap">{{ $sal->nik }}</td>
                                                 <td>{{ $sal->name }}
                                                 </td>
                                                 <td>{{ $sal->status }}</td>
@@ -99,10 +101,10 @@
                                                 <td>{{ $sal->grade }}</td>
 
                                                 <td class="text-end">
-                                                    {{ $sal->total_overtime_ori != 0 ? number_format($sal->total_overtime_ori, 0, ',', '.') : '-' }}
+                                                    {{ $sal->total_overtime_ori }} h
                                                 </td>
                                                 <td class="text-end">
-                                                    {{ $sal->total_overtime_adj != 0 ? number_format($sal->total_overtime_adj, 0, ',', '.') : '-' }}
+                                                    {{ $sal->total_overtime_adj }} h
                                                 </td>
 
                                                 <td class="text-center m-0 p-0">
