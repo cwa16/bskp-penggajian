@@ -21,18 +21,19 @@
                     </div>
                     <div class="card-body p-3 pb-2">
                         <div class="row">
-                            <div class="col-9">
+                            <div class="col-6">
                                 <table style="border: 3px solid rgb(255, 255, 255); border-collapse: collapse;">
                                     <thead style="border: 3px solid rgb(255, 255, 255); border-collapse: collapse;">
                                         <tr style="border: 3px solid rgb(255, 255, 255); border-collapse: collapse;">
                                             <th
                                                 style="border: 3px solid rgb(255, 255, 255); border-collapse: collapse; padding: 3px;">
-                                                Group</th>
+                                                Dept</th>
                                             <th
                                                 style="border: 3px solid rgb(255, 255, 255); border-collapse: collapse;  padding: 3px;">
                                                 : </th>
                                             <th
                                                 style="border: 3px solid rgb(255, 255, 255); border-collapse: collapse; padding: 3px;">
+                                                {{ $deptInput ?? '-' }}
                                             </th>
                                         </tr>
                                         <tr>
@@ -49,20 +50,43 @@
                                         <tr>
                                             <th
                                                 style="border: 3px solid rgb(255, 255, 255); border-collapse: collapse; padding: 3px;">
-                                                Dept</th>
+                                                Status</th>
                                             <th
                                                 style="border: 3px solid rgb(255, 255, 255); border-collapse: collapse; padding: 3px;">
                                                 : </th>
                                             <th
                                                 style="border: 3px solid rgb(255, 255, 255); border-collapse: collapse; padding: 3px;">
+                                                {{ $statusInput ?? '-' }}
                                             </th>
                                         </tr>
                                     </thead>
                                 </table>
                             </div>
-                            <div class="col-3">
+                            <div class="col-6">
                                 <form action="{{ url('/overtime-summary-index') }}" method="GET">
                                     <div class="row">
+                                        <div class="col pe-0">
+                                            <select name="deptInput" id="" class="form-select form-select-sm">
+                                                <option selected disabled>Pilih Dept</option>
+                                                <option value="All">All</option>
+                                                @foreach ($getEmployeesDept as $dept)
+                                                    <option value="{{ $dept }}">
+                                                        {{ $dept }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col pe-0">
+                                            <select name="status" id="" class="form-select form-select-sm">
+                                                <option selected disabled>Pilih Status</option>
+                                                <option value="All">All</option>
+                                                <option value="Manager">Manager</option>
+                                                <option value="Staff">Staff</option>
+                                                <option value="Monthly">Monthly</option>
+                                                <option value="Regular">Regular</option>
+                                                <option value="Contract BSKP">Contract BSKP</option>
+                                                <option value="Contract FL">Contract FL</option>
+                                            </select>
+                                        </div>
                                         <div class="col pe-0">
                                             <input type="month" name="month" class="form-select form-select-sm"
                                                 value="{{ request('month') }}">

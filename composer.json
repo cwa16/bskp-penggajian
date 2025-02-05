@@ -12,11 +12,14 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "maatwebsite/excel": "^3.1",
+        "php-flasher/flasher-laravel": "^1.15",
+        "php-flasher/flasher-toastr-laravel": "^1.15",
         "symfony/console": "^6.4",
         "twilio/sdk": "^8.2",
         "tymon/jwt-auth": "^2.1",
         "waapi/waapi-laravel-sdk": "^1.0",
-        "yajra/laravel-datatables-oracle": "^10.11"
+        "yajra/laravel-datatables-oracle": "^10.11",
+        "yoeunes/toastr": "^2.3"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

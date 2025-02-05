@@ -13,6 +13,13 @@
                         <div class="row">
                             <div class="col-5 justify-content-end">
                                 <form action="{{ url('/salary') }}" method="GET">
+                                    @csrf
+                                    <input type="hidden" name="nik" id="" value="{{ $nik }}">
+                                    <input type="hidden" name="name" id="" value="{{ $name }}">
+                                    <input type="hidden" name="dept" id="" value="{{ $dept }}">
+                                    <input type="hidden" name="jabatan" id="" value="{{ $jabatan }}">
+                                    <input type="hidden" name="role" id="" value="{{ $role }}">
+                                    <input type="hidden" name="token" id="" value="{{ $jwt_token }}">
                                     <div class="row">
                                         <div class="col pe-0">
                                             <select class="form-select form-select-sm" name="filter_status">
@@ -61,39 +68,25 @@
                                         <div class="col-auto">
                                             <button type="submit" class="btn btn-primary btn-sm">Filter</button>
                                         </div>
+                                        <div class="col-auto">
+                                            <button class="btn btn-success btn-sm" id="btn-d">Export</button>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
-                            {{-- <div class="col-7">
-                            </div> --}}
                         </div>
                         <div class="table-responsive p-0">
                             <form id="printForm" method="POST" action="">
                                 @csrf
-                                {{-- <button type="submit" class="btn btn-icon btn-3 btn-primary btn-sm" name="action"
-                                    value="check" formaction="{{ route('salary-check') }}">
-                                    <span class="btn-inner--icon"><i class="material-icons">check</i></span>
-                                    <span class="btn-inner--text">Check Selected</span>
-                                </button>
-
-                                <button type="submit" class="btn btn-icon btn-3 btn-success btn-sm" name="action"
-                                    value="approved" formaction="{{ route('salary-approved') }}">
-                                    <span class="btn-inner--icon"><i class="material-icons">thumb_up</i></span>
-                                    <span class="btn-inner--text">Approved Selected</span>
-                                </button> --}}
                                 <table
                                     class="table table-sm table-striped table-hover dtTable100 align-items-center small-tbl compact"
                                     id="example">
                                     <thead class="bg-thead">
                                         <tr>
-                                            {{-- <th rowspan="2" class="text-center"
-                                                style="background-color: #1A73E8;color: white; p-0">
-                                                <input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)">
-                                            </th> --}}
                                             <th colspan="7" class="text-center p-0">Employee Identity</th>
                                             <th colspan="13" class="text-center p-0">Salary Components</th>
                                             <th rowspan="2" class="text-center">Bruto Salary</th>
-                                            <th colspan="8" class="text-center p-0">Deduction</th>
+                                            <th colspan="11" class="text-center p-0">Deduction</th>
                                             <th rowspan="2" class="text-center">Total Deduction</th>
                                             <th rowspan="2" class="text-center">Nett Salary</th>
                                             <th rowspan="2" class="text-center">Allocation</th>
@@ -131,6 +124,9 @@
                                             <th>Absent</th>
                                             <th>Electricity</th>
                                             <th>Cooperative</th>
+                                            <th>Internet</th>
+                                            <th>Gas</th>
+                                            <th>Water</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -170,7 +166,8 @@
                                                     {{ $sal->fungtional_alw != 0 ? number_format($sal->fungtional_alw, 0, ',', '.') : '-' }}
                                                 </td>
                                                 <td class="text-end">
-                                                    <input type="hidden" name="skill_alw[]" value="{{ $sal->skill_alw }}">
+                                                    <input type="hidden" name="skill_alw[]"
+                                                        value="{{ $sal->skill_alw }}">
                                                     {{ $sal->skill_alw != 0 ? number_format($sal->skill_alw, 0, ',', '.') : '-' }}
                                                 </td>
                                                 <td class="text-end">
@@ -256,6 +253,19 @@
                                                     <input type="hidden" name="cooperative[]"
                                                         value="{{ $sal->cooperative }}">
                                                     {{ $sal->cooperative != 0 ? number_format($sal->cooperative, 0, ',', '.') : '-' }}
+                                                </td>
+                                                <td class="text-end">
+                                                    <input type="hidden" name="internet[]"
+                                                        value="{{ $sal->internet }}">
+                                                    {{ $sal->internet != 0 ? number_format($sal->internet, 0, ',', '.') : '-' }}
+                                                </td>
+                                                <td class="text-end">
+                                                    <input type="hidden" name="gas[]" value="{{ $sal->gas }}">
+                                                    {{ $sal->gas != 0 ? number_format($sal->gas, 0, ',', '.') : '-' }}
+                                                </td>
+                                                <td class="text-end">
+                                                    <input type="hidden" name="water[]" value="{{ $sal->water }}">
+                                                    {{ $sal->water != 0 ? number_format($sal->water, 0, ',', '.') : '-' }}
                                                 </td>
                                                 <td class="text-end">
                                                     <input type="hidden" name="total_deduction[]"
@@ -356,6 +366,12 @@
                                             </td>
                                             <td class="text-end">{{ number_format($totalCooperative, 0, ',', '.') }}
                                             </td>
+                                            <td class="text-end">{{ number_format($totalInternet, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-end">{{ number_format($totalGas, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-end">{{ number_format($totalWater, 0, ',', '.') }}
+                                            </td>
                                             <td class="text-end">{{ number_format($totalTotalded, 0, ',', '.') }}</td>
                                             <td class="text-end">{{ number_format($totalNetsalary, 0, ',', '.') }}
                                             </td>
@@ -398,6 +414,20 @@
                                                 </select>
                                             </div>
                                         </div>
+
+                                        <div class="col">
+                                            <div class="row">
+                                                <label for="year" class="col pt-1">Year:</label>
+                                                <select name="year" id="year"
+                                                    class="col form-select form-select-sm">
+                                                    @foreach ($years as $year)
+                                                        <option value="{{ $year }}">{{ $year }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
                                         <div class="col">
                                             <div class="row">
                                                 <label for="month" class="col pt-1">Month:</label>
@@ -411,6 +441,7 @@
                                                 </select>
                                             </div>
                                         </div>
+
                                         <div class="col-auto">
                                             <button type="submit" class="btn btn-warning btn-sm"><span
                                                     class="btn-inner--icon"><i class="material-icons">print</i></span>

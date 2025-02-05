@@ -110,12 +110,14 @@
                             <a href="./pages/sign-in.html" class="nav-link text-body p-0 font-weight-bold"
                                 id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa fa-user me-sm-1"></i>
-                                <span class="d-sm-inline d-none">Sign In</span>
+                                <span class="d-sm-inline d-none">{{ $name }}</span>
+                                {{-- <span class="d-sm-inline d-none">Admin</span> --}}
                             </a>
 
                             <ul class="dropdown-menu  dropdown-menu-end  px-2 " aria-labelledby="dropdownMenuButton">
                                 <li>
-                                    <a class="dropdown-item border-radius-md" href="javascript:;">
+                                    <a class="dropdown-item border-radius-md"
+                                        href="{{ 'http://127.0.0.1:8080/dashboard?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwODAvbG9naW4tb3RwIiwiaWF0IjoxNzM4MDMxMTUxLCJleHAiOjE3MzgwMzQ3NTEsIm5iZiI6MTczODAzMTE1MSwianRpIjoiUGx6YU9lSDNnb2VkdnpaWiIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3Iiwicm9sZXMiOlt7ImlkIjoxLCJ1c2VyX2lkIjoiMSIsImFwcF9pZCI6MjEsInJvbGUiOiJBZG1pbiIsImNyZWF0ZWRfYXQiOiIyMDI0LTEwLTIwVDE3OjQxOjU3LjAwMDAwMFoiLCJ1cGRhdGVkX2F0IjoiMjAyNC0xMC0yMVQxNjozODoxMi4wMDAwMDBaIiwidXNlciI6eyJpZCI6MSwibmlrIjoiMjIzLTAxNSIsIm5hbWUiOiJBaG1hZCBBcnl5YWRpIFNldGlhd2FuIiwic3RhdHVzIjoiTW9udGhseSIsImRlcHQiOiJJVCIsImphYmF0YW4iOiJTcHYiLCJlbWFpbCI6Iml0LmRldkBic2twLmNvLmlkIiwiZW1haWxfdmVyaWZpZWRfYXQiOm51bGwsImNyZWF0ZWRfYXQiOiIyMDI0LTEwLTE1VDA1OjM4OjIxLjAwMDAwMFoiLCJ1cGRhdGVkX2F0IjoiMjAyNC0xMC0xOFQxMToxODowNy4wMDAwMDBaIn19LHsiaWQiOjIsInVzZXJfaWQiOiIxIiwiYXBwX2lkIjoxMCwicm9sZSI6IkFkbWluIiwiY3JlYXRlZF9hdCI6IjIwMjQtMTAtMjFUMTY6NDA6MDcuMDAwMDAwWiIsInVwZGF0ZWRfYXQiOiIyMDI0LTEwLTIxVDE2OjQwOjA3LjAwMDAwMFoiLCJ1c2VyIjp7ImlkIjoxLCJuaWsiOiIyMjMtMDE1IiwibmFtZSI6IkFobWFkIEFyeXlhZGkgU2V0aWF3YW4iLCJzdGF0dXMiOiJNb250aGx5IiwiZGVwdCI6IklUIiwiamFiYXRhbiI6IlNwdiIsImVtYWlsIjoiaXQuZGV2QGJza3AuY28uaWQiLCJlbWFpbF92ZXJpZmllZF9hdCI6bnVsbCwiY3JlYXRlZF9hdCI6IjIwMjQtMTAtMTVUMDU6Mzg6MjEuMDAwMDAwWiIsInVwZGF0ZWRfYXQiOiIyMDI0LTEwLTE4VDExOjE4OjA3LjAwMDAwMFoifX0seyJpZCI6MywidXNlcl9pZCI6IjEiLCJhcHBfaWQiOjksInJvbGUiOiJBZG1pbiIsImNyZWF0ZWRfYXQiOiIyMDI0LTEwLTIxVDE2OjQwOjM5LjAwMDAwMFoiLCJ1cGRhdGVkX2F0IjoiMjAyNC0xMC0yMVQxNjo0MDozOS4wMDAwMDBaIiwidXNlciI6eyJpZCI6MSwibmlrIjoiMjIzLTAxNSIsIm5hbWUiOiJBaG1hZCBBcnl5YWRpIFNldGlhd2FuIiwic3RhdHVzIjoiTW9udGhseSIsImRlcHQiOiJJVCIsImphYmF0YW4iOiJTcHYiLCJlbWFpbCI6Iml0LmRldkBic2twLmNvLmlkIiwiZW1haWxfdmVyaWZpZWRfYXQiOm51bGwsImNyZWF0ZWRfYXQiOiIyMDI0LTEwLTE1VDA1OjM4OjIxLjAwMDAwMFoiLCJ1cGRhdGVkX2F0IjoiMjAyNC0xMC0xOFQxMToxODowNy4wMDAwMDBaIn19XX0.d2TKyRPxaprrHnGg5lhaT7TnsPmcoxv9tIlRM7uUDk0&user=1' }}">
                                         <div class="d-flex text-danger">
                                             <div class="pe-2">
                                                 <i class="material-icons opacity-10">logout</i>

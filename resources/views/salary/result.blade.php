@@ -20,12 +20,12 @@
                                                 <tr>
                                                     <th width="5px">NIK</th>
                                                     <th width="1px"> : </th>
-                                                    <th>{{ $name->nik }}</th>
+                                                    <th>{{ $nameEmp->nik }}</th>
                                                 </tr>
                                                 <tr>
                                                     <th>Name</th>
                                                     <th> : </th>
-                                                    <th>{{ $name->name }}</th>
+                                                    <th>{{ $nameEmp->name }}</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -84,11 +84,11 @@
                                         <tr>
                                             <td class="text-nowrap text-end">{{ $yearFilter }}</td>
                                             <td class="text-nowrap text-end">
-                                                {{ date('F', strtotime($sal->date)) }}</td>
+                                                {{ date('F', strtotime($sal->salary_month_date)) }}</td>
                                             <td>{{ $sal->status }}</td>
                                             <td>{{ $sal->dept }}</td>
                                             <td>{{ $sal->jabatan }}</td>
-                                            <td>{{ $sal->salary_grade }}</td>
+                                            <td>{{ $sal->name_grade }}</td>
                                             <td class="text-end">
                                                 {{ $sal->rate_salary != 0 ? number_format($sal->rate_salary, 0, ',', '.') : '-' }}
                                             </td>
@@ -162,11 +162,89 @@
                                                 {{ $sal->net_salary != 0 ? number_format($sal->net_salary, 0, ',', '.') : '-' }}
                                             </td>
 
-                                            <td class="text-end">{{ date('d M Y', strtotime($sal->date)) }}
+                                            <td class="text-end">{{ date('d M Y', strtotime($sal->salary_month_date)) }}
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="6" style="background-color: #1A73E8;"></td>
+                                        <td class="text-end">
+                                            {{ $rateSalaryTotal != 0 ? number_format($rateSalaryTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $abilityTotal != 0 ? number_format($abilityTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $fungtionalAlwTotal != 0 ? number_format($fungtionalAlwTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $familyAlwTotal != 0 ? number_format($familyAlwTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $transportAlwTotal != 0 ? number_format($transportAlwTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $skillAlwTotal != 0 ? number_format($skillAlwTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $telephoneAlwTotal != 0 ? number_format($telephoneAlwTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $totalOvertimeTotal != 0 ? number_format($totalOvertimeTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $thrTotal != 0 ? number_format($thrTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $bonusTotal != 0 ? number_format($bonusTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $incentiveTotal != 0 ? number_format($incentiveTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $adjustmentTotal != 0 ? number_format($adjustmentTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $salaryGrossTotal != 0 ? number_format($salaryGrossTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $brutoSalaryTotal != 0 ? number_format($brutoSalaryTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $bpjsTotal != 0 ? number_format($bpjsTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $jamsostekTotal != 0 ? number_format($jamsostekTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $unionTotal != 0 ? number_format($unionTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $absentTotal != 0 ? number_format($absentTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $electricityTotal != 0 ? number_format($electricityTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $cooperativeTotal != 0 ? number_format($cooperativeTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $pinjamanTotal != 0 ? number_format($pinjamanTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $subTotalDeductionTotal != 0 ? number_format($subTotalDeductionTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $totalDeductionTotal != 0 ? number_format($totalDeductionTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ $brutoSalaryTotal != 0 ? number_format($brutoSalaryTotal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td style="background-color: #1A73E8;"></td>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -179,7 +257,7 @@
         <script>
             $("#btn-d").click(function() {
                 TableToExcel.convert(document.getElementById("example"), {
-                    name: "All Salary Data - {{ $name->name }} - {{ $yearFilter }}.xlsx",
+                    name: "All Salary Data - {{ $nameEmp->name }} - {{ $yearFilter }}.xlsx",
                 });
             });
         </script>

@@ -89,13 +89,11 @@
                                             <th colspan="7" class="text-center p-0">Employee Identity</th>
                                             <th colspan="13" class="text-center p-0">Salary Components</th>
                                             <th rowspan="2" class="text-center">Bruto Salary</th>
-                                            <th colspan="8" class="text-center p-0">Deduction</th>
+                                            <th colspan="11" class="text-center p-0">Deduction</th>
                                             <th rowspan="2" class="text-center">Total Deduction</th>
                                             <th rowspan="2" class="text-center">Nett Salary</th>
                                             <th rowspan="2" class="text-center">Allocation</th>
                                             <th rowspan="2" class="text-center">Date Input</th>
-                                            {{-- <th rowspan="2" class="text-center">Check</th> --}}
-                                            {{-- <th rowspan="2" class="text-center">Approve</th> --}}
                                             <th rowspan="2" class="text-center">Action</th>
                                         </tr>
                                         <tr>
@@ -127,6 +125,9 @@
                                             <th>Absent</th>
                                             <th>Electricity</th>
                                             <th>Cooperative</th>
+                                            <th>Internet</th>
+                                            <th>Gas</th>
+                                            <th>Water</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -213,6 +214,15 @@
                                                     {{ $sal->cooperative != 0 ? number_format($sal->cooperative, 0, ',', '.') : '-' }}
                                                 </td>
                                                 <td class="text-end">
+                                                    {{ $sal->internet != 0 ? number_format($sal->internet, 0, ',', '.') : '-' }}
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $sal->gas != 0 ? number_format($sal->gas, 0, ',', '.') : '-' }}
+                                                </td>
+                                                <td class="text-end">
+                                                    {{ $sal->water != 0 ? number_format($sal->water, 0, ',', '.') : '-' }}
+                                                </td>
+                                                <td class="text-end">
                                                     {{ $sal->total_deduction != 0 ? number_format($sal->total_deduction, 0, ',', '.') : '-' }}
                                                 </td>
                                                 <td class="text-end">
@@ -231,20 +241,6 @@
                                                 <td class="text-end">
                                                     {{ date('d M Y', strtotime($sal->salary_month_date)) }}
                                                 </td>
-                                                {{-- <td class="align-middle text-center text-sm">
-                                                    @if ($sal->is_checked == 1)
-                                                        <span class="badge badge-sm bg-gradient-success">✓
-                                                        @else
-                                                            <span class="badge badge-sm bg-gradient-danger">✗
-                                                    @endif
-                                                </td>
-                                                <td class="align-middle text-center text-sm">
-                                                    @if ($sal->is_approved == 1)
-                                                        <span class="badge badge-sm bg-gradient-success">✓
-                                                        @else
-                                                            <span class="badge badge-sm bg-gradient-danger">✗
-                                                    @endif
-                                                </td> --}}
                                                 <td class="text-center m-0 p-0">
                                                     </button>
                                                     <a href="{{ url('/print-pdf/' . $sal->salary_month_id) }}"
@@ -283,10 +279,12 @@
                                             <td class="text-end">{{ number_format($totalAbsent, 0, ',', '.') }}</td>
                                             <td class="text-end">{{ number_format($totalElectricity, 0, ',', '.') }}</td>
                                             <td class="text-end">{{ number_format($totalCooperative, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($totalInternet, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($totalGas, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($totalWater, 0, ',', '.') }}</td>
                                             <td class="text-end">{{ number_format($totalTotalded, 0, ',', '.') }}</td>
                                             <td class="text-end">{{ number_format($totalNetsalary, 0, ',', '.') }}</td>
-                                            <td class="text-end">0</td>
-                                            <td colspan="2" style="background-color: #1A73E8;color: white;"></td>
+                                            <td colspan="3" style="background-color: #1A73E8;color: white;"></td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -310,33 +308,29 @@
                             </div>
                             <div class="card-body py-2">
                                 <form action="{{ url('/print-all') }}" method="get">
+                                    <input type="hidden" name="token" value="{{ $jwt_token }}">
+                                    <input type="hidden" name="nik" value="{{ $nik }}">
+                                    <input type="hidden" name="name" value="{{ $name }}">
+                                    <input type="hidden" name="jabatan" value="{{ $jabatan }}">
+                                    <input type="hidden" name="dept" value="{{ $dept }}">
+                                    <input type="hidden" name="role" value="{{ $role }}">
                                     @csrf
                                     <div class="row">
-                                        <div class="col">
+                                        <div class="col px-3">
                                             <div class="row">
-                                                <label for="year" class="col pt-1">Year:</label>
-                                                <select name="year" id="year"
+                                                <select name="status" id="status"
                                                     class="col form-select form-select-sm">
-                                                    @foreach ($years as $year)
-                                                        <option value="{{ $year }}">{{ $year }}</option>
-                                                    @endforeach
+                                                    <option value="" selected disabled>Pilih Status</option>
+                                                    <option value="Manager Staff">Manager Staff</option>
+                                                    <option value="Monthly">Monthly</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col">
                                             <div class="row">
-                                                <label for="month" class="col pt-1">Month:</label>
-                                                <select name="month" id="month"
-                                                    class="col form-select form-select-sm">
-                                                    @foreach ($months as $month)
-                                                        <option value="{{ $month['value'] }}">
-                                                            {{ $month['label'] }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
+                                                <input type="month" name="month">
                                             </div>
                                         </div>
-                                        {{-- <input type="text" name="" id=""> --}}
                                         <div class="col-auto">
                                             <button type="submit" class="btn btn-warning btn-sm"><span
                                                     class="btn-inner--icon"><i class="material-icons">print</i></span>
@@ -355,7 +349,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="printAllocation" tabindex="-1" role="dialog" aria-labelledby="modal-form"
+        {{-- <div class="modal fade" id="printAllocation" tabindex="-1" role="dialog" aria-labelledby="modal-form"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -390,6 +384,52 @@
                                                         </option>
                                                     @endforeach
                                                 </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="submit" class="btn btn-warning btn-sm"><span
+                                                    class="btn-inner--icon"><i class="material-icons">print</i></span>
+                                                <span class="btn-inner--text">Print</span></button>
+                                        </div>
+                                        <div class="col-auto ps-0">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary btn-3"
+                                                data-bs-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
+
+        <div class="modal fade" id="printAllocation" tabindex="-1" role="dialog" aria-labelledby="modal-form"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body p-0">
+                        <div class="card card-plain">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Select Year & Month</h5>
+                            </div>
+                            <div class="card-body py-3">
+                                <form action="{{ url('/print-allocation') }}" method="get">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="col px-3">
+                                            <div class="row">
+                                                <select name="status" id="status"
+                                                    class="col form-select form-select-sm">
+                                                    <option value="" selected disabled>Pilih Status</option>
+                                                    <option value="Manager Staff">Manager Staff</option>
+                                                    <option value="Monthly">Monthly</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="row">
+                                                <input type="month" name="month">
                                             </div>
                                         </div>
                                         <div class="col-auto">

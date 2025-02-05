@@ -33,7 +33,7 @@
                                                     <th colspan="6" class="text-center p-0">Employee
                                                         Identity</th>
                                                     <th colspan="5" class="text-center p-0">Salary Components</th>
-                                                    <th colspan="6" class="text-center p-0">Deduction</th>
+                                                    <th colspan="9" class="text-center p-0">Deduction</th>
                                                     {{-- <th rowspan="2" class="text-center">Allocation</th> --}}
                                                     <th rowspan="2" class="text-center">Month / Year</th>
                                                 </tr>
@@ -52,6 +52,9 @@
                                                     <th>Union</th>
                                                     <th>Absent</th>
                                                     <th>Electricity</th>
+                                                    <th>Internet</th>
+                                                    <th>Gas</th>
+                                                    <th>Water</th>
                                                     <th>Cooperative</th>
                                                     <th>Pinjaman</th>
                                                     <th>Other</th>
@@ -193,6 +196,36 @@
                                                                     oninput="formatCurrency(this)"
                                                                     placeholder="Enter the electricity"
                                                                     value="{{ $sm->electricity != 0 ? $sm->electricity : '' }}">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="input-group input-group-outline">
+                                                                <input type="text" class="form-control form-control-sm"
+                                                                    style="width: 120px"
+                                                                    name="internet[{{ $sm->salary_months_id }}]"
+                                                                    oninput="formatCurrency(this)"
+                                                                    placeholder="Enter the koperasi"
+                                                                    value="{{ $sm->internet != 0 ? $sm->internet : '' }}">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="input-group input-group-outline">
+                                                                <input type="text" class="form-control form-control-sm"
+                                                                    style="width: 120px"
+                                                                    name="gas[{{ $sm->salary_months_id }}]"
+                                                                    oninput="formatCurrency(this)"
+                                                                    placeholder="Enter the koperasi"
+                                                                    value="{{ $sm->gas != 0 ? $sm->gas : '' }}">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="input-group input-group-outline">
+                                                                <input type="text" class="form-control form-control-sm"
+                                                                    style="width: 120px"
+                                                                    name="water[{{ $sm->salary_months_id }}]"
+                                                                    oninput="formatCurrency(this)"
+                                                                    placeholder="Enter the koperasi"
+                                                                    value="{{ $sm->water != 0 ? $sm->water : '' }}">
                                                             </div>
                                                         </td>
                                                         <td>

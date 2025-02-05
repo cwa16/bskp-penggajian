@@ -24,7 +24,7 @@
                                 <div class="col">
                                     <div class="table-responsive p-0">
                                         <table
-                                            class="table table-sm align-items-center mb-0 dtTable small-tbl compact stripe">
+                                            class="table table-sm align-items-center mb-0 dtTable2 small-tbl compact stripe">
                                             <thead class="bg-thead">
                                                 <tr>
                                                     <th rowspan="2" class="text-center"
@@ -58,16 +58,16 @@
                                                         <td>{{ $key + 1 }}</td>
                                                         <td class="text-nowrap text-end">{{ $sy->nik }}</td>
                                                         <td>{{ $sy->name }}</td>
-                                                        <td>{{ $sy->name_status }}</td>
-                                                        <td>{{ $sy->name_dept }}</td>
-                                                        <td>{{ $sy->name_job }}</td>
+                                                        <td>{{ $sy->status }}</td>
+                                                        <td>{{ $sy->dept }}</td>
+                                                        <td>{{ $sy->jabatan }}</td>
 
                                                         <td>
                                                             <select name="id_grade[]" id="select-data"
                                                                 class="form-select form-select-sm">
                                                                 @foreach ($grade as $g)
                                                                     <option value="{{ $g->id }}"
-                                                                        {{ $g->name_grade == $sy->name_grade ? 'selected' : '' }}>
+                                                                        {{ $g->name_grade == $sy->grade ? 'selected' : '' }}>
                                                                         {{ $g->name_grade }}</option>
                                                                 @endforeach
                                                             </select>
@@ -81,10 +81,10 @@
                                                             {{-- INPUTAN HIDDEN --}}
                                                             <input type="hidden" name="ids[]"
                                                                 value="{{ $sy->salary_years_id }}">
-                                                            <input type="hidden" name="id_user[]"
-                                                                value="{{ $sy->user_id }}">
+                                                            <input type="hidden" name="emp_code[]"
+                                                                value="{{ $sy->nik }}">
                                                             <input type="hidden" name="id_salary_grade[]"
-                                                                value="{{ $sy->salary_grades_id }}">
+                                                                value="{{ $sy->id_salary_grade }}">
                                                             {{-- <input type="hidden" name="rate_salary[]"
                                                                 value="{{ $sy->rate_salary }}"> --}}
 

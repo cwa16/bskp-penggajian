@@ -26,15 +26,15 @@
                                     <table style="border: 1px solid rgb(254, 254, 254); border-collapse: collapse;">
                                         <thead style="border: 1px solid rgb(254, 254, 254); border-collapse: collapse;">
                                             <tr style="border: 1px solid rgb(254, 254, 254); border-collapse: collapse;">
-                                                <th
+                                                {{-- <th
                                                     style="border: 1px solid rgb(254, 254, 254); border-collapse: collapse; padding: 3px;">
-                                                    Group</th>
-                                                <th
+                                                    Group</th> --}}
+                                                {{-- <th
                                                     style="border: 1px solid rgb(254, 254, 254); border-collapse: collapse;  padding: 3px;">
-                                                    : </th>
-                                                <th
+                                                    : </th> --}}
+                                                {{-- <th
                                                     style="border: 1px solid rgb(254, 254, 254); border-collapse: collapse; padding: 3px;">
-                                                </th>
+                                                </th> --}}
                                             </tr>
                                             <tr>
                                                 <th
@@ -47,7 +47,7 @@
                                                     style="border: 1px solid rgb(254, 254, 254); border-collapse: collapse; padding: 3px;">
                                                     {{ \Carbon\Carbon::parse($dateYesterday)->format('l, d-m-Y') }}</th>
                                             </tr>
-                                            <tr>
+                                            {{-- <tr>
                                                 <th
                                                     style="border: 1px solid rgb(254, 254, 254); border-collapse: collapse; padding: 3px;">
                                                     Dept</th>
@@ -57,7 +57,7 @@
                                                 <th
                                                     style="border: 1px solid rgb(254, 254, 254); border-collapse: collapse; padding: 3px;">
                                                 </th>
-                                            </tr>
+                                            </tr> --}}
                                         </thead>
                                     </table>
                                 </div>

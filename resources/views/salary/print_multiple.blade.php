@@ -199,7 +199,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Total Overtime</td>
+                                <td>Total Overtime <b>({{ $data['sal']->hour_call }})</b> </td>
                                 <td>:</td>
                                 <td class="text-end">
                                     {{ number_format($data['sal']->total_overtime, 0, ',', '.') }}

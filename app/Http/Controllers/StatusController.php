@@ -9,11 +9,28 @@ use Illuminate\Http\Request;
 class StatusController extends Controller
 {
     /** Display a listing of the resource. */
-    public function index()
+    public function index(Request $request)
     {
         $statuses = User::distinct('status')->pluck('status')->toArray();
         $title = 'Status Data';
-        return view('status.index', compact('statuses', 'title'));
+
+        $jwt_token = session('jwt_token') ?? $request->jwt_token;
+        $role = session('role') ?? $request->role;
+        $nik = session('nik') ?? $request->nik;
+        $dept = session('dept') ?? $request->dept;
+        $jabatan = session('jabatan') ?? $request->jabatan;
+        $name = User::where('nik', $nik)->value('name');
+
+        return view('status.index', compact(
+            'statuses',
+            'title',
+            'jwt_token',
+            'role',
+            'dept',
+            'nik',
+            'jabatan',
+            'name'
+        ));
     }
 
     /** Show the form for creating a new resource. */

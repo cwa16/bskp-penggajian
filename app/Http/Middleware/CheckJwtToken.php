@@ -3,13 +3,14 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Cookie;;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use Illuminate\Support\Facades\Log;
 
-class ValidateSalary
+class CheckJwtToken
 {
     /**
      * Handle an incoming request.
@@ -19,24 +20,19 @@ class ValidateSalary
     public function handle(Request $request, Closure $next): Response
     {
         try {
-            $token = $request->query('token');
-            $role = $request->query('role');
-            $nik = $request->query('nik');
-            $dept = $request->query('dept');
-            $jabatan = $request->query('jabatan');
+            $token = $request->session()->get('jwt_token');
+            dd($token);
 
-            if (!$token || !JWTAuth::setToken($token)->check()) {
+            if (!$token) {
                 return response()->view('errors.unauthorized', [], 401);
             }
 
-            session(['jwt_token' => $token]);
-            session(['role' => $role]);
-            session(['nik' => $nik]);
-            session(['dept' => $dept]);
-            session(['jabatan' => $jabatan]);
+            $user = JWTAuth::toUser($token);
+
+            $request->auth = $user;
 
         } catch (JWTException $e) {
-            return response()->json(['error' => 'Token invalid'], 401);
+            return response()->view('errors.unauthorized', [], 401);
         }
 
         return $next($request);

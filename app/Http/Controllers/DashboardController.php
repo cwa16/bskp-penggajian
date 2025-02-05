@@ -14,31 +14,14 @@ class DashboardController extends Controller
      */
     public function index(Request $request)
     {
-        $roles = $request->get('roles');
+        $jwt_token = session('jwt_token') ?? $request->jwt_token;
+        $role = session('role') ?? $request->role;
+        $nik = session('nik') ?? $request->nik;
+        $dept = session('dept') ?? $request->dept;
+        $jabatan = session('jabatan') ?? $request->jabatan;
 
-        // dd($roles);
+        $name = User::where('nik', $nik)->value('name');
 
-        // $roleNames = array_map(function($role) {
-        //     return $role['role'];
-        // }, $roles);
-
-        // Cek apakah $roles adalah array
-        //     if (is_array($roles)) {
-        //         $roleNames = array_map(function($role) {
-        //             return is_array($role) && isset($role['role']) ? $role['role'] : null;
-        //         }, $roles);
-
-        //         $roleNames = array_filter($roleNames);
-        //     } else {
-        //         $roleNames = [];
-        // }
-
-        $request->session()->put('roles', $roles);
-        // dd(session('roles'));
-        // $request->session()->put('roles', $roleNames);
-
-        // dd($roleNames, session('roles'));
-        // $statuses = User::select('status')->where('status', 'Manager')->groupBy('status')->pluck('status')->count();
         $managerCount = User::where('status', 'Manager')->count();
         $staffCount = User::where('status', 'Staff')->count();
         $monthlyCount = User::where('status', 'Monthly')->count();
@@ -54,7 +37,8 @@ class DashboardController extends Controller
             'regularCount' => $regularCount,
             'contractBskpCount' => $contractBskpCount,
             'contractFlCount' => $contractFlCount,
-            'roles' => $roles
+            'role' => $role,
+            'name' => $name
         ]);
     }
 

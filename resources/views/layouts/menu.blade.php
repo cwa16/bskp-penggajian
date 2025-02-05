@@ -49,48 +49,6 @@
                 </a>
             </li>
 
-            {{-- <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#dataMaseter"
-                    class="nav-link text-white {{ Str::startsWith($currentRoute, ['status', 'grade', 'departement', 'job']) ? 'active' : '' }}"
-                    aria-controls="dataMaseter" role="button" aria-expanded="false">
-                    <i class="material-icons-round opacity-10">storage</i>
-                    <span class="nav-link-text ms-2 ps-1">Master Data</span>
-                </a>
-                <div class="collapse {{ Str::startsWith($currentRoute, ['status', 'grade', 'departement', 'job', 'salarygrade']) ? 'show' : '' }}"
-                    id="dataMaseter" style="">
-                    <ul class="nav ">
-                        <li class="nav-item">
-                            <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'status') ? 'active bg-gradient-primary' : '' }}"
-                                href="{{ route('status.index') }}">
-                                <span class="sidenav-mini-icon"> S </span>
-                                <span class="sidenav-normal  ms-2  ps-1"> Status </span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'departement') ? 'active bg-gradient-primary' : '' }}"
-                                href="{{ route('departement.index') }}">
-                                <span class="sidenav-mini-icon"> D </span>
-                                <span class="sidenav-normal  ms-2  ps-1"> Departement </span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'job') ? 'active bg-gradient-primary' : '' }}"
-                                href="{{ route('job.index') }}">
-                                <span class="sidenav-mini-icon"> J </span>
-                                <span class="sidenav-normal  ms-2  ps-1"> Job </span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'salarygrade') ? 'active bg-gradient-primary' : '' }}"
-                                href="{{ route('grade.index') }}">
-                                <span class="sidenav-mini-icon"> <i class="material-icons">price_change</i> </span>
-                                <span class="sidenav-normal  ms-2  ps-1"> Salary Data - Per Grade </span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li> --}}
-
             <li class="nav-item mt-3">
                 <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Salary Data
                 </h6>
@@ -156,7 +114,7 @@
                 </h6>
             </li>
 
-            @if (session('roles') && in_array('Admin', session('roles')))
+            @if ($role == 'Admin')
                 <li class="nav-item">
                     <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'historical') ? 'active bg-gradient-primary' : '' }}"
                         href="{{ url('/historical') }}">
@@ -167,16 +125,6 @@
                     </a>
                 </li>
             @endif
-
-            {{-- <li class="nav-item">
-                <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'historical') ? 'active bg-gradient-primary' : '' }}"
-                    href="{{ url('/historical') }}?token={{ session('jwt_token') }}">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons">grade</i>
-                    </div>
-                    <span class="nav-link-text ms-1">Historical</span>
-                </a>
-            </li> --}}
 
             <li class="nav-item">
                 <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'summary') ? 'active bg-gradient-primary' : '' }}"
@@ -213,7 +161,7 @@
                 </a>
             </li>
 
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'overtime-master-index') ? 'active bg-gradient-primary' : '' }}"
                     href="{{ url('/overtime-master-index') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -221,7 +169,7 @@
                     </div>
                     <span class="nav-link-text ms-1">Overtime Master</span>
                 </a>
-            </li>
+            </li> --}}
 
             <li class="nav-item">
                 <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'overtime-approval-index') ? 'active bg-gradient-primary' : '' }}"
@@ -250,6 +198,16 @@
                         <i class="material-icons">print</i>
                     </div>
                     <span class="nav-link-text ms-1">Overtime Print</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link text-white {{ Str::startsWith($currentRoute, 'summary-overtime-index') ? 'active bg-gradient-primary' : '' }}"
+                    href="{{ url('/summary-overtime-index') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons">alarm</i>
+                    </div>
+                    <span class="nav-link-text ms-1">Summary Overtime</span>
                 </a>
             </li>
 

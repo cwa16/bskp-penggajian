@@ -23,12 +23,7 @@
                         @csrf
                         <div class="card-body p-3 pb-2">
                             <div class="row">
-                                {{-- <button data-bs-toggle="modal" data-bs-target="#sendData"
-                                        class="btn btn-icon btn-3 btn-success btn-sm">
-                                        <span class="btn-inner--icon"><i class="material-icons">share</i></span>
-                                        <span class="btn-inner--text">Send Salary Slip</span>
-                                    </button> --}}
-                                <div class="col-2">
+                                <div class="col-auto">
                                     <select class="form-select form-select-sm" name="filter_month">
                                         <option selected disabled>Select Month</option>
                                         @foreach ($months_filter as $month)
@@ -46,6 +41,7 @@
                                     </button>
                                 </div>
                             </div>
+
                             <div class="table-responsive p-0">
                                 <table
                                     class="table table-sm table-striped table-hover dtTable1 align-items-center small-tbl compact"

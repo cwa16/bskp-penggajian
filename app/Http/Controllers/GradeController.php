@@ -3,16 +3,35 @@
 namespace App\Http\Controllers;
 
 use App\Models\Grade;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class GradeController extends Controller
 {
     /** Display a listing of the resource. */
-    public function index()
+    public function index(Request $request)
     {
+        $jwt_token = session('jwt_token') ?? $request->jwt_token;
+        $role = session('role') ?? $request->role;
+        $nik = session('nik') ?? $request->nik;
+        $dept = session('dept') ?? $request->dept;
+        $jabatan = session('jabatan') ?? $request->jabatan;
+
+        $name = User::where('nik', $nik)->value('name');
+
         $grades = Grade::all();
         $title = 'Grade Data';
-        return view('grade.index', compact('grades', 'title'));
+
+        return view('grade.index', [
+            'title' => $title,
+            'roles' => $role,
+            'name' => $name,
+            'grades' => $grades,
+            'jwt_token' => $jwt_token,
+            'dept' => $dept,
+            'jabatan' => $jabatan,
+
+        ]);
     }
 
     /** Show the form for creating a new resource. */
@@ -24,13 +43,19 @@ class GradeController extends Controller
     /** Store a newly created resource in storage.*/
     public function store(Request $request)
     {
-        Grade::create([
+        $grade = Grade::create([
             'name_grade' => $request->name_grade,
             'rate_salary' => $request->rate_salary,
             'year' => $request->year,
         ]);
 
-        return redirect()->route('grade.index');
+        if ($grade) {
+            toastr()->closeOnHover(true)->closeDuration(10)->success('Your Post as been edited!');
+            return redirect()->back();
+        } else {
+            toastr()->closeOnHover(true)->closeDuration(10)->error('Failed to edit your Post');
+            return redirect()->back();
+        }
     }
 
     /**  Display the specified resource.*/
@@ -55,7 +80,14 @@ class GradeController extends Controller
             'year' => $request->year,
         ]);
 
-        return redirect()->route('grade.index');
+        if ($grade) {
+            toastr()->closeOnHover(true)->closeDuration(10)->success('Your Post as been edited!');
+            return redirect()->back();
+        } else {
+            toastr()->closeOnHover(true)->closeDuration(10)->error('Failed to edit your Post');
+            return redirect()->back();
+        }
+
     }
 
     /** Remove the specified resource from storage. */
@@ -63,10 +95,15 @@ class GradeController extends Controller
     {
         $grade = Grade::find($id);
 
-        //delete grades
         $grade->delete();
 
-        //redirect to index
-        return redirect()->route('grade.index');
+        if ($grade) {
+            toastr()->closeOnHover(true)->closeDuration(10)->success('Your Post as been edited!');
+            return redirect()->back();
+        } else {
+            toastr()->closeOnHover(true)->closeDuration(10)->error('Failed to edit your Post');
+            return redirect()->back();
+        }
+
     }
 }

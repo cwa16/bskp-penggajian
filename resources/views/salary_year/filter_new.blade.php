@@ -15,14 +15,34 @@
                         <div class="card-body p-3 pb-2">
                             <div class="row">
                                 <div class="col-auto">
-                                    <select name="id_status" class="form-select form-select-sm" id="select-data">
+
+                                    {{-- <select name="id_status" class="form-select form-select-sm" id="select-data">
                                         <option value="">- Pilih Status -</option>
                                         @foreach ($statuses as $status)
-                                            <option value="{{ $status->id }}"
-                                                @if ($status->id == $selectedStatus) selected @endif>{{ $status->name_status }}
+                                            <option value="{{ $status }}"
+                                                @if ($status->id == $selectedStatus) selected @endif>{{ $status }}
+                                            </option>
+                                        @endforeach
+                                    </select> --}}
+
+                                    <select name="status" class="form-select form-select-sm" id="select-data">
+                                        <option value="">- Pilih Status -</option>
+                                        @foreach ($statuses as $status)
+                                            <option value="{{ $status }}">{{ $status }}
                                             </option>
                                         @endforeach
                                     </select>
+
+                                    {{-- <select name="id_status" class="form-select form-select-sm" id="select-data">
+                                        <option value="" {{ $selectedStatus == null ? 'selected' : '' }}>
+                                            - Choose Status -</option>
+                                        @foreach ($statuses as $status)
+                                            <option value="{{ $status }}">
+                                                {{ $status }}
+                                            </option>
+                                        @endforeach
+                                    </select> --}}
+
                                 </div>
                                 <div class="col">
                                     <a type="button" href="{{ route('salary-year') }}"
@@ -39,22 +59,25 @@
 
         <script src="{{ asset('assets/libs/jquery/jquery.js') }}"></script>
         <script>
-            $(document).ready(function(){
+            $(document).ready(function() {
                 // Handle "Select All" checkbox
-                $('#data-container').on('change', '#checkboxAll', function(){
+                $('#data-container').on('change', '#checkboxAll', function() {
                     $('.checkboxItem').prop('checked', $(this).prop('checked'));
                 });
 
                 // Handle change event on the select element
-                $('#select-data').change(function(){
+                $('#select-data').change(function() {
                     var selectedValue = $(this).val();
                     $.ajax({
                         url: "{{ route('salary-year.get-emp') }}",
                         type: "GET",
-                        data: { id_status: selectedValue },
+                        data: {
+                            status: selectedValue
+                        },
                         dataType: "json",
-                        success: function(data){
-                            var content = '<table class="table table-data" id="data-table" style="width: 100%">';
+                        success: function(data) {
+                            var content =
+                                '<table class="table table-data" id="data-table" style="width: 100%">';
                             if (data.length > 0) {
                                 content += `
                                     <thead class="bg-success text-light">
@@ -68,13 +91,13 @@
                                     <tbody>
                                 `;
                             }
-                            $.each(data, function(index, item){
+                            $.each(data, function(index, item) {
                                 content += `
                                     <tr>
-                                        <td><input type="checkbox" class="checkboxItem" value="${item.users_id}" name="id[]"></td>
+                                        <td><input type="checkbox" class="checkboxItem" value="${item.nik}" name="emp_code[]"></td>
                                         <td>${item.nik}</td>
                                         <td>${item.name}</td>
-                                        <td>${item.name_grade}</td>
+                                        <td>${item.grade}</td>
                                     </tr>
                                 `;
                             });

@@ -192,7 +192,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Total Overtime</td>
+                            <td>Total Overtime <b>({{ $sal->hour_call }} j)</b> </td>
                             <td>:</td>
                             <td class="text-end">{{ number_format($sal->total_overtime, 0, ',', '.') }}</td>
                         </tr>

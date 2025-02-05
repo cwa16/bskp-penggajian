@@ -8,43 +8,77 @@ use App\Models\SalaryYear;
 use App\Models\SalaryMonth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\User;
 
 class SalaryGradeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $title = 'Salary Per Grade';
-        // $salary_grades = SalaryGrade::all();
         $query = SalaryGrade::with('grade');
 
-        // Check if the "Show All" option is selected
+        $jwt_token = session('jwt_token') ?? $request->jwt_token;
+        $role = session('role') ?? $request->role;
+        $nik = session('nik') ?? $request->nik;
+        $dept = session('dept') ?? $request->dept;
+        $jabatan = session('jabatan') ?? $request->jabatan;
+        $name = User::where('nik', $nik)->value('name');
+
         if (request('filter_year') === 'all') {
-            // Do not filter by year
         } else {
-            // Filter by the selected year
             $filterYear = request('filter_year', Carbon::now()->year);
             $query->where('year', $filterYear);
         }
         $selectedYear = $filterYear ?? null;
         $salary_grades = $query->get();
         $years = SalaryGrade::distinct('year')->pluck('year')->toArray();
-        return view('salary_grade.index', compact('title', 'salary_grades', 'years', 'selectedYear'));
+
+        return view('salary_grade.index', compact(
+            'title',
+            'salary_grades',
+            'years',
+            'selectedYear',
+            'nik',
+            'name',
+            'jwt_token',
+            'dept',
+            'jabatan',
+            'roles'
+        ));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         $title = 'Salary Per Grade';
         $grades = Grade::all();
-        $currentYear = date('Y'); //menetapkan tahun sekarang
-        // $currentYear = 2021;
+        $currentYear = date('Y');
+
+        $jwt_token = session('jwt_token') ?? $request->jwt_token;
+        $role = session('role') ?? $request->role;
+        $nik = session('nik') ?? $request->nik;
+        $dept = session('dept') ?? $request->dept;
+        $jabatan = session('jabatan') ?? $request->jabatan;
+        $name = User::where('nik', $nik)->value('name');
+
         $existingData = SalaryGrade::where('year', $currentYear)->count();
-        return view('salary_grade.create', compact('title', 'grades', 'currentYear', 'existingData'));
+        return view('salary_grade.create', compact(
+            'title',
+            'grades',
+            'currentYear',
+            'existingData',
+            'nik',
+            'name',
+            'jwt_token',
+            'dept',
+            'jabatan',
+            'roles'
+        ));
     }
 
     /**
@@ -52,19 +86,15 @@ class SalaryGradeController extends Controller
      */
     public function store(Request $request)
     {
-        $currentYear = date('Y'); //menetapkan tahun sekarang
-        // $currentYear = 2021;
+        $currentYear = date('Y');
 
-        // Loop melalui data yang dikirim dari form
         foreach ($request->input('rate_salary') as $gradeId => $rate) {
-            // Cek apakah data untuk tahun ini dan grade tersebut sudah ada atau belum
             $existingData = SalaryGrade::where('year', $currentYear)
                 ->where('id_grade', $gradeId)
                 ->count();
 
-            // Jika belum ada, simpan data
             if ($existingData == 0) {
-                SalaryGrade::create([
+                $salaryGrade = SalaryGrade::create([
                     'id_grade' => $gradeId,
                     'rate_salary' => $rate,
                     'year' => $currentYear,
@@ -72,7 +102,14 @@ class SalaryGradeController extends Controller
             }
         }
 
-        // Redirect atau lakukan aksi lainnya setelah penyimpanan selesai
+        if ($salaryGrade) {
+            toastr()->closeOnHover(true)->closeDuration(10)->success('Your Post as been edited!');
+            return redirect()->back();
+        } else {
+            toastr()->closeOnHover(true)->closeDuration(10)->error('Failed to edit your Post');
+            return redirect()->back();
+        }
+
         return redirect()->route('salarygrade')->with('success', 'Data gaji berhasil disimpan.');
     }
 
@@ -81,15 +118,12 @@ class SalaryGradeController extends Controller
      */
     public function edit(Request $request)
     {
-        // $selectedIds = $request->input('ids', []);
         $selectedIds = $request->input('ids', '');
 
-        // Konversi string parameter ke dalam bentuk array
         if (is_string($selectedIds)) {
             $selectedIds = explode(',', $selectedIds);
         }
 
-        // Jika tidak ada id yang dipilih, redirect kembali atau tampilkan pesan sesuai kebutuhan
         if (empty($selectedIds)) {
             return redirect()->route('salarygrade')->with('error', 'No data selected for editing.');
         }
@@ -99,7 +133,25 @@ class SalaryGradeController extends Controller
         $salary_grades = SalaryGrade::whereIn('id', $selectedIds)->get();
         $currentYear = date('Y');
 
-        return view('salary_grade.edit', compact('title', 'grades', 'salary_grades', 'currentYear'));
+        $jwt_token = session('jwt_token') ?? $request->jwt_token;
+        $role = session('role') ?? $request->role;
+        $nik = session('nik') ?? $request->nik;
+        $dept = session('dept') ?? $request->dept;
+        $jabatan = session('jabatan') ?? $request->jabatan;
+        $name = User::where('nik', $nik)->value('name');
+
+        return view('salary_grade.edit', compact(
+            'title',
+            'grades',
+            'salary_grades',
+            'currentYear',
+            'nik',
+            'name',
+            'jwt_token',
+            'dept',
+            'jabatan',
+            'roles'
+        ));
     }
 
     /**
@@ -111,14 +163,11 @@ class SalaryGradeController extends Controller
             $gradeId = $request->input('grade_ids.' . $id);
             $rate = $request->input('rate_salary.' . $id);
 
-            // Perbarui data di tabel salary_grades
             SalaryGrade::where('id', $id)->update([
                 'id_grade' => $gradeId,
                 'rate_salary' => $rate,
-                // Tambahkan kolom lainnya jika ada
             ]);
 
-            // mengambil data salary year untuk melakukan beberapa perubahan hitungan
             $salary_years = SalaryYear::where('id_salary_grade', $id)->get();
             foreach ($salary_years as $salary_year) {
                 $ability = $salary_year->ability;
@@ -129,7 +178,6 @@ class SalaryGradeController extends Controller
 
                 $total = $rate +  $ability + $fungtional_alw + $family_alw;
 
-                // untuk kolom deduction
                 if ($total > 12000000) {
                     $bpjs = 12000000 * 0.01;
                 } else {
@@ -137,7 +185,6 @@ class SalaryGradeController extends Controller
                 }
                 $jamsostek = $total * 0.02;
 
-                // untuk menghitung data benefit
                 $jamsostek_jkk = $total * 0.0054;
                 $jamsostek_tk = $total * 0.003;
                 $jamsostek_tht = $total * 0.037;
@@ -162,11 +209,9 @@ class SalaryGradeController extends Controller
                     $electricity = $salary_month->electricity;
                     $cooperative = $salary_month->cooperative;
 
-                    // Hitungan total overtime
                     $hour_call = $salary_month->hour_call;
                     $total_overtime = (($rate + $ability) / 173) * $hour_call;
 
-                    // Hitungan untuk mencari totalan
                     $gross_sal = $rate + $ability + $fungtional_alw + $family_alw + $transport_alw +
                         $adjustment + $total_overtime + $thr + $bonus + $incentive;
                     $total_deduction = $bpjs + $jamsostek + $union + $absent + $electricity + $cooperative;
@@ -182,47 +227,8 @@ class SalaryGradeController extends Controller
             }
         }
 
-        // Redirect atau lakukan aksi lainnya setelah pembaruan selesai
         return redirect()->route('salarygrade')->with('success', 'Data gaji berhasil diperbarui.');
     }
-
-    // public function update(Request $request)
-    // {
-    //     $value = $request->input('id_salary_grade');
-    //     dd($value);
-    //     foreach ($request->input('ids') as $key => $value) {
-    //         // Simpan nilai input dalam variabel
-    //         $input = $request->only([
-    //             'rate_salary',
-    //         ]);
-
-    //         // Lakukan pembaruan data berdasarkan ID dan grade ID
-    //         SalaryGrade::where('id', $value)
-    //             ->update(['rate_salary' => $input['rate_salary'][$key]]);
-    //     }
-
-
-    //     // // Ambil data dari form
-    //     // $ids = $request->input('ids', []);
-    //     // $rateSalaries = $request->input('rate_salary', []);
-
-    //     // // Loop melalui data yang diambil
-    //     // foreach ($ids as $key => $id) {
-    //     //     $salary_years = SalaryYear::where('id', $id)->update();
-    //     //     dd($salary_years);
-    //     //     foreach ($salary_years as $salary_year) {
-
-    //     //     }
-    //     //     // Perbarui data sesuai dengan ID
-    //     //     SalaryGrade::where('id', $id)->update([
-    //     //         'rate_salary' => $rateSalaries[$key],
-    //     //         // Tambahkan kolom lainnya sesuai kebutuhan
-    //     //     ]);
-    //     // }
-
-    //     // Redirect atau lakukan aksi lainnya setelah pembaruan selesai
-    //     return redirect()->route('salarygrade')->with('success', 'Data gaji berhasil diperbarui.');
-    // }
 
     public function show()
     {

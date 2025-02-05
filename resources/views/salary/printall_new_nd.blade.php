@@ -47,29 +47,30 @@
 <body>
     <div class="header" style="text-align: center; margin-top: -30px;">
         <h1>PT BRIDGESTONE KALIMANTAN PLANTATION</h1>
-        <h1 style="margin-top: -10px;">SALARY PAYMENT <span style="text-transform: uppercase">{{ $date }}</span>
+        <h1 style="margin-top: -10px;">MONTHLY SALARY PAYMENT <span
+                style="text-transform: uppercase">{{ $date }}</span>
         </h1>
     </div>
     <div class="content">
-
-
         <table>
             <thead>
                 <tr>
                     <th rowspan="2">No</th>
                     <th colspan="{{ $employeeIdentityCols }}">Employee Identity</th>
                     <th colspan="{{ $salaryComponentCols }}">Salary Component</th>
+                    <th rowspan="2">Bruto<br>Salary</th>
                     <th colspan="{{ $deductionCols }}">Deduction</th>
                     <th rowspan="2">Net<br>Salary</th>
                 </tr>
 
                 <tr>
                     @foreach ($displayColumns as $column)
-                        @if ($column !== 'net_salary')
+                        @if ($column !== 'net_salary' && $column !== 'bruto_salary')
                             <th>{{ ucwords(str_replace('_', ' ', $column)) }}</th>
                         @endif
                     @endforeach
                 </tr>
+
             </thead>
 
             <tbody>
@@ -96,9 +97,19 @@
                                     $column == 'telephone_alw' ||
                                     $column == 'total_overtime' ||
                                     $column == 'incentive' ||
+                                    $column == 'adjustment' ||
+                                    $column == 'gross_salary' ||
                                     $column == 'fungtional_alw' ||
                                     $column == 'thr' ||
                                     $column == 'bonus')
+                                @if ($salary->$column == 0 || $salary->$column == null)
+                                    <td width="35px" style="text-align: right">-</td>
+                                @else
+                                    <td width="35px"
+                                        style="text-align: right; padding-top: 4px; padding-bottom: 1px; padding-left: 3px; padding-right: 1px">
+                                        {{ number_format($salary->$column, 0, ',', '.') }}</td>
+                                @endif
+                            @elseif ($column == 'bruto_salary')
                                 @if ($salary->$column == 0 || $salary->$column == null)
                                     <td width="35px" style="text-align: right">-</td>
                                 @else
@@ -198,6 +209,24 @@
                                 {{ number_format($totalIncentive, 0, ',', '.') }}</td>
                         @endif
 
+                        @if ($column == 'adjustment')
+                            <td
+                                style="text-align: right; padding-top: 4px; padding-bottom: 1px; padding-left: 3px; padding-right: 1px">
+                                {{ number_format($totalAdjustment, 0, ',', '.') }}</td>
+                        @endif
+
+                        @if ($column == 'gross_salary')
+                            <td
+                                style="text-align: right; padding-top: 4px; padding-bottom: 1px; padding-left: 3px; padding-right: 1px">
+                                {{ number_format($totalGrossSalary, 0, ',', '.') }}</td>
+                        @endif
+
+                        @if ($column == 'bruto_salary')
+                            <td
+                                style="text-align: right; padding-top: 4px; padding-bottom: 1px; padding-left: 3px; padding-right: 1px">
+                                {{ number_format($totalBrutoSalary, 0, ',', '.') }}</td>
+                        @endif
+
                         @if ($column == 'thr')
                             <td
                                 style="text-align: right; padding-top: 4px; padding-bottom: 1px; padding-left: 3px; padding-right: 1px">
@@ -272,6 +301,46 @@
                     @endforeach
                 </tr>
             </tfoot>
+        </table>
+
+        <table
+            style="width: 79%; margin: 0 auto; text-align: center; border: none; border-collapse: collapse; padding-top: 30px">
+            <thead>
+                <tr style="text-align: center; border: none;">
+                    <th colspan="7" style="border: none; padding-bottom: 50px;">Checked by</th>
+                    <th style="border: none; padding-bottom: 50px;">Approved by</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border: none;">
+                    <td style="border: none;">
+                        <u>WIDYA CITRA MUSTIKASARI</u>
+                        <br> HR Asst
+                    </td>
+                    <td style="border: none;">
+                        <u>EMAN ISTANTO</u>
+                        <br> ACC FIN Asst
+                    </td>
+                    <td style="border: none;">
+                        <u>JOHARI</u>
+                        <br> HR GA Mng
+                    </td>
+                    <td style="border: none;">
+                        <u>HENDY PRASSONANTIO</u>
+                        <br> ACC FIN Mng
+                    </td>
+                    <td style="border: none;">
+                        <u>SURYANI</u>
+                        <br> Director
+                    </td>
+                    <td style="border: none"></td>
+                    <td style="border: none"></td>
+                    <td style="border: none;">
+                        <u>TSUNEHISA SAKODA</u>
+                        <br> President Director
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
 

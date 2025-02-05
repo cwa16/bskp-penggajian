@@ -30,7 +30,7 @@
                                                         <th colspan="6" class="text-center p-0">Employee
                                                             Identity</th>
                                                         <th colspan="5" class="text-center p-0">Salary Components</th>
-                                                        <th colspan="6" class="text-center p-0">Deduction</th>
+                                                        <th colspan="9" class="text-center p-0">Deduction</th>
                                                         <th rowspan="2" class="text-center">Month / Year</th>
                                                     </tr>
                                                     <tr>
@@ -51,6 +51,9 @@
                                                         <th>Absent</th>
                                                         <th>Electricity</th>
                                                         <th>Cooperative</th>
+                                                        <th>internet</th>
+                                                        <th>Gas</th>
+                                                        <th>Water</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -223,6 +226,36 @@
                                                                         style="width: 120px"
                                                                         name="cooperative[{{ $key }}]"
                                                                         value="{{ $sy->cooperative ?? '' }}"
+                                                                        placeholder="Enter the koperasi">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="input-group input-group-outline">
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm"
+                                                                        style="width: 120px"
+                                                                        name="internet[{{ $key }}]"
+                                                                        value="{{ $sy->internet ?? '' }}"
+                                                                        placeholder="Enter the koperasi">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="input-group input-group-outline">
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm"
+                                                                        style="width: 120px"
+                                                                        name="gas[{{ $key }}]"
+                                                                        value="{{ $sy->gas ?? '' }}"
+                                                                        placeholder="Enter the koperasi">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="input-group input-group-outline">
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm"
+                                                                        style="width: 120px"
+                                                                        name="water[{{ $key }}]"
+                                                                        value="{{ $sy->water ?? '' }}"
                                                                         placeholder="Enter the koperasi">
                                                                 </div>
                                                             </td>

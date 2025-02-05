@@ -9,11 +9,29 @@ use Illuminate\Http\Request;
 class DeptController extends Controller
 {
     /** Display a listing of the resource. */
-    public function index()
+    public function index(Request $request)
     {
         $depts = User::distinct('dept')->pluck('dept')->toArray();
         $title = 'Data Departement';
-        return view('dept.index', compact('depts', 'title'));
+
+        $jwt_token = session('jwt_token') ?? $request->jwt_token;
+        $role = session('role') ?? $request->role;
+        $nik = session('nik') ?? $request->nik;
+        $dept = session('dept') ?? $request->dept;
+        $jabatan = session('jabatan') ?? $request->jabatan;
+
+        $name = User::where('nik', $nik)->value('name');
+
+        return view('dept.index', [
+            'title' => $title,
+            'roles' => $role,
+            'name' => $name,
+            'depts' => $depts,
+            'jwt_token' => $jwt_token,
+            'dept' => $dept,
+            'jabatan' => $jabatan,
+
+        ]);
     }
 
     /** Show the form for creating a new resource. */

@@ -61,14 +61,6 @@ class SendCheckedSalaryJob implements ShouldQueue
 
             $id = $data->salary_month_id;
 
-            // $sal = DB::table('salary_months')
-            //     ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-            //     ->join('users', 'users.nik', '=', 'salary_years.nik')
-            //     ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
-            //     ->select('salary_months.*', 'salary_months.date as salary_month_date', 'salary_years.*', 'users.*', 'grade.*')
-            //     ->where('salary_months.id', $id)
-            //     ->first();
-
             $sal = DB::table('salary_months')
                 ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
                 ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')

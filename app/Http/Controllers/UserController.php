@@ -20,11 +20,28 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $users = User::all();
         $title = 'Employees';
-        return view('user.index', compact('users', 'title'));
+
+        $jwt_token = session('jwt_token') ?? $request->jwt_token;
+        $role = session('role') ?? $request->role;
+        $nik = session('nik') ?? $request->nik;
+        $dept = session('dept') ?? $request->dept;
+        $jabatan = session('jabatan') ?? $request->jabatan;
+        $name = User::where('nik', $nik)->value('name');
+
+        return view('user.index', compact(
+            'users',
+            'title',
+            'jwt_token',
+            'role',
+            'dept',
+            'nik',
+            'jabatan',
+            'name'
+        ));
 
     }
 

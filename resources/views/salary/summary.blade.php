@@ -13,6 +13,13 @@
                     <div class="card-body p-3 pb-2">
                         <form action="{{ route('result') }}" method="get">
                             @csrf
+                            <input type="hidden" name="nik" id="" value="{{ $nik }}">
+                            <input type="hidden" name="name" id="" value="{{ $name }}">
+                            <input type="hidden" name="dept" id="" value="{{ $dept }}">
+                            <input type="hidden" name="jabatan" id="" value="{{ $jabatan }}">
+                            <input type="hidden" name="role" id="" value="{{ $role }}">
+                            <input type="hidden" name="token" id="" value="{{ $jwt_token }}">
+
                             <div class="row">
                                 <div class="col-auto pe-0">
                                     <select name="id_user" class="form-select form-select-sm">
