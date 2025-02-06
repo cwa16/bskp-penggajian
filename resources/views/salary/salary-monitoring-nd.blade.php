@@ -166,7 +166,7 @@
 
                                             {{-- Checked 2 --}}
                                             <td class="justify-content-center align-items-center">
-                                                @if ($jabatan == 'Asst Mng' && $dept == 'Acc & Fin')
+                                                @if ($jabatan == 'Asst Mng' && $dept == 'Acc Fin')
                                                     @if (($statuses['Manager']['is_checked_1'] ?? false) && ($statuses['Manager']['is_checked_2'] ?? false))
                                                         <div style="margin: 0;">
                                                             <button type="submit"
@@ -646,7 +646,7 @@
 
                                             {{-- Checked 2 --}}
                                             <td class="justify-content-center align-items-center">
-                                                @if ($jabatan == 'Asst Mng' && $dept == 'Acc & Fin')
+                                                @if ($jabatan == 'Asst Mng' && $dept == 'Acc Fin')
                                                     @if (($statuses['Staff']['is_checked_1'] ?? false) && ($statuses['Staff']['is_checked_2'] ?? false))
                                                         <div style="margin: 0;">
                                                             <button type="submit"
@@ -1126,7 +1126,7 @@
 
                                             {{-- Checked 2 --}}
                                             <td class="justify-content-center align-items-center">
-                                                @if ($jabatan == 'Asst Mng' && $dept == 'Acc & Fin')
+                                                @if ($jabatan == 'Asst Mng' && $dept == 'Acc Fin')
                                                     @if (($statuses['Monthly']['is_checked_1'] ?? false) && ($statuses['Monthly']['is_checked_2'] ?? false))
                                                         <div style="margin: 0;">
                                                             <button type="submit"
@@ -1606,7 +1606,7 @@
 
                                             {{-- Checked 2 --}}
                                             <td class="justify-content-center align-items-center">
-                                                @if ($jabatan == 'Asst Mng' && $dept == 'Acc & Fin')
+                                                @if ($jabatan == 'Asst Mng' && $dept == 'Acc Fin')
                                                     @if (($statuses['Contract BSKP']['is_checked_1'] ?? false) && ($statuses['Contract BSKP']['is_checked_2'] ?? false))
                                                         <div style="margin: 0;">
                                                             <button type="submit"

@@ -3550,6 +3550,8 @@ class SalaryController extends Controller
         $jabatan = session('jabatan');
         $name = User::where('nik', $nik)->value('name');
 
+        // dd( $jabatan, $dept);
+
         $years = SalaryMonth::distinct('date')->pluck('date')->map(function ($date) {
             return Carbon::parse($date)->format('Y');
         })->unique()->toArray();
