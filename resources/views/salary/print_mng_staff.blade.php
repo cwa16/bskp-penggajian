@@ -46,10 +46,10 @@
 
 <body>
     <div class="header" style="text-align: center; margin-top: -30px;">
-        <h1>PT BRIDGESTONE KALIMANTAN PLANTATION</h1>
-        <h1 style="margin-top: -10px;">MANAGER SALARY PAYMENT <span
+        <h3>PT BRIDGESTONE KALIMANTAN PLANTATION</h3>
+        <h3 style="margin-top: -10px;">MANAGER SALARY PAYMENT <span
                 style="text-transform: uppercase">{{ $dateMng }}</span>
-        </h1>
+        </h3>
     </div>
     <div class="content">
         <h3>Manager</h3>
@@ -304,7 +304,20 @@
             </tfoot>
         </table>
 
-        <br>
+        <br><br><br>
+        <br><br><br>
+        <br><br><br>
+        <br><br><br>
+        <br><br><br>
+        <br><br><br>
+        <br><br><br>
+        <br><br><br>
+        <br><br><br>
+        <br><br><br>
+        <br><br><br>
+        <br><br><br>
+        <br><br><br>
+        <br><br><br>
 
         <h3>Staff</h3>
         <table>

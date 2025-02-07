@@ -2566,7 +2566,7 @@ class SalaryController extends Controller
                     'salary_months.other',
                 )
                 ->selectRaw('JSON_LENGTH(salary_years.allocation) as allocation_count')
-                ->where('users.status', 'Monthly')
+                ->where('users.status', 'Contract BSKP')
                 ->where('salary_years.allocation', '["Contract BSKP Office"]')
                 ->whereYear('salary_months.date', $year)
                 ->whereMonth('salary_months.date', $month)
@@ -2609,7 +2609,7 @@ class SalaryController extends Controller
                     'salary_months.other',
                 )
                 ->selectRaw('JSON_LENGTH(salary_years.allocation) as allocation_count')
-                ->where('users.status', 'Monthly')
+                ->where('users.status', 'Contract BSKP')
                 ->where('salary_years.allocation', '["Contract BSKP Workshop"]')
                 ->whereYear('salary_months.date', $year)
                 ->whereMonth('salary_months.date', $month)
