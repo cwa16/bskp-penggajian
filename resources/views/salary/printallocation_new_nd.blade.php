@@ -717,7 +717,7 @@
     @endphp
     <h1>PT BRIDGESTONE KALIMANTAN PLANTATION</h1>
     <h2>SUMMARY OF SALARY MONTHLY & KONTRAK</h2>
-    <h3>NOV 2024</h3>
+    <h3>{{ date('F', strtotime($month)) }} {{ $year }}</h3>
     <table>
         <thead>
             <tr>

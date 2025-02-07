@@ -15,6 +15,7 @@ class GradeController extends Controller
         $role = session('role') ?? $request->role;
         $nik = session('nik') ?? $request->nik;
         $dept = session('dept') ?? $request->dept;
+        $role = session('role') ?? $request->role;
         $jabatan = session('jabatan') ?? $request->jabatan;
 
         $name = User::where('nik', $nik)->value('name');
@@ -29,6 +30,7 @@ class GradeController extends Controller
             'grades' => $grades,
             'jwt_token' => $jwt_token,
             'dept' => $dept,
+            'role' => $role,
             'jabatan' => $jabatan,
 
         ]);

@@ -32,6 +32,12 @@
                             </div>
                             <div class="col-4 justify-content-end">
                                 <form action="{{ url('/salary-month') }}" method="GET">
+                                    @csrf
+                                    <input type="hidden" name="token" value="{{ $jwt_token }}">
+                                    <input type="hidden" name="role" value="{{ $role }}">
+                                    <input type="hidden" name="nik" value="{{ $nik }}">
+                                    <input type="hidden" name="dept" value="{{ $dept }}">
+                                    <input type="hidden" name="jabatan" value="{{ $jabatan }}">
                                     <div class="row">
                                         <div class="col pe-0">
                                             <select class="form-select form-select-sm" name="filter_status">

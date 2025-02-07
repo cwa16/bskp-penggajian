@@ -13,6 +13,11 @@
                     <div class="card-body p-3 pb-2">
                         <form action="{{ route('salary-month.create') }}" method="get">
                             @csrf
+                            <input type="hidden" name="token" value="{{ $jwt_token }}">
+                            <input type="hidden" name="role" value="{{ $role }}">
+                            <input type="hidden" name="nik" value="{{ $nik }}">
+                            <input type="hidden" name="dept" value="{{ $dept }}">
+                            <input type="hidden" name="jabatan" value="{{ $jabatan }}">
                             <div class="row">
                                 <div class="col-auto pe-0">
                                     <select name="id_status" class="form-select form-select-sm">

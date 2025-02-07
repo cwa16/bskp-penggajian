@@ -1936,6 +1936,8 @@ class SalaryController extends Controller
                 'totalInternetGae' => $totalInternetGae,
                 'totalGasGae' => $totalGasGae,
                 'totalWaterGae' => $totalWaterGae,
+                'year' => $year,
+                'month' => $month
             ];
 
             $pdf = PDF::loadView('salary.printallocation_new', $result);
@@ -2931,6 +2933,8 @@ class SalaryController extends Controller
                     'totalOtherContractBSKPWorkshop' => $totalOtherContractBSKPWorkshop,
                     'subTotalElectricityContractBSKPWorkshop' => $subTotalElectricityContractBSKPWorkshop,
                     'totalAllocationCountContractBSKPWorkshop' => $totalAllocationCountContractBSKPWorkshop,
+                    'year' => $year,
+                    'month' => $month
                 ];
 
                 $pdf = PDF::loadView('salary.printallocation_new_nd', $result);

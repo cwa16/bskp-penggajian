@@ -63,8 +63,6 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('/salary-month/store', [SalaryMonthController::class, 'store'])->name('salary-month.store');
     Route::get('/salary-month/edit', [SalaryMonthController::class, 'edit'])->name('salary-month.edit');
     Route::put('/salary-month/update', [SalaryMonthController::class, 'update'])->name('salary-month.update');
-    Route::post('/salary-month/export', [SalaryMonthController::class, 'export'])->name('salary-month.export');
-    Route::post('/salary-month/import', [SalaryMonthController::class, 'import'])->name('salary-month.import');
     // -------------------------------------------------------------------
 
     // Master
@@ -107,6 +105,9 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 // -------------------------------------------------------------------
 
 });
+
+Route::post('/salary-month/export', [SalaryMonthController::class, 'export'])->name('salary-month.export');
+Route::post('/salary-month/import', [SalaryMonthController::class, 'import'])->name('salary-month.import');
 
 // Route::post('/is-checked', [SalaryController::class, 'salary_check'])->name('salary-check');
 // Route::post('/is-approved', [SalaryController::class, 'salary_approved'])->name('salary-approved');

@@ -177,6 +177,8 @@ class SalaryMonthController extends Controller
         //     ->select('users.*', 'grade.*', 'users.nik as id_user', 'salary_years.id as id_salary_year', 'grade.id as id_grade', 'salary_years.*')
         //     ->get();
 
+        // dd($checkStatus != null, $checkYear != null && $checkMonth != null);
+
         if ($checkStatus != null) {
             if ($checkYear != null && $checkMonth != null) {
 
@@ -234,6 +236,7 @@ class SalaryMonthController extends Controller
                 ->where('users.active', 'yes')
                 ->where('users.status', $statusFilter)
                 ->where('users.active', 'yes')
+                ->where('salary_years.year', $yearFilter)
                 ->select('users.*', 'grade.*', 'users.nik as id_user', 'salary_years.id as id_salary_year')
                 ->get();
         }
@@ -260,9 +263,12 @@ class SalaryMonthController extends Controller
 
     public function store(Request $request)
     {
+    // dd($request->all());
+
     $idFilter = $request->input('id_salary_month');
     $yearFilter = $request->input('year');
     $monthFilter = $request->input('month');
+
 
     foreach ($request->input('id_user') as $key => $id_user) {
         $date = $yearFilter . '-' . $monthFilter . '-13';
@@ -487,6 +493,15 @@ class SalaryMonthController extends Controller
 
     public function export(Request $request)
     {
+        // dd($request->all());
+
+        $jwt_token = session('jwt_token') ?? $request->jwt_token;
+        $role = session('role') ?? $request->role;
+        $nik = session('nik') ?? $request->nik;
+        $dept = session('dept') ?? $request->dept;
+        $jabatan = session('jabatan') ?? $request->jabatan;
+        $name = User::where('nik', $nik)->value('name');
+
         $monthYear = $request->input('date');
         $date = $monthYear . '-13';
         $status = $request->input('filter_status');
