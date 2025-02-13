@@ -61,8 +61,6 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('/salary-month/filter', [SalaryMonthController::class, 'filter'])->name('salary-month.filter');
     Route::get('/salary-month/create', [SalaryMonthController::class, 'create'])->name('salary-month.create');
     Route::post('/salary-month/store', [SalaryMonthController::class, 'store'])->name('salary-month.store');
-    Route::get('/salary-month/edit', [SalaryMonthController::class, 'edit'])->name('salary-month.edit');
-    Route::put('/salary-month/update', [SalaryMonthController::class, 'update'])->name('salary-month.update');
     // -------------------------------------------------------------------
 
     // Master
@@ -102,6 +100,9 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 
     Route::get('/salary-monitoring', [SalaryController::class, 'salary_monitoring_index'])->name('salary-monitoring');
     Route::post('/salary-monitoring-approve', [SalaryController::class, 'salary_monitoring_approve'])->name('salary-monitoring-approve');
+
+    Route::get('/summary-overtime-index', [OvertimeController::class, 'summary_overtime_index'])->name('summary-overtime-index');
+    Route::get('/summary-overtime-detail', [OvertimeController::class, 'summary_overtime_detail'])->name('summary-overtime-detail');
 // -------------------------------------------------------------------
 
 });
@@ -132,8 +133,8 @@ Route::post('/overtime-limit-store', [OvertimeController::class, 'overtime_limit
 
 Route::get('/overtime-master-index', [OvertimeController::class, 'overtime_master_index'])->name('overtime-master-index');
 
-Route::get('/summary-overtime-index', [OvertimeController::class, 'summary_overtime_index'])->name('summary-overtime-index');
-Route::get('/summary-overtime-detail', [OvertimeController::class, 'summary_overtime_detail'])->name('summary-overtime-detail');
+// Route::get('/summary-overtime-index', [OvertimeController::class, 'summary_overtime_index'])->name('summary-overtime-index');
+// Route::get('/summary-overtime-detail', [OvertimeController::class, 'summary_overtime_detail'])->name('summary-overtime-detail');
 
 Route::post('/update-salary-checkbox', [SalaryController::class, 'updateCheckbox'])->name('update.salary.checkbox');
 // -------------------------------------------------------------------
@@ -143,6 +144,9 @@ Route::post('/update-salary-checkbox', [SalaryController::class, 'updateCheckbox
 Route::get('/salary-year/edit', [SalaryYearController::class, 'edit'])->name('salary-year.edit');
 Route::get('/salary-year/get-emp', [SalaryYearController::class, 'get_emp'])->name('salary-year.get-emp');
 Route::get('/salary-year/get-rate-salary', [SalaryYearController::class, 'get_rate_salary'])->name('salary-year.get-rate-salary');
+
+Route::get('/salary-month/edit', [SalaryMonthController::class, 'edit'])->name('salary-month.edit');
+Route::put('/salary-month/update', [SalaryMonthController::class, 'update'])->name('salary-month.update');
 
 // UserController
 // -------------------------------------------------------------------

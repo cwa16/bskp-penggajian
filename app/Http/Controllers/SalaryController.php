@@ -3111,8 +3111,8 @@ class SalaryController extends Controller
 
         $statuses = User::distinct('status')->pluck('status')->toArray();
 
-        // $currentYear = Carbon::now()->subMonth()->year;
-        $currentYear = 2024;
+        $currentYear = Carbon::now()->subMonth()->year;
+        // $currentYear = 2024;
 
         $rawData = DB::table('salary_months')
             ->join('salary_years', 'salary_months.id_salary_year', 'salary_years.id')
@@ -3178,8 +3178,22 @@ class SalaryController extends Controller
 
     public function send_checked(Request $request)
     {
+        $months = request()->input('filter_month');
         $selectedIds = $request->input('salary_ids');
-        $months = $request->input('filter_month');
+
+        // $date = Carbon::createFromFormat('Y-m', $month);
+        // $year = $date->year;
+        // $month = $date->month;
+
+        // if () {
+
+        // } else {
+
+        // }
+
+        // $months = $request->input('filter_month');
+
+        // dd($selectedIds, $months);
 
         SendCheckedSalaryJob::dispatch($selectedIds, $months);
 

@@ -17,6 +17,11 @@
                         <form action="{{ route('summary-overtime-index') }}" method="GET"
                             style="display: flex; gap: 10px; width: 60%;">
                             @csrf
+                            <input type="hidden" name="token" value="{{ $jwt_token }}">
+                            <input type="hidden" name="role" value="{{ $role }}">
+                            <input type="hidden" name="nik_session" value="{{ $nik_session }}">
+                            <input type="hidden" name="dept_session" value="{{ $dept_session }}">
+                            <input type="hidden" name="jabatan" value="{{ $jabatan }}">
                             <select name="deptInput" id="dept" class="form-control form-control-outline"
                                 style="flex: 1;">
                                 <option value="" selected disabled>Pilih Dept</option>
@@ -100,6 +105,11 @@
                                         <td class="text-center">
                                             <form action="{{ route('summary-overtime-detail') }}" method="GET">
                                                 @csrf
+                                                <input type="hidden" name="token" value="{{ $jwt_token }}">
+                                                <input type="hidden" name="role" value="{{ $role }}">
+                                                <input type="hidden" name="nik_session" value="{{ $nik_session }}">
+                                                <input type="hidden" name="dept_session" value="{{ $dept_session }}">
+                                                <input type="hidden" name="jabatan" value="{{ $jabatan }}">
                                                 <input type="hidden" name="nik" id=""
                                                     value="{{ $ot->nik }}">
                                                 <button class="btn btn-primary btn-sm">Detail</button>

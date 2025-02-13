@@ -551,8 +551,6 @@ class OvertimeController extends Controller
 
     public function summary_overtime_index(Request $request)
     {
-        // dd($request->all(), $request->token != null && $request->nik != null && $request->role != null && $request->dept != null && $request->jabatan != null);
-
         $title = "Summary Overtime";
         $getEmployeesDept = User::pluck('dept')->unique()->sort();
         $getEmployeesStatus = User::pluck('status')->unique()->sort();
@@ -567,7 +565,8 @@ class OvertimeController extends Controller
         $dept = $request->deptInput;
         $status = $request->status;
 
-        if ($request->token != null && $request->nik != null && $request->role != null && $request->dept != null && $request->jabatan != null && $request->nik_session != null&& $request->dept_session != null) {
+
+        if ($request->token != null && $request->nik != null && $request->role != null && $request->dept != null && $request->jabatan != null && $nik_session != null && $dept_session != null) {
             $nik = SalaryYear::select('nik')->get();
             $overtime_records = [];
 

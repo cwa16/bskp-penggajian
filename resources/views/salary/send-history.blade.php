@@ -33,6 +33,7 @@
                                             </option>
                                         @endforeach
                                     </select>
+                                    {{-- <input type="month" name="filter_month" class="form-input form-input-sm"> --}}
                                 </div>
                                 <div class="col-auto">
                                     <button class="btn btn-icon btn-3 btn-primary btn-sm">

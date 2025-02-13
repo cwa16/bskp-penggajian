@@ -45,6 +45,7 @@ class SendCheckedSalaryJob implements ShouldQueue
             ->select('users.name as nama', 'users.nik', 'users.id as id_users', 'users.no_telpon', 'salary_months.id as salary_month_id', 'salary_months.date as salary_month_date')
             ->whereIn('salary_years.id', $this->selectedIds)
             ->whereMonth('salary_months.date', $this->months)
+            ->whereYear('salary_months.date', 2025)
             ->get();
 
         foreach ($query as $data) {
