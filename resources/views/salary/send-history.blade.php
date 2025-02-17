@@ -45,7 +45,7 @@
                             <div class="table-responsive p-0">
                                 <table
                                     class="table table-sm table-striped table-hover dtTable1 align-items-center small-tbl compact"
-                                    id="example">
+                                    id="myTable">
                                     <thead class="bg-thead">
                                         <tr>
                                             <th rowspan="2" class="text-center"
@@ -189,9 +189,15 @@
             </div>
         </div>
 
+        <script src="{{ url('https://cdn.datatables.net/2.2.2/js/dataTables.min.js') }}"></script>
         <script src="{{ asset('assets/libs/jquery/jquery.js') }}"></script>
         <script src="{{ asset('assets/js/tableToExcel.js') }}"></script>
         <script src="{{ asset('assets/libs/jquery/jquery.js') }}"></script>
+
+        <script>
+            let table = new DataTable('#myTable');
+        </script>
+
         <script>
             function toggleSelectAll(source) {
                 checkboxes = document.querySelectorAll('.selectItem');

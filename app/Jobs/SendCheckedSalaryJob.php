@@ -1,19 +1,15 @@
 <?php
-
 namespace App\Jobs;
 
+use App\Models\SalaryMonth;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-
-use App\Models\SalaryMonth;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-
 use PDF;
 use Twilio\Rest\Client;
 
@@ -30,7 +26,7 @@ class SendCheckedSalaryJob implements ShouldQueue
     public function __construct($selectedIds, $months)
     {
         $this->selectedIds = $selectedIds;
-        $this->months = $months;
+        $this->months      = $months;
     }
 
     /**
@@ -48,16 +44,17 @@ class SendCheckedSalaryJob implements ShouldQueue
             ->get();
 
         foreach ($query as $data) {
-            $days = Carbon::now()->subMonth(1)->format('mY');
-            $dayss = Carbon::now();
-            $day = ($dayss->hour < 12) ? "Pagi" : "Siang";
 
-            $name = $data->nama;
+            $days  = Carbon::now()->subMonth(1)->format('mY');
+            $dayss = Carbon::now();
+            $day   = ($dayss->hour < 12) ? "Pagi" : "Siang";
+
+            $name  = $data->nama;
             $month = Carbon::parse($data->salary_month_date)->isoFormat('MMMM Y');
 
             $customFileNames = $data->nik . $days . $data->salary_month_id;
-            $customFileName = Str::of($customFileNames)->toBase64();
-            $filePath = storage_path('app/public') . '/' . $customFileName . '.pdf';
+            $customFileName  = Str::of($customFileNames)->toBase64();
+            $filePath        = storage_path('app/public') . '/' . $customFileName . '.pdf';
 
             $id = $data->salary_month_id;
 
@@ -88,33 +85,33 @@ class SendCheckedSalaryJob implements ShouldQueue
                 ->where('salary_months.id', $id)
                 ->first();
 
-            if (!$sal) {
+            if (! $sal) {
                 dd("Salary with ID $id not found.");
             }
 
-            $rate_salary = $sal->rate_salary;
-            $ability = $sal->ability;
+            $rate_salary    = $sal->rate_salary;
+            $ability        = $sal->ability;
             $fungtional_alw = $sal->fungtional_alw;
-            $family_alw = $sal->family_alw;
-            $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
-            $pdf = PDF::loadView('salary.print', compact('sal', 'total'))->setPaper('a5', 'landscape');
+            $family_alw     = $sal->family_alw;
+            $total          = $rate_salary + $ability + $fungtional_alw + $family_alw;
+            $pdf            = PDF::loadView('salary.print', compact('sal', 'total'))->setPaper('a5', 'landscape');
 
             file_put_contents($filePath, $pdf->output());
 
-            $mediaUrl = $data->nik . $days . $data->salary_month_id;
+            $mediaUrl       = $data->nik . $days . $data->salary_month_id;
             $customFileName = (string) Str::of($mediaUrl)->toBase64();
 
             // Store the PDF to the public server via an API call
-            $http = new \GuzzleHttp\Client();
+            $http     = new \GuzzleHttp\Client();
             $response = $http->post('https://bskp.blog:9000/api/upload-pdf', [
                 'multipart' => [
                     [
-                        'name' => 'pdf',
+                        'name'     => 'pdf',
                         'contents' => $pdf->output(),
                         'filename' => $customFileName,
                     ],
                     [
-                        'name' => 'filename',
+                        'name'     => 'filename',
                         'contents' => $customFileName,
                     ],
                 ],
@@ -122,7 +119,7 @@ class SendCheckedSalaryJob implements ShouldQueue
 
             $responseData = json_decode($response->getBody(), true);
 
-            if (!isset($responseData['path'])) {
+            if (! isset($responseData['path'])) {
                 dd("Error uploading PDF");
             }
 
@@ -134,10 +131,10 @@ class SendCheckedSalaryJob implements ShouldQueue
             $is_send = $twilio->messages->create(
                 "whatsapp:+" . $data->no_telpon,
                 [
-                    "contentSid" => env('TWILIO_CONTENT_ID'),
+                    "contentSid"          => env('TWILIO_CONTENT_ID'),
                     "messagingServiceSid" => env('TWILIO_SERVICE_ID'),
-                    "from" => "whatsapp:" . env('TWILIO_PHONE_NUMBER'),
-                    "contentVariables" => json_encode([
+                    "from"                => "whatsapp:" . env('TWILIO_PHONE_NUMBER'),
+                    "contentVariables"    => json_encode([
                         "1" => $day,
                         "2" => $month,
                         "3" => $name,

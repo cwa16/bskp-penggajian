@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['middleware' => ['jwt.verify']], function () {
+// Route::group(['middleware' => ['jwt.verify']], function () {
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/historical', [SalaryController::class, 'historical'])->name('historical');
@@ -104,7 +104,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('/salary-monitoring-approve', [SalaryController::class, 'salary_monitoring_approve'])->name('salary-monitoring-approve');
 // -------------------------------------------------------------------
 
-});
+// });
 
 Route::post('/salary-month/export', [SalaryMonthController::class, 'export'])->name('salary-month.export');
 Route::post('/salary-month/import', [SalaryMonthController::class, 'import'])->name('salary-month.import');
