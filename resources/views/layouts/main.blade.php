@@ -102,6 +102,12 @@
                                 </div>
                             </a>
                         </li>
+                        <li>
+                            <form action="{{ route('logout') }}" method="post">
+                                @csrf
+                                <button style="border: none; background: none;">{{Auth::user()->name}}, Logout</button>
+                            </form>
+                        </li>
                         <li class="nav-item dropdown pe-2 d-flex align-items-center">
                             {{-- <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton"
                                 data-bs-toggle="dropdown" aria-expanded="false">
