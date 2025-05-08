@@ -54,6 +54,14 @@
                                         @endfor
                                     </select>
                                 </div>
+                                <div class="col-auto">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="thr">
+                                        <label class="form-check-label" for="defaultCheck1">
+                                          THR
+                                        </label>
+                                      </div>
+                                </div>
 
                                 <div class="col">
                                     <button type="submit" class="btn btn-primary btn-sm mb-2">Filter</button>

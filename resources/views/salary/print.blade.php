@@ -82,7 +82,13 @@
             </tr>
             <tr>
                 <td>Bentok Darat, Bati-Bati, Kab.Tanah Laut</td>
-                <td align="right" class="uppercase">SALARY PAYMENT {{ date('F Y', strtotime($sal->salary_months_date)) }}
+                <td align="right" class="uppercase">
+                    @if ($is_thr == 1)
+                        THR PAYMENT {{ date('Y', strtotime($sal->salary_months_date)) }}
+                    @else
+                        SALARY PAYMENT {{ date('F Y', strtotime($sal->salary_months_date)) }}
+                    @endif
+
                 </td>
             </tr>
             <tr>
@@ -150,23 +156,47 @@
                             <td>Grade</td>
                             <td>:</td>
                             <td class="text-end">
-                                {{ number_format($sal->rate_salary, 0, ',', '.') }}</td>
+                                @if ($is_thr == 1)
+                                    0
+                                @else
+                                    {{ number_format($sal->rate_salary, 0, ',', '.') }}
+                                @endif
+                            </td>
+
+
                         </tr>
                         <tr>
                             <td>Ability</td>
                             <td>:</td>
-                            <td class="text-end">{{ number_format($sal->ability, 0, ',', '.') }}</td>
+                            <td class="text-end">
+                                @if ($is_thr == 1)
+                                    0
+                                @else
+                                    {{ number_format($sal->ability, 0, ',', '.') }}
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>Fungtional All</td>
                             <td>:</td>
                             <td class="text-end">
-                                {{ number_format($sal->fungtional_alw, 0, ',', '.') }}</td>
+                                @if ($is_thr == 1)
+                                    0
+                                @else
+                                    {{ number_format($sal->fungtional_alw, 0, ',', '.') }}
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>Family All</td>
                             <td>:</td>
-                            <td class="text-end">{{ number_format($sal->family_alw, 0, ',', '.') }}
+                            <td class="text-end">
+                                @if ($is_thr == 1)
+                                    0
+                                @else
+                                    {{ number_format($sal->family_alw, 0, ',', '.') }}
+                                @endif
+
                             </td>
                         </tr>
 
@@ -174,21 +204,36 @@
                             <td>Transport All</td>
                             <td>:</td>
                             <td class="text-end">
-                                {{ number_format($sal->transport_alw, 0, ',', '.') }}
+                                @if ($is_thr == 1)
+                                    0
+                                @else
+                                    {{ number_format($sal->transport_alw, 0, ',', '.') }}
+                                @endif
+
                             </td>
                         </tr>
                         <tr>
                             <td>Skill All</td>
                             <td>:</td>
                             <td class="text-end">
-                                {{ number_format($sal->skill_alw, 0, ',', '.') }}
+                                @if ($is_thr == 1)
+                                    0
+                                @else
+                                    {{ number_format($sal->skill_alw, 0, ',', '.') }}
+                                @endif
+
                             </td>
                         </tr>
                         <tr>
                             <td>Telephone All</td>
                             <td>:</td>
                             <td class="text-end">
-                                {{ number_format($sal->telephone_alw, 0, ',', '.') }}
+                                @if ($is_thr == 1)
+                                    0
+                                @else
+                                    {{ number_format($sal->telephone_alw, 0, ',', '.') }}
+                                @endif
+
                             </td>
                         </tr>
                         <tr>
@@ -196,11 +241,15 @@
                             <td>:</td>
                             <td class="text-end">{{ number_format($sal->total_overtime, 0, ',', '.') }}</td>
                         </tr>
-                        <tr>
-                            <td>THR</td>
-                            <td>:</td>
-                            <td class="text-end">{{ number_format($sal->thr, 0, ',', '.') }}</td>
-                        </tr>
+
+                            @if ($is_thr == 1)
+                            <tr>
+                                <td>THR</td>
+                                <td>:</td>
+                                <td class="text-end">{{ number_format($sal->net_salary, 0, ',', '.') }}</td>
+                            </tr>
+                            @endif
+
                         <tr>
                             <td>Bonus</td>
                             <td>:</td>
@@ -220,7 +269,13 @@
                             <td><b>Salary Gross</b></td>
                             <td>:</td>
                             <td class="text-end"><b>
-                                    {{ number_format($sal->gross_salary, 0, ',', '.') }}</b>
+                                    @if ($is_thr == 1)
+                                        {{ number_format($sal->net_salary, 0, ',', '.') }}
+                                    @else
+                                        {{ number_format($sal->gross_salary, 0, ',', '.') }}
+                                    @endif
+
+                                </b>
                             </td>
                         </tr>
                     </table>
@@ -234,48 +289,102 @@
                         <tr>
                             <td>Pinjaman</td>
                             <td>:</td>
-                            <td class="text-end">{{ number_format($sal->pinjaman, 0, ',', '.') }}</td>
+                            <td class="text-end">
+                                @if ($is_thr == 1)
+                                    0
+                                @else
+                                    {{ number_format($sal->pinjaman, 0, ',', '.') }}
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>BPJS</td>
                             <td>:</td>
-                            <td class="text-end">{{ number_format($sal->bpjs, 0, ',', '.') }}</td>
+                            <td class="text-end">
+                                @if ($is_thr == 1)
+                                    0
+                                @else
+                                    {{ number_format($sal->bpjs, 0, ',', '.') }}
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>Jamsostek</td>
                             <td>:</td>
-                            <td class="text-end">{{ number_format($sal->jamsostek, 0, ',', '.') }}</td>
+                            <td class="text-end">
+                                @if ($is_thr == 1)
+                                    0
+                                @else
+                                    {{ number_format($sal->jamsostek, 0, ',', '.') }}
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>Union</td>
                             <td>:</td>
-                            <td class="text-end">{{ number_format($sal->union, 0, ',', '.') }}</td>
+                            <td class="text-end">
+                                @if ($is_thr == 1)
+                                    0
+                                @else
+                                    {{ number_format($sal->union, 0, ',', '.') }}
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>Absent</td>
                             <td>:</td>
-                            <td class="text-end">{{ number_format($sal->absent, 0, ',', '.') }}</td>
+                            <td class="text-end">
+                                @if ($is_thr == 1)
+                                    0
+                                @else
+                                    {{ number_format($sal->absent, 0, ',', '.') }}
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>Electricity</td>
                             <td>:</td>
-                            <td class="text-end">{{ number_format($sal->electricity, 0, ',', '.') }}</td>
+                            <td class="text-end">
+                                @if ($is_thr == 1)
+                                    0
+                                @else
+                                    {{ number_format($sal->electricity, 0, ',', '.') }}
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>Cooperative</td>
                             <td>:</td>
-                            <td class="text-end">{{ number_format($sal->cooperative, 0, ',', '.') }}</td>
+                            <td class="text-end">
+                                @if ($is_thr == 1)
+                                    0
+                                @else
+                                    {{ number_format($sal->cooperative, 0, ',', '.') }}
+                                @endif
+
+                            </td>
                         </tr>
                         <tr>
                             <td>Other</td>
                             <td>:</td>
-                            <td class="text-end">{{ number_format($sal->other, 0, ',', '.') }}</td>
+                            <td class="text-end">
+                                @if ($is_thr == 1)
+                                    0
+                                @else
+                                    {{ number_format($sal->other, 0, ',', '.') }}
+                                @endif
+                            </td>
                         </tr>
                         <tr class="top-border">
                             <td><b>Sub Total</b></td>
                             <td>:</td>
                             <td class="text-end"><b>
-                                    {{ number_format($sal->total_deduction, 0, ',', '.') }}</b>
+                                    @if ($is_thr == 1)
+                                        0
+                                    @else
+                                        {{ number_format($sal->total_deduction, 0, ',', '.') }}
+                                    @endif
+                                </b>
                             </td>
                         </tr>
                     </table>
@@ -311,7 +420,12 @@
                                 <td><b>Sub Total</b></td>
                                 <td>:</td>
                                 <td class="text-end"><b>
-                                        {{ number_format($sal->total_ben, 0, ',', '.') }}</b>
+                                        @if ($is_thr == 1)
+                                            0
+                                        @else
+                                            {{ number_format($sal->total_ben, 0, ',', '.') }}
+                                        @endif
+                                    </b>
                                 </td>
                                 <td class="text-end"><b></b></td>
                             </tr>
@@ -344,7 +458,13 @@
                                 <td><b>Sub Total</b></td>
                                 <td><b>:</b></td>
                                 <td class="text-end"><b>
-                                        {{ number_format($sal->total_ben_ded, 0, ',', '.') }}</b>
+                                        @if ($is_thr == 1)
+                                            0
+                                        @else
+                                            {{ number_format($sal->total_ben_ded, 0, ',', '.') }}
+                                        @endif
+
+                                    </b>
                                 </td>
                             </tr>
                         </table>
@@ -358,19 +478,37 @@
                             <tr>
                                 <td>Jamsostek JKK</td>
                                 <td>:</td>
-                                <td class="text-end">{{ number_format($total * 0.0054, 0, ',', '.') }}
+                                <td class="text-end">
+                                    @if ($is_thr == 1)
+                                        0
+                                    @else
+                                        {{ number_format($total * 0.0054, 0, ',', '.') }}
+                                    @endif
+
                                 </td>
                             </tr>
                             <tr>
                                 <td>Jamsostek JKM</td>
                                 <td>:</td>
-                                <td class="text-end">{{ number_format($total * 0.003, 0, ',', '.') }}
+                                <td class="text-end">
+                                    @if ($is_thr == 1)
+                                        0
+                                    @else
+                                        {{ number_format($total * 0.003, 0, ',', '.') }}
+                                    @endif
+
                                 </td>
                             </tr>
                             <tr>
                                 <td>Jamsostek JHT</td>
                                 <td>:</td>
-                                <td class="text-end">{{ number_format($total * 0.037, 0, ',', '.') }}
+                                <td class="text-end">
+                                    @if ($is_thr == 1)
+                                        0
+                                    @else
+                                        {{ number_format($total * 0.037, 0, ',', '.') }}
+                                    @endif
+
                                 </td>
                             </tr>
                             <tr>
@@ -383,7 +521,12 @@
                                 <td><b>Sub Total</b></td>
                                 <td>:</td>
                                 <td class="text-end"><b>
-                                        {{ number_format($sal->total_ben, 0, ',', '.') }}</b>
+                                        @if ($is_thr == 1)
+                                            0
+                                        @else
+                                            {{ number_format($sub_total_ded, 0, ',', '.') }}
+                                        @endif
+                                    </b>
                                 </td>
                                 <td class="text-end"><b></b></td>
                             </tr>
@@ -395,19 +538,38 @@
                             <tr>
                                 <td>Jamsostek JKK</td>
                                 <td>:</td>
-                                <td class="text-end">{{ number_format($total * 0.0054, 0, ',', '.') }}
+                                <td class="text-end">
+                                    @if ($is_thr == 1)
+                                        0
+                                    @else
+                                        {{ number_format($total * 0.0054, 0, ',', '.') }}
+                                    @endif
+
+
                                 </td>
                             </tr>
                             <tr>
                                 <td>Jamsostek JKM</td>
                                 <td>:</td>
-                                <td class="text-end">{{ number_format($total * 0.003, 0, ',', '.') }}
+                                <td class="text-end">
+                                    @if ($is_thr == 1)
+                                        0
+                                    @else
+                                        {{ number_format($total * 0.003, 0, ',', '.') }}
+                                    @endif
+
                                 </td>
                             </tr>
                             <tr>
                                 <td>Jamsostek JHT</td>
                                 <td>:</td>
-                                <td class="text-end">{{ number_format($total * 0.037, 0, ',', '.') }}
+                                <td class="text-end">
+                                    @if ($is_thr == 1)
+                                        0
+                                    @else
+                                        {{ number_format($total * 0.037, 0, ',', '.') }}
+                                    @endif
+
                                 </td>
                             </tr>
                             <tr>
@@ -419,7 +581,12 @@
                                 <td><b>Sub Total</b></td>
                                 <td><b>:</b></td>
                                 <td class="text-end"><b>
-                                        {{ number_format($sal->total_ben_ded, 0, ',', '.') }}</b>
+                                        @if ($is_thr == 1)
+                                            0
+                                        @else
+                                            {{ number_format($sub_total_ded, 0, ',', '.') }}
+                                        @endif
+                                    </b>
                                 </td>
                             </tr>
                         </table>
@@ -434,14 +601,24 @@
                                 <td>Salary Gross + <br>Total Benefit</td>
                                 <td>:</td>
                                 <td class="text-end">
-                                    {{ number_format($sal->gross_salary, 0, ',', '.') }}
+                                    @if ($is_thr == 1)
+                                        {{ number_format($sal->net_salary, 0, ',', '.') }}
+                                    @else
+                                        {{ number_format($sal->gross_salary, 0, ',', '.') }}
+                                    @endif
+                                    </b>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Total Deduction</td>
                                 <td>:</td>
                                 <td class="text-end">
-                                    {{ number_format($sal->total_deduction, 0, ',', '.') }}
+                                    @if ($is_thr == 1)
+                                        0
+                                    @else
+                                        {{ number_format($sal->total_deduction, 0, ',', '.') }}
+                                    @endif
+
                                 </td>
                             </tr>
                             <tr class="top-border">

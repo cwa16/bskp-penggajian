@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WhatsAppController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/upload-pdf', [WhatsAppController::class, 'store']);
+Route::post('/upload-file', [WhatsAppController::class, 'storeFile']);
+Route::post('/upload-file-hari-raya', [WhatsAppController::class, 'storeFileHariRaya']);

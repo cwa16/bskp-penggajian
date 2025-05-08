@@ -17,6 +17,10 @@
                                 @csrf
                                 <div class="row">
                                     <div class="col">
+
+                                        <input type="checkbox" name="thr" id="" value="yes" style="height: 20px; width: 20px;">
+                                        <label for="">THR</label>
+                                        <hr>
                                         <button type="submit" class="btn btn-success btn-sm px-4">Save</button>
                                     </div>
                                     <div class="col">
@@ -45,6 +49,7 @@
                                                         <th>THR</th>
                                                         <th>Bonus</th>
                                                         <th>Incentive</th>
+                                                        <th>Salary Backpay</th>
                                                         <th>Pinjaman</th>
                                                         <th>Union</th>
                                                         <th>Other</th>
@@ -167,6 +172,16 @@
                                                                         name="incentive[{{ $key }}]"
                                                                         value="{{ $sy->incentive ?? '' }}"
                                                                         placeholder="Enter the incentive">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="input-group input-group-outline">
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm"
+                                                                        style="width: 120px"
+                                                                        name="salary_backpay[{{ $key }}]"
+                                                                        value="{{ $sy->salary_backpay ?? '' }}"
+                                                                        placeholder="Enter the salary backpay">
                                                                 </div>
                                                             </td>
                                                             <td>

@@ -242,6 +242,7 @@ class SalaryYearController extends Controller
                     ->where('users.status', $selectedStatus)
                     ->where('salary_years.year', $currentYear)
                     ->where('users.active', 'yes')
+                    ->where('grade.year', $currentYear)
                     // ->where(function ($query) {
                     //     $query->where('salary_years.ability', 0)
                     //         ->orWhere('salary_years.fungtional_alw', 0)
@@ -480,6 +481,7 @@ class SalaryYearController extends Controller
             $totalBpjs = $rate_salary + $ability + $family_alw + $fungtional_alw + $telephone_alw + $skill_alw;
             $totalBpjsCal = $rate_salary + $ability + $family_alw + $fungtional_alw;
             $totalJamsostek = $rate_salary + $ability + $family_alw + $skill_alw + $fungtional_alw + $telephone_alw;
+            // dd($totalJamsostek);
 
             if ($totalBpjs > 12000000) {
                 $bpjs = 12000000 * 0.01;
@@ -492,7 +494,9 @@ class SalaryYearController extends Controller
             $jamsostek_jkk = $totalJamsostek * 0.0054;
             $jamsostek_tk = $totalJamsostek * 0.003;
             $jamsostek_tht = $totalJamsostek * 0.037;
-            $total_jamsostek = $jamsostek_jkk + $jamsostek_tk + $jamsostek_tht;
+            $total_jamsostek = $jamsostek + $bpjs;
+            // dd($total_jamsostek);
+            // dd($total_jamsostek, $jamsostek_jkk, $jamsostek_tk, $jamsostek_tht);
 
             $allocations = $request->input('allocations')[$id] ?? NULL;
             if ($allocations) {

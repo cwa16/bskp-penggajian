@@ -1,5 +1,11 @@
 @extends('layouts.main')
 @section('content')
+<style>
+    td, th {
+        font-size: 13px;
+        text-align: center;
+    }
+</style>
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-12">
@@ -77,217 +83,115 @@
                                     <span class="btn-inner--icon"><i class="material-icons">print</i></span>
                                     <span class="btn-inner--text">Print Selected</span>
                                 </button>
-                                <table
-                                    class="table table-sm table-striped table-hover dtTable100 align-items-center small-tbl compact"
-                                    id="example">
+                                <table class="table table-sm table-striped table-hover dtTable100 align-items-center small-tbl compact" id="example" style="font-size: 11px; text-align: center;">
                                     <thead class="bg-thead">
-                                        <tr>
-                                            <th rowspan="2" class="text-center"
-                                                style="background-color: #1A73E8;color: white; p-0">
+                                        <tr style="border: 1px solid oldlace;">
+                                            <th rowspan="2" class="text-center" style="background-color: #1A73E8; color: white; border: 1px solid oldlace;">
                                                 <input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)">
                                             </th>
-                                            <th colspan="7" class="text-center p-0">Employee Identity</th>
-                                            <th colspan="13" class="text-center p-0">Salary Components</th>
-                                            <th rowspan="2" class="text-center">Bruto Salary</th>
-                                            <th colspan="11" class="text-center p-0">Deduction</th>
-                                            <th rowspan="2" class="text-center">Total Deduction</th>
-                                            <th rowspan="2" class="text-center">Nett Salary</th>
-                                            <th rowspan="2" class="text-center">Allocation</th>
-                                            <th rowspan="2" class="text-center">Date Input</th>
-                                            <th rowspan="2" class="text-center">Action</th>
+                                            <th style="border: 1px solid oldlace;" colspan="7" class="text-center">Employee Identity</th>
+                                            <th style="border: 1px solid oldlace;" colspan="14" class="text-center">Salary Components</th>
+                                            <th style="border: 1px solid oldlace;" rowspan="2" class="text-center">Bruto Salary</th>
+                                            <th style="border: 1px solid oldlace;" colspan="11" class="text-center">Deduction</th>
+                                            <th style="border: 1px solid oldlace;" rowspan="2" class="text-center">Total Deduction</th>
+                                            <th style="border: 1px solid oldlace;" rowspan="2" class="text-center">Nett Salary</th>
+                                            <th style="border: 1px solid oldlace;" rowspan="2" class="text-center">Allocation</th>
+                                            <th style="border: 1px solid oldlace;" rowspan="2" class="text-center">Date Input</th>
+                                            <th style="border: 1px solid oldlace;" rowspan="2" class="text-center">Action</th>
                                         </tr>
-                                        <tr>
-                                            <th style="background-color: #1A73E8;color: white;">Emp Code</th>
-                                            <th style="background-color: #1A73E8;color: white;">Name</th>
-                                            <th>Status</th>
-                                            <th>Dept</th>
-                                            <th>Job</th>
-                                            <th>Grade</th>
-                                            <th>No Account</th>
-                                            <th>Salary Grade</th>
-                                            <th>Ability</th>
-                                            <th>Fungtional All</th>
-                                            <th>Skill All</th>
-                                            <th>Family All</th>
-                                            <th>Telephone All</th>
-                                            <th>Transport All</th>
-                                            <th>Total Overtime</th>
-                                            <th>THR</th>
-                                            <th>Bonus</th>
-                                            <th>Incentive</th>
-                                            <th>Adjustment</th>
-                                            <th>Salary Gross</th>
-                                            <th>Pinjaman</th>
-                                            <th>BPJS Kesehatan</th>
-                                            <th>Jamsostek</th>
-                                            <th>Union</th>
-                                            <th>Other</th>
-                                            <th>Absent</th>
-                                            <th>Electricity</th>
-                                            <th>Cooperative</th>
-                                            <th>Internet</th>
-                                            <th>Gas</th>
-                                            <th>Water</th>
+                                        <tr style="border: 1px solid oldlace;">
+                                            <th style="border: 1px solid oldlace; background-color: #1A73E8; color: white; width: 100px;">NIK</th>
+                                            <th style="border: 1px solid oldlace; background-color: #1A73E8; color: white;">Name</th>
+                                            <th style="border: 1px solid oldlace;">Status</th>
+                                            <th style="border: 1px solid oldlace;">Dept</th>
+                                            <th style="border: 1px solid oldlace;">Job</th>
+                                            <th style="border: 1px solid oldlace;">Grade</th>
+                                            <th style="border: 1px solid oldlace;">Acc. No</th>
+                                            <th style="border: 1px solid oldlace;">Salary</th>
+                                            <th style="border: 1px solid oldlace;">Ability</th>
+                                            <th style="border: 1px solid oldlace;">Func. All</th>
+                                            <th style="border: 1px solid oldlace;">Skill All</th>
+                                            <th style="border: 1px solid oldlace;">Family All</th>
+                                            <th style="border: 1px solid oldlace;">Telp. All</th>
+                                            <th style="border: 1px solid oldlace;">Tran. All</th>
+                                            <th style="border: 1px solid oldlace;">OT</th>
+                                            <th style="border: 1px solid oldlace;">THR</th>
+                                            <th style="border: 1px solid oldlace;">Bonus</th>
+                                            <th style="border: 1px solid oldlace;">Incentive</th>
+                                            <th style="border: 1px solid oldlace;">Sal. Backpay</th>
+                                            <th style="border: 1px solid oldlace;">Adjustment</th>
+                                            <th style="border: 1px solid oldlace;">Sal. Gross</th>
+                                            <th style="border: 1px solid oldlace;">Pinjaman</th>
+                                            <th style="border: 1px solid oldlace;">BPJS</th>
+                                            <th style="border: 1px solid oldlace;">Jamsostek</th>
+                                            <th style="border: 1px solid oldlace;">Union</th>
+                                            <th style="border: 1px solid oldlace;">Other</th>
+                                            <th style="border: 1px solid oldlace;">Absent</th>
+                                            <th style="border: 1px solid oldlace;">Electricity</th>
+                                            <th style="border: 1px solid oldlace;">Cooperative</th>
+                                            <th style="border: 1px solid oldlace;">Internet</th>
+                                            <th style="border: 1px solid oldlace;">Gas</th>
+                                            <th style="border: 1px solid oldlace;">Water</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($data as $key => $sal)
+                                        @foreach ($data as $sal)
                                             <tr>
                                                 <td class="text-center">
-                                                    <input type="checkbox" name="salary_ids[]"
-                                                        value="{{ $sal->salary_month_id }}" class="selectItem"
-                                                        onclick="togglePrintButton()">
+                                                    <input type="checkbox" name="salary_ids[]" value="{{ $sal->salary_month_id }}" class="selectItem" onclick="togglePrintButton()">
                                                 </td>
-                                                <td class="text-nowrap text-end">{{ $sal->nik }}</td>
-                                                <td><a data-bs-toggle="modal"
-                                                        href="#detailGaji{{ $sal->salary_month_id }}">{{ $sal->name }}</a>
-                                                </td>
+                                                <td class="text-end">{{ $sal->nik }}</td>
+                                                <td><a data-bs-toggle="modal" href="#detailGaji{{ $sal->salary_month_id }}">{{ $sal->name }}</a></td>
                                                 <td>{{ $sal->status }}</td>
                                                 <td>{{ $sal->dept }}</td>
                                                 <td>{{ $sal->jabatan }}</td>
                                                 <td>{{ $sal->grade }}</td>
                                                 <td>-</td>
-                                                <td class="text-end">
-                                                    {{ $sal->rate_salary != 0 ? number_format($sal->rate_salary, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->ability != 0 ? number_format($sal->ability, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->fungtional_alw != 0 ? number_format($sal->fungtional_alw, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->skill_alw != 0 ? number_format($sal->skill_alw, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->family_alw != 0 ? number_format($sal->family_alw, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->telephone_alw != 0 ? number_format($sal->telephone_alw, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->transport_alw != 0 ? number_format($sal->transport_alw, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->total_overtime != 0 ? number_format($sal->total_overtime, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->thr != 0 ? number_format($sal->thr, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->bonus != 0 ? number_format($sal->bonus, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->incentive != 0 ? number_format($sal->incentive, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->adjustment != 0 ? number_format($sal->adjustment, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->gross_salary != 0 ? number_format($sal->gross_salary, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->gross_salary + $sal->total_ben != 0 ? number_format($sal->gross_salary + $sal->total_ben, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->pinjaman != 0 ? number_format($sal->pinjaman, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->bpjs != 0 ? number_format($sal->bpjs, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->jamsostek != 0 ? number_format($sal->jamsostek, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->union != 0 ? number_format($sal->union, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->other != 0 ? number_format($sal->other, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->absent != 0 ? number_format($sal->absent, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->electricity != 0 ? number_format($sal->electricity, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->cooperative != 0 ? number_format($sal->cooperative, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->internet != 0 ? number_format($sal->internet, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->gas != 0 ? number_format($sal->gas, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->water != 0 ? number_format($sal->water, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->total_deduction != 0 ? number_format($sal->total_deduction, 0, ',', '.') : '-' }}
-                                                </td>
-                                                <td class="text-end">
-                                                    {{ $sal->net_salary != 0 ? number_format($sal->net_salary, 0, ',', '.') : '-' }}
-                                                </td>
+                                                <td class="text-end">{{ number_format($sal->rate_salary, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->ability, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->fungtional_alw, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->skill_alw, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->family_alw, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->telephone_alw, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->transport_alw, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->total_overtime, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->thr, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->bonus, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->incentive, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->salary_backpay, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->adjustment, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->gross_salary, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->gross_salary, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->pinjaman, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->bpjs, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->jamsostek, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->union, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->other, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->absent, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->electricity, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->cooperative, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->internet, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->gas, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->water, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->total_deduction, 0, ',', '.') }}</td>
+                                                <td class="text-end">{{ number_format($sal->net_salary, 0, ',', '.') }}</td>
                                                 <td>
                                                     @php
-                                                        $allocations = json_decode($sal->allocation);
-                                                        if (is_array($allocations)) {
-                                                            echo implode(', ', $allocations);
-                                                        } else {
-                                                            echo $allocations;
-                                                        }
+                                                        $allocations = json_decode($sal->allocation, true);
+                                                        echo is_array($allocations) ? implode(', ', $allocations) : '-';
                                                     @endphp
                                                 </td>
-                                                <td class="text-end">
-                                                    {{ date('d M Y', strtotime($sal->salary_month_date)) }}
-                                                </td>
-                                                <td class="text-center m-0 p-0">
-                                                    </button>
-                                                    <a href="{{ url('/print-pdf/' . $sal->salary_month_id) }}"
-                                                        class="btn btn-warning btn-icon-only m-0 p-0 btn-sm"
-                                                        target="_blank">
-                                                        <span class="btn-inner--icon"><i
-                                                                class="material-icons">print</i></span>
+                                                <td class="text-end">{{ date('d M Y', strtotime($sal->salary_month_date)) }}</td>
+                                                <td class="text-center">
+                                                    <a href="{{ url('/print-pdf/' . $sal->salary_month_id) }}" target="_blank">
+                                                        Print
                                                     </a>
                                                 </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="8" style="background-color: #1A73E8;color: white;"></td>
-                                            <td class="text-end">{{ number_format($totalRateSalary, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalAbility, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalFungtionalAlw, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-end">{{ number_format($totalSkillAlw, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalFamilyAlw, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalTelephoneAlw, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalTransportAlw, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalTotalOT, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalThr, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalBonus, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalIncentive, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalAdjustment, 0, ',', '.') }}</td>
-                                            <td class="text-end">0</td>
-                                            <td class="text-end">0</td>
-                                            <td class="text-end">{{ number_format($totalPinjaman, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalBpjs, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalJamsostek, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalUnion, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalOther, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalAbsent, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalElectricity, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalCooperative, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalInternet, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalGas, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalWater, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalTotalded, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($totalNetsalary, 0, ',', '.') }}</td>
-                                            <td colspan="3" style="background-color: #1A73E8;color: white;"></td>
-                                        </tr>
-                                    </tfoot>
                                 </table>
+
                             </form>
                         </div>
                     </div>
@@ -331,10 +235,15 @@
                                                 <input type="month" name="month">
                                             </div>
                                         </div>
+                                        <br>
+                                        <div class="col">
+                                            <div class="row">
+                                             <input type="checkbox" name="thr" id="" value="yes" style="height: 20px; width: 20px;">
+                                             <label for="">THR</label>
+                                            </div>
+                                        </div>
                                         <div class="col-auto">
-                                            <button type="submit" class="btn btn-warning btn-sm"><span
-                                                    class="btn-inner--icon"><i class="material-icons">print</i></span>
-                                                <span class="btn-inner--text">Print</span></button>
+                                            <button type="submit" class="btn btn-warning btn-sm">Print</button>
                                         </div>
                                         <div class="col-auto ps-0">
                                             <button type="button" class="btn btn-sm btn-outline-secondary btn-3"

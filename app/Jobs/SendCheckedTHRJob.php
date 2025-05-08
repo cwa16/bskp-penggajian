@@ -17,20 +17,22 @@ use Illuminate\Support\Str;
 use PDF;
 use Twilio\Rest\Client;
 
-class SendCheckedSalaryJob implements ShouldQueue
+class SendCheckedTHRJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $selectedIds;
     protected $months;
+    protected $is_thr;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($selectedIds, $months)
+    public function __construct($selectedIds, $months, $is_thr)
     {
         $this->selectedIds = $selectedIds;
         $this->months = $months;
+        $this->is_thr = $is_thr;
     }
 
     /**
@@ -38,6 +40,8 @@ class SendCheckedSalaryJob implements ShouldQueue
      */
     public function handle()
     {
+        $is_thr = $this->is_thr;
+
         $query = DB::table('salary_months')
             ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
             ->join('users', 'users.nik', '=', 'salary_years.nik')
@@ -45,6 +49,7 @@ class SendCheckedSalaryJob implements ShouldQueue
             ->select('users.name as nama', 'users.nik', 'users.id as id_users', 'users.no_telpon', 'salary_months.id as salary_month_id', 'salary_months.date as salary_month_date')
             ->whereIn('salary_years.id', $this->selectedIds)
             ->whereMonth('salary_months.date', $this->months)
+            ->where('salary_months.is_thr', '1')
             ->whereYear('salary_months.date', 2025)
             ->get();
 
@@ -87,6 +92,7 @@ class SendCheckedSalaryJob implements ShouldQueue
                     'salary_months.net_salary'
                 )
                 ->where('salary_months.id', $id)
+                ->where('salary_months.is_thr', '1')
                 ->first();
 
             if (!$sal) {
@@ -104,8 +110,6 @@ class SendCheckedSalaryJob implements ShouldQueue
             $jht = $total * 0.037;
 
             $sub_total_ded = $jkk + $jkm + $jht;
-
-            $is_thr = 0;
             $pdf = PDF::loadView('salary.print', compact('sal', 'total', 'sub_total_ded', 'is_thr'))->setPaper('a5', 'landscape');
 
             file_put_contents($filePath, $pdf->output());
@@ -143,7 +147,7 @@ class SendCheckedSalaryJob implements ShouldQueue
             $is_send = $twilio->messages->create(
                 "whatsapp:+" . $data->no_telpon,
                 [
-                    "contentSid" => env('TWILIO_CONTENT_ID'),
+                    "contentSid" => 'HX8eafaa37e3906b69fa254143cd491440',
                     "messagingServiceSid" => env('TWILIO_SERVICE_ID'),
                     "from" => "whatsapp:" . env('TWILIO_PHONE_NUMBER'),
                     "contentVariables" => json_encode([

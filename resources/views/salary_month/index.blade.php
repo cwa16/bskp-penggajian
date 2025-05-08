@@ -214,12 +214,16 @@
                                 <h5 class="modal-title">Choose File</h5>
                             </div>
                             <div class="card-body py-2">
-                                <form action="{{ route('salary-month.import') }}" method="POST"
+                                <form id="importForm" action="{{ route('salary-month.import') }}" method="POST"
                                     enctype="multipart/form-data">
                                     @csrf
                                     <input type="file" name="file" class="form-control">
                                     <br>
-                                    <button class="btn btn-success">Import Data</button>
+                                    <button type="submit" class="btn btn-success"
+                                    onclick="setAction('{{ route('salary-month.import') }}')">Import Data</button>
+                                <button type="submit" class="btn btn-success"
+                                    onclick="setAction('{{ route('salary-month.import-thr') }}')">Import Data
+                                    THR</button>
                                 </form>
                             </div>
                         </div>
@@ -238,7 +242,7 @@
                                 <h5 class="modal-title">Choose Date</h5>
                             </div>
                             <div class="card-body py-2">
-                                <form action="{{ route('salary-month.export') }}" method="POST">
+                                <form id="exportForm" action="{{ route('salary-month.export') }}" method="POST">
                                     @csrf
                                     <select class="form-select form-select-sm" name="filter_status">
                                         <option selected disabled>-- Pilih Status --</option>
@@ -249,7 +253,11 @@
                                     <hr>
                                     <input type="month" name="date" class="form-control">
                                     <br>
-                                    <button class="btn btn-success">Import Data</button>
+                                    <button type="submit" class="btn btn-success"
+                                        onclick="setAction('{{ route('salary-month.export') }}')">Export Data</button>
+                                    <button type="submit" class="btn btn-success"
+                                        onclick="setAction('{{ route('salary-month.export-thr') }}')">Export Data
+                                        THR</button>
                                 </form>
                             </div>
                         </div>
@@ -311,6 +319,11 @@
                         alert('No data selected for editing.');
                     }
                 });
+
+                function setAction(actionUrl) {
+                    document.getElementById('exportForm').action = actionUrl;
+                    document.getElementById('importForm').action = actionUrl;
+                }
 
             });
         </script>

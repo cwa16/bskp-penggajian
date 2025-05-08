@@ -76,6 +76,7 @@ class GradeController extends Controller
     public function update(Request $request, $id)
     {
         $grade = Grade::find($id);
+        // dd($grade);
         $grade->update([
             'name_grade' => $request->name_grade,
             'rate_salary' => $request->rate_salary,

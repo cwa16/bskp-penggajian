@@ -33,6 +33,9 @@
                                             </option>
                                         @endforeach
                                     </select>
+                                    <br>
+                                    <input type="checkbox" name="thr" id="" value="yes" style="width: 25px; height: 25px;">
+                                    <label for="">THR</label>
                                     {{-- <input type="month" name="filter_month" class="form-input form-input-sm"> --}}
                                 </div>
                                 <div class="col-auto">

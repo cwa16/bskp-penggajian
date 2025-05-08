@@ -73,7 +73,7 @@
                                                                 @foreach ($grade as $g)
                                                                     <option value="{{ $g->id }}"
                                                                         {{ $g->name_grade == $sy->name_grade ? 'selected' : '' }}>
-                                                                        {{ $g->name_grade }}</option>
+                                                                        {{ $g->name_grade }} - {{  $g->year}}</option>
                                                                 @endforeach
                                                             </select>
                                                         </td>

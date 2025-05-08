@@ -13,7 +13,7 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use DB;
 
-class SalaryMonthExport implements FromCollection, WithHeadings, WithStyles, WithEvents
+class SalaryMonthTHRExport implements FromCollection, WithHeadings, WithStyles, WithEvents
 {
     use Exportable;
 
@@ -34,6 +34,7 @@ class SalaryMonthExport implements FromCollection, WithHeadings, WithStyles, Wit
             ->whereDate('salary_months.date', $this->date)
             ->where('users.status', $this->status)
             ->where('grade.year', '2025')
+            ->where('salary.month', '1')
             ->orderBy('users.name', 'asc');
 
         return $query->get();

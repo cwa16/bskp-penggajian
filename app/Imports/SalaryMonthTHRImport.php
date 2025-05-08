@@ -9,7 +9,7 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use DB;
 
-class SalaryMonthImport implements ToModel, WithHeadingRow
+class SalaryMonthTHRImport implements ToModel, WithHeadingRow
 {
     /**
     * @param array $row
@@ -38,7 +38,7 @@ class SalaryMonthImport implements ToModel, WithHeadingRow
         $adjustment = $getRateSalary->adjustment;
 
         $hourCall = $row['hour_call'];
-        $total_overtime = (($rateSalary + $ability + $fungtional_alw) / 173) * $hourCall;
+        $total_overtime = (($rateSalary + $ability) / 173) * $hourCall;
 
         $thr = $row['thr'];
         $bonus = $row['bonus'];
@@ -51,7 +51,7 @@ class SalaryMonthImport implements ToModel, WithHeadingRow
         $pinjaman = $row['pinjaman'];
         $other = $row['other'];
 
-        $gross_sal = $rateSalary + $ability + $fungtional_alw + $family_alw + $transport_alw + $skill_alw + $telephone_alw + $adjustment + $total_overtime + $thr + $bonus + $incentive + $salary_backpay;
+        $gross_sal = $rateSalary + $ability + $fungtional_alw + $family_alw +$telephone_alw + $skill_alw;
 
         $total = $rateSalary + $ability + $family_alw;
 
@@ -78,25 +78,26 @@ class SalaryMonthImport implements ToModel, WithHeadingRow
                 'date' => $row['date'],
             ],
             [
-                'hour_call'       => $row['hour_call'],
-                'total_overtime'  => $total_overtime,
+                'hour_call'       => '0',
+                'total_overtime'  => '0',
                 'thr'             => $thr,
-                'bonus'           => $bonus,
-                'incentive'       => $incentive,
-                'salary_backpay'  => $salary_backpay,
-                'union'           => $union,
-                'absent'          => $absent,
-                'electricity'     => $electricity,
-                'cooperative'     => $cooperative,
-                'pinjaman'        => $pinjaman,
-                'other'           => $other,
-                'gross_salary'    => $gross_sal,
-                'total_deduction' => $total_deduction,
-                'net_salary'      => $net_salary,
-                'bpjs'            => $bpjs,
-                'jamsostek'       => $jamsostek,
-                'total_ben'       => $total_ben,
-                'total_ben_ded'   => $total_ben_ded,
+                'bonus'           => '0',
+                'incentive'       => '0',
+                'salary_backpay'  => '0',
+                'union'           => '0',
+                'absent'          => '0',
+                'electricity'     => '0',
+                'cooperative'     => '0',
+                'pinjaman'        => '0',
+                'other'           => '0',
+                'gross_salary'    => $thr,
+                'total_deduction' => '0',
+                'net_salary'      => $thr,
+                'bpjs'            => '0',
+                'jamsostek'       => '0',
+                'total_ben'       => '0',
+                'total_ben_ded'   => '0',
+                'is_thr'          => '1',
             ]
         );
     }

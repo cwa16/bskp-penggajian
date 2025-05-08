@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['middleware' => ['jwt.verify']], function () {
+// Route::group(['middleware' => ['jwt.verify']], function () {
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/historical', [SalaryController::class, 'historical'])->name('historical');
@@ -105,10 +105,12 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('/summary-overtime-detail', [OvertimeController::class, 'summary_overtime_detail'])->name('summary-overtime-detail');
 // -------------------------------------------------------------------
 
-});
+// });
 
 Route::post('/salary-month/export', [SalaryMonthController::class, 'export'])->name('salary-month.export');
+Route::post('/salary-month/export-thr', [SalaryMonthController::class, 'export_thr'])->name('salary-month.export-thr');
 Route::post('/salary-month/import', [SalaryMonthController::class, 'import'])->name('salary-month.import');
+Route::post('/salary-month/import-thr', [SalaryMonthController::class, 'import_thr'])->name('salary-month.import-thr');
 
 // Route::post('/is-checked', [SalaryController::class, 'salary_check'])->name('salary-check');
 // Route::post('/is-approved', [SalaryController::class, 'salary_approved'])->name('salary-approved');

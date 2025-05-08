@@ -84,7 +84,7 @@
                                     <thead class="bg-thead">
                                         <tr>
                                             <th colspan="7" class="text-center p-0">Employee Identity</th>
-                                            <th colspan="13" class="text-center p-0">Salary Components</th>
+                                            <th colspan="14" class="text-center p-0">Salary Components</th>
                                             <th rowspan="2" class="text-center">Bruto Salary</th>
                                             <th colspan="11" class="text-center p-0">Deduction</th>
                                             <th rowspan="2" class="text-center">Total Deduction</th>
@@ -114,6 +114,7 @@
                                             <th>THR</th>
                                             <th>Bonus</th>
                                             <th>Incentive</th>
+                                            <th>Salary Backpay</th>
                                             <th>Adjustment</th>
                                             <th>Salary Gross</th>
                                             <th>Pinjaman</th>
@@ -204,6 +205,11 @@
                                                     {{ $sal->incentive != 0 ? number_format($sal->incentive, 0, ',', '.') : '-' }}
                                                 </td>
                                                 <td class="text-end">
+                                                    <input type="hidden" name="salary_backpay[]"
+                                                        value="{{ $sal->salary_backpay }}">
+                                                    {{ $sal->salary_backpay != 0 ? number_format($sal->salary_backpay, 0, ',', '.') : '-' }}
+                                                </td>
+                                                <td class="text-end">
                                                     <input type="hidden" name="adjustment[]"
                                                         value="{{ $sal->adjustment }}">
                                                     {{ $sal->adjustment != 0 ? number_format($sal->adjustment, 0, ',', '.') : '-' }}
@@ -292,21 +298,6 @@
                                                         value="{{ $sal->salary_month_date }}">
                                                     {{ date('d M Y', strtotime($sal->salary_month_date)) }}
                                                 </td>
-
-                                                {{-- <td class="align-middle text-center text-sm">
-                                                    @if ($sal->is_checked == 1)
-                                                        <span class="badge badge-sm bg-gradient-success">✓
-                                                        @else
-                                                            <span class="badge badge-sm bg-gradient-danger">✗
-                                                    @endif
-                                                </td>
-                                                <td class="align-middle text-center text-sm">
-                                                    @if ($sal->is_approved == 1)
-                                                        <span class="badge badge-sm bg-gradient-success">✓
-                                                        @else
-                                                            <span class="badge badge-sm bg-gradient-danger">✗
-                                                    @endif
-                                                </td> --}}
 
                                                 <td class="text-center m-0 p-0">
                                                     <button class="btn btn-primary btn-icon-only m-0 p-0 btn-sm"

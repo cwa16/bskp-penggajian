@@ -16,6 +16,7 @@ use Twilio\Rest\Client;
 use WaAPI\WaAPI;
 use Illuminate\Support\Str;
 use App\Jobs\SendCheckedSalaryJob;
+use App\Jobs\SendCheckedTHRJob;
 
 class SalaryController extends Controller
 {
@@ -30,14 +31,6 @@ class SalaryController extends Controller
         $jabatan = session('jabatan') ?? $request->jabatan;
 
         $name = User::where('nik', $nik)->value('name');
-
-        // $data = DB::table('salary_months')
-        //         ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
-        //         ->join('users', 'users.nik', '=', 'salary_years.nik')
-        //         ->join('grade', 'users.grade', '=', 'grade.name_grade')
-        //         ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date','salary_months.id as salary_month_id')
-        //         ->get();
-
 
         $salary_months = SalaryMonth::all();
 
@@ -147,6 +140,7 @@ class SalaryController extends Controller
         $totalThr = $data->sum('thr');
         $totalBonus = $data->sum('bonus');
         $totalIncentive = $data->sum('incentive');
+        $totalSalaryBackpay = $data->sum('salary_backpay');
         $totalUnion = $data->sum('union');
         $totalAbsent = $data->sum('absent');
         $totalElectricity = $data->sum('electricity');
@@ -381,10 +375,12 @@ class SalaryController extends Controller
                     ->join('grade', 'grade.id', '=', 'salary_years.id_salary_grade')
                     ->join('users', 'users.nik', '=', 'salary_years.nik')
                     ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date', 'salary_months.id as salary_month_id')
-                    ->where('users.status', $selectedStatus)
+                    ->whereIn('users.status', ['Monthly', 'Contract BSKP'])
                     ->whereYear('salary_months.date', $selectedYear)
                     ->whereMonth('salary_months.date', $selectedMonth)
+                    ->where('users.dept', 'Workshop')
                     ->get();
+                    // dd($data);
             }
         }
 
@@ -493,7 +489,7 @@ class SalaryController extends Controller
             ->where('salary_months.id', $id)
             ->first();
 
-            // dd($sal->hour_call);
+            // dd($sal);
 
             $date = date('My', strtotime($sal->salary_months_date));
 
@@ -505,10 +501,20 @@ class SalaryController extends Controller
         $ability = $sal->ability;
         $fungtional_alw = $sal->fungtional_alw;
         $family_alw = $sal->family_alw;
+        $telp_alw = $sal->telephone_alw;
+        $skill_alw = $sal->skill_alw;
 
-        $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
+        $total = $rate_salary + $ability + $fungtional_alw + $family_alw  + $skill_alw;
 
-        $pdf = PDF::loadView('salary.print', compact('sal', 'total'));
+        $jkk = $total * 0.0054;
+        $jkm = $total * 0.003;
+        $jht = $total * 0.037;
+
+        $sub_total_ded = $jkk + $jkm + $jht;
+
+        $is_thr = 0;
+
+        $pdf = PDF::loadView('salary.print', compact('sal', 'total', 'sub_total_ded', 'is_thr'));
         return $pdf->setPaper('a5', 'landscape')->stream('SAL_' . $date . '_' . $sal->Emp_Code . '_' . $sal->Nama . '.pdf');
     }
 
@@ -617,8 +623,10 @@ class SalaryController extends Controller
         $date = Carbon::createFromFormat('Y-m', $monthYear);
         $year = $date->year;
         $month = $date->month;
+        $is_thr = request()->input('thr');
+        // dd($status, $is_thr);
 
-        if ($status == 'Monthly') {
+        if ($status == 'Monthly' && $is_thr == null) {
             $salaries = DB::table('salary_months')
                 ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
                 ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
@@ -657,8 +665,7 @@ class SalaryController extends Controller
                 ->whereYear('salary_months.date', $year)
                 ->whereMonth('salary_months.date', $month)
                 ->where('users.status', $status)
-                ->orderBy('users.grade', 'DESC')
-                ->orderBy('users.name')
+                ->orderBy('bruto_salary', 'DESC')
                 ->get();
 
             $totalRateSalary = $salaries->sum('rate_salary');
@@ -778,7 +785,168 @@ class SalaryController extends Controller
             } else {
                 return redirect()->route('salary.index');
             }
-        } else {
+        } elseif ($status == 'Monthly' && $is_thr == 'yes') {
+            $salaries = DB::table('salary_months')
+                ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
+                ->join('users', 'users.nik', '=', 'salary_years.nik')
+                ->select(
+                    'users.nik as Emp Code',
+                    'users.name as Nama',
+                    'grade.name_grade as Grade',
+                    'grade.rate_salary',
+                    'salary_years.ability',
+                    'salary_years.fungtional_alw',
+                    'salary_years.family_alw',
+                    'salary_years.transport_alw',
+                    'salary_years.skill_alw',
+                    'salary_years.telephone_alw',
+                    'salary_years.bpjs',
+                    'salary_years.jamsostek',
+                    'salary_years.adjustment',
+                    'salary_years.total_ben',
+                    'salary_months.total_overtime',
+                    'salary_months.thr',
+                    'salary_months.bonus',
+                    'salary_months.incentive',
+                    'salary_months.gross_salary',
+                    'salary_months.union',
+                    'salary_months.absent',
+                    'salary_months.electricity',
+                    'salary_months.cooperative',
+                    'salary_months.pinjaman',
+                    'salary_months.other',
+                    'salary_months.date as salary_months_date',
+                    'salary_months.total_deduction',
+                    'salary_months.net_salary',
+                    'salary_months.is_thr',
+                    DB::raw('(total_ben + gross_salary) as bruto_salary')
+                )
+                ->whereYear('salary_months.date', $year)
+                ->whereMonth('salary_months.date', $month)
+                ->where('users.status', $status)
+                ->where('salary_months.thr', 'yes')
+                ->orderBy('bruto_salary', 'DESC')
+                ->get();
+
+            $totalRateSalary = $salaries->sum('rate_salary');
+            $totalAbility = $salaries->sum('ability');
+            $totalFungtionalAlw = $salaries->sum('fungtional_alw');
+            $totalSkillAlw = $salaries->sum('skill_alw');
+            $totalFamilyAlw = $salaries->sum('family_alw');
+            $totalTelephoneAlw = $salaries->sum('telephone_alw');
+            $totalTransportAlw = $salaries->sum('transport_alw');
+            $totalTotalOT = $salaries->sum('total_overtime');
+            $totalIncentive = $salaries->sum('incentive');
+            $totalAdjustment = $salaries->sum('adjustment');
+            $totalGrossSalary = $salaries->sum('gross_salary');
+            $totalThr = $salaries->sum('thr');
+            $totalBonus = $salaries->sum('bonus');
+            $totalPinjaman = $salaries->sum('pinjaman');
+            $totalBpjs = $salaries->sum('bpjs');
+            $totalJamsostek = $salaries->sum('jamsostek');
+            $totalUnion = $salaries->sum('union');
+            $totalOther = $salaries->sum('other');
+            $totalAbsent = $salaries->sum('absent');
+            $totalElectricity = $salaries->sum('electricity');
+            $totalCooperative = $salaries->sum('cooperative');
+            $totalTotalDed = $salaries->sum('total_deduction');
+            $totalNetSalary = $salaries->sum('net_salary');
+            $totalTotalBen = $salaries->sum('total_ben');
+            $totalBrutoSalary = $salaries->sum('bruto_salary');
+
+            $columns = [
+                'Emp Code',
+                'Nama',
+                'Grade',
+                'rate_salary',
+                'ability',
+                'fungtional_alw',
+                'skill_alw',
+                'family_alw',
+                'telephone_alw',
+                'transport_alw',
+                'total_overtime',
+                'incentive',
+                'adjustment',
+                'gross_salary',
+                'bruto_salary',
+                'thr',
+                'bonus',
+                'pinjaman',
+                'bpjs',
+                'jamsostek',
+                'union',
+                'other',
+                'absent',
+                'electricity',
+                'cooperative',
+                'total_deduction',
+                'net_salary',
+            ];
+
+            $displayColumns = [];
+            foreach ($columns as $column) {
+                if ($salaries->pluck($column)->filter()->isNotEmpty()) {
+                    $displayColumns[] = $column;
+                }
+            }
+
+            $employeeIdentityColumns = ['Emp Code', 'Nama', 'Grade'];
+            $salaryComponentColumns = ['rate_salary', 'ability', 'fungtional_alw', 'skill_alw', 'family_alw', 'telephone_alw', 'transport_alw', 'total_overtime', 'incentive', 'thr', 'bonus', 'adjustment', 'gross_salary'];
+            $deductionColumns = ['pinjaman', 'bpjs', 'jamsostek', 'union', 'other', 'absent', 'electricity', 'cooperative', 'total_deduction'];
+
+            $employeeIdentityCols = count(array_intersect($displayColumns, $employeeIdentityColumns));
+            $salaryComponentCols = count(array_intersect($displayColumns, $salaryComponentColumns));
+            $deductionCols = count(array_intersect($displayColumns, $deductionColumns));
+
+            $date = null;
+            foreach ($salaries as $sal) {
+                $date = date('F Y', strtotime($sal->salary_months_date));
+            }
+
+            if ($date) {
+                $pdf = PDF::loadView('salary.printall_new_nd', compact(
+                    'salaries',
+                    'date',
+                    'displayColumns',
+                    'employeeIdentityCols'
+                    ,
+                    'salaryComponentCols',
+                    'deductionCols',
+                    'totalRateSalary',
+                    'totalAbility',
+                    'totalFungtionalAlw',
+                    'totalSkillAlw'
+                    ,
+                    'totalFamilyAlw',
+                    'totalTelephoneAlw',
+                    'totalTransportAlw',
+                    'totalTotalOT',
+                    'totalIncentive',
+                    'totalAdjustment',
+                    'totalGrossSalary',
+                    'totalBrutoSalary',
+                    'totalThr'
+                    ,
+                    'totalBonus',
+                    'totalPinjaman',
+                    'totalBpjs',
+                    'totalJamsostek',
+                    'totalUnion',
+                    'totalOther'
+                    ,
+                    'totalAbsent',
+                    'totalElectricity',
+                    'totalCooperative',
+                    'totalTotalDed',
+                    'totalNetSalary'
+                ));
+                return $pdf->setPaper(array(0, 0, 609.4488, 935.433), 'landscape')->stream('PrintAll.pdf');
+            } else {
+                return redirect()->route('salary.index');
+            }
+        } elseif ($status == 'Manager Staff' && $is_thr == null) {
             $salariesMng = DB::table('salary_months')
                 ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
                 ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
@@ -818,8 +986,7 @@ class SalaryController extends Controller
                 ->whereMonth('salary_months.date', $month)
                 ->whereIn('users.status', ['Manager', 'Staff'])
                 ->whereIn('users.jabatan', ['Dir', 'Mng', 'Dep. Mng'])
-                ->orderBy('users.grade', 'DESC')
-                ->orderBy('users.name')
+                ->orderBy('bruto_salary', 'DESC')
                 ->get();
 
             $salariesStaff = DB::table('salary_months')
@@ -861,8 +1028,316 @@ class SalaryController extends Controller
                 ->whereMonth('salary_months.date', $month)
                 ->where('users.status', 'Staff')
                 ->whereIn('users.jabatan', ['Asst Mng', 'Asst Mng Trainee'])
-                ->orderBy('users.grade', 'DESC')
-                ->orderBy('users.name')
+                ->orderBy('bruto_salary', 'DESC')
+                ->get();
+
+                // dd($salariesMng, $salariesStaff);
+
+            $totalRateSalaryMng = $salariesMng->sum('rate_salary');
+            $totalAbilityMng = $salariesMng->sum('ability');
+            $totalFungtionalAlwMng = $salariesMng->sum('fungtional_alw');
+            $totalSkillAlwMng = $salariesMng->sum('skill_alw');
+            $totalFamilyAlwMng = $salariesMng->sum('family_alw');
+            $totalTelephoneAlwMng = $salariesMng->sum('telephone_alw');
+            $totalTransportAlwMng = $salariesMng->sum('transport_alw');
+            $totalTotalOTMng = $salariesMng->sum('total_overtime');
+            $totalIncentiveMng = $salariesMng->sum('incentive');
+            $totalAdjustmentMng = $salariesMng->sum('adjustment');
+            $totalGrossSalaryMng = $salariesMng->sum('gross_salary');
+            $totalThrMng = $salariesMng->sum('thr');
+            $totalBonusMng = $salariesMng->sum('bonus');
+            $totalPinjamanMng = $salariesMng->sum('pinjaman');
+            $totalBpjsMng = $salariesMng->sum('bpjs');
+            $totalJamsostekMng = $salariesMng->sum('jamsostek');
+            $totalUnionMng = $salariesMng->sum('union');
+            $totalOtherMng = $salariesMng->sum('other');
+            $totalAbsentMng = $salariesMng->sum('absent');
+            $totalElectricityMng = $salariesMng->sum('electricity');
+            $totalCooperativeMng = $salariesMng->sum('cooperative');
+            $totalTotalDedMng = $salariesMng->sum('total_deduction');
+            $totalNetSalaryMng = $salariesMng->sum('net_salary');
+            $totalTotalBenMng = $salariesMng->sum('total_ben');
+            $totalBrutoSalaryMng = $salariesMng->sum('bruto_salary');
+
+            $totalRateSalaryStaff = $salariesStaff->sum('rate_salary');
+            $totalAbilityStaff = $salariesStaff->sum('ability');
+            $totalFungtionalAlwStaff = $salariesStaff->sum('fungtional_alw');
+            $totalSkillAlwStaff = $salariesStaff->sum('skill_alw');
+            $totalFamilyAlwStaff = $salariesStaff->sum('family_alw');
+            $totalTelephoneAlwStaff = $salariesStaff->sum('telephone_alw');
+            $totalTransportAlwStaff = $salariesStaff->sum('transport_alw');
+            $totalTotalOTStaff = $salariesStaff->sum('total_overtime');
+            $totalIncentiveStaff = $salariesStaff->sum('incentive');
+            $totalAdjustmentStaff = $salariesStaff->sum('adjustment');
+            $totalGrossSalaryStaff = $salariesStaff->sum('gross_salary');
+            $totalThrStaff = $salariesStaff->sum('thr');
+            $totalBonusStaff = $salariesStaff->sum('bonus');
+            $totalPinjamanStaff = $salariesStaff->sum('pinjaman');
+            $totalBpjsStaff = $salariesStaff->sum('bpjs');
+            $totalJamsostekStaff = $salariesStaff->sum('jamsostek');
+            $totalUnionStaff = $salariesStaff->sum('union');
+            $totalOtherStaff = $salariesStaff->sum('other');
+            $totalAbsentStaff = $salariesStaff->sum('absent');
+            $totalElectricityStaff = $salariesStaff->sum('electricity');
+            $totalCooperativeStaff = $salariesStaff->sum('cooperative');
+            $totalTotalDedStaff = $salariesStaff->sum('total_deduction');
+            $totalNetSalaryStaff = $salariesStaff->sum('net_salary');
+            $totalTotalBenStaff = $salariesStaff->sum('total_ben');
+            $totalBrutoSalaryStaff = $salariesStaff->sum('bruto_salary');
+
+            $columnsMng = [
+                'Emp Code',
+                'Nama',
+                'Grade',
+                'rate_salary',
+                'ability',
+                'fungtional_alw',
+                'skill_alw',
+                'family_alw',
+                'telephone_alw',
+                'transport_alw',
+                'total_overtime',
+                'incentive',
+                'adjustment',
+                'gross_salary',
+                'bruto_salary',
+                'thr',
+                'bonus',
+                'pinjaman',
+                'bpjs',
+                'jamsostek',
+                'union',
+                'other',
+                'absent',
+                'electricity',
+                'cooperative',
+                'total_deduction',
+                'net_salary',
+            ];
+
+            $columnsStaff = [
+                'Emp Code',
+                'Nama',
+                'Grade',
+                'rate_salary',
+                'ability',
+                'fungtional_alw',
+                'skill_alw',
+                'family_alw',
+                'telephone_alw',
+                'transport_alw',
+                'total_overtime',
+                'incentive',
+                'adjustment',
+                'gross_salary',
+                'bruto_salary',
+                'thr',
+                'bonus',
+                'pinjaman',
+                'bpjs',
+                'jamsostek',
+                'union',
+                'other',
+                'absent',
+                'electricity',
+                'cooperative',
+                'total_deduction',
+                'net_salary',
+            ];
+
+            $displayColumnsMng = [];
+            foreach ($columnsMng as $column) {
+                if ($salariesMng->pluck($column)->filter()->isNotEmpty()) {
+                    $displayColumnsMng[] = $column;
+                }
+            }
+
+            $displayColumnsStaff = [];
+            foreach ($columnsStaff as $column) {
+                if ($salariesStaff->pluck($column)->filter()->isNotEmpty()) {
+                    $displayColumnsStaff[] = $column;
+                }
+            }
+
+            $employeeIdentityColumnsMng = ['Emp Code', 'Nama', 'Grade'];
+            $salaryComponentColumnsMng = ['rate_salary', 'ability', 'fungtional_alw', 'skill_alw', 'family_alw', 'telephone_alw', 'transport_alw', 'total_overtime', 'incentive', 'thr', 'bonus', 'adjustment', 'gross_salary'];
+            $deductionColumnsMng = ['pinjaman', 'bpjs', 'jamsostek', 'union', 'other', 'absent', 'electricity', 'cooperative', 'total_deduction'];
+
+            $employeeIdentityColumnsStaff = ['Emp Code', 'Nama', 'Grade'];
+            $salaryComponentColumnsStaff = ['rate_salary', 'ability', 'fungtional_alw', 'skill_alw', 'family_alw', 'telephone_alw', 'transport_alw', 'total_overtime', 'incentive', 'thr', 'bonus', 'adjustment', 'gross_salary'];
+            $deductionColumnsStaff = ['pinjaman', 'bpjs', 'jamsostek', 'union', 'other', 'absent', 'electricity', 'cooperative', 'total_deduction'];
+
+            $employeeIdentityColsMng = count(array_intersect($displayColumnsMng, $employeeIdentityColumnsMng));
+            $salaryComponentColsMng = count(array_intersect($displayColumnsMng, $salaryComponentColumnsMng));
+            $deductionColsMng = count(array_intersect($displayColumnsMng, $deductionColumnsMng));
+
+            $employeeIdentityColsStaff = count(array_intersect($displayColumnsStaff, $employeeIdentityColumnsStaff));
+            $salaryComponentColsStaff = count(array_intersect($displayColumnsStaff, $salaryComponentColumnsStaff));
+            $deductionColsStaff = count(array_intersect($displayColumnsStaff, $deductionColumnsStaff));
+
+            $dateMng = null;
+            foreach ($salariesMng as $salMng) {
+                $dateMng = date('F Y', strtotime($salMng->salary_months_date));
+            }
+
+            $dateStaff = null;
+            foreach ($salariesStaff as $salStaff) {
+                $dateStaff = date('F Y', strtotime($salStaff->salary_months_date));
+            }
+
+            if ($dateMng && $dateStaff) {
+                $pdf = PDF::loadView('salary.print_mng_staff', compact(
+                    'salariesMng',
+                    'dateMng',
+                    'displayColumnsMng',
+                    'employeeIdentityColsMng',
+                    'salaryComponentColsMng',
+                    'deductionColsMng',
+                    'totalRateSalaryMng',
+                    'totalAbilityMng',
+                    'totalFungtionalAlwMng',
+                    'totalSkillAlwMng' ,
+                    'totalFamilyAlwMng',
+                    'totalTelephoneAlwMng',
+                    'totalTransportAlwMng',
+                    'totalTotalOTMng',
+                    'totalIncentiveMng',
+                    'totalAdjustmentMng',
+                    'totalGrossSalaryMng',
+                    'totalBrutoSalaryMng',
+                    'totalThrMng',
+                    'totalBonusMng',
+                    'totalPinjamanMng',
+                    'totalBpjsMng',
+                    'totalJamsostekMng',
+                    'totalUnionMng',
+                    'totalOtherMng',
+                    'totalAbsentMng',
+                    'totalElectricityMng',
+                    'totalCooperativeMng',
+                    'totalTotalDedMng',
+                    'totalNetSalaryMng',
+                    'salariesStaff',
+                    'dateStaff',
+                    'displayColumnsStaff',
+                    'employeeIdentityColsStaff',
+                    'salaryComponentColsStaff',
+                    'deductionColsStaff',
+                    'totalRateSalaryStaff',
+                    'totalAbilityStaff',
+                    'totalFungtionalAlwStaff',
+                    'totalSkillAlwStaff' ,
+                    'totalFamilyAlwStaff',
+                    'totalTelephoneAlwStaff',
+                    'totalTransportAlwStaff',
+                    'totalTotalOTStaff',
+                    'totalIncentiveStaff',
+                    'totalAdjustmentStaff',
+                    'totalGrossSalaryStaff',
+                    'totalBrutoSalaryStaff',
+                    'totalThrStaff',
+                    'totalBonusStaff',
+                    'totalPinjamanStaff',
+                    'totalBpjsStaff',
+                    'totalJamsostekStaff',
+                    'totalUnionStaff',
+                    'totalOtherStaff',
+                    'totalAbsentStaff',
+                    'totalElectricityStaff',
+                    'totalCooperativeStaff',
+                    'totalTotalDedStaff',
+                    'totalNetSalaryStaff'
+                ));
+                return $pdf->setPaper(array(0, 0, 609.4488, 935.433), 'landscape')->stream('PrintAll.pdf');
+            } else {
+                return redirect()->route('salary.index');
+            }
+        } elseif ($status == 'Manager Staff' && $is_thr == 'yes') {
+            $salariesMng = DB::table('salary_months')
+                ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
+                ->join('users', 'users.nik', '=', 'salary_years.nik')
+                ->select(
+                    'users.nik as Emp Code',
+                    'users.name as Nama',
+                    'grade.name_grade as Grade',
+                    'grade.rate_salary',
+                    'salary_years.ability',
+                    'salary_years.fungtional_alw',
+                    'salary_years.family_alw',
+                    'salary_years.transport_alw',
+                    'salary_years.skill_alw',
+                    'salary_years.telephone_alw',
+                    'salary_years.bpjs',
+                    'salary_years.jamsostek',
+                    'salary_years.adjustment',
+                    'salary_years.total_ben',
+                    'salary_months.total_overtime',
+                    'salary_months.thr',
+                    'salary_months.bonus',
+                    'salary_months.incentive',
+                    'salary_months.gross_salary',
+                    'salary_months.union',
+                    'salary_months.absent',
+                    'salary_months.electricity',
+                    'salary_months.cooperative',
+                    'salary_months.pinjaman',
+                    'salary_months.other',
+                    'salary_months.date as salary_months_date',
+                    'salary_months.total_deduction',
+                    'salary_months.net_salary',
+                    'salary_months.is_thr',
+                    DB::raw('(total_ben + gross_salary) as bruto_salary')
+                )
+                ->whereYear('salary_months.date', $year)
+                ->whereMonth('salary_months.date', $month)
+                ->where('salary_months.is_thr', 'yes')
+                ->whereIn('users.status', ['Manager', 'Staff'])
+                ->whereIn('users.jabatan', ['Dir', 'Mng', 'Dep. Mng'])
+                ->orderBy('bruto_salary', 'DESC')
+                ->get();
+
+            $salariesStaff = DB::table('salary_months')
+                ->join('salary_years', 'salary_years.id', '=', 'salary_months.id_salary_year')
+                ->join('grade', 'salary_years.id_salary_grade', '=', 'grade.id')
+                ->join('users', 'users.nik', '=', 'salary_years.nik')
+                ->select(
+                    'users.nik as Emp Code',
+                    'users.name as Nama',
+                    'grade.name_grade as Grade',
+                    'grade.rate_salary',
+                    'salary_years.ability',
+                    'salary_years.fungtional_alw',
+                    'salary_years.family_alw',
+                    'salary_years.transport_alw',
+                    'salary_years.skill_alw',
+                    'salary_years.telephone_alw',
+                    'salary_years.bpjs',
+                    'salary_years.jamsostek',
+                    'salary_years.adjustment',
+                    'salary_years.total_ben',
+                    'salary_months.total_overtime',
+                    'salary_months.thr',
+                    'salary_months.bonus',
+                    'salary_months.incentive',
+                    'salary_months.gross_salary',
+                    'salary_months.union',
+                    'salary_months.absent',
+                    'salary_months.electricity',
+                    'salary_months.cooperative',
+                    'salary_months.pinjaman',
+                    'salary_months.other',
+                    'salary_months.date as salary_months_date',
+                    'salary_months.total_deduction',
+                    'salary_months.net_salary',
+                    DB::raw('(total_ben + gross_salary) as bruto_salary')
+                )
+                ->whereYear('salary_months.date', $year)
+                ->whereMonth('salary_months.date', $month)
+                ->where('users.status', 'Staff')
+                ->where('salary_months.is_thr', 'yes')
+                ->whereIn('users.jabatan', ['Asst Mng', 'Asst Mng Trainee'])
+                ->orderBy('bruto_salary', 'DESC')
                 ->get();
 
             $totalRateSalaryMng = $salariesMng->sum('rate_salary');
@@ -3135,7 +3610,8 @@ class SalaryController extends Controller
             ->where('users.active', 'yes')
             ->whereNotNull('users.no_telpon')
             ->whereYear('salary_months.date', $currentYear)
-            ->orderBy('users.status')
+            ->orderBy('users.status', 'asc')
+            ->orderBy('users.nik', 'desc')
             ->get();
 
         $rawData->transform(function ($item) {
@@ -3181,6 +3657,8 @@ class SalaryController extends Controller
         $months = request()->input('filter_month');
         $selectedIds = $request->input('salary_ids');
 
+        $is_thr = $request->has('thr') ? 1 : 0;
+
         // $date = Carbon::createFromFormat('Y-m', $month);
         // $year = $date->year;
         // $month = $date->month;
@@ -3195,7 +3673,11 @@ class SalaryController extends Controller
 
         // dd($selectedIds, $months);
 
-        SendCheckedSalaryJob::dispatch($selectedIds, $months);
+        if ($is_thr == 1) {
+            SendCheckedTHRJob::dispatch($selectedIds, $months, $is_thr);
+        } else {
+            SendCheckedSalaryJob::dispatch($selectedIds, $months);
+        }
 
         return redirect()->back();
     }

@@ -205,10 +205,15 @@
                                     {{ number_format($data['sal']->total_overtime, 0, ',', '.') }}
                                 </td>
                             </tr>
-                            <tr>
+                            {{-- <tr>
                                 <td>THR</td>
                                 <td>:</td>
                                 <td class="text-end">{{ number_format($data['sal']->thr, 0, ',', '.') }}</td>
+                            </tr> --}}
+                            <tr>
+                                <td>Rapel Januari 2025</td>
+                                <td>:</td>
+                                <td class="text-end">{{ number_format($data['sal']->salary_backpay, 0, ',', '.') }}</td>
                             </tr>
                             <tr>
                                 <td>Bonus</td>
