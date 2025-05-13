@@ -227,6 +227,7 @@
                                                     <option value="" selected disabled>Pilih Status</option>
                                                     <option value="Manager Staff">Manager Staff</option>
                                                     <option value="Monthly">Monthly</option>
+                                                    <option value="Contract BSKP">Contract BSKP</option>
                                                 </select>
                                             </div>
                                         </div>

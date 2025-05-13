@@ -53,6 +53,8 @@ class User extends Authenticatable
         'access_by',
         'image_url',
         'role_app',
+        'is_bpjs',
+        'is_jamsostek',
         'active',
         'overtime_limit',
         'email_verified_at',

@@ -1,19 +1,13 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\OvertimeController;
-use App\Http\Controllers\StatusController;
 use App\Http\Controllers\GradeController;
-use App\Http\Controllers\DeptController;
-use App\Http\Controllers\JobController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\SalaryGradeController;
-use App\Http\Controllers\SalaryYearController;
-use App\Http\Controllers\SalaryMonthController;
+use App\Http\Controllers\OvertimeController;
 use App\Http\Controllers\SalaryController;
-use App\Http\Controllers\WhatsAppController;
-use App\Http\Controllers\SomeController;
-
+use App\Http\Controllers\SalaryGradeController;
+use App\Http\Controllers\SalaryMonthController;
+use App\Http\Controllers\SalaryYearController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,8 +21,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::group(['middleware' => ['jwt.verify']], function () {
 
+Auth::routes();
+// Route::group(['middleware' => ['jwt.verify']], function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/historical', [SalaryController::class, 'historical'])->name('historical');
     Route::resource('user', UserController::class);
@@ -107,50 +103,52 @@ use Illuminate\Support\Facades\Route;
 
 // });
 
-Route::post('/salary-month/export', [SalaryMonthController::class, 'export'])->name('salary-month.export');
-Route::post('/salary-month/export-thr', [SalaryMonthController::class, 'export_thr'])->name('salary-month.export-thr');
-Route::post('/salary-month/import', [SalaryMonthController::class, 'import'])->name('salary-month.import');
-Route::post('/salary-month/import-thr', [SalaryMonthController::class, 'import_thr'])->name('salary-month.import-thr');
+    Route::post('/salary-month/export', [SalaryMonthController::class, 'export'])->name('salary-month.export');
+    Route::post('/salary-month/export-thr', [SalaryMonthController::class, 'export_thr'])->name('salary-month.export-thr');
+    Route::post('/salary-month/import', [SalaryMonthController::class, 'import'])->name('salary-month.import');
+    Route::post('/salary-month/import-thr', [SalaryMonthController::class, 'import_thr'])->name('salary-month.import-thr');
 
 // Route::post('/is-checked', [SalaryController::class, 'salary_check'])->name('salary-check');
 // Route::post('/is-approved', [SalaryController::class, 'salary_approved'])->name('salary-approved');
 
-
-
 // OvertimeController
 // -------------------------------------------------------------------
-Route::get('/overtime-approval-index', [OvertimeController::class, 'index'])->name('overtime-approval-index');
-Route::post('/overtime-approval-store', [OvertimeController::class, 'store'])->name('overtime-approval-store');
+    Route::get('/overtime-approval-index', [OvertimeController::class, 'index'])->name('overtime-approval-index');
+    Route::post('/overtime-approval-store', [OvertimeController::class, 'store'])->name('overtime-approval-store');
 
-Route::get('/overtime-summary-index', [OvertimeController::class, 'index_summary'])->name('overtime-summary-index');
-Route::post('/overtime-summary-store', [OvertimeController::class, 'store_summary'])->name('overtime-summary-store');
+    Route::get('/overtime-summary-index', [OvertimeController::class, 'index_summary'])->name('overtime-summary-index');
+    Route::post('/overtime-summary-store', [OvertimeController::class, 'store_summary'])->name('overtime-summary-store');
 
-Route::get('/overtime-master-index', [OvertimeController::class, 'overtime_master_index'])->name('overtime-master-index');
-Route::post('/overtime-master-store', [OvertimeController::class, 'overtime_master_store'])->name('overtime-master-store');
-Route::put('/overtime-master-update/{id}', [OvertimeController::class, 'overtime_master_update'])->name('overtime-master-update');
-Route::delete('/overtime-master-destroy/{id}', [OvertimeController::class, 'overtime_master_destory'])->name('overtime-master-destroy');
+    Route::get('/overtime-master-index', [OvertimeController::class, 'overtime_master_index'])->name('overtime-master-index');
+    Route::post('/overtime-master-store', [OvertimeController::class, 'overtime_master_store'])->name('overtime-master-store');
+    Route::put('/overtime-master-update/{id}', [OvertimeController::class, 'overtime_master_update'])->name('overtime-master-update');
+    Route::delete('/overtime-master-destroy/{id}', [OvertimeController::class, 'overtime_master_destory'])->name('overtime-master-destroy');
 
-Route::get('/overtime-limit-index', [OvertimeController::class, 'overtime_limit_index'])->name('overtime-limit-index');
-Route::post('/overtime-limit-store', [OvertimeController::class, 'overtime_limit_store'])->name('overtime-limit-store');
+    Route::get('/overtime-limit-index', [OvertimeController::class, 'overtime_limit_index'])->name('overtime-limit-index');
+    Route::post('/overtime-limit-store', [OvertimeController::class, 'overtime_limit_store'])->name('overtime-limit-store');
 
-Route::get('/overtime-master-index', [OvertimeController::class, 'overtime_master_index'])->name('overtime-master-index');
+    Route::get('/overtime-master-index', [OvertimeController::class, 'overtime_master_index'])->name('overtime-master-index');
 
 // Route::get('/summary-overtime-index', [OvertimeController::class, 'summary_overtime_index'])->name('summary-overtime-index');
 // Route::get('/summary-overtime-detail', [OvertimeController::class, 'summary_overtime_detail'])->name('summary-overtime-detail');
 
-Route::post('/update-salary-checkbox', [SalaryController::class, 'updateCheckbox'])->name('update.salary.checkbox');
+    Route::post('/update-salary-checkbox', [SalaryController::class, 'updateCheckbox'])->name('update.salary.checkbox');
 // -------------------------------------------------------------------
 
 // });
 
-Route::get('/salary-year/edit', [SalaryYearController::class, 'edit'])->name('salary-year.edit');
-Route::get('/salary-year/get-emp', [SalaryYearController::class, 'get_emp'])->name('salary-year.get-emp');
-Route::get('/salary-year/get-rate-salary', [SalaryYearController::class, 'get_rate_salary'])->name('salary-year.get-rate-salary');
+    Route::get('/salary-year/edit', [SalaryYearController::class, 'edit'])->name('salary-year.edit');
+    Route::get('/salary-year/get-emp', [SalaryYearController::class, 'get_emp'])->name('salary-year.get-emp');
+    Route::get('/salary-year/get-rate-salary', [SalaryYearController::class, 'get_rate_salary'])->name('salary-year.get-rate-salary');
 
-Route::get('/salary-month/edit', [SalaryMonthController::class, 'edit'])->name('salary-month.edit');
-Route::put('/salary-month/update', [SalaryMonthController::class, 'update'])->name('salary-month.update');
+    Route::get('/salary-month/edit', [SalaryMonthController::class, 'edit'])->name('salary-month.edit');
+    Route::put('/salary-month/update', [SalaryMonthController::class, 'update'])->name('salary-month.update');
+});
 
 // UserController
 // -------------------------------------------------------------------
 Route::get('/api-user', [UserController::class, 'getApiUser'])->name('api-user');
 // -------------------------------------------------------------------
+
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -341,7 +341,13 @@ class SalaryYearController extends Controller
             $jamsostek_jkk = $totalJamsostek * 0.0054;
             $jamsostek_tk = $totalJamsostek * 0.003;
             $jamsostek_tht = $totalJamsostek * 0.037;
-            $total_jamsostek = $jamsostek_jkk + $jamsostek_tk + $jamsostek_tht;
+
+            $users = User::where('nik', $input['nik'][$key])->first();
+            if ($users->is_jamsostek == 1) {
+                 $total_jamsostek = $jamsostek_jkk + $jamsostek_tk + $jamsostek_tht;
+            } else {
+                $jamsostek = 0;
+            }
 
             $allocations = $request->input('allocation')[$key] ?? NULL;
             if ($allocations) {
@@ -494,6 +500,14 @@ class SalaryYearController extends Controller
             $jamsostek_jkk = $totalJamsostek * 0.0054;
             $jamsostek_tk = $totalJamsostek * 0.003;
             $jamsostek_tht = $totalJamsostek * 0.037;
+
+            $users = User::where('nik', $id_user)->first();
+            if ($users->is_jamsostek == 1) {
+                $jamsostek = $totalJamsostek * 0.02;
+            } else {
+                $jamsostek = 0;
+            }
+
             $total_jamsostek = $jamsostek + $bpjs;
             // dd($total_jamsostek);
             // dd($total_jamsostek, $jamsostek_jkk, $jamsostek_tk, $jamsostek_tht);
@@ -519,7 +533,7 @@ class SalaryYearController extends Controller
                     'skill_alw' => $skill_alw,
                     'adjustment' => $adjustment,
                     'bpjs' => $bpjs,
-                    'jamsostek' => 0,
+                    'jamsostek' => ($users->is_jamsostek == 1) ? $jamsostek : 0,
                     'total_ben' => 0,
                     'total_ben_ded' => 0,
                     'allocation' => $allocationJson,

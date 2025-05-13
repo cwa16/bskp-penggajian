@@ -110,7 +110,7 @@
                             <a href="./pages/sign-in.html" class="nav-link text-body p-0 font-weight-bold"
                                 id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa fa-user me-sm-1"></i>
-                                <span class="d-sm-inline d-none">{{ $name }}</span>
+                                <span class="d-sm-inline d-none">{{ Auth::user()->name }}</span>
                                 {{-- <span class="d-sm-inline d-none">Admin</span> --}}
                             </a>
 
@@ -124,7 +124,12 @@
                                             </div>
                                             <div class="d-flex flex-column justify-content-center">
                                                 <h6 class="text-sm font-weight-normal">
-                                                    <span class="font-weight-bold text-danger">Logout</span>
+                                                    <form action="{{ route('logout') }}" method="post">
+                                                        @csrf
+                                                        <button type="submit" class=""
+                                                            style="border: none; background: none;">Logout</button>
+                                                        {{-- <a href="{{ route('logout') }}" class="btn btn-link text-danger text-gradient px-3 mb-0">Logout</a> --}}
+                                                    </form>
                                                 </h6>
                                             </div>
                                         </div>

@@ -1,4 +1,7 @@
 @extends('layouts.main')
+<!-- Toastr -->
+<link href="{{('https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css')}}" rel="stylesheet"/>
+<script src="{{('https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js')}}"></script>
 @section('content')
     {{-- Bagian  Isi Konten --}}
     <div class="row">
@@ -33,25 +36,10 @@
                                     <th>No Telpon</th>
                                     <th>Kis</th>
                                     <th>Kpj</th>
-                                    <th>Suku</th>
-                                    <th>No Sepatu Safety</th>
-                                    <th>Start Work User</th>
-                                    <th>End Work User</th>
-                                    <th>Loc Kerja</th>
-                                    <th>Loc</th>
-                                    <th>Sistem Absensi</th>
-                                    <th>Latitude</th>
-                                    <th>Longitude</th>
-                                    <th>Aktual Cuti</th>
-                                    <th>Status Pernikahan</th>
-                                    <th>Istri Suami</th>
-                                    <th>Anak 1</th>
-                                    <th>Anak 2</th>
-                                    <th>Anak 3</th>
-                                    {{-- <th>Access By</th> --}}
-                                    {{-- <th>Image Url</th> --}}
-                                    <th>Role App</th>
                                     <th>Active</th>
+                                    <th>BPJS</th>
+                                    <th>Jamsostek</th>
+                                    <th>SPSI</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -75,25 +63,34 @@
                                         <td>{{ $user->no_telpon }}</td>
                                         <td>{{ $user->kis }}</td>
                                         <td>{{ $user->kpj }}</td>
-                                        <td>{{ $user->suku }}</td>
-                                        <td>{{ $user->no_sepatu_safety }}</td>
-                                        <td>{{ $user->start_work_user }}</td>
-                                        <td>{{ $user->end_work_user }}</td>
-                                        <td>{{ $user->loc_kerja }}</td>
-                                        <td>{{ $user->loc }}</td>
-                                        <td>{{ $user->sistem_absensi }}</td>
-                                        <td>{{ $user->latitude }}</td>
-                                        <td>{{ $user->longitude }}</td>
-                                        <td>{{ $user->aktual_cuti }}</td>
-                                        <td>{{ $user->status_pernikahan }}</td>
-                                        <td>{{ $user->istri_suami }}</td>
-                                        <td>{{ $user->anak_1 }}</td>
-                                        <td>{{ $user->anak_2 }}</td>
-                                        <td>{{ $user->anak_3 }}</td>
-                                        {{-- <td>{{ $user->access_by }}</td> --}}
-                                        {{-- <td>{{ $user->image_url }}</td> --}}
-                                        <td>{{ $user->role_app }}</td>
                                         <td>{{ $user->active }}</td>
+                                        <form id="user-form-{{ $user->id }}">
+                                            @csrf
+                                            @method('PUT')
+
+                                            <td>
+                                                <input type="hidden" name="is_bpjs" value="0">
+                                                <input type="checkbox" name="is_bpjs" value="1"
+                                                    {{ $user->is_bpjs ? 'checked' : '' }} class="checkbox-update"
+                                                    data-user-id="{{ $user->id }}">
+                                            </td>
+
+                                            <td>
+                                                <input type="hidden" name="is_jamsostek" value="0">
+                                                <input type="checkbox" name="is_jamsostek" value="1"
+                                                    {{ $user->is_jamsostek ? 'checked' : '' }} class="checkbox-update"
+                                                    data-user-id="{{ $user->id }}">
+                                            </td>
+
+                                            <td>
+                                                <input type="hidden" name="is_union" value="0">
+                                                <input type="checkbox" name="is_union" value="1"
+                                                    {{ $user->is_union ? 'checked' : '' }} class="checkbox-update"
+                                                    data-user-id="{{ $user->id }}">
+                                            </td>
+                                        </form>
+
+
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -105,3 +102,34 @@
     </div>
     {{-- /Bagian  Isi Konten --}}
 @endsection
+<script src="{{('https://code.jquery.com/jquery-3.6.0.min.js')}}"></script>
+<script>
+    $(document).ready(function() {
+        $('.checkbox-update').on('change', function() {
+            const userId = $(this).data('user-id');
+            const form = $('#user-form-' + userId);
+            const url = "{{ route('user.update', ['user' => 'USER_ID']) }}".replace('USER_ID', userId);
+            // Serialize the form data
+            const formData = form.serialize();
+
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'X-HTTP-Method-Override': 'PUT'
+                },
+                success: function(response) {
+                    console.log('Updated successfully');
+                   toastr.success('User updated successfully');
+                },
+                error: function(xhr) {
+                    console.error('Update failed', xhr.responseText);
+                    toastr.error('Failed to update user');
+                    // Optionally show an error message
+                }
+            });
+        });
+    });
+</script>
