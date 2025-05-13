@@ -242,13 +242,13 @@
                             <td class="text-end">{{ number_format($sal->total_overtime, 0, ',', '.') }}</td>
                         </tr>
 
-                            @if ($is_thr == 1)
+                        @if ($is_thr == 1)
                             <tr>
                                 <td>THR</td>
                                 <td>:</td>
                                 <td class="text-end">{{ number_format($sal->net_salary, 0, ',', '.') }}</td>
                             </tr>
-                            @endif
+                        @endif
 
                         <tr>
                             <td>Bonus</td>
@@ -390,7 +390,7 @@
                     </table>
                 </td>
 
-                @if ($sal->jamsostek == 0)
+                @if ($sal->is_jamsostek == 0 || $sal->is_jamsostek == null || $sal->is_jamsostek == '')
                     <td rowspan="2" style="vertical-align: top; padding-left:10px; padding-bottom: 0;">
                         <table class="tb-detail">
                             <tr>

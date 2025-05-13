@@ -23,16 +23,16 @@ class SendCheckedSalaryJob implements ShouldQueue
 
     protected $selectedIds;
     protected $months;
-
+    protected $content_id;
     /**
      * Create a new job instance.
      */
-    public function __construct($selectedIds, $months)
+    public function __construct($selectedIds, $months, $content_id)
     {
         $this->selectedIds = $selectedIds;
         $this->months = $months;
+        $this->content_id = $content_id;
     }
-
     /**
      * Execute the job.
      */
@@ -73,6 +73,7 @@ class SendCheckedSalaryJob implements ShouldQueue
                     'users.dept as Dept',
                     'users.jabatan as Jabatan',
                     'users.start_work_user',
+                    'users.is_jamsostek',
                     'grade.name_grade as Grade',
                     'grade.rate_salary',
                     'salary_years.*',
@@ -143,7 +144,7 @@ class SendCheckedSalaryJob implements ShouldQueue
             $is_send = $twilio->messages->create(
                 "whatsapp:+" . $data->no_telpon,
                 [
-                    "contentSid" => env('TWILIO_CONTENT_ID'),
+                    "contentSid" => $this->content_id,
                     "messagingServiceSid" => env('TWILIO_SERVICE_ID'),
                     "from" => "whatsapp:" . env('TWILIO_PHONE_NUMBER'),
                     "contentVariables" => json_encode([

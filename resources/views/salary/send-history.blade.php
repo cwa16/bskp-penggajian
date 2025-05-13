@@ -33,6 +33,10 @@
                                             </option>
                                         @endforeach
                                     </select>
+                                        <select class="form-select form-select-sm" name="revision">
+                                        <option value="0" selected>Fix</option>
+                                        <option value="1">Revisi</option>
+                                    </select>
                                     <br>
                                     <input type="checkbox" name="thr" id="" value="yes" style="width: 25px; height: 25px;">
                                     <label for="">THR</label>
@@ -46,13 +50,13 @@
                                 </div>
                             </div>
 
-                            <div class="table-responsive p-0">
+                            <div class="">
                                 <table
-                                    class="table table-sm table-striped table-hover dtTable1 align-items-center small-tbl compact"
-                                    id="example">
-                                    <thead class="bg-thead">
+                                    class="table table-sm table-striped table-hover align-items-center dtTable300"
+                                    id="">
+                                    <thead>
                                         <tr>
-                                            <th rowspan="2" class="text-center"
+                                            <th class="text-center"
                                                 style="background-color: #1A73E8;color: white; p-0">
                                                 <input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)">
                                             </th>
@@ -193,9 +197,8 @@
             </div>
         </div>
 
-        <script src="{{ asset('assets/libs/jquery/jquery.js') }}"></script>
+        {{-- <script src="{{ asset('assets/libs/jquery/jquery.js') }}"></script> --}}
         <script src="{{ asset('assets/js/tableToExcel.js') }}"></script>
-        <script src="{{ asset('assets/libs/jquery/jquery.js') }}"></script>
         <script>
             function toggleSelectAll(source) {
                 checkboxes = document.querySelectorAll('.selectItem');

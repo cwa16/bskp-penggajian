@@ -353,7 +353,7 @@ class SalaryController extends Controller
                     $query->whereMonth('salary_months.date', $subMonth)
                         ->orWhereMonth('salary_months.date', $subMonthNd);
                 })
-                ->get();
+                ->orderBy('users.grade', 'DESC')->limit(150)->get();
         } else {
             if ($selectedStatus == 'All Status') {
                 $data = DB::table('salary_months')
@@ -373,7 +373,6 @@ class SalaryController extends Controller
                     ->whereIn('users.status', ['Monthly', 'Contract BSKP'])
                     ->whereYear('salary_months.date', $selectedYear)
                     ->whereMonth('salary_months.date', $selectedMonth)
-                    ->where('users.dept', 'Workshop')
                     ->get();
                 // dd($data);
             }
@@ -534,6 +533,7 @@ class SalaryController extends Controller
                 'users.dept as Dept',
                 'users.jabatan as Jabatan',
                 'users.start_work_user',
+                'users.is_jamsostek',
                 'grade.name_grade as Grade',
                 'grade.rate_salary',
                 'salary_years.*',
@@ -560,9 +560,10 @@ class SalaryController extends Controller
             $rate_salary    = $sal->rate_salary;
             $ability        = $sal->ability;
             $fungtional_alw = $sal->fungtional_alw;
+            $skill_alw      = $sal->skill_alw;
             $family_alw     = $sal->family_alw;
 
-            $total = $rate_salary + $ability + $fungtional_alw + $family_alw;
+            $total = $rate_salary + $ability + $fungtional_alw + $family_alw + $skill_alw;
 
             $pdfData[] = [
                 'sal'   => $sal,
@@ -3972,6 +3973,13 @@ class SalaryController extends Controller
     {
         $months      = request()->input('filter_month');
         $selectedIds = $request->input('salary_ids');
+        $revision    = $request->input('revision');
+
+        if ($revision > 0) {
+            $content_id = "HX0be005e765f6e9672d443445ef867045";
+        } else {
+            $content_id = "HXa7086bffee8cbc4d29a746a011800519";
+        }
 
         $is_thr = $request->has('thr') ? 1 : 0;
 
@@ -3992,7 +4000,7 @@ class SalaryController extends Controller
         if ($is_thr == 1) {
             SendCheckedTHRJob::dispatch($selectedIds, $months, $is_thr);
         } else {
-            SendCheckedSalaryJob::dispatch($selectedIds, $months);
+            SendCheckedSalaryJob::dispatch($selectedIds, $months, $content_id);
         }
 
         return redirect()->back();
