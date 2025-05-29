@@ -211,12 +211,14 @@
                                 <td class="text-end">{{ number_format($data['sal']->thr, 0, ',', '.') }}</td>
                             </tr> --}}
 
-                            @if ($data['sal']->salary_backpay > 0))
-                                 <tr>
-                                <td>Rapel Januari 2025</td>
-                                <td>:</td>
-                                <td class="text-end">{{ number_format($data['sal']->salary_backpay, 0, ',', '.') }}</td>
-                            </tr>
+                            @if ($data['sal']->salary_backpay > 0)
+                                )
+                                <tr>
+                                    <td>Rapel Januari 2025</td>
+                                    <td>:</td>
+                                    <td class="text-end">{{ number_format($data['sal']->salary_backpay, 0, ',', '.') }}
+                                    </td>
+                                </tr>
                             @endif
 
 
@@ -312,6 +314,19 @@
                         </table>
                     </td>
 
+                    @php
+                        $isJamsostek = $data['sal']->is_jamsostek;
+                        $isJKK = $data['sal']->is_jkk;
+                        $isJKM = $data['sal']->is_jkm;
+                        $isJHT = $data['sal']->is_jht;
+
+                        $JKK = $isJKK ? $data['total'] * 0.0054 : 0;
+                        $JKM = $isJKM ? $data['total'] * 0.003 : 0;
+                        $JHT = $isJHT ? $data['total'] * 0.037 : 0;
+
+                        $sub_total_fix = $JKK + $JKM + $JHT;
+                    @endphp
+
                     <td rowspan="2" style="vertical-align: top; padding-left:10px; padding-bottom: 0;">
                         <table class="tb-detail">
                             <tr>
@@ -320,37 +335,24 @@
                             <tr>
                                 <td>Jamsostek JKK</td>
                                 <td>:</td>
-                                @if ($data['sal']->is_jamsostek == 1)
-                                    <td class="text-end">{{ number_format($data['total'] * 0.0054, 0, ',', '.') }}
+                                <td class="text-end">{{ number_format($JKK, 0, ',', '.') }}
                                 </td>
-                                @else
-                                    <td class="text-end">0</td>
-                                @endif
 
 
                             </tr>
                             <tr>
                                 <td>Jamsostek JKM</td>
                                 <td>:</td>
-                                @if ($data['sal']->is_jamsostek == 1)
-                                    <td class="text-end">{{ number_format($data['total'] * 0.003, 0, ',', '.') }}
+                                <td class="text-end">{{ number_format($JKM, 0, ',', '.') }}
                                 </td>
-                                @else
-                                    <td class="text-end">0</td>
-                                @endif
 
 
                             </tr>
                             <tr>
                                 <td>Jamsostek JHT</td>
                                 <td>:</td>
-                                @if ($data['sal']->is_jamsostek == 1)
-                                    <td class="text-end">{{ number_format($data['total'] * 0.037, 0, ',', '.') }}
+                                <td class="text-end">{{ number_format($JHT, 0, ',', '.') }}
                                 </td>
-                                @else
-                                     <td class="text-end">0</td>
-                                @endif
-
 
                             </tr>
                             <tr>
@@ -363,20 +365,9 @@
                             <tr class="top-border">
                                 <td><b>Sub Total</b></td>
                                 <td>:</td>
-                                @php
-                                    $jkk = $data['total'] * 0.0054;
-                                    $jkm = $data['total'] * 0.003;
-                                    $jht = $data['total'] * 0.037;
-                                    $pph = 0;
-                                    $total_ben = $jkk + $jkm + $jht + $pph;
-                                @endphp
-                                @if ($data['sal']->is_jamsostek == 1)
-                                    <td class="text-end"><b>
-                                        {{ number_format($total_ben, 0, ',', '.') }}</b>
+                                <td class="text-end"><b>
+                                        {{ number_format($sub_total_fix, 0, ',', '.') }}</b>
                                 </td>
-                                @else
-                                    <td class="text-end">0</td>
-                                @endif
 
                             </tr>
                         </table>
@@ -384,40 +375,27 @@
                             <tr>
                                 <td colspan="3"><u><b>D. DEDUCTION BENEFIT</b></u></td>
                             </tr>
-                           <tr>
+                            <tr>
                                 <td>Jamsostek JKK</td>
                                 <td>:</td>
-                                @if ($data['sal']->is_jamsostek == 1)
-                                    <td class="text-end">{{ number_format($data['total'] * 0.0054, 0, ',', '.') }}
+                                <td class="text-end">{{ number_format($JKK, 0, ',', '.') }}
                                 </td>
-                                @else
-                                    <td class="text-end">0</td>
-                                @endif
 
 
                             </tr>
                             <tr>
                                 <td>Jamsostek JKM</td>
                                 <td>:</td>
-                                @if ($data['sal']->is_jamsostek == 1)
-                                    <td class="text-end">{{ number_format($data['total'] * 0.003, 0, ',', '.') }}
+                                <td class="text-end">{{ number_format($JKM, 0, ',', '.') }}
                                 </td>
-                                @else
-                                    <td class="text-end">0</td>
-                                @endif
 
 
                             </tr>
                             <tr>
                                 <td>Jamsostek JHT</td>
                                 <td>:</td>
-                                @if ($data['sal']->is_jamsostek == 1)
-                                    <td class="text-end">{{ number_format($data['total'] * 0.037, 0, ',', '.') }}
+                                <td class="text-end">{{ number_format($JHT, 0, ',', '.') }}
                                 </td>
-                                @else
-                                     <td class="text-end">0</td>
-                                @endif
-
 
                             </tr>
                             <tr>
@@ -430,20 +408,9 @@
                             <tr class="top-border">
                                 <td><b>Sub Total</b></td>
                                 <td>:</td>
-                                @php
-                                    $jkk = $data['total'] * 0.0054;
-                                    $jkm = $data['total'] * 0.003;
-                                    $jht = $data['total'] * 0.037;
-                                    $pph = 0;
-                                    $total_ben = $jkk + $jkm + $jht + $pph;
-                                @endphp
-                                @if ($data['sal']->is_jamsostek == 1)
-                                    <td class="text-end"><b>
-                                        {{ number_format($total_ben, 0, ',', '.') }}</b>
+                                <td class="text-end"><b>
+                                        {{ number_format($sub_total_fix, 0, ',', '.') }}</b>
                                 </td>
-                                @else
-                                    <td class="text-end">0</td>
-                                @endif
 
                             </tr>
                         </table>

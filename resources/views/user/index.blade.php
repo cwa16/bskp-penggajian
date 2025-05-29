@@ -39,6 +39,9 @@
                                     <th>Active</th>
                                     <th>BPJS</th>
                                     <th>Jamsostek</th>
+                                    <th>JKK</th>
+                                    <th>JKM</th>
+                                    <th>JHT</th>
                                     <th>SPSI</th>
                                 </tr>
                             </thead>
@@ -79,6 +82,27 @@
                                                 <input type="hidden" name="is_jamsostek" value="0">
                                                 <input type="checkbox" name="is_jamsostek" value="1"
                                                     {{ $user->is_jamsostek ? 'checked' : '' }} class="checkbox-update"
+                                                    data-user-id="{{ $user->id }}">
+                                            </td>
+
+                                            <td>
+                                                <input type="hidden" name="is_jkk" value="0">
+                                                <input type="checkbox" name="is_jkk" value="1"
+                                                    {{ $user->is_jkk ? 'checked' : '' }} class="checkbox-update"
+                                                    data-user-id="{{ $user->id }}">
+                                            </td>
+
+                                             <td>
+                                                <input type="hidden" name="is_jkm" value="0">
+                                                <input type="checkbox" name="is_jkm" value="1"
+                                                    {{ $user->is_jkm ? 'checked' : '' }} class="checkbox-update"
+                                                    data-user-id="{{ $user->id }}">
+                                            </td>
+
+                                             <td>
+                                                <input type="hidden" names="is_jht" value="0">
+                                                <input type="checkbox" name="is_jht" value="1"
+                                                    {{ $user->is_jht ? 'checked' : '' }} class="checkbox-update"
                                                     data-user-id="{{ $user->id }}">
                                             </td>
 

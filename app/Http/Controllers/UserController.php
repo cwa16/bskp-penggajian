@@ -102,7 +102,10 @@ class UserController extends Controller
     {
         $user->update([
             'is_bpjs'      => $request->input('is_bpjs', 0),
-            'is_jamsostek' => $request->input('is_jamsostek', 0),
+            'is_jamsostek'      => $request->input('is_jamsostek', 0),
+            'is_jkk' => $request->input('is_jkk', 0),
+            'is_jkm' => $request->input('is_jkm', 0),
+            'is_jht' => $request->input('is_jht', 0),
             'is_union'     => $request->input('is_union', 0),
         ]);
 

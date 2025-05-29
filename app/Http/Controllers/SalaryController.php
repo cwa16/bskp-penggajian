@@ -370,7 +370,7 @@ class SalaryController extends Controller
                     ->join('grade', 'grade.id', '=', 'salary_years.id_salary_grade')
                     ->join('users', 'users.nik', '=', 'salary_years.nik')
                     ->select('salary_months.*', 'salary_years.*', 'users.*', 'grade.*', 'salary_months.date as salary_month_date', 'salary_months.id as salary_month_id')
-                    ->whereIn('users.status', ['Monthly', 'Contract BSKP'])
+                    ->where('users.status', $selectedStatus)
                     ->whereYear('salary_months.date', $selectedYear)
                     ->whereMonth('salary_months.date', $selectedMonth)
                     ->get();
@@ -467,6 +467,11 @@ class SalaryController extends Controller
                 'users.dept as Dept',
                 'users.jabatan as Jabatan',
                 'users.start_work_user',
+                'users.is_jamsostek',
+                'users.is_bpjs',
+                'users.is_jkk',
+                'users.is_jkm',
+                'users.is_jht',
                 'grade.name_grade as Grade',
                 'grade.rate_salary',
                 'salary_years.*',
@@ -534,10 +539,24 @@ class SalaryController extends Controller
                 'users.jabatan as Jabatan',
                 'users.start_work_user',
                 'users.is_jamsostek',
+                'users.is_bpjs',
+                'users.is_jkk',
+                'users.is_jkm',
+                'users.is_jht',
                 'grade.name_grade as Grade',
                 'grade.rate_salary',
-                'salary_years.*',
-                'salary_months.*',
+                'salary_years.date',
+                'salary_years.ability',
+                'salary_years.fungtional_alw',
+                'salary_years.family_alw',
+                'salary_years.transport_alw',
+                'salary_years.skill_alw',
+                'salary_years.telephone_alw',
+                'salary_years.adjustment',
+                'salary_years.bpjs',
+                'salary_years.jamsostek',
+                'salary_years.total_ben',
+                'salary_years.total_ben_ded',
                 'salary_months.absent',
                 'salary_months.electricity',
                 'salary_months.cooperative',
@@ -545,12 +564,19 @@ class SalaryController extends Controller
                 'salary_months.other',
                 'salary_months.date as salary_months_date',
                 'salary_months.total_deduction',
-                'salary_months.net_salary'
+                'salary_months.net_salary',
+                'salary_months.is_thr',
+                'salary_months.hour_call',
+                'salary_months.total_overtime',
+                'salary_months.salary_backpay',
+                'salary_months.bonus',
+                'salary_months.incentive',
+                'salary_months.gross_salary',
+                'salary_months.union',
+
             )
             ->whereIn('salary_months.id', $salaryIds)
             ->get();
-
-        // dd($salaries);
 
         $pdfData = [];
 

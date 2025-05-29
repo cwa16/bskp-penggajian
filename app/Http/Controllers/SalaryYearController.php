@@ -127,6 +127,7 @@ class SalaryYearController extends Controller
 
     public function filter(Request $request){
         $title = 'Salary Per Year';
+
         $statuses = User::select('status')->groupBy('status')->pluck('status');
         $currentYear = date('Y');
 
@@ -336,15 +337,32 @@ class SalaryYearController extends Controller
             } else {
                 $bpjs = $totalBpjs * 0.01;
             }
-            $jamsostek = $totalJamsostek * 0.02;
+
 
             $jamsostek_jkk = $totalJamsostek * 0.0054;
             $jamsostek_tk = $totalJamsostek * 0.003;
             $jamsostek_tht = $totalJamsostek * 0.037;
 
             $users = User::where('nik', $input['nik'][$key])->first();
+
+            $isJKK = $users->is_jkk;
+            $isJKM = $users->is_jkm;
+            $isJHT = $users->is_jht;
+
+            if ($isJKK == 1 && $isJKM == 1 && $isJHT == 1) {
+                $total_jamsostek = $jamsostek_jkk + $jamsostek_tk + $jamsostek_tht;
+            } elseif ($isJKK == 1 && $isJKM == 1 && $isJHT == 0) {
+                $total_jamsostek = $jamsostek_jkk + $jamsostek_tk;
+            } elseif ($isJKK == 1 && $isJKM == 0 && $isJHT == 1) {
+                $total_jamsostek = $jamsostek_jkk + $jamsostek_tht;
+            } elseif ($isJKK == 0 && $isJKM == 1 && $isJHT == 1) {
+                $total_jamsostek = $jamsostek_tk + $jamsostek_tht;
+            } else {
+                $total_jamsostek = 0;
+            }
+
             if ($users->is_jamsostek == 1) {
-                 $total_jamsostek = $jamsostek_jkk + $jamsostek_tk + $jamsostek_tht;
+                $jamsostek = $totalJamsostek * 0.02;
             } else {
                 $jamsostek = 0;
             }

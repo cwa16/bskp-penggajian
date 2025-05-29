@@ -390,208 +390,141 @@
                     </table>
                 </td>
 
-                @if ($sal->is_jamsostek == 0 || $sal->is_jamsostek == null || $sal->is_jamsostek == '')
-                    <td rowspan="2" style="vertical-align: top; padding-left:10px; padding-bottom: 0;">
-                        <table class="tb-detail">
-                            <tr>
-                                <td colspan="3"><u><b>C. BENEFIT</b></u></td>
-                            </tr>
-                            <tr>
-                                <td>Jamsostek JKK</td>
-                                <td>:</td>
-                                <td class="text-end">0</td>
-                            </tr>
-                            <tr>
-                                <td>Jamsostek JKM</td>
-                                <td>:</td>
-                                <td class="text-end">0</td>
-                            </tr>
-                            <tr>
-                                <td>Jamsostek JHT</td>
-                                <td>:</td>
-                                <td class="text-end">0</td>
-                            </tr>
-                            <tr>
-                                <td>Tax PPh 21</td>
-                                <td>:</td>
-                                <td class="text-end">0</td>
-                            </tr>
-                            <tr class="top-border">
-                                <td><b>Sub Total</b></td>
-                                <td>:</td>
-                                <td class="text-end"><b>
-                                        @if ($is_thr == 1)
-                                            0
-                                        @else
-                                            {{ number_format($sal->total_ben, 0, ',', '.') }}
-                                        @endif
-                                    </b>
-                                </td>
-                                <td class="text-end"><b></b></td>
-                            </tr>
-                        </table>
-                        <table class="tb-detail" style="margin-top: 28px;">
-                            <tr>
-                                <td colspan="3"><u><b>D. DEDUCTION BENEFIT</b></u></td>
-                            </tr>
-                            <tr>
-                                <td>Jamsostek JKK</td>
-                                <td>:</td>
-                                <td class="text-end">0</td>
-                            </tr>
-                            <tr>
-                                <td>Jamsostek JKM</td>
-                                <td>:</td>
-                                <td class="text-end">0</td>
-                            </tr>
-                            <tr>
-                                <td>Jamsostek JHT</td>
-                                <td>:</td>
-                                <td class="text-end">0</td>
-                            </tr>
-                            <tr>
-                                <td>Tax PPh 21</td>
-                                <td>:</td>
-                                <td class="text-end">0</td>
-                            </tr>
-                            <tr class="top-border">
-                                <td><b>Sub Total</b></td>
-                                <td><b>:</b></td>
-                                <td class="text-end"><b>
-                                        @if ($is_thr == 1)
-                                            0
-                                        @else
-                                            {{ number_format($sal->total_ben_ded, 0, ',', '.') }}
-                                        @endif
+                @php
+                    $isJamsostek = $sal->is_jamsostek;
+                    $isJKK = $sal->is_jkk;
+                    $isJKM = $sal->is_jkm;
+                    $isJHT = $sal->is_jht;
 
-                                    </b>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                @else
-                    <td rowspan="2" style="vertical-align: top; padding-left:10px; padding-bottom: 0;">
-                        <table class="tb-detail">
-                            <tr>
-                                <td colspan="3"><u><b>C. BENEFIT</b></u></td>
-                            </tr>
-                            <tr>
-                                <td>Jamsostek JKK</td>
-                                <td>:</td>
-                                <td class="text-end">
+                    $JKK = ($isJKK) ? $total * 0.0054 : 0;
+                    $JKM = ($isJKM) ? $total * 0.003 : 0;
+                    $JHT = ($isJHT) ? $total * 0.037 : 0;
+
+                    $sub_total_fix = $JKK + $JKM + $JHT;
+                @endphp
+
+                <td rowspan="2" style="vertical-align: top; padding-left:10px; padding-bottom: 0;">
+                    <table class="tb-detail">
+                        <tr>
+                            <td colspan="3"><u><b>C. BENEFIT</b></u></td>
+                        </tr>
+                        <tr>
+                            <td>Jamsostek JKK</td>
+                            <td>:</td>
+                            <td class="text-end">
+                                @if ($is_thr == 1)
+                                    0
+                                @else
+                                    {{  number_format($JKK, 0, ',', '.') }}
+                                @endif
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Jamsostek JKM</td>
+                            <td>:</td>
+                            <td class="text-end">
+                                @if ($is_thr == 1)
+                                    0
+                                @else
+                                    {{  number_format($JKM, 0, ',', '.') }}
+                                @endif
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Jamsostek JHT</td>
+                            <td>:</td>
+                            <td class="text-end">
+                                @if ($is_thr == 1)
+                                    0
+                                @else
+                                    {{  number_format($JHT, 0, ',', '.') }}
+                                @endif
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Tax PPh 21</td>
+                            <td>:</td>
+                            {{-- <td class="text-end">{{ number_format($sal->pph21_ben, 0, ',', '.') }}</td> --}}
+                            <td class="text-end">0</td>
+                        </tr>
+                        <tr class="top-border">
+                            <td><b>Sub Total</b></td>
+                            <td>:</td>
+                            <td class="text-end"><b>
                                     @if ($is_thr == 1)
                                         0
                                     @else
-                                        {{ number_format($total * 0.0054, 0, ',', '.') }}
+                                        {{ number_format($sub_total_fix, 0, ',', '.') }}
                                     @endif
+                                </b>
+                            </td>
+                            <td class="text-end"><b></b></td>
+                        </tr>
+                    </table>
+                    <table class="tb-detail" style="margin-top: 28px;">
+                        <tr>
+                            <td colspan="3"><u><b>D. DEDUCTION BENEFIT</b></u></td>
+                        </tr>
+                        <tr>
+                            <td>Jamsostek JKK</td>
+                            <td>:</td>
+                            <td class="text-end">
+                                @if ($is_thr == 1)
+                                    0
+                                @else
+                                    {{ number_format($JKK, 0, ',', '.') }}
+                                @endif
 
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Jamsostek JKM</td>
-                                <td>:</td>
-                                <td class="text-end">
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Jamsostek JKM</td>
+                            <td>:</td>
+                            <td class="text-end">
+                                @if ($is_thr == 1)
+                                    0
+                                @else
+                                    {{ number_format($JKM, 0, ',', '.') }}
+                                @endif
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Jamsostek JHT</td>
+                            <td>:</td>
+                            <td class="text-end">
+                                @if ($is_thr == 1)
+                                    0
+                                @else
+                                    {{ number_format($JHT, 0, ',', '.') }}
+                                @endif
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Tax PPh 21</td>
+                            <td>:</td>
+                            <td class="text-end">0</td>
+                        </tr>
+                        <tr class="top-border">
+                            <td><b>Sub Total</b></td>
+                            <td><b>:</b></td>
+                            <td class="text-end"><b>
                                     @if ($is_thr == 1)
                                         0
                                     @else
-                                        {{ number_format($total * 0.003, 0, ',', '.') }}
+                                        {{ number_format($sub_total_fix, 0, ',', '.') }}
                                     @endif
+                                </b>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
 
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Jamsostek JHT</td>
-                                <td>:</td>
-                                <td class="text-end">
-                                    @if ($is_thr == 1)
-                                        0
-                                    @else
-                                        {{ number_format($total * 0.037, 0, ',', '.') }}
-                                    @endif
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Tax PPh 21</td>
-                                <td>:</td>
-                                {{-- <td class="text-end">{{ number_format($sal->pph21_ben, 0, ',', '.') }}</td> --}}
-                                <td class="text-end">0</td>
-                            </tr>
-                            <tr class="top-border">
-                                <td><b>Sub Total</b></td>
-                                <td>:</td>
-                                <td class="text-end"><b>
-                                        @if ($is_thr == 1)
-                                            0
-                                        @else
-                                            {{ number_format($sub_total_ded, 0, ',', '.') }}
-                                        @endif
-                                    </b>
-                                </td>
-                                <td class="text-end"><b></b></td>
-                            </tr>
-                        </table>
-                        <table class="tb-detail" style="margin-top: 28px;">
-                            <tr>
-                                <td colspan="3"><u><b>D. DEDUCTION BENEFIT</b></u></td>
-                            </tr>
-                            <tr>
-                                <td>Jamsostek JKK</td>
-                                <td>:</td>
-                                <td class="text-end">
-                                    @if ($is_thr == 1)
-                                        0
-                                    @else
-                                        {{ number_format($total * 0.0054, 0, ',', '.') }}
-                                    @endif
-
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Jamsostek JKM</td>
-                                <td>:</td>
-                                <td class="text-end">
-                                    @if ($is_thr == 1)
-                                        0
-                                    @else
-                                        {{ number_format($total * 0.003, 0, ',', '.') }}
-                                    @endif
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Jamsostek JHT</td>
-                                <td>:</td>
-                                <td class="text-end">
-                                    @if ($is_thr == 1)
-                                        0
-                                    @else
-                                        {{ number_format($total * 0.037, 0, ',', '.') }}
-                                    @endif
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Tax PPh 21</td>
-                                <td>:</td>
-                                <td class="text-end">0</td>
-                            </tr>
-                            <tr class="top-border">
-                                <td><b>Sub Total</b></td>
-                                <td><b>:</b></td>
-                                <td class="text-end"><b>
-                                        @if ($is_thr == 1)
-                                            0
-                                        @else
-                                            {{ number_format($sub_total_ded, 0, ',', '.') }}
-                                        @endif
-                                    </b>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                @endif
             </tr>
             <tr>
                 <td style="padding-left: 10px; padding-right: 10px; margin-bottom: 0;">
