@@ -221,7 +221,8 @@
                         .join(',');
 
                     if (selectedIds.length > 0) {
-                        window.location.href = `/salary-year/edit?ids=${selectedIds}`;
+                        const baseUrl = "{{ route('salary-year.edit') }}";
+                        window.location.href = `${baseUrl}?ids=${selectedIds}`;
                     } else {
                         alert('No data selected for editing.');
                     }
